@@ -3,9 +3,9 @@
 
 namespace Window
 {
-    void init(SDL_Window *win);
-    void close(SDL_Window *win);
-    void open(SDL_Window *win);
+    SDL_Window* createWindow();
+
+    bool isNull(SDL_Window* win);
 }
 
 #endif

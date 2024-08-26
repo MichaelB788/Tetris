@@ -1,4 +1,3 @@
-#include <iostream>
 #include <SDL2/SDL.h>
 
 #include "Components/Window.h"
@@ -47,7 +46,7 @@ int main (int argc, char **argv)
 
     // Test
     Render::drawTetromino();
-    
+
     SDL_Delay(10000);
     terminate();
     return 0;

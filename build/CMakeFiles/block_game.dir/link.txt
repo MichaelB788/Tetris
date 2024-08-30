@@ -1,0 +1,1 @@
+/usr/bin/c++ -lSDL2 -rdynamic CMakeFiles/block_game.dir/main.cpp.o -o block_game  src/libGameLibrary.a 

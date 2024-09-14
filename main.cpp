@@ -1,9 +1,12 @@
+// SDL2 Library
 #include <SDL2/SDL.h>
 
-#include "Components/Window.h"
-#include "Components/Render.h"
+// SDL Systems
+#include "src/Components/SDLComponents.h"
+#include "src/Components/Window.h"
+#include "src/Components/Render.h"
 
-// Access SDL systems
+//Access SDL systems
 struct SDL_Systems
 {
     SDL_Window* win;

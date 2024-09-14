@@ -1,15 +1,32 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include "CoordinatePoint.h"
 class Block
 {
     private:
-        int x, y;
+        void createBlockI();
 
-        void createBlock(int x, int y, char type);
+        void createBlockO();
+
+        void createBlockT();
+
+        void createBlockS();
+
+        void createBlockZ();
+
+        void createBlockL();
+
+        void createBlockJ();
 
     public:
-        Block(int x, int y, char type);
+        Block(char type);
+
+        void moveDown();
+
+        void moveRight();
+
+        void moveLeft();
 
         bool isValidPosition();
 

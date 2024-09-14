@@ -7,7 +7,7 @@ class CoordinatePoint
         int posx;
         int posy;
 
-    public:
+   public:
         CoordinatePoint(int x, int y);
         CoordinatePoint getCoordinates();
 

@@ -1,6 +1,5 @@
 #include "CoordinatePoint.h"
 
-// macro
 #define TILE 20
 
 // private
@@ -39,3 +38,4 @@ void CoordinatePoint::shiftY(int amount)
 {
     posy += amount * TILE;
 }
+

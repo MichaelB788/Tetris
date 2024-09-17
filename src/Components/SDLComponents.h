@@ -1,6 +1,8 @@
 #ifndef SDL_COMPONENTS
 #define SDL_COMPONENTS
 
+#include <SDL2/SDL.h>
+
 namespace SDL_Components 
 {    
     struct SDL_Systems;

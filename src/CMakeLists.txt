@@ -1,8 +1,8 @@
-add_library(GameLibrary STATIC
+add_library(GameLibrary SHARED
     Components/Render.cpp
-    Components/Surface.cpp
     Components/Window.cpp
+    Components/SDLComponents.cpp
+
     Game/Block.cpp
-    Game/Board.cpp
     Game/CoordinatePoint.cpp
 )

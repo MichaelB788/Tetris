@@ -1,4 +1,4 @@
-/home/mike/Projects/BlockGame/build/CMakeFiles/block_game.dir
+/home/mike/Projects/BlockGame/build/CMakeFiles/BlockGame.dir
 /home/mike/Projects/BlockGame/build/CMakeFiles/edit_cache.dir
 /home/mike/Projects/BlockGame/build/CMakeFiles/rebuild_cache.dir
 /home/mike/Projects/BlockGame/build/src/CMakeFiles/GameLibrary.dir

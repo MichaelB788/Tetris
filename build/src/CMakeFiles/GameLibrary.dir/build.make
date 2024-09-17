@@ -83,24 +83,10 @@ src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Render.cpp.s"
 	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/Render.cpp -o CMakeFiles/GameLibrary.dir/Components/Render.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o: ../src/Components/Surface.cpp
-src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o -c /home/mike/Projects/BlockGame/src/Components/Surface.cpp
-
-src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/Surface.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Components/Surface.cpp > CMakeFiles/GameLibrary.dir/Components/Surface.cpp.i
-
-src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Surface.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/Surface.cpp -o CMakeFiles/GameLibrary.dir/Components/Surface.cpp.s
-
 src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
 src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: ../src/Components/Window.cpp
 src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o"
 	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/Window.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/Window.cpp.o -c /home/mike/Projects/BlockGame/src/Components/Window.cpp
 
 src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.i: cmake_force
@@ -110,6 +96,20 @@ src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.i: cmake_force
 src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Window.cpp.s"
 	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/Window.cpp -o CMakeFiles/GameLibrary.dir/Components/Window.cpp.s
+
+src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: ../src/Components/SDLComponents.cpp
+src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o"
+	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o -c /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp
+
+src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i"
+	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp > CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i
+
+src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s"
+	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp -o CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s
 
 src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
 src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o: ../src/Game/Block.cpp
@@ -125,24 +125,10 @@ src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Game/Block.cpp.s"
 	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Game/Block.cpp -o CMakeFiles/GameLibrary.dir/Game/Block.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: ../src/Game/Board.cpp
-src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o -MF CMakeFiles/GameLibrary.dir/Game/Board.cpp.o.d -o CMakeFiles/GameLibrary.dir/Game/Board.cpp.o -c /home/mike/Projects/BlockGame/src/Game/Board.cpp
-
-src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Game/Board.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Game/Board.cpp > CMakeFiles/GameLibrary.dir/Game/Board.cpp.i
-
-src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Game/Board.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Game/Board.cpp -o CMakeFiles/GameLibrary.dir/Game/Board.cpp.s
-
 src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
 src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: ../src/Game/CoordinatePoint.cpp
 src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o"
 	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o -MF CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o.d -o CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o -c /home/mike/Projects/BlockGame/src/Game/CoordinatePoint.cpp
 
 src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.i: cmake_force
@@ -156,29 +142,26 @@ src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.s: cmake_force
 # Object files for target GameLibrary
 GameLibrary_OBJECTS = \
 "CMakeFiles/GameLibrary.dir/Components/Render.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o" \
 "CMakeFiles/GameLibrary.dir/Components/Window.cpp.o" \
+"CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o" \
 "CMakeFiles/GameLibrary.dir/Game/Block.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Game/Board.cpp.o" \
 "CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o"
 
 # External object files for target GameLibrary
 GameLibrary_EXTERNAL_OBJECTS =
 
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/build.make
-src/libGameLibrary.a: src/CMakeFiles/GameLibrary.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libGameLibrary.a"
-	cd /home/mike/Projects/BlockGame/build/src && $(CMAKE_COMMAND) -P CMakeFiles/GameLibrary.dir/cmake_clean_target.cmake
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/build.make
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library libGameLibrary.so"
 	cd /home/mike/Projects/BlockGame/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GameLibrary.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-src/CMakeFiles/GameLibrary.dir/build: src/libGameLibrary.a
+src/CMakeFiles/GameLibrary.dir/build: src/libGameLibrary.so
 .PHONY : src/CMakeFiles/GameLibrary.dir/build
 
 src/CMakeFiles/GameLibrary.dir/clean:

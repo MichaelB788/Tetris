@@ -154,29 +154,29 @@ Components/Render.cpp.s:
 	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.s
 .PHONY : Components/Render.cpp.s
 
-Components/Surface.o: Components/Surface.cpp.o
-.PHONY : Components/Surface.o
+Components/SDLComponents.o: Components/SDLComponents.cpp.o
+.PHONY : Components/SDLComponents.o
 
 # target to build an object file
-Components/Surface.cpp.o:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o
-.PHONY : Components/Surface.cpp.o
+Components/SDLComponents.cpp.o:
+	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o
+.PHONY : Components/SDLComponents.cpp.o
 
-Components/Surface.i: Components/Surface.cpp.i
-.PHONY : Components/Surface.i
+Components/SDLComponents.i: Components/SDLComponents.cpp.i
+.PHONY : Components/SDLComponents.i
 
 # target to preprocess a source file
-Components/Surface.cpp.i:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.i
-.PHONY : Components/Surface.cpp.i
+Components/SDLComponents.cpp.i:
+	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i
+.PHONY : Components/SDLComponents.cpp.i
 
-Components/Surface.s: Components/Surface.cpp.s
-.PHONY : Components/Surface.s
+Components/SDLComponents.s: Components/SDLComponents.cpp.s
+.PHONY : Components/SDLComponents.s
 
 # target to generate assembly for a file
-Components/Surface.cpp.s:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.s
-.PHONY : Components/Surface.cpp.s
+Components/SDLComponents.cpp.s:
+	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s
+.PHONY : Components/SDLComponents.cpp.s
 
 Components/Window.o: Components/Window.cpp.o
 .PHONY : Components/Window.o
@@ -226,30 +226,6 @@ Game/Block.cpp.s:
 	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.s
 .PHONY : Game/Block.cpp.s
 
-Game/Board.o: Game/Board.cpp.o
-.PHONY : Game/Board.o
-
-# target to build an object file
-Game/Board.cpp.o:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o
-.PHONY : Game/Board.cpp.o
-
-Game/Board.i: Game/Board.cpp.i
-.PHONY : Game/Board.i
-
-# target to preprocess a source file
-Game/Board.cpp.i:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.i
-.PHONY : Game/Board.cpp.i
-
-Game/Board.s: Game/Board.cpp.s
-.PHONY : Game/Board.s
-
-# target to generate assembly for a file
-Game/Board.cpp.s:
-	cd /home/mike/Projects/BlockGame/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.s
-.PHONY : Game/Board.cpp.s
-
 Game/CoordinatePoint.o: Game/CoordinatePoint.cpp.o
 .PHONY : Game/CoordinatePoint.o
 
@@ -286,18 +262,15 @@ help:
 	@echo "... Components/Render.o"
 	@echo "... Components/Render.i"
 	@echo "... Components/Render.s"
-	@echo "... Components/Surface.o"
-	@echo "... Components/Surface.i"
-	@echo "... Components/Surface.s"
+	@echo "... Components/SDLComponents.o"
+	@echo "... Components/SDLComponents.i"
+	@echo "... Components/SDLComponents.s"
 	@echo "... Components/Window.o"
 	@echo "... Components/Window.i"
 	@echo "... Components/Window.s"
 	@echo "... Game/Block.o"
 	@echo "... Game/Block.i"
 	@echo "... Game/Block.s"
-	@echo "... Game/Board.o"
-	@echo "... Game/Board.i"
-	@echo "... Game/Board.s"
 	@echo "... Game/CoordinatePoint.o"
 	@echo "... Game/CoordinatePoint.i"
 	@echo "... Game/CoordinatePoint.s"

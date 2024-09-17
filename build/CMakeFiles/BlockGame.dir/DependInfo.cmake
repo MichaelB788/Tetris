@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/mike/Projects/BlockGame/main.cpp" "CMakeFiles/block_game.dir/main.cpp.o" "gcc" "CMakeFiles/block_game.dir/main.cpp.o.d"
+  "/home/mike/Projects/BlockGame/src/main.cpp" "CMakeFiles/BlockGame.dir/src/main.cpp.o" "gcc" "CMakeFiles/BlockGame.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.

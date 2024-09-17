@@ -9,10 +9,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/mike/Projects/BlockGame/src/Components/Render.cpp" "src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o.d"
-  "/home/mike/Projects/BlockGame/src/Components/Surface.cpp" "src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/Surface.cpp.o.d"
+  "/home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp" "src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o.d"
   "/home/mike/Projects/BlockGame/src/Components/Window.cpp" "src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o.d"
   "/home/mike/Projects/BlockGame/src/Game/Block.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o.d"
-  "/home/mike/Projects/BlockGame/src/Game/Board.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o.d"
   "/home/mike/Projects/BlockGame/src/Game/CoordinatePoint.cpp" "src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o.d"
   )
 

@@ -1,7 +1,7 @@
 #ifndef SDL_RENDERER
 #define SDL_RENDERER
 
-#include <SDL2/SDL.h>
+#include "../Game/Block.h"
 
 namespace Render
 {
@@ -9,7 +9,9 @@ namespace Render
 
     bool isNull(SDL_Renderer* ren);
 
-    // void draw(SDL_Renderer* ren, int x, int y);
+    void setDrawColor(char id, SDL_Renderer* ren);
+
+    void drawBlock(Block bl, SDL_Renderer* ren);
 }
 
 #endif

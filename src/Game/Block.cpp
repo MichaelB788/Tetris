@@ -4,72 +4,10 @@
 #include "Block.h"
 
 using namespace std;
-
 // A vector of size four will consist of coordinate points 
 // this will represent the block objects
 vector<CoordinatePoint> blockomino;
-
-//private
-void Block::createBlockI()
-{
-    blockomino = {
-        CoordinatePoint(5, 20),
-        CoordinatePoint(5, 19),
-        CoordinatePoint(5, 18),
-        CoordinatePoint(5, 17)
-    };
-}
-
-void Block::createBlockO()
-{
-    blockomino = {
-        CoordinatePoint(4, 20), CoordinatePoint(5, 20),
-        CoordinatePoint(4, 19), CoordinatePoint(5, 19)
-    };
-}
-
-void Block::createBlockT()
-{
-    blockomino = {
-        CoordinatePoint(3, 20), CoordinatePoint(4, 20), CoordinatePoint(5, 20),
-                                CoordinatePoint(4, 19)
-    };
-}
-
-void Block::createBlockS()
-{
-    blockomino = {
-                                CoordinatePoint(5, 20), CoordinatePoint(6, 20),
-        CoordinatePoint(4, 19), CoordinatePoint(5, 19)
-    };
-}
-
-void Block::createBlockZ()
-{
-    blockomino = {
-        CoordinatePoint(4, 20), CoordinatePoint(5, 20),
-                                CoordinatePoint(5, 19), CoordinatePoint(6, 19)
-    };
-}
-
-void Block::createBlockL()
-{
-    blockomino = {
-        CoordinatePoint(5, 20),
-        CoordinatePoint(5, 19),
-        CoordinatePoint(5, 18), CoordinatePoint(6, 17)
-    };
-}
-
-void Block::createBlockJ()
-{
-    blockomino = {
-                                CoordinatePoint(6, 20),
-                                CoordinatePoint(6, 19),
-        CoordinatePoint(5, 18), CoordinatePoint(6, 17)
-    };
-}
-
+char id;
 
 //public
 Block::Block(char type)
@@ -136,3 +74,81 @@ bool Block::isValidPosition()
     return true;
 }
 
+vector<CoordinatePoint> Block::getBlock()
+{
+    return blockomino;
+}
+
+char Block::getID()
+{
+    return id;
+}
+
+
+//private
+void Block::createBlockI()
+{
+    id = 'I';
+    blockomino = {
+        CoordinatePoint(5, 20),
+        CoordinatePoint(5, 19),
+        CoordinatePoint(5, 18),
+        CoordinatePoint(5, 17)
+    };
+}
+
+void Block::createBlockO()
+{
+    id = 'O';
+    blockomino = {
+        CoordinatePoint(4, 20), CoordinatePoint(5, 20),
+        CoordinatePoint(4, 19), CoordinatePoint(5, 19)
+    };
+}
+
+void Block::createBlockT()
+{
+    id = 'T';
+    blockomino = {
+        CoordinatePoint(3, 20), CoordinatePoint(4, 20), CoordinatePoint(5, 20),
+                                CoordinatePoint(4, 19)
+    };
+}
+
+void Block::createBlockS()
+{
+    id = 'S';
+    blockomino = {
+                                CoordinatePoint(5, 20), CoordinatePoint(6, 20),
+        CoordinatePoint(4, 19), CoordinatePoint(5, 19)
+    };
+}
+
+void Block::createBlockZ()
+{
+    id = 'Z';
+    blockomino = {
+        CoordinatePoint(4, 20), CoordinatePoint(5, 20),
+                                CoordinatePoint(5, 19), CoordinatePoint(6, 19)
+    };
+}
+
+void Block::createBlockL()
+{
+    id = 'L';
+    blockomino = {
+        CoordinatePoint(5, 20),
+        CoordinatePoint(5, 19),
+        CoordinatePoint(5, 18), CoordinatePoint(6, 17)
+    };
+}
+
+void Block::createBlockJ()
+{
+    id = 'J';
+    blockomino = {
+                                CoordinatePoint(6, 20),
+                                CoordinatePoint(6, 19),
+        CoordinatePoint(5, 18), CoordinatePoint(6, 17)
+    };
+}

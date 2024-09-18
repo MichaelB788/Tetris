@@ -22,15 +22,11 @@ bool SDL_Components::initialize()
 
     // Create and check window state
     sdl.win = Window::createWindow();  
-
-    if ( Window::isNull(sdl.win) )
-    { terminate(); return false;}
+    if ( Window::isNull(sdl.win) ){ terminate(); return false;}
 
     // Create and check renderer state
     sdl.ren = SDL_CreateRenderer(sdl.win, -1, 0);
-
-    if ( Render::isNull(sdl.ren) )
-    { terminate(); return false; }
+    if ( Render::isNull(sdl.ren) ){ terminate(); return false; }
 
     return true;
 }

@@ -21,7 +21,7 @@ int main (int argc, char **argv)
     Block test = Block('T');  
     Render::drawBlock(test, ren);
 
-    SDL_Delay(10000);
+    SDL_Delay(3000);
     SDL_Components::terminate();
     return 0;
 }

@@ -1,4 +1,5 @@
 #include <vector>
+#include <stdexcept>
 
 #include "CoordinatePoint.h"
 #include "Block.h"
@@ -16,20 +17,28 @@ Block::Block(char type)
     {
         case 'I':
             createBlockI();
+            break;
         case 'O':
             createBlockO();
+            break;
         case 'T':
             createBlockT();
+            break;
         case 'S':
             createBlockS();
+            break;
         case 'Z':
             createBlockZ();
-        case 'J':
-            createBlockJ();
+            break;
         case 'L':
             createBlockL();
+            break;
+        case 'J':
+            createBlockJ();
+            break;
         default:
-            blockomino = {CoordinatePoint(0, 0)};
+            throw std::invalid_argument("Block type is invalid; could not create Block object.");
+            break;
     }
 } 
 

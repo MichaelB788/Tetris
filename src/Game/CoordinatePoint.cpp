@@ -9,8 +9,8 @@ int posy;
 // public
 CoordinatePoint::CoordinatePoint(int x, int y)
 {
-    posx = x;
-    posy = y;
+    posx = x * TILE;
+    posy = y * TILE;
 }
 
 CoordinatePoint CoordinatePoint::getCoordinates()

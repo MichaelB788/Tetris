@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 #include "Render.h"
@@ -25,21 +26,28 @@ void Render::setDrawColor(char id, SDL_Renderer* ren)
     switch (id)
     {
         case 'I':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 0, 255, 255, 1);
+            break;
         case 'O':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 255, 255, 0, 1);
+            break;
         case 'T':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 255, 0, 255, 1);
+            break;
         case 'S':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 255, 0, 0, 1);
+            break;
         case 'Z':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 0, 255, 0, 1);
+            break;
         case 'L':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 0, 0, 255, 1);
+            break;
         case 'J':
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(ren, 255, 145, 0, 1);
+            break;
         default:
-            SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+            throw std::invalid_argument("Invalid Block type: Could not set drawing color.");
     }
 }
 

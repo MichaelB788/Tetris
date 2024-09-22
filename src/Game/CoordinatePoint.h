@@ -1,5 +1,5 @@
-#ifndef COORDINATE_POINT
-#define COORDINATE_POINT
+#ifndef COORDINATE_POINT_H
+#define COORDINATE_POINT_H
 
 class CoordinatePoint
 {

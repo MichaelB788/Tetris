@@ -1,5 +1,5 @@
-#ifndef SDL_WINDOW
-#define SDL_WINDOW
+#ifndef WINDOW_H
+#define WINDOW_H
 
 namespace Window
 {

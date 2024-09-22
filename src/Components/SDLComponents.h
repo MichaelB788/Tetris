@@ -1,5 +1,5 @@
-#ifndef SDL_COMPONENTS
-#define SDL_COMPONENTS
+#ifndef SDL_COMPONENTS_H
+#define SDL_COMPONENTS_H
 
 #include <SDL2/SDL.h>
 

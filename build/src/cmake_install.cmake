@@ -1,4 +1,4 @@
-# Install script for directory: /home/mike/Projects/BlockGame/src
+# Install script for directory: /home/mike/Projects/Code/Tetris/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

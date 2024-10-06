@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mike/Projects/BlockGame
+CMAKE_SOURCE_DIR = /home/mike/Projects/Code/Tetris
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mike/Projects/BlockGame/build
+CMAKE_BINARY_DIR = /home/mike/Projects/Code/Tetris/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/GameLibrary.dir/depend.make
@@ -69,106 +69,106 @@ include src/CMakeFiles/GameLibrary.dir/progress.make
 # Include the compile flags for this target's objects.
 include src/CMakeFiles/GameLibrary.dir/flags.make
 
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: ../src/Components/Render.cpp
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/Render.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/Render.cpp.o -c /home/mike/Projects/BlockGame/src/Components/Render.cpp
+src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o: ../src/SDL/Render.cpp
+src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o -MF CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o.d -o CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o -c /home/mike/Projects/Code/Tetris/src/SDL/Render.cpp
 
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/Render.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Components/Render.cpp > CMakeFiles/GameLibrary.dir/Components/Render.cpp.i
+src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/SDL/Render.cpp.i"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/Code/Tetris/src/SDL/Render.cpp > CMakeFiles/GameLibrary.dir/SDL/Render.cpp.i
 
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Render.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/Render.cpp -o CMakeFiles/GameLibrary.dir/Components/Render.cpp.s
+src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/SDL/Render.cpp.s"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/Code/Tetris/src/SDL/Render.cpp -o CMakeFiles/GameLibrary.dir/SDL/Render.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: ../src/Components/Window.cpp
-src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/Window.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/Window.cpp.o -c /home/mike/Projects/BlockGame/src/Components/Window.cpp
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o: ../src/SDL/Window.cpp
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o -MF CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o.d -o CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o -c /home/mike/Projects/Code/Tetris/src/SDL/Window.cpp
 
-src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/Window.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Components/Window.cpp > CMakeFiles/GameLibrary.dir/Components/Window.cpp.i
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/SDL/Window.cpp.i"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/Code/Tetris/src/SDL/Window.cpp > CMakeFiles/GameLibrary.dir/SDL/Window.cpp.i
 
-src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Window.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/Window.cpp -o CMakeFiles/GameLibrary.dir/Components/Window.cpp.s
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/SDL/Window.cpp.s"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/Code/Tetris/src/SDL/Window.cpp -o CMakeFiles/GameLibrary.dir/SDL/Window.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: ../src/Components/SDLComponents.cpp
-src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o -c /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp
+src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: ../src/Game/Board.cpp
+src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o -MF CMakeFiles/GameLibrary.dir/Game/Board.cpp.o.d -o CMakeFiles/GameLibrary.dir/Game/Board.cpp.o -c /home/mike/Projects/Code/Tetris/src/Game/Board.cpp
 
-src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp > CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.i
+src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Game/Board.cpp.i"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/Code/Tetris/src/Game/Board.cpp > CMakeFiles/GameLibrary.dir/Game/Board.cpp.i
 
-src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Components/SDLComponents.cpp -o CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.s
+src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Game/Board.cpp.s"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/Code/Tetris/src/Game/Board.cpp -o CMakeFiles/GameLibrary.dir/Game/Board.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o: ../src/Game/Block.cpp
-src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o -MF CMakeFiles/GameLibrary.dir/Game/Block.cpp.o.d -o CMakeFiles/GameLibrary.dir/Game/Block.cpp.o -c /home/mike/Projects/BlockGame/src/Game/Block.cpp
+src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o: ../src/Components/Draw.cpp
+src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o -c /home/mike/Projects/Code/Tetris/src/Components/Draw.cpp
 
-src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Game/Block.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Game/Block.cpp > CMakeFiles/GameLibrary.dir/Game/Block.cpp.i
+src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/Draw.cpp.i"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/Code/Tetris/src/Components/Draw.cpp > CMakeFiles/GameLibrary.dir/Components/Draw.cpp.i
 
-src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Game/Block.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Game/Block.cpp -o CMakeFiles/GameLibrary.dir/Game/Block.cpp.s
+src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/Draw.cpp.s"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/Code/Tetris/src/Components/Draw.cpp -o CMakeFiles/GameLibrary.dir/Components/Draw.cpp.s
 
-src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
-src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: ../src/Game/CoordinatePoint.cpp
-src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o -MF CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o.d -o CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o -c /home/mike/Projects/BlockGame/src/Game/CoordinatePoint.cpp
+src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o: src/CMakeFiles/GameLibrary.dir/flags.make
+src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o: ../src/Components/EventHandler.cpp
+src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o: src/CMakeFiles/GameLibrary.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o -MF CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o.d -o CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o -c /home/mike/Projects/Code/Tetris/src/Components/EventHandler.cpp
 
-src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.i"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/BlockGame/src/Game/CoordinatePoint.cpp > CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.i
+src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.i"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mike/Projects/Code/Tetris/src/Components/EventHandler.cpp > CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.i
 
-src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.s"
-	cd /home/mike/Projects/BlockGame/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/BlockGame/src/Game/CoordinatePoint.cpp -o CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.s
+src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.s"
+	cd /home/mike/Projects/Code/Tetris/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mike/Projects/Code/Tetris/src/Components/EventHandler.cpp -o CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.s
 
 # Object files for target GameLibrary
 GameLibrary_OBJECTS = \
-"CMakeFiles/GameLibrary.dir/Components/Render.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Components/Window.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Game/Block.cpp.o" \
-"CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o"
+"CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o" \
+"CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o" \
+"CMakeFiles/GameLibrary.dir/Game/Board.cpp.o" \
+"CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o" \
+"CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o"
 
 # External object files for target GameLibrary
 GameLibrary_EXTERNAL_OBJECTS =
 
-src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o
-src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/Window.cpp.o
-src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/SDLComponents.cpp.o
-src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Game/Block.cpp.o
-src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Game/CoordinatePoint.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/Draw.cpp.o
+src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o
 src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/build.make
 src/libGameLibrary.so: src/CMakeFiles/GameLibrary.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mike/Projects/BlockGame/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library libGameLibrary.so"
-	cd /home/mike/Projects/BlockGame/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GameLibrary.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mike/Projects/Code/Tetris/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library libGameLibrary.so"
+	cd /home/mike/Projects/Code/Tetris/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GameLibrary.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/GameLibrary.dir/build: src/libGameLibrary.so
 .PHONY : src/CMakeFiles/GameLibrary.dir/build
 
 src/CMakeFiles/GameLibrary.dir/clean:
-	cd /home/mike/Projects/BlockGame/build/src && $(CMAKE_COMMAND) -P CMakeFiles/GameLibrary.dir/cmake_clean.cmake
+	cd /home/mike/Projects/Code/Tetris/build/src && $(CMAKE_COMMAND) -P CMakeFiles/GameLibrary.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/GameLibrary.dir/clean
 
 src/CMakeFiles/GameLibrary.dir/depend:
-	cd /home/mike/Projects/BlockGame/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mike/Projects/BlockGame /home/mike/Projects/BlockGame/src /home/mike/Projects/BlockGame/build /home/mike/Projects/BlockGame/build/src /home/mike/Projects/BlockGame/build/src/CMakeFiles/GameLibrary.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/mike/Projects/Code/Tetris/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mike/Projects/Code/Tetris /home/mike/Projects/Code/Tetris/src /home/mike/Projects/Code/Tetris/build /home/mike/Projects/Code/Tetris/build/src /home/mike/Projects/Code/Tetris/build/src/CMakeFiles/GameLibrary.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/GameLibrary.dir/depend
 

@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/mike/Projects/BlockGame/src/main.cpp" "CMakeFiles/BlockGame.dir/src/main.cpp.o" "gcc" "CMakeFiles/BlockGame.dir/src/main.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/main.cpp" "CMakeFiles/BlockGame.dir/src/main.cpp.o" "gcc" "CMakeFiles/BlockGame.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/mike/Projects/BlockGame/build/src/CMakeFiles/GameLibrary.dir/DependInfo.cmake"
+  "/home/mike/Projects/Code/Tetris/build/src/CMakeFiles/GameLibrary.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

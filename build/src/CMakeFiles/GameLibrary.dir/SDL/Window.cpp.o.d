@@ -1,5 +1,5 @@
-src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: \
- /home/mike/Projects/BlockGame/src/Components/Render.cpp \
+src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o: \
+ /home/mike/Projects/Code/Tetris/src/SDL/Window.cpp \
  /usr/include/stdc-predef.h /usr/include/SDL2/SDL.h \
  /usr/include/SDL2/SDL_main.h /usr/include/SDL2/SDL_stdinc.h \
  /usr/include/SDL2/SDL_config.h \
@@ -213,9 +213,9 @@ src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: \
  /usr/include/SDL2/SDL_shape.h /usr/include/SDL2/SDL_system.h \
  /usr/include/SDL2/SDL_timer.h /usr/include/SDL2/SDL_version.h \
  /usr/include/SDL2/SDL_locale.h /usr/include/SDL2/SDL_misc.h \
- /usr/include/SDL2/SDL_render.h /usr/include/c++/11/iostream \
- /usr/include/c++/11/ostream /usr/include/c++/11/ios \
- /usr/include/c++/11/iosfwd /usr/include/c++/11/bits/stringfwd.h \
+ /usr/include/c++/11/iostream /usr/include/c++/11/ostream \
+ /usr/include/c++/11/ios /usr/include/c++/11/iosfwd \
+ /usr/include/c++/11/bits/stringfwd.h \
  /usr/include/c++/11/bits/memoryfwd.h /usr/include/c++/11/bits/postypes.h \
  /usr/include/c++/11/cwchar /usr/include/c++/11/exception \
  /usr/include/c++/11/bits/exception.h \
@@ -282,12 +282,5 @@ src/CMakeFiles/GameLibrary.dir/Components/Render.cpp.o: \
  /usr/include/c++/11/bits/locale_facets.tcc \
  /usr/include/c++/11/bits/basic_ios.tcc \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
- /usr/include/c++/11/bits/istream.tcc /usr/include/c++/11/vector \
- /usr/include/c++/11/bits/stl_uninitialized.h \
- /usr/include/c++/11/bits/stl_vector.h \
- /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc \
- /home/mike/Projects/BlockGame/src/Components/Render.h \
- /home/mike/Projects/BlockGame/src/Components/../Game/Block.h \
- /home/mike/Projects/BlockGame/src/Components/../Game/CoordinatePoint.h \
- /home/mike/Projects/BlockGame/src/Components/../Game/CoordinatePoint.h
+ /usr/include/c++/11/bits/istream.tcc \
+ /home/mike/Projects/Code/Tetris/src/SDL/Window.hpp

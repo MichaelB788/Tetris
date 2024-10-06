@@ -1,8 +1,11 @@
 #include <SDL2/SDL.h>
 #include <stdexcept>
+#include <vector>
 
-#include "../Game/Block.h"
-#include "Draw.h"
+#include "../Game/Piece.hpp"
+#include "Draw.hpp"
+
+# define TILE_SIZE 40
 
 void Draw::setColor(char id, SDL_Renderer* ren)
 {
@@ -29,28 +32,47 @@ void Draw::setColor(char id, SDL_Renderer* ren)
         case 'J':
             SDL_SetRenderDrawColor(ren, 255, 145, 0, 1);
             break;
+        case '#':
+            SDL_SetRenderDrawColor(ren, 0, 0, 250, 0);
+            break;
+        case '|':
+        case '_':
+            SDL_SetRenderDrawColor(ren, 125, 225, 255, 1);
+            break;
         default:
-            throw std::invalid_argument("Invalid Block type: Could not set drawing color.");
+            throw std::invalid_argument("Invalid character given to Draw::drawColor()");
     }
 }
 
-void Draw::block(Block bl, SDL_Renderer* ren)
+void Draw::drawBoard(std::vector<std::vector<char>> board, SDL_Renderer* ren)
 {
-    // Create a tile at each coordinate point in the Block, 
-    // then draw it on the screen.
-    setColor(bl.getID(), ren);
+    int y_pos = 0;
 
-    for (CoordinatePoint cp : bl.getBlock())
+    for (auto y : board)
     {
-        SDL_Rect tile;
-        tile.h = 20;
-        tile.w = 20;
-        tile.x = cp.getX();
-        tile.y = cp.getY();
-
-        // Draw the tile
-        SDL_RenderFillRect(ren, &tile);
+        int x_pos = 0;
+        for (auto x : y)
+        { 
+            x_pos++;
+            drawTile(x_pos, y_pos, x, ren);
+        }
+        y_pos++;
     }
-
-    SDL_RenderPresent(ren);
 }
+
+void Draw::drawTile(int x, int y, char id, SDL_Renderer* ren)
+{
+    // Our tile specs
+    SDL_Rect tile;
+
+    tile.x = TILE_SIZE * x;
+    tile.y = TILE_SIZE * y;
+    tile.h = TILE_SIZE;
+    tile.w = TILE_SIZE;
+
+    // Set the color based on the character on the current tile
+    setColor(id, ren);
+
+    (id == '#' || id == '|' || id == '_')?
+        SDL_RenderDrawRect(ren, &tile) : SDL_RenderFillRect(ren, &tile);
+} 

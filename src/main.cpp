@@ -1,27 +1,50 @@
 // SDL2 Library
 #include <SDL2/SDL.h>
+
+// C++ Libraries
 #include <vector>
+#include <iostream>
 
-// SDL Systems
-#include "Components/Window.h"
-#include "Components/Render.h"
-#include "Components/SDLComponents.h"
+// SDL Classes
+#include "SDL/Window.hpp"
+#include "SDL/Render.hpp"
 
-#include "Game/Block.h"
+// Game Objects
+#include "Game/Piece.hpp"
+#include "Game/Board.hpp"
+
+// Custom Components
+#include "Components/Draw.hpp"
+#include "Game/EventHandler.hpp"
 
 int main (int argc, char **argv)
 {
-    // Initialize all SDL subsystems
-    if (!SDL_Components::initialize()) return -1;
+    // Initialize all SDL Video
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        std::cout << "Could not initialize SDL Video: " << SDL_GetError() << std::endl;
+        return 1; 
+    }
 
-    // Window and Renderer subsystems
-    SDL_Window* win = SDL_Components::getWindow();
-    SDL_Renderer* ren = SDL_Components::getRenderer();
+    // Initialize SDL window and renderer.
+    const WindowObject win = WindowObject();
+    const RendererObject ren = RendererObject(win.pSDL_Window);
 
-    Block test = Block('T');  
-    Render::drawBlock(test, ren);
+    if (win.pSDL_Window == NULL || ren.pSDL_Renderer == NULL)
+    {
+        return 1;
+    }
 
-    SDL_Delay(3000);
-    SDL_Components::terminate();
+    bool gameIsRunning = true;
+    SDL_Event event;
+
+    // Game loop
+    while (gameIsRunning && SDL_PollEvent(&event))
+    {
+        // Do game stuff!
+    }
+    
+    SDL_Quit();
+
     return 0;
 }

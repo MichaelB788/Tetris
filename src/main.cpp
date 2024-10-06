@@ -15,7 +15,6 @@
 
 // Custom Components
 #include "Components/Draw.hpp"
-#include "Game/EventHandler.hpp"
 
 int main (int argc, char **argv)
 {
@@ -38,10 +37,16 @@ int main (int argc, char **argv)
     bool gameIsRunning = true;
     SDL_Event event;
 
+    // Testing stuff
+    Draw::drawBoard(Board::getBoard(), ren.pSDL_Renderer);
+    SDL_Delay(5000);
+
     // Game loop
     while (gameIsRunning && SDL_PollEvent(&event))
     {
-        // Do game stuff!
+        SDL_RenderClear(ren.pSDL_Renderer);
+        gameIsRunning = false; // Don't want an infinite loop yet!
+        SDL_RenderPresent(ren.pSDL_Renderer); 
     }
     
     SDL_Quit();

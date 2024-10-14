@@ -1,12 +1,13 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <vector>
+#include <array>
 
 namespace Board
 {
-    std::vector<std::vector<char>> getBoard();
-    void updateBoard();
+    extern std::array<std::array<char, 10>, 20> board_state;
+
+    void clearBoard();
 }
 
 #endif

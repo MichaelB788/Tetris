@@ -2,7 +2,6 @@
 #include <SDL2/SDL.h>
 
 // C++ Libraries
-#include <vector>
 #include <iostream>
 
 // SDL Classes
@@ -14,7 +13,8 @@
 #include "Game/Board.hpp"
 
 // Custom Components
-#include "Components/Draw.hpp"
+#include "Components/Graphics.hpp"
+#include "Components/EventHandler.hpp"
 
 int main (int argc, char **argv)
 {
@@ -26,10 +26,10 @@ int main (int argc, char **argv)
     }
 
     // Initialize SDL window and renderer.
-    const WindowObject win = WindowObject();
-    const RendererObject ren = RendererObject(win.pSDL_Window);
+    const WindowObject WIN = WindowObject();
+    const RendererObject REN = RendererObject(WIN.pSDL_Window);
 
-    if (win.pSDL_Window == NULL || ren.pSDL_Renderer == NULL)
+    if (WIN.pSDL_Window == NULL || REN.pSDL_Renderer == NULL)
     {
         return 1;
     }
@@ -37,16 +37,21 @@ int main (int argc, char **argv)
     bool gameIsRunning = true;
     SDL_Event event;
 
-    // Testing stuff
-    Draw::drawBoard(Board::getBoard(), ren.pSDL_Renderer);
-    SDL_Delay(5000);
-
+    const char piecetypes[7] = {'I','O','T','S','Z','L','J'};
     // Game loop
-    while (gameIsRunning && SDL_PollEvent(&event))
+    while (gameIsRunning)
     {
-        SDL_RenderClear(ren.pSDL_Renderer);
-        gameIsRunning = false; // Don't want an infinite loop yet!
-        SDL_RenderPresent(ren.pSDL_Renderer); 
+        // Handle the events
+        EventHandler::process(event, gameIsRunning);
+
+        // Clear the screen
+        SDL_RenderClear(REN.pSDL_Renderer);
+
+        // Draw our new frame
+        Graphics::renderFrame(Board::board_state, REN.pSDL_Renderer);
+
+        // Show our new frame
+        SDL_RenderPresent(REN.pSDL_Renderer); 
     }
     
     SDL_Quit();

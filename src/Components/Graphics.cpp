@@ -48,7 +48,7 @@ void Graphics::renderFrame(std::array<std::array<char, 10>, 20> &board, SDL_Rend
         for (auto col : row)
         { 
             x_pos++;
-            renderTile(x_pos, y_pos, x, ren);
+            renderTile(x_pos, y_pos, col, ren);
         }
         y_pos++;
     }

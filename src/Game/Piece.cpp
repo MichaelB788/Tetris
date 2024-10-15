@@ -1,44 +1,60 @@
-#include <vector>
-
-#include "Board.hpp"
 #include "Piece.hpp"
+#include "Coordinate.hpp"
+#include "PieceManager.hpp"
 
-char id;
-
-void Piece::moveDown()
+typedef enum Piece::Direction : unsigned int 
 {
-    if (isValidPosition())
+    LEFT, RIGHT, DOWN
+} Direction;
+
+Piece::Piece(char type)
+{ 
+    coordinates = PieceManager::giveNewPiece(type);
+
+    for (Coordinate::Point point : coordinates.getFourPoints())
     {
-        // move the block down the row 
+         Board::arrayOfArrays[point.getX()][point.getY()] = type; 
     }
 }
 
-void Piece::moveRight()
+void Piece::move(Direction dir)
 {
-    if (isValidPosition())
+    if (PieceManager::isValidPosition(coordinates))
     {
-        // shift the block right once
+        switch (dir)
+        {
+            case LEFT:
+                for (Coordinate::Point point : coordinates.getFourPoints()){
+                    point.translateX(-1);
+                }
+                break;
+            case RIGHT:
+                for (Coordinate::Point point : coordinates.getFourPoints()){
+                    point.translateX(1);
+                }
+                break;
+            case DOWN:
+                for (Coordinate::Point point : coordinates.getFourPoints()){
+                    point.translateY(1);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 
-void Piece::moveLeft()
+void Piece::rotate(Direction dir)
 {
-    if (isValidPosition())
+    if (PieceManager::isValidPosition(coordinates))
     {
-        // shift the block left once
+        switch (dir) {
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+            default:
+                break;
+        }
     }
 }
-
-bool Piece::isValidPosition()
-{
-    /*
-     * Check if the the piece is within a free space (0)
-     * If the block is hitting wall (2), motion is stopped.
-     **/
-}
-
-char Piece::getID()
-{
-    return id;
-}
-

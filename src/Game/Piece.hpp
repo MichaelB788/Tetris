@@ -1,24 +1,21 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
-#include <vector>
-
+#include "Coordinate.hpp"
 #include "Board.hpp"
 
-class Piece
+typedef struct Piece : Board
 {
-    public:
-        Piece(char type);
+    enum Direction : unsigned int;
 
-        void moveDown();
+    Piece(char type);
 
-        void moveRight();
+    void move(Direction dir);
 
-        void moveLeft();
+    void rotate(Direction dir);
 
-        bool isValidPosition();
-        
-        char getID();
-};
+private:
+    Coordinate::FourPoints coordinates;
+} Piece;
 
 #endif

@@ -3,11 +3,10 @@
 
 #include <array>
 
-namespace Board
+typedef struct Board
 {
-    extern std::array<std::array<char, 10>, 20> board_state;
-
+    static std::array<std::array<char, 10>, 20> arrayOfArrays;
     void clearBoard();
-}
+} Board;
 
 #endif

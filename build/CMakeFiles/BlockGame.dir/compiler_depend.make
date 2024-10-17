@@ -255,36 +255,21 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/SDL2/SDL_version.h \
   /usr/include/SDL2/SDL_locale.h \
   /usr/include/SDL2/SDL_misc.h \
-  /usr/include/SDL2/SDL_timer.h \
-  /usr/include/c++/11/vector \
-  /usr/include/c++/11/bits/allocator.h \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
-  /usr/include/c++/11/ext/new_allocator.h \
-  /usr/include/c++/11/new \
-  /usr/include/c++/11/bits/exception.h \
-  /usr/include/c++/11/bits/memoryfwd.h \
-  /usr/include/c++/11/bits/stl_construct.h \
-  /usr/include/c++/11/bits/stl_uninitialized.h \
-  /usr/include/c++/11/ext/alloc_traits.h \
-  /usr/include/c++/11/bits/alloc_traits.h \
-  /usr/include/c++/11/bits/stl_vector.h \
-  /usr/include/c++/11/initializer_list \
-  /usr/include/c++/11/bits/stl_bvector.h \
-  /usr/include/c++/11/bits/functional_hash.h \
-  /usr/include/c++/11/bits/hash_bytes.h \
-  /usr/include/c++/11/bits/range_access.h \
-  /usr/include/c++/11/bits/vector.tcc \
   /usr/include/c++/11/iostream \
   /usr/include/c++/11/ostream \
   /usr/include/c++/11/ios \
   /usr/include/c++/11/iosfwd \
   /usr/include/c++/11/bits/stringfwd.h \
+  /usr/include/c++/11/bits/memoryfwd.h \
   /usr/include/c++/11/bits/postypes.h \
   /usr/include/c++/11/cwchar \
   /usr/include/c++/11/exception \
+  /usr/include/c++/11/bits/exception.h \
   /usr/include/c++/11/bits/exception_ptr.h \
   /usr/include/c++/11/bits/cxxabi_init_exception.h \
   /usr/include/c++/11/typeinfo \
+  /usr/include/c++/11/bits/hash_bytes.h \
+  /usr/include/c++/11/new \
   /usr/include/c++/11/bits/nested_exception.h \
   /usr/include/c++/11/bits/char_traits.h \
   /usr/include/c++/11/cstdint \
@@ -315,12 +300,21 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/x86_64-linux-gnu/sys/single_threaded.h \
   /usr/include/c++/11/bits/locale_classes.h \
   /usr/include/c++/11/string \
+  /usr/include/c++/11/bits/allocator.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
+  /usr/include/c++/11/ext/new_allocator.h \
   /usr/include/c++/11/bits/ostream_insert.h \
   /usr/include/c++/11/bits/cxxabi_forced.h \
   /usr/include/c++/11/bits/stl_function.h \
   /usr/include/c++/11/backward/binders.h \
+  /usr/include/c++/11/bits/range_access.h \
+  /usr/include/c++/11/initializer_list \
   /usr/include/c++/11/bits/basic_string.h \
+  /usr/include/c++/11/ext/alloc_traits.h \
+  /usr/include/c++/11/bits/alloc_traits.h \
+  /usr/include/c++/11/bits/stl_construct.h \
   /usr/include/c++/11/string_view \
+  /usr/include/c++/11/bits/functional_hash.h \
   /usr/include/c++/11/bits/string_view.tcc \
   /usr/include/c++/11/ext/string_conversions.h \
   /usr/include/c++/11/cstdio \
@@ -356,19 +350,23 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
   ../src/SDL/Window.hpp \
   ../src/SDL/Render.hpp \
   ../src/Game/Piece.hpp \
+  ../src/Game/Coordinate.hpp \
+  /usr/include/c++/11/array \
+  /usr/include/c++/11/utility \
+  /usr/include/c++/11/bits/stl_relops.h \
   ../src/Game/Board.hpp \
   ../src/Game/Board.hpp \
-  ../src/Components/Draw.hpp \
-  ../src/Game/Piece.cpp \
-  ../src/Game/Board.hpp \
-  ../src/Game/Piece.hpp
+  ../src/Components/Graphics.hpp \
+  ../src/Components/EventHandler.hpp
 
 
-../src/Game/Piece.cpp:
+../src/Components/EventHandler.hpp:
 
-../src/Components/Draw.hpp:
+../src/Components/Graphics.hpp:
 
 ../src/Game/Board.hpp:
+
+/usr/include/c++/11/bits/stl_relops.h:
 
 ../src/Game/Piece.hpp:
 
@@ -396,6 +394,8 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/c++/11/bits/basic_string.tcc:
 
+../src/Game/Coordinate.hpp:
+
 /usr/include/c++/11/bits/charconv.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
@@ -416,9 +416,17 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/c++/11/bits/string_view.tcc:
 
+/usr/include/c++/11/bits/functional_hash.h:
+
+/usr/include/c++/11/bits/stl_construct.h:
+
 /usr/include/c++/11/bits/basic_string.h:
 
 /usr/include/c++/11/backward/binders.h:
+
+/usr/include/c++/11/ext/new_allocator.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
 /usr/include/c++/11/bits/locale_classes.h:
 
@@ -437,6 +445,10 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/asm-generic/errno.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
+
+/usr/include/c++/11/ext/alloc_traits.h:
+
+/usr/include/x86_64-linux-gnu/bits/sched.h:
 
 /usr/include/wctype.h:
 
@@ -460,33 +472,17 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/c++/11/bits/nested_exception.h:
 
+/usr/include/c++/11/new:
+
 /usr/include/c++/11/bits/cxxabi_init_exception.h:
 
 /usr/include/c++/11/bits/exception_ptr.h:
-
-/usr/include/c++/11/cwchar:
-
-/usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
-
-/usr/include/c++/11/ios:
-
-/usr/include/c++/11/ostream:
-
-/usr/include/c++/11/bits/functional_hash.h:
-
-/usr/include/x86_64-linux-gnu/bits/sched.h:
-
-/usr/include/c++/11/ext/alloc_traits.h:
-
-/usr/include/c++/11/bits/stl_uninitialized.h:
-
-/usr/include/c++/11/bits/stl_construct.h:
 
 /usr/include/c++/11/bits/locale_facets.h:
 
 /usr/include/c++/11/bits/exception.h:
 
-/usr/include/c++/11/new:
+/usr/include/c++/11/cwchar:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h:
 
@@ -501,6 +497,8 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/c++/11/tr1/poly_laguerre.tcc:
 
 /usr/include/c++/11/bits/stl_iterator_base_types.h:
+
+/usr/include/c++/11/array:
 
 /usr/include/c++/11/tr1/beta_function.tcc:
 
@@ -517,8 +515,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/c++/11/bits/move.h:
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
-
-/usr/include/c++/11/bits/stl_vector.h:
 
 /usr/include/SDL2/SDL_hidapi.h:
 
@@ -548,7 +544,9 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/gfniintrin.h:
 
-/usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
+/usr/include/c++/11/bits/allocator.h:
+
+/usr/include/c++/11/cmath:
 
 /usr/include/c++/11/math.h:
 
@@ -563,10 +561,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/pmmintrin.h:
-
-/usr/include/c++/11/iostream:
-
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/uintrintrin.h:
 
@@ -605,10 +599,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/SDL2/SDL_assert.h:
 
 /usr/include/c++/11/pstl/pstl_config.h:
-
-/usr/include/c++/11/cmath:
-
-/usr/include/c++/11/bits/allocator.h:
 
 /usr/include/c++/11/limits:
 
@@ -696,8 +686,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
-/usr/include/c++/11/bits/stl_bvector.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
 
 /usr/include/SDL2/SDL_haptic.h:
@@ -746,8 +734,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
-/usr/include/c++/11/bits/vector.tcc:
-
 /usr/lib/gcc/x86_64-linux-gnu/11/include/xsaveoptintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/rdseedintrin.h:
@@ -792,6 +778,10 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/c++/11/iostream:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/waitpkgintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
@@ -812,8 +802,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
-/usr/include/c++/11/ext/new_allocator.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
@@ -829,6 +817,12 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/SDL2/SDL_sensor.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+
+/usr/include/c++/11/utility:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
+
+/usr/include/c++/11/ios:
 
 /usr/include/stdio.h:
 
@@ -950,12 +944,6 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/tmmintrin.h:
 
-/usr/include/c++/11/iosfwd:
-
-/usr/include/c++/11/initializer_list:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/smmintrin.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vldqintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/wmmintrin.h:
@@ -981,6 +969,8 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/wchar.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512bwintrin.h:
+
+/usr/include/c++/11/ostream:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512dqintrin.h:
 
@@ -1019,6 +1009,12 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/lib/gcc/x86_64-linux-gnu/11/include/avx512vp2intersectvlintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/fmaintrin.h:
+
+/usr/include/c++/11/initializer_list:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/smmintrin.h:
+
+/usr/include/c++/11/iosfwd:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
@@ -1073,5 +1069,3 @@ CMakeFiles/BlockGame.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
 
 /usr/include/SDL2/SDL_misc.h:
-
-/usr/include/c++/11/vector:

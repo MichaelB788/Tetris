@@ -56,16 +56,12 @@ void Graphics::renderFrame(std::array<std::array<char, 10>, 20> &board, SDL_Rend
 
 void Graphics::renderTile(int x, int y, char id, SDL_Renderer* ren)
 {
-    // Our tile specs
     SDL_Rect tile;
-
     tile.x = TILE_SIZE * x;
     tile.y = TILE_SIZE * y;
     tile.h = TILE_SIZE;
     tile.w = TILE_SIZE;
 
-    // Set the color based on the character on the current tile
     setColor(id, ren);
-
     (id == '#')? SDL_RenderDrawRect(ren, &tile) : SDL_RenderFillRect(ren, &tile);
 } 

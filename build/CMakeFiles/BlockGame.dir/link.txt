@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/BlockGame.dir/src/main.cpp.o -o BlockGame  -Wl,-rpath,/home/mike/Projects/Code/Tetris/build/src -lSDL2 src/libGameLibrary.so 

@@ -1,6 +1,0 @@
-/home/mike/Projects/Code/Tetris/build/CMakeFiles/BlockGame.dir
-/home/mike/Projects/Code/Tetris/build/CMakeFiles/edit_cache.dir
-/home/mike/Projects/Code/Tetris/build/CMakeFiles/rebuild_cache.dir
-/home/mike/Projects/Code/Tetris/build/src/CMakeFiles/GameLibrary.dir
-/home/mike/Projects/Code/Tetris/build/src/CMakeFiles/edit_cache.dir
-/home/mike/Projects/Code/Tetris/build/src/CMakeFiles/rebuild_cache.dir

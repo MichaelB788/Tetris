@@ -1,26 +1,60 @@
 #include <SDL2/SDL.h>
-#include <iostream>
 
 #include "EventHandler.hpp"
+#include "../Game/Piece.hpp"
 
-void EventHandler::handle(SDL_Event &event)
+void EventHandler::process(SDL_Event event, bool gameState)
 {
-    switch(event.type)
+    while (SDL_PollEvent(&event))
     {
-        case SDL_QUIT:
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                gameState = false;
+            case SDL_KEYDOWN:
+                // keydown(event);
+                break;
+            case SDL_KEYUP:
+                // keyup(event);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void EventHandler::keydown(SDL_Event event)
+{
+    // Handle event.key.keysym.sym on key down
+    switch (event.key.keysym.sym)
+    {
+        // TODO: Get the enums working. Needs to be global maybe?
+        case SDLK_h:
+            // Piece::move(Piece::Direction::RIGHT);  
             break;
-        case SDL_KEYDOWN:
+        case SDLK_k:
+            // Piece::move(LEFT);
             break;
-        case SDL_KEYUP:
+        case SDLK_SPACE:
+            // Piece::forceDrop();
             break;
         default:
-            std::cout << "No event detected" << std::endl;
             break;
     }
 }
 
-void EventHandler::quit();
-
-void EventHandler::keydown(SDL_Event);
-
-void EventHandler::keyup(SDL_Event);
+void EventHandler::keyup(SDL_Event event)
+{
+    // Handle event.key.keysym.sym on key up
+    switch (event.key.keysym.sym)
+    {
+        case SDLK_h:
+            break;
+        case SDLK_k:
+            break;
+        case SDLK_SPACE:
+            break;
+        default:
+            break;
+    }
+}

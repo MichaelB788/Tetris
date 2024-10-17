@@ -1,21 +1,5 @@
-// SDL2 Library
-#include <SDL2/SDL.h>
-
-// SDL API
-#include "API/SDLUtils.hpp"
-
-// Game Objects
-#include "Game/Piece.hpp"
-#include "Game/Board.hpp"
-
-// Custom Components
-#include "Components/Graphics.hpp"
-#include "Components/EventHandler.hpp"
-
-int main (int argc, char **argv)
+void run()
 {
-    SDLUtils::initEverything();
-
     bool gameIsRunning = true;
     SDL_Event event;
 
@@ -37,8 +21,4 @@ int main (int argc, char **argv)
         // Show our new frame
         SDL_RenderPresent(SDLUtils::renderer.pSDL_Renderer); 
     }
-    
-    SDL_Quit();
-
-    return 0;
 }

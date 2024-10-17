@@ -1,10 +1,12 @@
 add_library(GameLibrary SHARED
-    SDL/Render.cpp
-    SDL/Window.cpp
+    API/SDLUtils.cpp 
 
-    # Game/Piece.cpp
-    Game/Board.cpp
+    Game/Objects/Board.cpp
+    Game/Objects/Coordinate.cpp
+    Game/Objects/Piece.cpp
+    Game/Objects/PieceManager.cpp
+    Game/Tetris.cpp
 
-    Components/Draw.cpp
+    Components/Graphics.cpp
     Components/EventHandler.cpp
 )

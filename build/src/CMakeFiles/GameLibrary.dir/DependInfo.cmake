@@ -8,14 +8,14 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/mike/Projects/Code/Tetris/src/API/SDLUtils.cpp" "src/CMakeFiles/GameLibrary.dir/API/SDLUtils.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/API/SDLUtils.cpp.o.d"
   "/home/mike/Projects/Code/Tetris/src/Components/EventHandler.cpp" "src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/EventHandler.cpp.o.d"
   "/home/mike/Projects/Code/Tetris/src/Components/Graphics.cpp" "src/CMakeFiles/GameLibrary.dir/Components/Graphics.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Components/Graphics.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/Game/Board.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/Game/Coordinate.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Coordinate.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Coordinate.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/Game/Piece.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Piece.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Piece.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/Game/PieceManager.cpp" "src/CMakeFiles/GameLibrary.dir/Game/PieceManager.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/PieceManager.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/SDL/Render.cpp" "src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o.d"
-  "/home/mike/Projects/Code/Tetris/src/SDL/Window.cpp" "src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/Game/Objects/Board.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Board.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Board.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/Game/Objects/Coordinate.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Coordinate.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Coordinate.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/Game/Objects/Piece.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Piece.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Objects/Piece.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/Game/Objects/PieceManager.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Objects/PieceManager.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Objects/PieceManager.cpp.o.d"
+  "/home/mike/Projects/Code/Tetris/src/Game/Tetris.cpp" "src/CMakeFiles/GameLibrary.dir/Game/Tetris.cpp.o" "gcc" "src/CMakeFiles/GameLibrary.dir/Game/Tetris.cpp.o.d"
   )
 
 # Targets to which this target links.

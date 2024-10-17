@@ -130,6 +130,30 @@ GameLibrary/fast:
 	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/build
 .PHONY : GameLibrary/fast
 
+API/SDLUtils.o: API/SDLUtils.cpp.o
+.PHONY : API/SDLUtils.o
+
+# target to build an object file
+API/SDLUtils.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/API/SDLUtils.cpp.o
+.PHONY : API/SDLUtils.cpp.o
+
+API/SDLUtils.i: API/SDLUtils.cpp.i
+.PHONY : API/SDLUtils.i
+
+# target to preprocess a source file
+API/SDLUtils.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/API/SDLUtils.cpp.i
+.PHONY : API/SDLUtils.cpp.i
+
+API/SDLUtils.s: API/SDLUtils.cpp.s
+.PHONY : API/SDLUtils.s
+
+# target to generate assembly for a file
+API/SDLUtils.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/API/SDLUtils.cpp.s
+.PHONY : API/SDLUtils.cpp.s
+
 Components/EventHandler.o: Components/EventHandler.cpp.o
 .PHONY : Components/EventHandler.o
 
@@ -178,149 +202,125 @@ Components/Graphics.cpp.s:
 	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Components/Graphics.cpp.s
 .PHONY : Components/Graphics.cpp.s
 
-Game/Board.o: Game/Board.cpp.o
-.PHONY : Game/Board.o
+Game/Objects/Board.o: Game/Objects/Board.cpp.o
+.PHONY : Game/Objects/Board.o
 
 # target to build an object file
-Game/Board.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.o
-.PHONY : Game/Board.cpp.o
+Game/Objects/Board.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Board.cpp.o
+.PHONY : Game/Objects/Board.cpp.o
 
-Game/Board.i: Game/Board.cpp.i
-.PHONY : Game/Board.i
+Game/Objects/Board.i: Game/Objects/Board.cpp.i
+.PHONY : Game/Objects/Board.i
 
 # target to preprocess a source file
-Game/Board.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.i
-.PHONY : Game/Board.cpp.i
+Game/Objects/Board.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Board.cpp.i
+.PHONY : Game/Objects/Board.cpp.i
 
-Game/Board.s: Game/Board.cpp.s
-.PHONY : Game/Board.s
+Game/Objects/Board.s: Game/Objects/Board.cpp.s
+.PHONY : Game/Objects/Board.s
 
 # target to generate assembly for a file
-Game/Board.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Board.cpp.s
-.PHONY : Game/Board.cpp.s
+Game/Objects/Board.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Board.cpp.s
+.PHONY : Game/Objects/Board.cpp.s
 
-Game/Coordinate.o: Game/Coordinate.cpp.o
-.PHONY : Game/Coordinate.o
+Game/Objects/Coordinate.o: Game/Objects/Coordinate.cpp.o
+.PHONY : Game/Objects/Coordinate.o
 
 # target to build an object file
-Game/Coordinate.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Coordinate.cpp.o
-.PHONY : Game/Coordinate.cpp.o
+Game/Objects/Coordinate.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Coordinate.cpp.o
+.PHONY : Game/Objects/Coordinate.cpp.o
 
-Game/Coordinate.i: Game/Coordinate.cpp.i
-.PHONY : Game/Coordinate.i
+Game/Objects/Coordinate.i: Game/Objects/Coordinate.cpp.i
+.PHONY : Game/Objects/Coordinate.i
 
 # target to preprocess a source file
-Game/Coordinate.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Coordinate.cpp.i
-.PHONY : Game/Coordinate.cpp.i
+Game/Objects/Coordinate.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Coordinate.cpp.i
+.PHONY : Game/Objects/Coordinate.cpp.i
 
-Game/Coordinate.s: Game/Coordinate.cpp.s
-.PHONY : Game/Coordinate.s
+Game/Objects/Coordinate.s: Game/Objects/Coordinate.cpp.s
+.PHONY : Game/Objects/Coordinate.s
 
 # target to generate assembly for a file
-Game/Coordinate.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Coordinate.cpp.s
-.PHONY : Game/Coordinate.cpp.s
+Game/Objects/Coordinate.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Coordinate.cpp.s
+.PHONY : Game/Objects/Coordinate.cpp.s
 
-Game/Piece.o: Game/Piece.cpp.o
-.PHONY : Game/Piece.o
+Game/Objects/Piece.o: Game/Objects/Piece.cpp.o
+.PHONY : Game/Objects/Piece.o
 
 # target to build an object file
-Game/Piece.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Piece.cpp.o
-.PHONY : Game/Piece.cpp.o
+Game/Objects/Piece.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Piece.cpp.o
+.PHONY : Game/Objects/Piece.cpp.o
 
-Game/Piece.i: Game/Piece.cpp.i
-.PHONY : Game/Piece.i
+Game/Objects/Piece.i: Game/Objects/Piece.cpp.i
+.PHONY : Game/Objects/Piece.i
 
 # target to preprocess a source file
-Game/Piece.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Piece.cpp.i
-.PHONY : Game/Piece.cpp.i
+Game/Objects/Piece.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Piece.cpp.i
+.PHONY : Game/Objects/Piece.cpp.i
 
-Game/Piece.s: Game/Piece.cpp.s
-.PHONY : Game/Piece.s
+Game/Objects/Piece.s: Game/Objects/Piece.cpp.s
+.PHONY : Game/Objects/Piece.s
 
 # target to generate assembly for a file
-Game/Piece.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Piece.cpp.s
-.PHONY : Game/Piece.cpp.s
+Game/Objects/Piece.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/Piece.cpp.s
+.PHONY : Game/Objects/Piece.cpp.s
 
-Game/PieceManager.o: Game/PieceManager.cpp.o
-.PHONY : Game/PieceManager.o
+Game/Objects/PieceManager.o: Game/Objects/PieceManager.cpp.o
+.PHONY : Game/Objects/PieceManager.o
 
 # target to build an object file
-Game/PieceManager.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/PieceManager.cpp.o
-.PHONY : Game/PieceManager.cpp.o
+Game/Objects/PieceManager.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/PieceManager.cpp.o
+.PHONY : Game/Objects/PieceManager.cpp.o
 
-Game/PieceManager.i: Game/PieceManager.cpp.i
-.PHONY : Game/PieceManager.i
+Game/Objects/PieceManager.i: Game/Objects/PieceManager.cpp.i
+.PHONY : Game/Objects/PieceManager.i
 
 # target to preprocess a source file
-Game/PieceManager.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/PieceManager.cpp.i
-.PHONY : Game/PieceManager.cpp.i
+Game/Objects/PieceManager.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/PieceManager.cpp.i
+.PHONY : Game/Objects/PieceManager.cpp.i
 
-Game/PieceManager.s: Game/PieceManager.cpp.s
-.PHONY : Game/PieceManager.s
+Game/Objects/PieceManager.s: Game/Objects/PieceManager.cpp.s
+.PHONY : Game/Objects/PieceManager.s
 
 # target to generate assembly for a file
-Game/PieceManager.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/PieceManager.cpp.s
-.PHONY : Game/PieceManager.cpp.s
+Game/Objects/PieceManager.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Objects/PieceManager.cpp.s
+.PHONY : Game/Objects/PieceManager.cpp.s
 
-SDL/Render.o: SDL/Render.cpp.o
-.PHONY : SDL/Render.o
+Game/Tetris.o: Game/Tetris.cpp.o
+.PHONY : Game/Tetris.o
 
 # target to build an object file
-SDL/Render.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.o
-.PHONY : SDL/Render.cpp.o
+Game/Tetris.cpp.o:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Tetris.cpp.o
+.PHONY : Game/Tetris.cpp.o
 
-SDL/Render.i: SDL/Render.cpp.i
-.PHONY : SDL/Render.i
-
-# target to preprocess a source file
-SDL/Render.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.i
-.PHONY : SDL/Render.cpp.i
-
-SDL/Render.s: SDL/Render.cpp.s
-.PHONY : SDL/Render.s
-
-# target to generate assembly for a file
-SDL/Render.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Render.cpp.s
-.PHONY : SDL/Render.cpp.s
-
-SDL/Window.o: SDL/Window.cpp.o
-.PHONY : SDL/Window.o
-
-# target to build an object file
-SDL/Window.cpp.o:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.o
-.PHONY : SDL/Window.cpp.o
-
-SDL/Window.i: SDL/Window.cpp.i
-.PHONY : SDL/Window.i
+Game/Tetris.i: Game/Tetris.cpp.i
+.PHONY : Game/Tetris.i
 
 # target to preprocess a source file
-SDL/Window.cpp.i:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.i
-.PHONY : SDL/Window.cpp.i
+Game/Tetris.cpp.i:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Tetris.cpp.i
+.PHONY : Game/Tetris.cpp.i
 
-SDL/Window.s: SDL/Window.cpp.s
-.PHONY : SDL/Window.s
+Game/Tetris.s: Game/Tetris.cpp.s
+.PHONY : Game/Tetris.s
 
 # target to generate assembly for a file
-SDL/Window.cpp.s:
-	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/SDL/Window.cpp.s
-.PHONY : SDL/Window.cpp.s
+Game/Tetris.cpp.s:
+	cd /home/mike/Projects/Code/Tetris/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/GameLibrary.dir/build.make src/CMakeFiles/GameLibrary.dir/Game/Tetris.cpp.s
+.PHONY : Game/Tetris.cpp.s
 
 # Help Target
 help:
@@ -331,30 +331,30 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... GameLibrary"
+	@echo "... API/SDLUtils.o"
+	@echo "... API/SDLUtils.i"
+	@echo "... API/SDLUtils.s"
 	@echo "... Components/EventHandler.o"
 	@echo "... Components/EventHandler.i"
 	@echo "... Components/EventHandler.s"
 	@echo "... Components/Graphics.o"
 	@echo "... Components/Graphics.i"
 	@echo "... Components/Graphics.s"
-	@echo "... Game/Board.o"
-	@echo "... Game/Board.i"
-	@echo "... Game/Board.s"
-	@echo "... Game/Coordinate.o"
-	@echo "... Game/Coordinate.i"
-	@echo "... Game/Coordinate.s"
-	@echo "... Game/Piece.o"
-	@echo "... Game/Piece.i"
-	@echo "... Game/Piece.s"
-	@echo "... Game/PieceManager.o"
-	@echo "... Game/PieceManager.i"
-	@echo "... Game/PieceManager.s"
-	@echo "... SDL/Render.o"
-	@echo "... SDL/Render.i"
-	@echo "... SDL/Render.s"
-	@echo "... SDL/Window.o"
-	@echo "... SDL/Window.i"
-	@echo "... SDL/Window.s"
+	@echo "... Game/Objects/Board.o"
+	@echo "... Game/Objects/Board.i"
+	@echo "... Game/Objects/Board.s"
+	@echo "... Game/Objects/Coordinate.o"
+	@echo "... Game/Objects/Coordinate.i"
+	@echo "... Game/Objects/Coordinate.s"
+	@echo "... Game/Objects/Piece.o"
+	@echo "... Game/Objects/Piece.i"
+	@echo "... Game/Objects/Piece.s"
+	@echo "... Game/Objects/PieceManager.o"
+	@echo "... Game/Objects/PieceManager.i"
+	@echo "... Game/Objects/PieceManager.s"
+	@echo "... Game/Tetris.o"
+	@echo "... Game/Tetris.i"
+	@echo "... Game/Tetris.s"
 .PHONY : help
 
 

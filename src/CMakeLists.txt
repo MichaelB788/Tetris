@@ -1,7 +1,6 @@
 add_library(GameLibrary SHARED
     API/SDLUtils.cpp 
 
-    Game/Objects/Board.cpp
     Game/Objects/Coordinate.cpp
     Game/Objects/Piece.cpp
     Game/Objects/PieceManager.cpp

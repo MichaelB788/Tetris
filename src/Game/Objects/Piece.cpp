@@ -2,24 +2,20 @@
 #include "Coordinate.hpp"
 #include "PieceManager.hpp"
 
-typedef enum Piece::Direction : unsigned int 
-{
-    LEFT, RIGHT, DOWN
-} Direction;
-
-Piece::Piece(char type)
+Piece::Piece(char type, Board board)
 { 
     coordinates = PieceManager::giveNewPiece(type);
+    mBoard = board;
 
     for (Coordinate::Point point : coordinates.getFourPoints())
     {
-         Board::arrayOfArrays[point.getX()][point.getY()] = type; 
+        board.modifyAt(point, type);
     }
 }
 
 void Piece::move(Direction dir)
 {
-    if (PieceManager::isValidPosition(coordinates))
+    if (PieceManager::isValidPosition(coordinates, mBoard))
     {
         switch (dir)
         {
@@ -46,7 +42,7 @@ void Piece::move(Direction dir)
 
 void Piece::rotate(Direction dir)
 {
-    if (PieceManager::isValidPosition(coordinates))
+    if (PieceManager::isValidPosition(coordinates, mBoard))
     {
         switch (dir) {
             case LEFT:
@@ -58,3 +54,4 @@ void Piece::rotate(Direction dir)
         }
     }
 }
+

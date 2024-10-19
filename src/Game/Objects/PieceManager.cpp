@@ -1,6 +1,6 @@
-#include <stdexcept>
-
 #include "PieceManager.hpp"
+
+#include <stdexcept>
 #include "Coordinate.hpp"
 #include "Board.hpp"
 
@@ -34,27 +34,27 @@ Coordinate::FourPoints PieceManager::giveNewPiece(char type)
     }
 }
 
-bool PieceManager::isValidPosition(Coordinate::FourPoints &coordinates)
+bool PieceManager::isValidPosition(Coordinate::FourPoints &coordinates, Board board)
 {
     for (Coordinate::Point point : coordinates.getFourPoints())
     {
         int x = point.getX();
         int y = point.getY();
 
-        // Coordinate::FourPoints neighbors = Coordinate::getNeighborsAt(point); 
-
         // TODO: create a function which compares two points
         // I want to see if the neighboring tile is a free tile # 
-        if (Board::arrayOfArrays[--x][y] == '#' && Board::arrayOfArrays[++x][y] == '#')
+        if (board.at(--x, y) == '#' && board.at(++x, y) == '#')
         {
             return true;
         }
 
-        else if (Board::arrayOfArrays[x] == Board::arrayOfArrays[Board::arrayOfArrays.size()])
+        /*
+        else if (board.at(x, y) == 20)
         { 
             releaseCurrentPiece();
             return false;
         }
+        */
     }
 
     return false;

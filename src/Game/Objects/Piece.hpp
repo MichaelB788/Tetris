@@ -4,11 +4,14 @@
 #include "Coordinate.hpp"
 #include "Board.hpp"
 
-typedef struct Piece : Board
+typedef struct Piece
 {
-    enum Direction : unsigned int;
+    typedef enum Direction : unsigned int 
+    {
+        LEFT, RIGHT, DOWN
+    } Direction;
 
-    Piece(char type);
+    Piece(char type, Board board);
 
     void move(Direction dir);
 
@@ -16,6 +19,7 @@ typedef struct Piece : Board
 
 private:
     Coordinate::FourPoints coordinates;
+    Board mBoard;
 } Piece;
 
 #endif

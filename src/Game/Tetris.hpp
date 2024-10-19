@@ -2,20 +2,21 @@
 #define TETRIS_H
 
 #include <SDL2/SDL.h>
+#include "../Components/Graphics.hpp"
+#include "Objects/Board.hpp"
+#include "Objects/Piece.hpp"
 
 typedef class Tetris
 {
-    bool gameIsRunning;
-
+private:
     SDL_Event event;
-
-    char piecetypes[7] = {'I','O','T','S','Z','L','J'};
-
-    void clearBoard();
+    bool gameIsRunning = true;
+    Board board;
 
 public:
-    Tetris();
-    
+    Tetris() = default;
+
+    void runGame(GraphicsModule gm);
 } Tetris;
 
 #endif

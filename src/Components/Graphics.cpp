@@ -1,67 +1,78 @@
 #include <SDL2/SDL.h>
-#include <array>
 
 #include "Graphics.hpp"
 
-#define TILE_SIZE 40
+GraphicsModule::GraphicsModule(SDL_Renderer* ren)
+{
+    p_renderer = ren;
+}
 
-void Graphics::setColor(char id, SDL_Renderer* ren)
+GraphicsModule::~GraphicsModule()
+{
+    p_renderer = nullptr;
+}
+
+void GraphicsModule::setColor(char id)
 {
     switch (id)
     {
         case 'I':
-            SDL_SetRenderDrawColor(ren, 0, 255, 255, 1);
+            SDL_SetRenderDrawColor(p_renderer, 0, 255, 255, 1);
             break;
         case 'O':
-            SDL_SetRenderDrawColor(ren, 255, 255, 0, 1);
+            SDL_SetRenderDrawColor(p_renderer, 255, 255, 0, 1);
             break;
         case 'T':
-            SDL_SetRenderDrawColor(ren, 255, 0, 255, 1);
+            SDL_SetRenderDrawColor(p_renderer, 255, 0, 255, 1);
             break;
         case 'S':
-            SDL_SetRenderDrawColor(ren, 255, 0, 0, 1);
+            SDL_SetRenderDrawColor(p_renderer, 255, 0, 0, 1);
             break;
         case 'Z':
-            SDL_SetRenderDrawColor(ren, 0, 255, 0, 1);
+            SDL_SetRenderDrawColor(p_renderer, 0, 255, 0, 1);
             break;
         case 'L':
-            SDL_SetRenderDrawColor(ren, 0, 0, 255, 1);
+            SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
         case 'J':
-            SDL_SetRenderDrawColor(ren, 255, 145, 0, 1);
+            SDL_SetRenderDrawColor(p_renderer, 255, 145, 0, 1);
             break;
         case '#':
-            SDL_SetRenderDrawColor(ren, 0, 0, 250, 0);
+            SDL_SetRenderDrawColor(p_renderer, 250, 250, 250, 0);
             break;
         default:
             break;
     }
 }
 
-void Graphics::renderFrame(std::array<std::array<char, 10>, 20> &board, SDL_Renderer* ren)
+void GraphicsModule::drawBoard(Board board)
 {
-    int y_pos = 0;
-
-    for (auto row : board)
-    {
-        int x_pos = 0;
-        for (auto col : row)
-        { 
-            x_pos++;
-            renderTile(x_pos, y_pos, col, ren);
-        }
-        y_pos++;
-    }
+    // Board has dimenstions 20 x 10
+    for (int row = 0; row < 20; row++)
+        for (int col = 0; col < 10; col++)
+            drawTile(col, row, board.at(row, col));
 }
 
-void Graphics::renderTile(int x, int y, char id, SDL_Renderer* ren)
+void GraphicsModule::drawTile(int x, int y, char id)
 {
     SDL_Rect tile;
-    tile.x = TILE_SIZE * x;
-    tile.y = TILE_SIZE * y;
-    tile.h = TILE_SIZE;
-    tile.w = TILE_SIZE;
+    tile.x = tileSize * x;
+    tile.y = tileSize * y;
+    tile.h = tileSize;
+    tile.w = tileSize;
 
-    setColor(id, ren);
-    (id == '#')? SDL_RenderDrawRect(ren, &tile) : SDL_RenderFillRect(ren, &tile);
+    setColor(id);
+
+    (id == '#') ? SDL_RenderDrawRect(p_renderer, &tile) : SDL_RenderFillRect(p_renderer, &tile);
 } 
+
+void GraphicsModule::clearAndPresentFrame(Board board)
+{
+    SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
+
+    SDL_RenderClear(p_renderer);
+
+    drawBoard(board);
+
+    SDL_RenderPresent(p_renderer); 
+}

@@ -2,6 +2,7 @@
 #define COORDINATE_H
 
 #include <array>
+
 namespace Coordinate
 {
     typedef struct Point

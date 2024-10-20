@@ -1,63 +1,47 @@
 #include "PieceManager.hpp"
 
+#include <array>
 #include <stdexcept>
 #include "Coordinate.hpp"
-#include "Board.hpp"
+#include "TetrisBoard.hpp"
 
-Coordinate::FourPoints PieceManager::giveNewPiece(char type)
+std::array<Point, 4> PieceManager::giveNewPiece(char type)
 {
-    switch (type)
-    {
+    switch (type) {
         case 'I':
-            return Coordinate::FourPoints({{{5, 0}, {5, 1}, {5, 2}, {5, 2}}});
-            break;
+            return {Point(4, 1), Point(4, 0), Point(4, 2), Point(4, 3)};
         case 'O':
-            return Coordinate::FourPoints({{{4, 0}, {5, 0}, {4, 1}, {5, 1}}});
-            break;
+            return {Point(4, 0), Point(5, 0), Point(4, 1), Point(5, 1)};
         case 'T':
-            return Coordinate::FourPoints({{{3, 0}, {4, 0}, {5, 0}, {4, 1}}});
-            break;
+            return {Point(4, 0), Point(3, 0), Point(5, 0), Point(4, 1)};
         case 'S':
-            return Coordinate::FourPoints({{{3, 0}, {4, 0}, {4, 1}, {5, 2}}});
-            break;
+            return {Point(4, 1), Point(3, 1), Point(4, 0), Point(5, 0)};
         case 'Z':
-            return Coordinate::FourPoints({{{4, 0}, {5, 0}, {4, 1}, {3, 1}}});
-            break;
+            return {Point(4, 1), Point(3, 0), Point(4, 0), Point(5, 1)};
         case 'L':
-            return Coordinate::FourPoints({{{4, 0}, {4, 1}, {4, 2}, {5, 2}}});
-            break;
+            return {Point(4, 1), Point(4, 0), Point(4, 2), Point(5, 2)};
         case 'J':
-            return Coordinate::FourPoints({{{5, 0}, {5, 1}, {5, 2}, {4, 2}}});
-            break;
+            return {Point(5, 1), Point(5, 0), Point(5, 2), Point(4, 2)};
         default:
-            throw std::invalid_argument("Invalid char type given to PieceManager::giveNewPiece()");
+            throw std::invalid_argument("Invalid type given to PieceManager::giveNewPiece(char type)");
     }
 }
 
-bool PieceManager::isValidPosition(Coordinate::FourPoints &coordinates, Board board)
+bool PieceManager::positionIsValid(std::array<Point, 4> &coordinates)
 {
-    for (Coordinate::Point point : coordinates.getFourPoints())
+    for (Point point : coordinates)
     {
         int x = point.getX();
         int y = point.getY();
 
-        // TODO: create a function which compares two points
-        // I want to see if the neighboring tile is a free tile # 
-        if (board.at(--x, y) == '#' && board.at(++x, y) == '#')
+        if (TetrisBoard::Grid::at(--x, y) != '#' &&
+            TetrisBoard::Grid::at(++x, y) != '#')
         {
-            return true;
-        }
-
-        /*
-        else if (board.at(x, y) == 20)
-        { 
-            releaseCurrentPiece();
             return false;
         }
-        */
     }
 
-    return false;
+    return true;
 }
 
 void PieceManager::releaseCurrentPiece()

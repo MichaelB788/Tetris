@@ -1,14 +1,14 @@
 #ifndef PIECE_MANAGER
 #define PIECE_MANAGER
 
+#include <array>
 #include "Coordinate.hpp"
-#include "Board.hpp"
 
 namespace PieceManager 
 {
-    Coordinate::FourPoints giveNewPiece(char type);
+    std::array<Point, 4> giveNewPiece(char type);
 
-    bool isValidPosition(Coordinate::FourPoints &coordinates, Board board);
+    bool positionIsValid(std::array<Point, 4> &coordinates);
 
     void releaseCurrentPiece();
 }

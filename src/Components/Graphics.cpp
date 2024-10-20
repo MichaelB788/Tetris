@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 
 #include "Graphics.hpp"
+#include "../Game/Objects/TetrisBoard.hpp"
 
 GraphicsModule::GraphicsModule(SDL_Renderer* ren)
 {
@@ -26,16 +27,16 @@ void GraphicsModule::setColor(char id)
             SDL_SetRenderDrawColor(p_renderer, 255, 0, 255, 1);
             break;
         case 'S':
-            SDL_SetRenderDrawColor(p_renderer, 255, 0, 0, 1);
-            break;
-        case 'Z':
             SDL_SetRenderDrawColor(p_renderer, 0, 255, 0, 1);
             break;
+        case 'Z':
+            SDL_SetRenderDrawColor(p_renderer, 255, 0, 0, 1);
+            break;
         case 'L':
-            SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
+            SDL_SetRenderDrawColor(p_renderer, 255, 145, 0, 1);
             break;
         case 'J':
-            SDL_SetRenderDrawColor(p_renderer, 255, 145, 0, 1);
+            SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
         case '#':
             SDL_SetRenderDrawColor(p_renderer, 250, 250, 250, 0);
@@ -45,12 +46,12 @@ void GraphicsModule::setColor(char id)
     }
 }
 
-void GraphicsModule::drawBoard(Board board)
+void GraphicsModule::drawBoard()
 {
     // Board has dimenstions 20 x 10
     for (int row = 0; row < 20; row++)
         for (int col = 0; col < 10; col++)
-            drawTile(col, row, board.at(row, col));
+            drawTile(col, row, TetrisBoard::Grid::at(col, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, char id)
@@ -66,13 +67,13 @@ void GraphicsModule::drawTile(int x, int y, char id)
     (id == '#') ? SDL_RenderDrawRect(p_renderer, &tile) : SDL_RenderFillRect(p_renderer, &tile);
 } 
 
-void GraphicsModule::clearAndPresentFrame(Board board)
+void GraphicsModule::clearAndPresentFrame()
 {
     SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
 
     SDL_RenderClear(p_renderer);
 
-    drawBoard(board);
+    drawBoard();
 
     SDL_RenderPresent(p_renderer); 
 }

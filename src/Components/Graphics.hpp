@@ -3,8 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "../Game/Objects/Board.hpp"
-
 typedef struct GraphicsModule
 {
     GraphicsModule(SDL_Renderer* ren);
@@ -13,11 +11,11 @@ typedef struct GraphicsModule
 
     void setColor(char id);
 
-    void drawBoard(Board board);
+    void drawBoard();
 
     void drawTile(int x, int y, char id);
 
-    void clearAndPresentFrame(Board board);
+    void clearAndPresentFrame();
 
     private:
 

@@ -3,45 +3,28 @@
 
 #include <array>
 
-namespace Coordinate
+typedef struct Point
 {
-    typedef struct Point
-    {
-        Point();
+    Point();
 
-        Point(std::array<int, 2>);
+    Point(std::array<int, 2> pair);
 
-        std::array<int, 2> getPoint();
+    Point(int x, int y);
 
-        int getX();
+    Point(Point &other);
 
-        int getY();
+    Point getPoint();
 
-        void translateX(int amount);
+    int const getX();
 
-        void translateY(int amount);
+    int const getY();
 
-        private:
-        std::array<int, 2> pair;
-    } Point;
+    void translateX(int amount);
 
-    typedef struct FourPoints
-    {
-        FourPoints();
+    void translateY(int amount);
 
-        FourPoints(Point p1, Point p2, Point p3, Point p4);
-
-        FourPoints(std::array<std::array<int, 2>, 4> arrayOfArrays);
-
-        std::array<Point, 4> getFourPoints();
-        
-        private:
-        std::array<Point, 4> fourPairs;  
-    } FourPoints;
-
-    FourPoints getNeighborsAt(std::array<int, 2> point);
-
-    FourPoints getNeighborsAt(Point point);
-}
+private:
+    std::array<int, 2> pair_;
+} Point;
 
 #endif 

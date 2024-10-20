@@ -10,97 +10,47 @@
  *
  * */
 
-Coordinate::Point::Point()
+Point::Point()
 {
-    pair = {0, 0};
+    pair_ = {0, 0};
 }
 
-Coordinate::Point::Point(std::array<int, 2> pair)
+Point::Point(std::array<int, 2> pair)
 {
-    pair = pair;
+    pair_ = pair;
 }
 
-std::array<int, 2> Coordinate::Point::getPoint()
+Point::Point(int x, int y)
 {
-    return pair;
+    pair_ = {x, y};
 }
 
-int Coordinate::Point::getX()
+Point::Point(Point &other)
 {
-    return pair[0];
+    pair_ = {other.getX(), other.getY()}; 
 }
 
-int Coordinate::Point::getY()
+Point Point::getPoint()
 {
-    return pair[1];
+    return Point(pair_);
 }
 
-void Coordinate::Point::translateX(int amount)
+int const Point::getX()
 {
-    pair[0] += amount;
+    return pair_[0];
 }
 
-void Coordinate::Point::translateY(int amount)
+int const Point::getY()
 {
-    pair[1] += amount;
+    return pair_[1];
 }
 
-/*
- * Coordinate::FourPoint is a simple wrapper around a 2D array, where 
- * the inner array is of size 2 (Coordinate::Point) and the outer array 
- * is of size four. This is very useful in a game inspired by Tetris.
- *
- * Because FourPoints consists of four Coordinate::Point, it's best to
- * use functions from Coordinate::Point to modify FourPoints through a
- * loop
- *
- * */
-
-Coordinate::FourPoints::FourPoints()
+void Point::translateX(int amount)
 {
-    fourPairs = {Point(), Point(), Point(), Point()};
+    pair_[0] += amount;
 }
 
-Coordinate::FourPoints::FourPoints(Point p1, Point p2, Point p3, Point p4)
+void Point::translateY(int amount)
 {
-    fourPairs = {p1.getPoint(), p2.getPoint(), p3.getPoint(), p4.getPoint()};
-}
-
-Coordinate::FourPoints::FourPoints(std::array<std::array<int, 2>, 4> arrayOfArrays)
-{
-    Point p1, p2, p3, p4;
-
-    p1 = arrayOfArrays[0];
-    p2 = arrayOfArrays[1];
-    p3 = arrayOfArrays[2];
-    p4 = arrayOfArrays[3];
-
-    fourPairs = {p1, p2, p3, p4};
-}
-
-std::array<Coordinate::Point, 4> Coordinate::FourPoints::getFourPoints()
-{
-    return fourPairs;
-}
-
-/*
- * The functions below serve to return special instances of Point or 
- * FourPoint
- *
- * */
-
-Coordinate::FourPoints Coordinate::getNeighborsAt(std::array<int, 2> point)
-{
-    int x = point[0];
-    int y = point[1];
-
-    return FourPoints({{{++x, y}, {--x, y}, {x, ++y}, {x, --y}}});
-}
-
-Coordinate::FourPoints Coordinate::getNeighborsAt(Point point)
-{
-    int x = point.getPoint()[0];
-    int y = point.getPoint()[1];
-
-    return FourPoints({{{++x, y}, {--x, y}, {x, ++y}, {x, --y}}});
+    pair_[1] += amount;
 }

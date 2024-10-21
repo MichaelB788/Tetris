@@ -4,10 +4,10 @@
 #include "Coordinate.hpp"
 #include <array>
 
+enum Direction { LEFT, RIGHT, DOWN };
+
 namespace TetrisBoard
 { 
-    enum Direction { LEFT, RIGHT, DOWN };
-
     typedef struct Piece
     {
         Piece(char type);
@@ -18,10 +18,18 @@ namespace TetrisBoard
 
         void move(Direction dir);
 
-    private:
-        std::array<Point, 4> coordinates_;
-        char type_;
+        std::array<Point, 4> getNewCoordinates() const;
 
+        std::array<Point, 4> getOldCoordinates() const;
+
+        char getType() const;
+        
+    private:
+        std::array<Point, 4> newCoordinates_;
+
+        std::array<Point, 4> oldCoordinates_;
+
+        char type_;
     } Piece;
 
     namespace Grid
@@ -33,6 +41,8 @@ namespace TetrisBoard
         void set(int row, int col, char newElement);
 
         void set(Point c, char newElement);
+
+        void clear();
     }
 }
 

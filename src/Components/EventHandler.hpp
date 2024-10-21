@@ -2,13 +2,26 @@
 #define EVENT_HANDLER_H
 
 #include <SDL2/SDL.h>
+#include "../Game/Objects/TetrisBoard.hpp"
 
-namespace EventHandler 
+typedef struct EventHandler 
 {
-    void process(SDL_Event event, bool gameState);
+    EventHandler(TetrisBoard::Piece *piece, bool &gameState);
 
-    void keydown(SDL_Event event);
-    void keyup(SDL_Event event);
-}
+    void setTargetPiece(TetrisBoard::Piece *newPiece);
+
+    void processInput();
+
+    void keydown();
+
+    void keyup();
+
+private:
+    SDL_Event event_;
+
+    TetrisBoard::Piece *target_ = nullptr;
+
+    bool &gameState_;
+} EventHandler;
 
 #endif

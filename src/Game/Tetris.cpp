@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <cstdio>
 #include <cstdlib>
 
 #include "Tetris.hpp"
@@ -8,14 +9,27 @@
 
 #include "Objects/TetrisBoard.hpp"
 
-void Tetris::runGame(GraphicsModule gm)
+void Tetris::runGame(GraphicsModule graphics)
 {
-    TetrisBoard::Piece p;
+    EventHandler handler = EventHandler(&currentPiece, gameIsRunning);
 
     while (gameIsRunning)
     {
-        EventHandler::processInput(event, gameIsRunning);
+        handler.processInput();
 
-        gm.clearAndPresentFrame();
+        updateGame();
+
+        graphics.clearAndPresentFrame();
     }
+}
+
+void Tetris::updateGame()
+{
+    using namespace TetrisBoard;
+
+    for (Point point : currentPiece.getOldCoordinates())
+         Grid::set(point.getX(), point.getY(), '#');
+
+    for (Point point : currentPiece.getNewCoordinates())
+         Grid::set(point.getX(), point.getY(), currentPiece.getType());
 }

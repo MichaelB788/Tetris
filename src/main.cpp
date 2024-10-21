@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <assert.h>
 
 #include "Game/Tetris.hpp"
 #include "API/GameCore.hpp"
@@ -6,6 +7,8 @@
 
 int main (int argc, char **argv)
 {
+    assert(SDL_Init(SDL_INIT_VIDEO) == 0);
+
     GameCore core;
 
     GraphicsModule graphics = GraphicsModule(core.m_Renderer);
@@ -13,10 +16,6 @@ int main (int argc, char **argv)
     Tetris tetris;
 
     tetris.runGame(graphics);
-
-    core.terminate();
-
-    SDL_Quit();
 
     return 0;
 }

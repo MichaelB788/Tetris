@@ -11,7 +11,7 @@ typedef struct GameCore
 
     GameCore();
 
-    void terminate();
+    ~GameCore();
 }GameCore;
 
 #endif

@@ -5,8 +5,6 @@
 
 GameCore::GameCore()
 {
-    assert(SDL_Init(SDL_INIT_VIDEO) == 0);
-
     m_Window = SDL_CreateWindow("Block Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, SDL_WINDOW_SHOWN);
 
     assert((m_Window != NULL));
@@ -17,11 +15,13 @@ GameCore::GameCore()
 }
 
 // Destructors
-void GameCore::terminate()
+GameCore::~GameCore()
 {
     SDL_DestroyWindow(m_Window);
     m_Window = nullptr;
 
     SDL_DestroyRenderer(m_Renderer);
     m_Renderer = nullptr;
+
+    SDL_Quit();
 }

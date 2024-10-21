@@ -5,7 +5,7 @@
 
 GameCore::GameCore()
 {
-    m_Window = SDL_CreateWindow("Block Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, SDL_WINDOW_SHOWN);
+    m_Window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_SHOWN);
 
     assert((m_Window != NULL));
 

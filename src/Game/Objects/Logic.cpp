@@ -1,13 +1,13 @@
-#include "PieceManager.hpp"
+#include "Logic.hpp"
 
 #include <array>
 #include <stdexcept>
 #include "Coordinate.hpp"
-#include "TetrisBoard.hpp"
+#include "Grid.hpp"
 
-std::array<Point, 4> PieceManager::giveNewPiece(char type)
+std::array<Point, 4> Logic::giveNewPiece(char _type)
 {
-    switch (type) {
+    switch (_type) {
         case 'I':
             return {Point(4, 1), Point(4, 0), Point(4, 2), Point(4, 3)};
         case 'O':
@@ -27,24 +27,24 @@ std::array<Point, 4> PieceManager::giveNewPiece(char type)
     }
 }
 
-bool PieceManager::positionIsValid(std::array<Point, 4> &coordinates)
+bool Logic::positionIsValid(std::array<Point, 4> &_coordinates)
 {
-    for (Point point : coordinates)
+    for (Point& _point : _coordinates)
     {
-        int x = point.getX();
-        int y = point.getY();
+        int x = _point.getX();
+        int y = _point.getY();
 
-        if (TetrisBoard::Grid::at(--x, y) != '#' &&
-            TetrisBoard::Grid::at(++x, y) != '#')
+        if (Grid::at(--x, y) != '#' &&
+            Grid::at(++x, y) != '#')
         {
-            return false;
+            return true;
         }
     }
 
     return true;
 }
 
-void PieceManager::releaseCurrentPiece()
+void Logic::releaseCurrentPiece()
 {
 }
 

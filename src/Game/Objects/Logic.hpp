@@ -4,11 +4,11 @@
 #include <array>
 #include "Coordinate.hpp"
 
-namespace PieceManager 
+namespace Logic 
 {
-    std::array<Point, 4> giveNewPiece(char type);
+    std::array<Point, 4> giveNewPiece(char _type);
 
-    bool positionIsValid(std::array<Point, 4> &coordinates);
+    bool positionIsValid(std::array<Point, 4> &_coordinates);
 
     void releaseCurrentPiece();
 }

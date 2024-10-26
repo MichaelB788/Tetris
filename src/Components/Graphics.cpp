@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 
 #include "Graphics.hpp"
-#include "../Game/Objects/TetrisBoard.hpp"
+#include "../Game/Objects/Grid.hpp"
 
 GraphicsModule::GraphicsModule(SDL_Renderer* ren)
 {
@@ -48,10 +48,9 @@ void GraphicsModule::setColor(char id)
 
 void GraphicsModule::drawBoard()
 {
-    // Board has dimenstions 20 x 10
     for (int row = 0; row < 20; row++)
         for (int col = 0; col < 10; col++)
-            drawTile(col, row, TetrisBoard::Grid::at(col, row));
+            drawTile(col, row, Grid::at(col, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, char id)
@@ -69,6 +68,9 @@ void GraphicsModule::drawTile(int x, int y, char id)
 
 void GraphicsModule::clearAndPresentFrame()
 {
+    // Important to set the renderer color black first as RenderClear
+    // essentially "fills" the screen with the last color given to 
+    // SetRenderDrawColor
     SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
 
     SDL_RenderClear(p_renderer);

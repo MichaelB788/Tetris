@@ -3,6 +3,9 @@
 
 #include <SDL2/SDL.h>
 
+/*
+ * A structure which handles game rendering given an SDL Renderer.
+ **/
 typedef struct GraphicsModule
 {
     GraphicsModule(SDL_Renderer* ren);

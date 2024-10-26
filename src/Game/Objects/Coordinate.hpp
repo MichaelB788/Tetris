@@ -1,13 +1,13 @@
 #ifndef COORDINATE_H
 #define COORDINATE_H
 
-#include <array>
-
 typedef struct Point
 {
-    Point();
+private:
+    int m_x, m_y;
 
-    Point(std::array<int, 2> pair);
+public:
+    Point();
 
     Point(int x, int y);
 
@@ -22,9 +22,6 @@ typedef struct Point
     void translateX(int amount);
 
     void translateY(int amount);
-
-private:
-    std::array<int, 2> pair_;
 } Point;
 
 #endif 

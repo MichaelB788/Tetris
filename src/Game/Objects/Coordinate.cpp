@@ -1,56 +1,44 @@
-#include <array>
-
 #include "Coordinate.hpp"
-
-/*
- * Coordinate::Point is a simple wrapper around an std::array of size 2, 
- * notably named pair to suggest a coordinate pair.
- *
- * pair[0] represents the x value, while pair[1] represents the y value.
- *
- * */
 
 Point::Point()
 {
-    pair_ = {0, 0};
-}
-
-Point::Point(std::array<int, 2> pair)
-{
-    pair_ = pair;
+    m_x = 0;
+    m_y = 0;
 }
 
 Point::Point(int x, int y)
 {
-    pair_ = {x, y};
+    m_x = x;
+    m_y = y;
 }
 
 Point::Point(Point &other)
 {
-    pair_ = {other.getX(), other.getY()}; 
+    m_x = other.getX();
+    m_y = other.getY();
 }
 
 Point Point::getPoint()
 {
-    return Point(pair_);
+    return Point(m_x, m_y);
 }
 
-int const Point::getX()
+int const Point::getX() 
 {
-    return pair_[0];
+    return m_x;
 }
 
 int const Point::getY()
 {
-    return pair_[1];
+    return m_y;
 }
 
 void Point::translateX(int amount)
 {
-    pair_[0] += amount;
+    m_x += amount;
 }
 
 void Point::translateY(int amount)
 {
-    pair_[1] += amount;
+    m_y += amount;
 }

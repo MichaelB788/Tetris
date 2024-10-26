@@ -39,7 +39,7 @@ void GraphicsModule::setColor(char id)
             SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
         case '#':
-            SDL_SetRenderDrawColor(p_renderer, 250, 250, 250, 0);
+            SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
             break;
         default:
             break;
@@ -48,9 +48,10 @@ void GraphicsModule::setColor(char id)
 
 void GraphicsModule::drawBoard()
 {
+    // Draws every tile on the grid except for the surrounding border.
     for (int row = 0; row < 20; row++)
         for (int col = 0; col < 10; col++)
-            drawTile(col, row, Grid::at(col, row));
+            drawTile(col, row, Grid::at(col + 1, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, char id)

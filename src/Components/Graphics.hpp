@@ -22,7 +22,7 @@ typedef struct GraphicsModule
 
     private:
 
-    const int tileSize = 40;
+    unsigned int const tileSize = 40;
 
     SDL_Renderer* p_renderer;
 } GraphicsModule;

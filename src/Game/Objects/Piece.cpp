@@ -21,50 +21,32 @@ Piece::Piece()
 
 void Piece::move(Direction dir)
 {
-    if (Logic::positionIsValid(m_newCoordinates))
+    m_oldCoordinates = m_newCoordinates;
+
+    switch (dir)
     {
-        m_oldCoordinates = m_newCoordinates;
-        switch (dir)
-        {
-            case LEFT:
-                for (auto &_point : m_newCoordinates)
-                _point.translateX(-1);
-                break;
-            case RIGHT:
-                for (int i = 0; i < 4; i++)
-                    m_newCoordinates.at(i).translateX(1);
-                break;
-            case DOWN:
-                for (int i = 0; i < 4; i++)
-                    m_newCoordinates.at(i).translateY(1);
-                break;
-            default:
-                break;
-        }
+        case LEFT:
+            for (Point& point : m_newCoordinates)
+                point.translateX(-1);
+            break;
+        case RIGHT:
+            for (Point& point : m_newCoordinates)
+                point.translateX(1);
+            break;
+        case DOWN:
+            for (Point& point : m_newCoordinates)
+                point.translateY(1);
+            break;
+        default:
+            break;
     }
+
+    if (!Logic::positionIsValid(m_newCoordinates))
+        m_newCoordinates = m_oldCoordinates;
 }
 
-std::array<Point, 4> Piece::getNewCoordinates() const 
-{
-    std::array<Point, 4> _coordinates;
+std::array<Point, 4> Piece::getNewCoordinates() { return m_newCoordinates; }
 
-    for (int i = 0; i < 4; i++)
-        _coordinates[i] = m_newCoordinates[i];
+std::array<Point, 4> Piece::getOldCoordinates() { return m_oldCoordinates; }
 
-    return _coordinates;
-}
-
-std::array<Point, 4> Piece::getOldCoordinates() const 
-{
-    std::array<Point, 4> _coordinates;
-
-    for (int i = 0; i < 4; i++)
-        _coordinates[i] = m_oldCoordinates[i];
-
-    return _coordinates;
-}
-
-char Piece::getType() const
-{
-    return m_type;
-}
+char Piece::getType() const { return m_type; }

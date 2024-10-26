@@ -5,9 +5,9 @@
 #include "Coordinate.hpp"
 #include "Grid.hpp"
 
-std::array<Point, 4> Logic::giveNewPiece(char _type)
+std::array<Point, 4> Logic::giveNewPiece(char type)
 {
-    switch (_type) {
+    switch (type) {
         case 'I':
             return {Point(4, 1), Point(4, 0), Point(4, 2), Point(4, 3)};
         case 'O':
@@ -23,23 +23,36 @@ std::array<Point, 4> Logic::giveNewPiece(char _type)
         case 'J':
             return {Point(5, 1), Point(5, 0), Point(5, 2), Point(4, 2)};
         default:
-            throw std::invalid_argument("Invalid type given to PieceManager::giveNewPiece(char type)");
+            throw std::invalid_argument("Invalid type given to Logic::giveNewPiece(char type)");
     }
 }
 
-bool Logic::positionIsValid(std::array<Point, 4> &_coordinates)
+bool Logic::positionIsValid(std::array<Point, 4> coordinates)
 {
-    for (Point& _point : _coordinates)
-    {
-        int x = _point.getX();
-        int y = _point.getY();
+    CollisionDetection check = CollisionDetection(coordinates);
 
-        if (Grid::at(--x, y) != '#' &&
-            Grid::at(++x, y) != '#')
-        {
+    return check.result();
+}
+
+Logic::CollisionDetection::CollisionDetection
+(std::array<Point, 4> target) : m_target(target) {}
+
+bool Logic::CollisionDetection::collidesWallOrFloor()
+{
+    for (Point& point : m_target)
+    {
+         char curr = Grid::at(point.getX(), point.getY());
+        if (curr == '|' || curr == '_'){
             return true;
         }
     }
+
+    return false;
+}
+
+bool Logic::CollisionDetection::result()
+{
+    if (collidesWallOrFloor()) return false;
 
     return true;
 }

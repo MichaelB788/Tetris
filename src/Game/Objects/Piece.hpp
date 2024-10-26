@@ -14,9 +14,9 @@ typedef struct Piece
 
     void move(Direction dir);
 
-    std::array<Point, 4> getNewCoordinates() const;
+    std::array<Point, 4> getNewCoordinates();
 
-    std::array<Point, 4> getOldCoordinates() const;
+    std::array<Point, 4> getOldCoordinates();
 
     char getType() const;
 

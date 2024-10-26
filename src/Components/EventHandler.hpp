@@ -2,26 +2,31 @@
 #define EVENT_HANDLER_H
 
 #include <SDL2/SDL.h>
-#include "../Game/Objects/TetrisBoard.hpp"
+#include "../Game/Objects/Piece.hpp"
 
-typedef struct EventHandler 
+/*
+ * A class which handles events from the keyboard and manipulates
+ * TetrisBoard::Piece objects outside of its scope through a pointer.
+ * */
+typedef class EventHandler 
 {
-    EventHandler(TetrisBoard::Piece *piece, bool &gameState);
+    SDL_Event m_event;
 
-    void setTargetPiece(TetrisBoard::Piece *newPiece);
+    Piece* m_target = nullptr;
 
-    void processInput();
+    bool& m_gameState;
 
     void keydown();
 
     void keyup();
 
-private:
-    SDL_Event event_;
+public:
+    EventHandler(Piece* piece, bool& gameState);
 
-    TetrisBoard::Piece *target_ = nullptr;
+    void setTargetPiece(Piece* newPiece);
 
-    bool &gameState_;
+    void processInput();
+
 } EventHandler;
 
 #endif

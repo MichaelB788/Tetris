@@ -36,8 +36,7 @@ void Piece::release()
 {
     srand(time(0));
     m_type = _types[rand() % 7];
-    std::array<Point, 4> newPiece = Mechanics::giveNewPiece(m_type);
-    m_oldCoordinates = newPiece;
+    m_oldCoordinates = Mechanics::giveNewPiece(m_type);
 }
 
 void Piece::move(Direction dir)

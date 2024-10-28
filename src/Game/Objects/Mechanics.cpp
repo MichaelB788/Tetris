@@ -1,11 +1,13 @@
-#include "Logic.hpp"
+#include "Mechanics.hpp"
 
 #include <array>
+#include <cstdio>
+#include <cstdlib>
 #include <stdexcept>
 #include "Coordinate.hpp"
 #include "Grid.hpp"
 
-std::array<Point, 4> Logic::giveNewPiece(char type)
+std::array<Point, 4> Mechanics::giveNewPiece(char type)
 {
     switch (type) {
         case 'I':
@@ -27,37 +29,22 @@ std::array<Point, 4> Logic::giveNewPiece(char type)
     }
 }
 
-bool Logic::positionIsValid(std::array<Point, 4> coordinates)
+bool Mechanics::Collision::collidesWall(std::array<Point, 4> target)
 {
-    CollisionDetection check = CollisionDetection(coordinates);
-
-    return check.result();
-}
-
-Logic::CollisionDetection::CollisionDetection
-(std::array<Point, 4> target) : m_target(target) {}
-
-bool Logic::CollisionDetection::collidesWallOrFloor()
-{
-    for (Point& point : m_target)
-    {
-         char curr = Grid::at(point.getX(), point.getY());
-        if (curr == '|' || curr == '_'){
-            return true;
-        }
+    for (Point& point : target){
+        char curr = Grid::at(point.getX(), point.getY());
+        if (curr == '|') return true;
     }
 
     return false;
 }
 
-bool Logic::CollisionDetection::result()
+bool Mechanics::Collision::collidesFloor(std::array<Point, 4> target)
 {
-    if (collidesWallOrFloor()) return false;
+    for (Point& point : target){
+        char curr = Grid::at(point.getX(), point.getY());
+        if (curr == '_') return true;
+    }
 
-    return true;
+    return false;
 }
-
-void Logic::releaseCurrentPiece()
-{
-}
-

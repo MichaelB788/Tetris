@@ -12,13 +12,18 @@ typedef struct Piece
 
     Piece();
 
+    bool positionIsValid(std::array<Point, 4> coordinates);
+
     void move(Direction dir);
 
+    void release();
+
+    // Getters
     std::array<Point, 4> getNewCoordinates();
 
     std::array<Point, 4> getOldCoordinates();
 
-    char getType() const;
+    char getType();
 
 private:
     std::array<Point, 4> m_newCoordinates;

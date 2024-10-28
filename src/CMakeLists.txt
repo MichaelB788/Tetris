@@ -4,7 +4,7 @@ add_library(GameLibrary SHARED
     Game/Objects/Coordinate.cpp
     Game/Objects/Grid.cpp
     Game/Objects/Piece.cpp
-    Game/Objects/Logic.cpp
+    Game/Objects/Mechanics.cpp
     Game/Tetris.cpp
 
     Components/Graphics.cpp

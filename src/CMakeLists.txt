@@ -5,6 +5,7 @@ add_library(GameLibrary SHARED
     Game/Objects/Grid.cpp
     Game/Objects/Piece.cpp
     Game/Objects/Mechanics.cpp
+    Game/Player.cpp
     Game/Tetris.cpp
 
     Components/Graphics.cpp

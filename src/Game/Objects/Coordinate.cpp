@@ -42,3 +42,13 @@ void Point::translateY(int amount)
 {
     m_y += amount;
 }
+
+bool Point::equals(Point other)
+{
+    return m_x == other.m_x && m_y == other.m_y;
+}
+
+bool Point::equals(int x, int y)
+{
+    return m_x == x && m_y == y;
+}

@@ -22,6 +22,10 @@ public:
     void translateX(int amount);
 
     void translateY(int amount);
+
+    bool equals(Point other);
+
+    bool equals(int x, int y);
 } Point;
 
 #endif 

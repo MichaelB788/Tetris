@@ -7,13 +7,12 @@
 #include "../Components/Graphics.hpp"
 #include "../Components/EventHandler.hpp"
 
-#include "Objects/Coordinate.hpp"
-#include "Objects/Grid.hpp"
 #include "Objects/Piece.hpp"
 
 void Tetris::runGame(GraphicsModule graphics)
 {
-    EventHandler handler = EventHandler(&m_currentPiece, m_gameIsRunning);
+    EventHandler handler = EventHandler(&m_player, m_gameIsRunning);
+
     while (m_gameIsRunning)
     {
         handler.processInput();
@@ -26,9 +25,7 @@ void Tetris::runGame(GraphicsModule graphics)
 
 void Tetris::updateGame()
 {
-    for (Point& point : m_currentPiece.getOldCoordinates())
-         Grid::set(point, '#');
+    Piece target = m_player.getPiece();
 
-    for (Point& point : m_currentPiece.getNewCoordinates())
-         Grid::set(point, m_currentPiece.getType());
+    target.modifyGrid();
 }

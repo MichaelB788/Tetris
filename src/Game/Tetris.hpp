@@ -3,14 +3,14 @@
 
 #include <SDL2/SDL.h>
 #include "../Components/Graphics.hpp"
-#include "Objects/Piece.hpp"
+#include "Player.hpp"
 
 typedef class Tetris
 {
 private:
     bool m_gameIsRunning = true;
      
-    Piece m_currentPiece;
+    Player m_player;
 
     void updateGame();
 

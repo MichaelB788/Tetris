@@ -3,6 +3,7 @@
 
 #include <array>
 #include "Coordinate.hpp"
+#include "Piece.hpp"
 
 namespace Mechanics 
 {
@@ -10,8 +11,9 @@ namespace Mechanics
 
     namespace Collision
     {
-        bool collidesWall(std::array<Point, 4> target);
-        bool collidesFloor(std::array<Point, 4> target);
+        bool wallOrPiece(Piece& target);
+
+        bool floor(Piece& target);
     };
 }
 

@@ -2,17 +2,17 @@
 #define EVENT_HANDLER_H
 
 #include <SDL2/SDL.h>
-#include "../Game/Objects/Piece.hpp"
+#include "../Game/Player.hpp"
 
 /*
  * A class which handles events from the keyboard and manipulates
- * TetrisBoard::Piece objects outside of its scope through a pointer.
+ * the Player object outside of its scope through a pointer.
  * */
 typedef class EventHandler 
 {
     SDL_Event m_event;
 
-    Piece* m_target = nullptr;
+    Player* p_player = nullptr;
 
     bool& m_gameState;
 
@@ -21,9 +21,7 @@ typedef class EventHandler
     void keyup();
 
 public:
-    EventHandler(Piece* piece, bool& gameState);
-
-    void setTargetPiece(Piece* newPiece);
+    EventHandler(Player* player, bool& gameState);
 
     void processInput();
 

@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef PIECE_H
+#define PIECE_H
 
 #include "Coordinate.hpp"
 #include <array>
@@ -8,27 +8,24 @@ enum Direction { LEFT, RIGHT, DOWN };
 
 typedef struct Piece
 {
-    Piece(char type);
-
     Piece();
 
-    bool positionIsValid(std::array<Point, 4> coordinates);
+    void translate(Direction dir);
 
-    void move(Direction dir);
+    void revert();
 
-    void release();
+    void swap();
 
-    // Getters
-    std::array<Point, 4> getNewCoordinates();
+    bool compare(char tile);
 
-    std::array<Point, 4> getOldCoordinates();
+    bool contains(Point otherPoint);
 
-    char getType();
+    void modifyGrid();
 
 private:
-    std::array<Point, 4> m_newCoordinates;
+    std::array<Point, 4> m_curr;
 
-    std::array<Point, 4> m_oldCoordinates;
+    std::array<Point, 4> m_prev;
 
     char m_type;
 } Piece;

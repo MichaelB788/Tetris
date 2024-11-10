@@ -1,72 +1,84 @@
 #include <array>
-#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 
 #include "Coordinate.hpp"
+#include "Grid.hpp"
 #include "Piece.hpp"
 #include "Mechanics.hpp"
 
 char _types[7] = {'I', 'O', 'T', 'S', 'Z', 'L', 'J'};
 
-Piece::Piece(char type) :
-    m_newCoordinates(Mechanics::giveNewPiece(type)), m_type(type) {}
-
 Piece::Piece() 
 {
     srand(time(0));
     m_type = _types[rand() % 7];
-    m_newCoordinates = Mechanics::giveNewPiece(m_type);
+    m_curr = Mechanics::giveNewPiece(m_type);
+    m_prev = m_curr;
 };
 
-bool Piece::positionIsValid(std::array<Point, 4> coordinates)
+void Piece::translate(Direction dir)
 {
-    if (Mechanics::Collision::collidesWall(coordinates)){
-        return false;
-    }
-    else if (Mechanics::Collision::collidesFloor(coordinates)){
-        release();
-        return false;
-    }
-
-    return true;
-}
-
-void Piece::release()
-{
-    srand(time(0));
-    m_type = _types[rand() % 7];
-    m_oldCoordinates = Mechanics::giveNewPiece(m_type);
-}
-
-void Piece::move(Direction dir)
-{
-    m_oldCoordinates = m_newCoordinates;
+    m_prev = m_curr;
 
     switch (dir)
     {
         case LEFT:
-            for (Point& point : m_newCoordinates)
-                point.translateX(-1);
+            for (Point& point : m_curr)
+            point.translateX(-1);
             break;
         case RIGHT:
-            for (Point& point : m_newCoordinates)
-                point.translateX(1);
+            for (Point& point : m_curr)
+            point.translateX(1);
             break;
         case DOWN:
-            for (Point& point : m_newCoordinates)
-                point.translateY(1);
+            for (Point& point : m_curr)
+            point.translateY(1);
             break;
         default:
             break;
     }
-
-    if (!positionIsValid(m_newCoordinates))
-        m_newCoordinates = m_oldCoordinates;
 }
 
-std::array<Point, 4> Piece::getNewCoordinates() { return m_newCoordinates; }
+void Piece::revert()
+{
+    m_curr = m_prev;
+}
 
-std::array<Point, 4> Piece::getOldCoordinates() { return m_oldCoordinates; }
+void Piece::swap()
+{
+    srand(time(0));
+    m_type = _types[rand() % 7];
+    m_prev = Mechanics::giveNewPiece(m_type);
+}
 
-char Piece::getType() { return m_type; }
+bool Piece::compare(char tile)
+{
+    for (Point& point : m_curr)
+    {
+        char currTile = Grid::at(point.getX(), point.getY());
+        if (currTile == tile) return true;
+    }
+
+    return false;
+}
+
+bool Piece::contains(Point otherPoint)
+{
+    bool result = false;
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (otherPoint.equals(m_curr[i]))
+            result = true;
+    }
+
+    return result;
+}
+
+void Piece::modifyGrid()
+{
+    for (Point& point : m_prev) Grid::set(point, '#');
+
+    for (Point& point : m_curr) Grid::set(point, m_type);
+}

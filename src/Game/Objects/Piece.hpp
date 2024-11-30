@@ -16,16 +16,20 @@ typedef struct Piece
 
     void swap();
 
-    bool compare(char tile);
-
-    bool contains(Point otherPoint);
-
     void modifyGrid();
+
+    const char type();
+
+    std::array<Point, 4> getCurrArray();
+
+    std::array<Point, 4> getPrevArray();
 
 private:
     std::array<Point, 4> m_curr;
 
     std::array<Point, 4> m_prev;
+
+    Direction m_currdir;
 
     char m_type;
 } Piece;

@@ -1,6 +1,8 @@
 #include <array>
+#include <cctype>
 #include <cstdlib>
 #include <ctime>
+#include <locale>
 
 #include "Coordinate.hpp"
 #include "Grid.hpp"
@@ -47,38 +49,28 @@ void Piece::revert()
 
 void Piece::swap()
 {
+    for (Point& point : m_prev)
+        Grid::set(point, std::tolower(m_type, std::locale()));
+
     srand(time(0));
     m_type = _types[rand() % 7];
     m_prev = Mechanics::giveNewPiece(m_type);
 }
 
-bool Piece::compare(char tile)
-{
-    for (Point& point : m_curr)
-    {
-        char currTile = Grid::at(point.getX(), point.getY());
-        if (currTile == tile) return true;
-    }
-
-    return false;
-}
-
-bool Piece::contains(Point otherPoint)
-{
-    bool result = false;
-
-    for (int i = 0; i < 4; i++)
-    {
-        if (otherPoint.equals(m_curr[i]))
-            result = true;
-    }
-
-    return result;
-}
-
 void Piece::modifyGrid()
 {
     for (Point& point : m_prev) Grid::set(point, '#');
-
     for (Point& point : m_curr) Grid::set(point, m_type);
+}
+
+const char Piece::type() { return m_type; }
+
+std::array<Point, 4> Piece::getCurrArray() 
+{
+    return m_curr;
+}
+
+std::array<Point, 4> Piece::getPrevArray()
+{
+    return m_prev;
 }

@@ -1,14 +1,17 @@
 #include "Mechanics.hpp"
 
 #include <array>
+#include <cctype>
 #include <stdexcept>
 
 #include "Coordinate.hpp"
+#include "Grid.hpp"
 #include "Piece.hpp"
 
 std::array<Point, 4> Mechanics::giveNewPiece(char type)
 {
-    switch (type) {
+    switch (type)
+    {
         case 'I':
             return {Point(5, 1), Point(5, 0), Point(5, 2), Point(5, 3)};
         case 'O':
@@ -24,16 +27,53 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
         case 'J':
             return {Point(6, 1), Point(6, 0), Point(6, 2), Point(5, 2)};
         default:
-            throw std::invalid_argument("Invalid type given to Logic::giveNewPiece(char type)");
+            throw std::invalid_argument("Invalid character given to Logic::giveNewPiece(char type)");
     }
 }
 
 bool Mechanics::Collision::wallOrPiece(Piece& target)
 {
-    return target.compare('|');
+    bool result;
+    char type = target.type();
+    /*
+     * Things to check:
+     * - Is the tile a wall? '|'
+     * - Is the tile another piece? (all chars EXCEPT '#' and the target type)
+     * */
+    for (Point& p : target.getCurrArray())
+    {
+        char currTile = Grid::at(p.getX(), p.getY());
+
+        switch (currTile)
+        {
+            case '#':
+                result = false;
+                break;
+            default:
+                if (currTile == type) result = false;
+                else result = true;
+                break;
+        }
+
+        if (result) return result;
+    }
+        /*
+        if (currTile == '|' ||
+            (currTile != '#' && currTile != target.type()))
+            return true;
+    }
+    */
+
+    return result;
 }
 
 bool Mechanics::Collision::floor(Piece& target)
 {
-    return target.compare('_');
+    for (Point& p : target.getCurrArray())
+    {
+        char currTile = Grid::at(p.getX(), p.getY());
+        if (currTile == '_') return true;
+    }
+
+    return false;
 }

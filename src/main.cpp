@@ -2,20 +2,14 @@
 #include <assert.h>
 
 #include "Game/Tetris.hpp"
-#include "API/GameCore.hpp"
-#include "Components/Graphics.hpp"
 
 int main (int argc, char **argv)
 {
+    // It is crucial to use an SDL function in main;
+    // CMake may fail to link SDL2 during compilation otherwise.
     assert(SDL_Init(SDL_INIT_VIDEO) == 0);
 
-    GameCore core;
-
-    GraphicsModule graphics = GraphicsModule(core.m_Renderer);
-
     Tetris tetris;
-
-    tetris.runGame(graphics);
 
     return 0;
 }

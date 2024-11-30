@@ -1,10 +1,27 @@
 #include <array>
+#include <cstdio>
 
 #include "Grid.hpp"
 
+/* The following functions are used to help navigate the 2D array.
+ * These values should not be modified as the grid is immutable.
+ * */
+enum Dimensions { ROWS = 22, COLS = 12 };
+
 int pointAt(int x, int y){ return x + (y * 12); }
 
-std::array<char, 260> _grid = {
+/* 
+ * The grid is a immutable single dimension array which represents a
+ * 22 x 12 two dimensional array.
+ *
+ * The behavior of the pieces will rely on checking the neighboring 
+ * characters of the array at a given tile.
+ *
+ * Characters also provide a good way to get a visual representation of 
+ * the board, and they will be useful in rendering the board through 
+ * Graphics.
+ * */
+std::array<char, ROWS * COLS> _grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
@@ -25,7 +42,7 @@ std::array<char, 260> _grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+       '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'
     };
 
 char Grid::at(int x, int y)
@@ -50,7 +67,17 @@ void Grid::set(Point point, char newElement)
 
 void Grid::clear()
 {
-    for (auto &_element : _grid){
-        _element = '#';
+    for (auto &element : _grid){
+        element = '#';
+    }
+}
+
+void Grid::printGrid()
+{
+    for (int row = 0; row < ROWS; row++){
+        for (int col = 0; col < COLS; col++){
+            printf("%c", Grid::at(col, row));
+        }
+    printf("\n");
     }
 }

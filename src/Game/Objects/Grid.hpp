@@ -14,6 +14,8 @@ namespace Grid
     void set(Point point, char newElement);
 
     void clear();
+
+    void printGrid();
 } 
 
 #endif 

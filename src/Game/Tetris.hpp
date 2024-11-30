@@ -2,22 +2,22 @@
 #define TETRIS_H
 
 #include <SDL2/SDL.h>
-#include "../Components/Graphics.hpp"
 #include "Player.hpp"
 
 typedef class Tetris
 {
 private:
-    bool m_gameIsRunning = true;
+    bool m_running = true;
      
     Player m_player;
+
+    SDL_Event m_event;
 
     void updateGame();
 
 public:
-    Tetris() = default;
+    Tetris();
 
-    void runGame(GraphicsModule gm);
 } Tetris;
 
 #endif

@@ -6,14 +6,29 @@
 
 #include "../Components/Graphics.hpp"
 #include "../Components/EventHandler.hpp"
+#include "../API/GameCore.hpp"
 
+#include "Objects/Grid.hpp"
 #include "Objects/Piece.hpp"
 
-void Tetris::runGame(GraphicsModule graphics)
+Tetris::Tetris()
 {
-    EventHandler handler = EventHandler(&m_player, m_gameIsRunning);
+    /*
+     * GameCore initializes SDL subsystems such as SDL_Render
+     * and SDL_window.
+     *
+     * GraphicsModule will use the renderer to draw on the screen.
+     *
+     * Eventhandler will handle SDL events and Player movement.
+     * */
+    GameCore core;
 
-    while (m_gameIsRunning)
+    GraphicsModule graphics = GraphicsModule(core.m_Renderer);
+
+    EventHandler handler = EventHandler(&m_player, m_running);
+
+    // Game loop
+    while (m_running)
     {
         handler.processInput();
 
@@ -21,11 +36,13 @@ void Tetris::runGame(GraphicsModule graphics)
 
         graphics.clearAndPresentFrame();
     }
+
+    // Testing
+    Grid::printGrid();
 }
 
 void Tetris::updateGame()
 {
     Piece target = m_player.getPiece();
-
     target.modifyGrid();
 }

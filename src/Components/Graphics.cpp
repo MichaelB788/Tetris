@@ -18,24 +18,31 @@ void GraphicsModule::setColor(char id)
     switch (id)
     {
         case 'I':
+        case 'i':
             SDL_SetRenderDrawColor(p_renderer, 0, 255, 255, 1);
             break;
         case 'O':
+        case 'o':
             SDL_SetRenderDrawColor(p_renderer, 255, 255, 0, 1);
             break;
         case 'T':
+        case 't':
             SDL_SetRenderDrawColor(p_renderer, 255, 0, 255, 1);
             break;
         case 'S':
+        case 's':
             SDL_SetRenderDrawColor(p_renderer, 0, 255, 0, 1);
             break;
         case 'Z':
+        case 'z':
             SDL_SetRenderDrawColor(p_renderer, 255, 0, 0, 1);
             break;
         case 'L':
+        case 'l':
             SDL_SetRenderDrawColor(p_renderer, 255, 145, 0, 1);
             break;
         case 'J':
+        case 'j':
             SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
         case '#':

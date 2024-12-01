@@ -34,46 +34,17 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
 bool Mechanics::Collision::wallOrPiece(Piece& target)
 {
     bool result;
-    char type = target.type();
-    /*
-     * Things to check:
-     * - Is the tile a wall? '|'
-     * - Is the tile another piece? (all chars EXCEPT '#' and the target type)
-     * */
+    char pieceTile = target.type();
+
     for (Point& p : target.getCurrArray())
     {
         char currTile = Grid::at(p.getX(), p.getY());
 
-        switch (currTile)
-        {
-            case '#':
-                result = false;
-                break;
-            default:
-                if (currTile == type) result = false;
-                else result = true;
-                break;
-        }
+        if (currTile == '#' || currTile == pieceTile) result = false;
+        else result = true;
 
         if (result) return result;
     }
-        /*
-        if (currTile == '|' ||
-            (currTile != '#' && currTile != target.type()))
-            return true;
-    }
-    */
 
     return result;
-}
-
-bool Mechanics::Collision::floor(Piece& target)
-{
-    for (Point& p : target.getCurrArray())
-    {
-        char currTile = Grid::at(p.getX(), p.getY());
-        if (currTile == '_') return true;
-    }
-
-    return false;
 }

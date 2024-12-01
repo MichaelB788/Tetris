@@ -12,8 +12,6 @@ namespace Mechanics
     namespace Collision
     {
         bool wallOrPiece(Piece& target);
-
-        bool floor(Piece& target);
     };
 }
 

@@ -4,7 +4,7 @@
 #include "Coordinate.hpp"
 #include <array>
 
-enum Direction { LEFT, RIGHT, DOWN };
+enum Direction { NONE, LEFT, RIGHT, DOWN };
 
 typedef struct Piece
 {
@@ -20,6 +20,8 @@ typedef struct Piece
 
     const char type();
 
+    const Direction direction();
+
     std::array<Point, 4> getCurrArray();
 
     std::array<Point, 4> getPrevArray();
@@ -29,7 +31,7 @@ private:
 
     std::array<Point, 4> m_prev;
 
-    Direction m_currdir;
+    Direction m_direction;
 
     char m_type;
 } Piece;

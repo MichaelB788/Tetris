@@ -22,6 +22,7 @@ Piece::Piece()
 void Piece::translate(Direction dir)
 {
     m_prev = m_curr;
+    m_direction = dir;
 
     switch (dir)
     {
@@ -38,6 +39,7 @@ void Piece::translate(Direction dir)
             point.translateY(1);
             break;
         default:
+            m_direction = NONE;
             break;
     }
 }
@@ -64,6 +66,8 @@ void Piece::modifyGrid()
 }
 
 const char Piece::type() { return m_type; }
+
+const Direction Piece::direction() { return m_direction; }
 
 std::array<Point, 4> Piece::getCurrArray() 
 {

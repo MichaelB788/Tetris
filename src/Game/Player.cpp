@@ -11,13 +11,9 @@ Piece Player::getPiece()
 
 bool Player::positionIsValid()
 {
-    if (Mechanics::Collision::floor(m_piece))
+    if (Mechanics::Collision::wallOrPiece(m_piece))
     {
-        m_piece.swap();
-        return false;
-    }
-    else if (Mechanics::Collision::wallOrPiece(m_piece))
-    {
+        if (m_piece.direction() == DOWN) m_piece.swap();
         return false;
     }
 

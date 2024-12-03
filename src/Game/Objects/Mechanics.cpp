@@ -27,7 +27,10 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
         case 'J':
             return {Point(6, 1), Point(6, 0), Point(6, 2), Point(5, 2)};
         default:
-            throw std::invalid_argument("Invalid character given to Logic::giveNewPiece(char type)");
+            Grid::printGrid();
+            throw std::invalid_argument(
+             "Invalid character given to Mechanics::giveNewPiece(char type)"
+            );
     }
 }
 

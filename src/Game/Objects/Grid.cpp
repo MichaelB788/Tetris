@@ -3,25 +3,23 @@
 
 #include "Grid.hpp"
 
-/* The following functions are used to help navigate the 2D array.
- * These values should not be modified as the grid is immutable.
+/* The following functions are used to help navigate
+ * the "2D array."
+ *
+ * These values should not be modified and may only be
+ * used in this file.
  * */
-enum Dimensions { ROWS = 22, COLS = 12 };
+enum Dimensions { ROWS = 20, COLS = 12 };
 
-int pointAt(int x, int y){ return x + (y * 12); }
+int pointAt(int x, int y){ return x + (y * COLS); }
 
 /* 
- * The grid is a immutable single dimension array which represents a
- * 22 x 12 two dimensional array.
+ * Grid Dimensions: 20 x 12
  *
- * The behavior of the pieces will rely on checking the neighboring 
- * characters of the array at a given tile.
- *
- * Characters also provide a good way to get a visual representation of 
- * the board, and they will be useful in rendering the board through 
- * Graphics.
+ * Character's are used to represents tiles with 
+ * special behaviors.
  * */
-std::array<char, ROWS * COLS> _grid = {
+std::array<char, ROWS * COLS> grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
@@ -42,40 +40,48 @@ std::array<char, ROWS * COLS> _grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'
     };
 
-char Grid::at(int x, int y)
+char Grid::at(unsigned int x, unsigned int y)
 {
-    return _grid[pointAt(x, y)];
+    return grid[pointAt(x, y)];
 }
 
 char Grid::at(Point point)
 {
-    return _grid[pointAt(point.getX(), point.getY())];
+    return grid[pointAt(point.getX(), point.getY())];
 }
 
-void Grid::set(int x, int y, char newElement)
+void Grid::set(unsigned int x, unsigned int y, char newElement)
 {
-    _grid[pointAt(x, y)] = newElement;
+    grid[pointAt(x, y)] = newElement;
 }
 
 void Grid::set(Point point, char newElement)
 {
-    _grid[pointAt(point.getX(), point.getY())] = newElement;
+    grid[pointAt(point.getX(), point.getY())] = newElement;
 }
 
 void Grid::clear()
 {
-    for (auto &element : _grid){
-        element = '#';
+    for (auto &element : grid) element = '#';
+}
+
+void Grid::clear(unsigned int row)
+{
+    for (int col = 0; col < 10; col++)
+    {
+        set(col + 1, row - 1, '#');
     }
 }
 
+// FOR TESTING ONLY
 void Grid::printGrid()
 {
-    for (int row = 0; row < ROWS; row++){
-        for (int col = 0; col < COLS; col++){
+    for (int row = 0; row < ROWS; row++)
+    {
+        for (int col = 0; col < COLS; col++)
+        {
             printf("%c", Grid::at(col, row));
         }
     printf("\n");

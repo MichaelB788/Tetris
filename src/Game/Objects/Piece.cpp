@@ -28,15 +28,15 @@ void Piece::translate(Direction dir)
     {
         case LEFT:
             for (Point& point : m_curr)
-            point.translateX(-1);
+                point.translateX(-1);
             break;
         case RIGHT:
             for (Point& point : m_curr)
-            point.translateX(1);
+                point.translateX(1);
             break;
         case DOWN:
             for (Point& point : m_curr)
-            point.translateY(1);
+                point.translateY(1);
             break;
         default:
             m_direction = NONE;

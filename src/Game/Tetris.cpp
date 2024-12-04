@@ -45,4 +45,12 @@ void Tetris::updateGame()
 {
     Piece target = m_player.getPiece();
     target.modifyGrid();
+
+    unsigned int row = 0;
+    while (row < 20)
+    {
+        // TODO: fix the clear function, which is not clearing last row.
+        if (Grid::hasFullRow(row)) Grid::clear(row);
+        row++;
+    }
 }

@@ -11,7 +11,15 @@
  * */
 enum Dimensions { ROWS = 20, COLS = 12 };
 
-int pointAt(int x, int y){ return x + (y * COLS); }
+unsigned int pointAt(unsigned int x, unsigned int y)
+{
+    return x + (y * COLS);
+}
+
+bool isFloor(char tile)
+{
+    return 'i' <= tile && tile <= 'z';
+}
 
 /* 
  * Grid Dimensions: 20 x 12
@@ -39,7 +47,7 @@ std::array<char, ROWS * COLS> grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
+       '|', 'o', 'o', 'o', 'o', '#', '#', 'o', 'o', 'o', 'o', '|',
     };
 
 char Grid::at(unsigned int x, unsigned int y)
@@ -69,10 +77,30 @@ void Grid::clear()
 
 void Grid::clear(unsigned int row)
 {
-    for (int col = 0; col < 10; col++)
+    if (row > 19) row = 19;
+    unsigned int pos = pointAt(1, row);
+    
+    while (pos < COLS - 1)
     {
-        set(col + 1, row - 1, '#');
+        grid[pos] = '#';
+        pos++;
     }
+}
+
+// Check each row and see if it does not contain '#'
+bool Grid::hasFullRow(unsigned int row)
+{
+    if (row > 19) row = 19;
+    unsigned int pos = pointAt(1, row);
+
+    while (pos < COLS - 1)
+    {
+        if (grid[pos] == '#' || !isFloor(grid[pos]))
+            return false;
+        else pos++;
+    }
+
+    return true;
 }
 
 // FOR TESTING ONLY

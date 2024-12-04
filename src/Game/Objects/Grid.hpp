@@ -17,6 +17,8 @@ namespace Grid
 
     void clear(unsigned int row);
 
+    bool hasFullRow(unsigned int row);
+
     void printGrid();
 } 
 

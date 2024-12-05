@@ -80,7 +80,7 @@ void Grid::clear(unsigned int row)
     if (row > 19) row = 19;
     unsigned int pos = pointAt(1, row);
     
-    while (pos < COLS - 1)
+    while (grid[pos] != '|')
     {
         grid[pos] = '#';
         pos++;
@@ -93,7 +93,7 @@ bool Grid::hasFullRow(unsigned int row)
     if (row > 19) row = 19;
     unsigned int pos = pointAt(1, row);
 
-    while (pos < COLS - 1)
+    while (grid[pos] != '|')
     {
         if (grid[pos] == '#' || !isFloor(grid[pos]))
             return false;

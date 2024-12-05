@@ -13,8 +13,14 @@ typedef struct Player
 
     void move(Direction dir);
 
+    void incrementPoint();
+
+    void points();
+
 private:
     Piece m_piece;
+
+    unsigned int m_points = 0;
 } Player;
 
 #endif

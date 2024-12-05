@@ -13,8 +13,7 @@
 
 Tetris::Tetris()
 {
-    /*
-     * GameCore initializes SDL subsystems such as SDL_Render
+    /* GameCore initializes SDL subsystems such as SDL_Render
      * and SDL_window.
      *
      * GraphicsModule will use the renderer to draw on the screen.
@@ -22,20 +21,19 @@ Tetris::Tetris()
      * Eventhandler will handle SDL events and Player movement.
      * */
     GameCore core;
-
     GraphicsModule graphics = GraphicsModule(core.m_Renderer);
-
     EventHandler handler = EventHandler(&m_player, m_running);
 
     // Game loop
     while (m_running)
     {
         handler.processInput();
-
         updateGame();
-
         graphics.clearAndPresentFrame();
+        SDL_Delay(5);
     }
+
+    m_player.points();
 
     // Testing
     Grid::printGrid();
@@ -49,8 +47,10 @@ void Tetris::updateGame()
     unsigned int row = 0;
     while (row < 20)
     {
-        // TODO: fix the clear function, which is not clearing last row.
-        if (Grid::hasFullRow(row)) Grid::clear(row);
+        if (Grid::hasFullRow(row)) { 
+            Grid::clear(row);
+            m_player.incrementPoint();
+        }
         row++;
     }
 }

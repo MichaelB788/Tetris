@@ -41,7 +41,7 @@ bool Mechanics::Collision::wallOrPiece(Piece& target)
 
     for (Point& p : target.getCurrArray())
     {
-        char currTile = Grid::at(p.getX(), p.getY());
+        char currTile = Grid::tileAt(p);
 
         if (currTile == '#' || currTile == pieceTile) result = false;
         else result = true;

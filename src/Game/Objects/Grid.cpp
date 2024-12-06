@@ -11,12 +11,12 @@
  * */
 enum Dimensions { ROWS = 20, COLS = 12 };
 
-unsigned int pointAt(unsigned int x, unsigned int y)
+static unsigned int pointAt(unsigned int x, unsigned int y)
 {
     return x + (y * COLS);
 }
 
-bool isFloor(char tile)
+static bool isFloor(char tile)
 {
     return 'i' <= tile && tile <= 'z';
 }
@@ -27,7 +27,7 @@ bool isFloor(char tile)
  * Character's are used to represents tiles with 
  * special behaviors.
  * */
-std::array<char, ROWS * COLS> grid = {
+static std::array<char, ROWS * COLS> grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
@@ -44,18 +44,18 @@ std::array<char, ROWS * COLS> grid = {
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
+       '|', 'o', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
+       '|', 'o', 'o', '#', '#', '#', '#', '#', '#', '#', '#', '|',
+       '|', 'o', 'o', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', 'o', 'o', 'o', 'o', '#', '#', 'o', 'o', 'o', 'o', '|',
     };
 
-char Grid::at(unsigned int x, unsigned int y)
+char Grid::tileAt(unsigned int x, unsigned int y)
 {
     return grid[pointAt(x, y)];
 }
 
-char Grid::at(Point point)
+char Grid::tileAt(Point point)
 {
     return grid[pointAt(point.getX(), point.getY())];
 }
@@ -70,20 +70,18 @@ void Grid::set(Point point, char newElement)
     grid[pointAt(point.getX(), point.getY())] = newElement;
 }
 
-void Grid::clear()
-{
-    for (auto &element : grid) element = '#';
-}
-
 void Grid::clear(unsigned int row)
 {
     if (row > 19) row = 19;
-    unsigned int pos = pointAt(1, row);
     
-    while (grid[pos] != '|')
+    while (row > 0)
     {
-        grid[pos] = '#';
-        pos++;
+        for (int col = COLS - 1; col > 0; col--)
+        {
+            // if (row == 0) set(col, row, '#');
+            set(col, row, tileAt(col, row - 1));
+        }
+        row--;
     }
 }
 
@@ -91,13 +89,13 @@ void Grid::clear(unsigned int row)
 bool Grid::hasFullRow(unsigned int row)
 {
     if (row > 19) row = 19;
-    unsigned int pos = pointAt(1, row);
+    unsigned int x = 1;
 
-    while (grid[pos] != '|')
+    while (tileAt(x, row) != '|')
     {
-        if (grid[pos] == '#' || !isFloor(grid[pos]))
+        if (tileAt(x, row) == '#' || !isFloor(tileAt(x, row)))
             return false;
-        else pos++;
+        else x++;
     }
 
     return true;
@@ -110,7 +108,7 @@ void Grid::printGrid()
     {
         for (int col = 0; col < COLS; col++)
         {
-            printf("%c", Grid::at(col, row));
+            printf("%c", Grid::tileAt(col, row));
         }
     printf("\n");
     }

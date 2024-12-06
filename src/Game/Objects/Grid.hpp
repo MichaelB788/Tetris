@@ -5,15 +5,13 @@
 
 namespace Grid 
 {
-    char at(unsigned int x, unsigned int y);
+    char tileAt(unsigned int x, unsigned int y);
 
-    char at(Point point);
+    char tileAt(Point point);
 
     void set(unsigned int x, unsigned int y, char newElement);
 
     void set(Point point, char newElement);
-
-    void clear();
 
     void clear(unsigned int row);
 

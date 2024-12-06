@@ -58,7 +58,7 @@ void GraphicsModule::drawBoard()
     // Draws every tile on the grid except for the surrounding border.
     for (int row = 0; row < 20; row++)
         for (int col = 0; col < 10; col++)
-            drawTile(col, row, Grid::at(col + 1, row));
+            drawTile(col, row, Grid::tileAt(col + 1, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, char id)

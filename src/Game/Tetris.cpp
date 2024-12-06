@@ -42,7 +42,6 @@ Tetris::Tetris()
 void Tetris::updateGame()
 {
     Piece target = m_player.getPiece();
-    target.modifyGrid();
 
     unsigned int row = 0;
     while (row < 20)
@@ -53,4 +52,6 @@ void Tetris::updateGame()
         }
         row++;
     }
+
+    target.modifyGrid();
 }

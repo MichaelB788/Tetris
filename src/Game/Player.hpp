@@ -11,8 +11,6 @@ typedef struct Player
 
     void move(Direction dir);
 
-    void incrementPoint();
-
 private:
     Piece m_piece;
 } Player;

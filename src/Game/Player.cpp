@@ -2,13 +2,6 @@
 #include "Objects/Piece.hpp"
 #include "Objects/Mechanics.hpp"
 
-Player::Player() : m_piece(Piece()) {}
-
-Piece Player::getPiece() 
-{
-    return m_piece;
-}
-
 bool Player::positionIsValid()
 {
     if (Mechanics::Collision::wallOrPiece(m_piece))

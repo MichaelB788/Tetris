@@ -5,9 +5,7 @@
 
 typedef struct Player
 {
-    Player();
-
-    Piece getPiece(); 
+    Player() = default;
 
     bool positionIsValid();
 

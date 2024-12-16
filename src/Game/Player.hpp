@@ -15,12 +15,8 @@ typedef struct Player
 
     void incrementPoint();
 
-    void points();
-
 private:
     Piece m_piece;
-
-    unsigned int m_points = 0;
 } Player;
 
 #endif

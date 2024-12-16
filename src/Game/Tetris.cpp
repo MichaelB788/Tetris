@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
-#include <cstdio>
+#include <SDL2/SDL_render.h>
+#include <iostream>
 #include <cstdlib>
 
 #include "Tetris.hpp"
@@ -23,35 +24,48 @@ Tetris::Tetris()
     GameCore core;
     GraphicsModule graphics = GraphicsModule(core.m_Renderer);
     EventHandler handler = EventHandler(&m_player, m_running);
+    
+    m_player.move(NONE);
 
     // Game loop
     while (m_running)
     {
+        m_timer++;
+
         handler.processInput();
+
         updateGame();
+        
         graphics.clearAndPresentFrame();
+            
         SDL_Delay(5);
     }
 
-    m_player.points();
-
+    std::cout << "Points earned: " << m_points << std::endl;
     // Testing
     Grid::printGrid();
 }
 
 void Tetris::updateGame()
 {
-    Piece target = m_player.getPiece();
-
     unsigned int row = 0;
     while (row < 20)
     {
-        if (Grid::hasFullRow(row)) { 
+        if (Grid::hasFullRow(row))
+        { 
             Grid::clear(row);
-            m_player.incrementPoint();
+            m_points++;   
         }
         row++;
     }
+  
+    invokeGravity();
+}
 
-    target.modifyGrid();
+void Tetris::invokeGravity()
+{
+    if (m_points > 20) m_difficulty = NORMAL;
+    else if (m_points > 50) m_difficulty = HARD;
+
+    if (m_timer % m_difficulty == 0) m_player.move(DOWN);
 }

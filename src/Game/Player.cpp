@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Player.hpp"
 #include "Objects/Piece.hpp"
 #include "Objects/Mechanics.hpp"
@@ -26,14 +24,6 @@ void Player::move(Direction dir)
 {
     m_piece.translate(dir);
     if (!positionIsValid()) m_piece.revert();
-}
 
-void Player::incrementPoint()
-{
-    m_points++;
-}
-
-void Player::points()
-{
-    std::cout << "Points earned: " << m_points << std::endl;
+    m_piece.modifyGrid();
 }

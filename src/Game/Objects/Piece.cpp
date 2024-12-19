@@ -2,7 +2,6 @@
 #include <cctype>
 #include <cstdlib>
 #include <ctime>
-#include <locale>
 
 #include "Coordinate.hpp"
 #include "Grid.hpp"
@@ -15,66 +14,38 @@ Piece::Piece()
 {
     srand(time(0));
     m_type = _types[rand() % 7];
-    m_curr = Mechanics::giveNewPiece(m_type);
-    m_prev = m_curr;
+    m_position = Mechanics::giveNewPiece(m_type);
 };
 
-void Piece::translate(Direction dir)
+std::array<Point, 4> Piece::translate(Direction dir)
 {
-    m_prev = m_curr;
-    m_direction = dir;
-
     switch (dir)
     {
         case LEFT:
-            for (Point& point : m_curr)
+            for (Point& point : m_position)
                 point.translateX(-1);
             break;
         case RIGHT:
-            for (Point& point : m_curr)
+            for (Point& point : m_position)
                 point.translateX(1);
             break;
         case DOWN:
-            for (Point& point : m_curr)
+            for (Point& point : m_position)
                 point.translateY(1);
             break;
         default:
-            m_direction = NONE;
             break;
     }
+    
+    return m_position;
 }
 
-void Piece::revert()
+void Piece::spawn()
 {
-    m_curr = m_prev;
+    for (Point& point : m_position)
+        Grid::set(point, m_type);
 }
 
 void Piece::swap()
 {
-    for (Point& point : m_prev)
-        Grid::set(point, std::tolower(m_type, std::locale()));
-
-    srand(time(0));
-    m_type = _types[rand() % 7];
-    m_prev = Mechanics::giveNewPiece(m_type);
-}
-
-void Piece::modifyGrid()
-{
-    for (Point& point : m_prev) Grid::set(point, '#');
-    for (Point& point : m_curr) Grid::set(point, m_type);
-}
-
-const char Piece::type() { return m_type; }
-
-const Direction Piece::direction() { return m_direction; }
-
-std::array<Point, 4> Piece::getCurrArray() 
-{
-    return m_curr;
-}
-
-std::array<Point, 4> Piece::getPrevArray()
-{
-    return m_prev;
 }

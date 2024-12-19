@@ -10,28 +10,21 @@ typedef struct Piece
 {
     Piece();
 
-    void translate(Direction dir);
+    std::array<Point, 4> translate(Direction dir);
 
-    void revert();
+    void spawn();
 
     void swap();
+    
+    void setPosition(std::array<Point, 4> newPosition)
+    { m_position = newPosition; }
 
-    void modifyGrid();
-
-    const char type();
-
-    const Direction direction();
-
-    std::array<Point, 4> getCurrArray();
-
-    std::array<Point, 4> getPrevArray();
+    const char type() { return m_type; }
+    
+    std::array<Point, 4> position() { return m_position; }
 
 private:
-    std::array<Point, 4> m_curr;
-
-    std::array<Point, 4> m_prev;
-
-    Direction m_direction;
+    std::array<Point, 4> m_position;
 
     char m_type;
 } Piece;

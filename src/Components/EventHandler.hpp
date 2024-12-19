@@ -2,7 +2,8 @@
 #define EVENT_HANDLER_H
 
 #include <SDL2/SDL.h>
-#include "../Game/Player.hpp"
+#include "Commands/Command.hpp"
+#include "../Game/Objects/Piece.hpp"
 
 /*
  * A class which handles events from the keyboard and manipulates
@@ -12,16 +13,15 @@ typedef class EventHandler
 {
     SDL_Event m_event;
 
-    Player* p_player = nullptr;
+    Piece* p_piece;
 
     bool& m_gameState;
 
-    void keydown();
-
-    void keyup();
+    Command* keydown();
 
 public:
-    EventHandler(Player* player, bool& gameState);
+    EventHandler(Piece* piece, bool& gameState) :
+        p_piece(piece), m_gameState(gameState){}
 
     void processInput();
 

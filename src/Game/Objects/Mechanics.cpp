@@ -34,20 +34,16 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
     }
 }
 
-bool Mechanics::Collision::wallOrPiece(Piece& target)
+bool Mechanics::collidesObject(Piece* target)
 {
-    bool result;
-    char pieceTile = target.type();
-
-    for (Point& p : target.getCurrArray())
+    for (Point& p : target->position())
     {
         char currTile = Grid::tileAt(p);
 
-        if (currTile == '#' || currTile == pieceTile) result = false;
-        else result = true;
-
-        if (result) return result;
+        if (currTile != '#' &&
+            currTile != target->type())  
+            return true;
     }
 
-    return result;
+    return false;
 }

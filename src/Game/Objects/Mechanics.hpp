@@ -8,11 +8,7 @@
 namespace Mechanics 
 {
     std::array<Point, 4> giveNewPiece(char type);
-
-    namespace Collision
-    {
-        bool wallOrPiece(Piece& target);
-    };
+    bool collidesObject(Piece* target);
 }
 
 #endif

@@ -7,6 +7,8 @@
 
 #include "../Components/Graphics.hpp"
 #include "../Components/EventHandler.hpp"
+#include "../Components/Commands/Move.hpp"
+
 #include "../API/GameCore.hpp"
 
 #include "Objects/Grid.hpp"
@@ -23,9 +25,9 @@ Tetris::Tetris()
      * */
     GameCore core;
     GraphicsModule graphics = GraphicsModule(core.m_Renderer);
-    EventHandler handler = EventHandler(&m_player, m_running);
+    EventHandler handler = EventHandler(&m_piece, m_running);
     
-    m_player.move(NONE);
+    m_piece.spawn();
 
     // Game loop
     while (m_running)
@@ -67,5 +69,10 @@ void Tetris::invokeGravity()
     if (m_points > 20) m_difficulty = NORMAL;
     else if (m_points > 50) m_difficulty = HARD;
 
-    if (m_timer % m_difficulty == 0) m_player.move(DOWN);
+    if (m_timer % m_difficulty == 0)
+    {
+        Command* gravity = new MoveCommand(&m_piece, DOWN);
+        gravity->execute();
+        delete gravity;
+    }
 }

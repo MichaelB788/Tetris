@@ -1,8 +1,8 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
+#include "Objects/Piece.hpp"
 #include <SDL2/SDL.h>
-#include "Player.hpp"
 
 typedef class Tetris
 {
@@ -14,10 +14,8 @@ private:
         HARD = 100 
     }; 
 
-    Player m_player;
+    Piece m_piece;
 
-    SDL_Event m_event;
-    
     Difficulty m_difficulty = EASY;
 
     unsigned int m_timer = 0;

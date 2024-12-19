@@ -1,8 +1,8 @@
 #include "Mechanics.hpp"
 
 #include <array>
-#include <cctype>
-#include <stdexcept>
+#include <iostream>
+#include <locale>
 
 #include "Coordinate.hpp"
 #include "Grid.hpp"
@@ -26,11 +26,11 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
             return {Point(5, 1), Point(5, 0), Point(5, 2), Point(6, 2)};
         case 'J':
             return {Point(6, 1), Point(6, 0), Point(6, 2), Point(5, 2)};
-        default:
+        default: {
             Grid::printGrid();
-            throw std::invalid_argument(
-             "Invalid character given to Mechanics::giveNewPiece(char type)"
-            );
+            std::cerr << "Unkown char given to Mechanics::giveNewPiece(char type): " << type << std::endl;
+            throw;
+        }
     }
 }
 
@@ -46,4 +46,11 @@ bool Mechanics::collidesObject(Piece* target)
     }
 
     return false;
+}
+
+void Mechanics::ground(Piece* target)
+{
+    for (Point& p: target->position())
+        Grid::set(p, std::tolower(target->type(),
+                                  std::locale())); 
 }

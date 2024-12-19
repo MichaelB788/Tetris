@@ -8,7 +8,15 @@ void MoveCommand::execute()
     oldPosition = newPosition;
     newPosition = p_piece->translate(m_direction);
 
-    if (invalidPosition()) undo();
+    if (Mechanics::collidesObject(p_piece))
+    {
+        undo();
+        if (m_direction == DOWN)
+        {
+            Mechanics::ground(p_piece);
+            p_piece->swap();
+        }
+    }
     else display();
 }
 
@@ -25,15 +33,3 @@ void MoveCommand::display()
     for (Point& point : newPosition)
         Grid::set(point, p_piece->type());
 }
-
-bool MoveCommand::invalidPosition()
-{
-    if (Mechanics::collidesObject(p_piece))
-    {
-        if (m_direction == DOWN) p_piece->swap();
-        return true;
-    }
-
-    return false;
-}
-

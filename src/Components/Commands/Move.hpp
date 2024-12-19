@@ -19,7 +19,7 @@ struct MoveCommand : public Command
 
     void display() override;
 
-    bool invalidPosition();
+    void ground();
     
 private:
     Piece* p_piece;

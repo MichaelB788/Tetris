@@ -48,4 +48,7 @@ void Piece::spawn()
 
 void Piece::swap()
 {
+    srand(time(0));
+    m_type = _types[rand() % 7];
+    m_position = Mechanics::giveNewPiece(m_type);
 }

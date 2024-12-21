@@ -4,6 +4,7 @@ add_library(GameLibrary SHARED
     Components/Graphics.cpp
     Components/EventHandler.cpp
     Components/Commands/Move.cpp
+    Components/Commands/Rotate.cpp
 
     Game/Objects/Coordinate.cpp
     Game/Objects/Grid.cpp

@@ -7,25 +7,27 @@ private:
     int m_x, m_y;
 
 public:
-    Point();
+    // Constructors
+    Point() : m_x(0), m_y(0) {};
 
-    Point(int x, int y);
+    Point(int x, int y) : m_x(x), m_y(y) {};
 
-    Point(Point &other);
+    Point(Point &other) : m_x(other.m_x),
+        m_y(other.m_y) {};
 
-    Point getPoint();
-
-    int const getX();
-
-    int const getY();
-
+    // Methods
     void translateX(int amount);
 
     void translateY(int amount);
 
-    bool equals(Point other);
+    void rotate270(Point origin);
 
-    bool equals(int x, int y);
+    // Getters
+    Point getPoint() { return Point(m_x, m_y); }
+
+    int const getX() { return m_x; }
+
+    int const getY() { return m_y; }
 } Point;
 
 #endif 

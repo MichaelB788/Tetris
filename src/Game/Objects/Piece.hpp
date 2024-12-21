@@ -8,17 +8,23 @@ enum Direction { NONE, LEFT, RIGHT, DOWN };
 
 typedef struct Piece
 {
+    // Constructor
     Piece();
 
+    // Methods
     std::array<Point, 4> translate(Direction dir);
+
+    std::array<Point, 4> rotate();
 
     void spawn();
 
     void swap();
     
+    // Setters
     void setPosition(std::array<Point, 4> newPosition)
     { m_position = newPosition; }
 
+    // Getters
     const char type() { return m_type; }
     
     std::array<Point, 4> position() { return m_position; }

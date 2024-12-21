@@ -19,23 +19,33 @@ Piece::Piece()
 
 std::array<Point, 4> Piece::translate(Direction dir)
 {
-    switch (dir)
+    for (Point& point : m_position) 
     {
-        case LEFT:
-            for (Point& point : m_position)
+        switch (dir)
+        {
+            case LEFT:
                 point.translateX(-1);
-            break;
-        case RIGHT:
-            for (Point& point : m_position)
+                break;
+            case RIGHT:
                 point.translateX(1);
-            break;
-        case DOWN:
-            for (Point& point : m_position)
+                break;
+            case DOWN:
                 point.translateY(1);
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
+        }
     }
+    
+    return m_position;
+}
+
+std::array<Point, 4> Piece::rotate()
+{
+    Point origin = m_position[0];
+
+    for (int i = 1; i < 4; i++) 
+        m_position[i].rotate270(origin);
     
     return m_position;
 }

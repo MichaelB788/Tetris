@@ -10,22 +10,29 @@
 
 std::array<Point, 4> Mechanics::giveNewPiece(char type)
 {
+    /*
+     * Each shape is represented by an array of four Points
+     *
+     * The first Point in the array is the point of rotation, 
+     * or the origin point
+     *  
+     * */
     switch (type)
     {
         case 'I':
-            return {Point(5, 1), Point(5, 0), Point(5, 2), Point(5, 3)};
+            return {Point(5, 2), Point(5, 1), Point(5, 3), Point(5, 4)};
         case 'O':
-            return {Point(5, 0), Point(6, 0), Point(5, 1), Point(6, 1)};
+            return {Point(5, 1), Point(6, 1), Point(5, 2), Point(6, 2)};
         case 'T':
-            return {Point(5, 0), Point(4, 0), Point(6, 0), Point(5, 1)};
+            return {Point(5, 1), Point(4, 1), Point(6, 1), Point(5, 2)};
         case 'S':
-            return {Point(5, 1), Point(4, 1), Point(5, 0), Point(6, 0)};
+            return {Point(5, 2), Point(4, 2), Point(5, 1), Point(6, 1)};
         case 'Z':
-            return {Point(5, 1), Point(4, 0), Point(5, 0), Point(6, 1)};
+            return {Point(5, 2), Point(4, 1), Point(5, 1), Point(6, 2)};
         case 'L':
-            return {Point(5, 1), Point(5, 0), Point(5, 2), Point(6, 2)};
+            return {Point(5, 2), Point(5, 1), Point(5, 3), Point(6, 3)};
         case 'J':
-            return {Point(6, 1), Point(6, 0), Point(6, 2), Point(5, 2)};
+            return {Point(6, 2), Point(6, 1), Point(6, 3), Point(5, 3)};
         default: {
             Grid::printGrid();
             std::cerr << "Unkown char given to Mechanics::giveNewPiece(char type): " << type << std::endl;

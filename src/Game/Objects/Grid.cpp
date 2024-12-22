@@ -9,7 +9,7 @@
  * These values should not be modified and may only be
  * used in this file.
  * */
-enum Dimensions { ROWS = 20, COLS = 12 };
+enum Dimensions { ROWS = 21, COLS = 12 };
 
 static unsigned int pointAt(unsigned int x, unsigned int y)
 {
@@ -28,6 +28,7 @@ static bool isFloor(char tile)
  * special behaviors.
  * */
 static std::array<char, ROWS * COLS> grid = {
+       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
        '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
@@ -72,8 +73,6 @@ void Grid::set(Point point, char newElement)
 
 void Grid::clear(unsigned int row)
 {
-    if (row > 19) row = 19;
-    
     while (row > 0)
     {
         for (int col = COLS - 1; col > 0; col--)
@@ -88,7 +87,6 @@ void Grid::clear(unsigned int row)
 // Check each row and see if it does not contain '#'
 bool Grid::hasFullRow(unsigned int row)
 {
-    if (row > 19) row = 19;
     unsigned int x = 1;
 
     while (tileAt(x, row) != '|')

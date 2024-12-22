@@ -53,9 +53,10 @@ void GraphicsModule::setColor(char id)
 void GraphicsModule::drawBoard()
 {
     // Draws every tile on the grid except for the surrounding border.
-    for (int row = 0; row < 20; row++)
-        for (int col = 0; col < 10; col++)
-            drawTile(col, row, Grid::tileAt(col + 1, row));
+    for (int row = 1; row < 21; row++)
+        for (int col = 1; col < 11; col++)
+            drawTile(col - 1, row - 1,
+                     Grid::tileAt(col, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, char id)

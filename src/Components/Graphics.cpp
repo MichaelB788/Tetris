@@ -45,9 +45,6 @@ void GraphicsModule::setColor(char id)
         case 'j':
             SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
-        case '#':
-            SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
-            break;
         default:
             break;
     }
@@ -69,16 +66,23 @@ void GraphicsModule::drawTile(int x, int y, char id)
     tile.h = tileSize;
     tile.w = tileSize;
 
-    setColor(id);
+    if (id == '#')
+    {
+        SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
+        SDL_RenderDrawRect(p_renderer, &tile);
+    } 
+    else 
+    {
+        setColor(id);
+        SDL_RenderFillRect(p_renderer, &tile);
 
-    (id == '#') ? SDL_RenderDrawRect(p_renderer, &tile) : SDL_RenderFillRect(p_renderer, &tile);
+        SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
+        SDL_RenderDrawRect(p_renderer, &tile);
+    } 
 } 
 
 void GraphicsModule::clearAndPresentFrame()
 {
-    // Important to set the renderer color black first as RenderClear
-    // essentially "fills" the screen with the last color given to 
-    // SetRenderDrawColor
     SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
 
     SDL_RenderClear(p_renderer);

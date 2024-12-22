@@ -16,10 +16,10 @@ typedef struct Piece
 
     std::array<Point, 4> rotate();
 
+    std::array<Point, 4> swap();
+    
     void spawn();
 
-    void swap();
-    
     // Setters
     void setPosition(std::array<Point, 4> newPosition)
     { m_position = newPosition; }

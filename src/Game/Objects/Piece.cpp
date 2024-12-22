@@ -56,9 +56,11 @@ void Piece::spawn()
         Grid::set(point, m_type);
 }
 
-void Piece::swap()
+std::array<Point, 4> Piece::swap()
 {
     srand(time(0));
     m_type = _types[rand() % 7];
     m_position = Mechanics::giveNewPiece(m_type);
+
+    return m_position;
 }

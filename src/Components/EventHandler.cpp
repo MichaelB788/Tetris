@@ -1,9 +1,11 @@
 #include "EventHandler.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
 #include "Commands/Command.hpp"
 #include "Commands/Move.hpp"
 #include "Commands/Rotate.hpp"
+#include "Commands/Drop.hpp"
 
 void EventHandler::processInput()
 {
@@ -30,17 +32,16 @@ Command* EventHandler::keydown()
     // Handle event.key.keysym.sym on key down
     switch (m_event.key.keysym.sym)
     {
-        case SDLK_LEFT:
-        case SDLK_a:
+        case SDLK_h:
             return new MoveCommand(p_piece, LEFT);
-        case SDLK_RIGHT:
-        case SDLK_d:
+        case SDLK_l:
             return new MoveCommand(p_piece, RIGHT);
-        case SDLK_DOWN:
-        case SDLK_s:
+        case SDLK_j:
             return new MoveCommand(p_piece, DOWN);
         case SDLK_r:
             return new RotateCommand(p_piece);
+        case SDLK_SPACE:
+            return new DropCommand(p_piece);
         default:
             return NULL;
     }

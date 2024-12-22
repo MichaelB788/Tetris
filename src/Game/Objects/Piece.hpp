@@ -18,7 +18,7 @@ typedef struct Piece
 
     std::array<Point, 4> swap();
     
-    void spawn();
+    void draw();
 
     // Setters
     void setPosition(std::array<Point, 4> newPosition)

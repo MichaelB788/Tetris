@@ -27,7 +27,7 @@ Tetris::Tetris()
     GraphicsModule graphics = GraphicsModule(core.m_Renderer);
     EventHandler handler = EventHandler(&m_piece, m_running);
     
-    m_piece.spawn();
+    m_piece.draw();
 
     // Game loop
     while (m_running)
@@ -53,6 +53,8 @@ void Tetris::updateGame()
     checkForFullRow();
   
     invokeGravity();
+    
+    m_piece.draw();
 }
 
 void Tetris::invokeGravity()
@@ -61,16 +63,12 @@ void Tetris::invokeGravity()
     else if (m_points > 50) m_difficulty = HARD;
 
     if (m_timer % m_difficulty == 0)
-    {
-        Command* gravity = new MoveCommand(&m_piece, DOWN);
-        gravity->execute();
-        delete gravity;
-    }
+        MoveCommand(&m_piece, DOWN).execute();
 }
 
 void Tetris::checkForFullRow()
 {
-    for (int row = 0; row < 20; row++)
+    for (int row = 0; row < 22; row++)
     {
         if (Grid::hasFullRow(row))
         { 

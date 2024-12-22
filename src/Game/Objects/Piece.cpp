@@ -50,7 +50,7 @@ std::array<Point, 4> Piece::rotate()
     return m_position;
 }
 
-void Piece::spawn()
+void Piece::draw()
 {
     for (Point& point : m_position)
         Grid::set(point, m_type);

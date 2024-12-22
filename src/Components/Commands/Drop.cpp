@@ -29,7 +29,4 @@ void DropCommand::display()
     Mechanics::ground(p_piece);
 
     newPosition = p_piece->swap();
-
-    for (Point& point : newPosition)
-        Grid::set(point, p_piece->type());
 }

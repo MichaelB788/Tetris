@@ -18,8 +18,6 @@ struct MoveCommand : public Command
     void undo() override;
 
     void display() override;
-
-    void ground();
     
 private:
     Piece* p_piece;
@@ -29,6 +27,8 @@ private:
     std::array<Point, 4> oldPosition;
 
     std::array<Point, 4> newPosition;
+
+    void enforceCollision();
 };
 
 #endif

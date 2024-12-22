@@ -50,16 +50,7 @@ Tetris::Tetris()
 
 void Tetris::updateGame()
 {
-    unsigned int row = 0;
-    while (row < 20)
-    {
-        if (Grid::hasFullRow(row))
-        { 
-            Grid::clear(row);
-            m_points++;   
-        }
-        row++;
-    }
+    checkForFullRow();
   
     invokeGravity();
 }
@@ -74,5 +65,17 @@ void Tetris::invokeGravity()
         Command* gravity = new MoveCommand(&m_piece, DOWN);
         gravity->execute();
         delete gravity;
+    }
+}
+
+void Tetris::checkForFullRow()
+{
+    for (int row = 0; row < 20; row++)
+    {
+        if (Grid::hasFullRow(row))
+        { 
+            Grid::clear(row);
+            m_points++;   
+        }
     }
 }

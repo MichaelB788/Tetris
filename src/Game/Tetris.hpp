@@ -7,10 +7,11 @@
 typedef class Tetris
 {
 private:
+    // Members 
     enum Difficulty 
     {
-        EASY = 300,
-        NORMAL = 200,
+        EASY = 200,
+        NORMAL = 150,
         HARD = 100 
     }; 
 
@@ -24,9 +25,12 @@ private:
 
     bool m_running = true;
 
+    // Functions
     void invokeGravity();
 
     void updateGame();
+
+    void checkForFullRow();
 
 public:
     Tetris();

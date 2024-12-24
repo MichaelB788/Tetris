@@ -6,6 +6,7 @@ add_library(GameLibrary SHARED
     Components/Commands/Move.cpp
     Components/Commands/Rotate.cpp
     Components/Commands/Drop.cpp
+    Components/Commands/Store.cpp
 
     Game/Objects/Coordinate.cpp
     Game/Objects/Grid.cpp

@@ -6,6 +6,7 @@
 #include "Commands/Move.hpp"
 #include "Commands/Rotate.hpp"
 #include "Commands/Drop.hpp"
+#include "Commands/Store.hpp"
 
 void EventHandler::processInput()
 {
@@ -32,12 +33,16 @@ Command* EventHandler::keydown()
     // Handle event.key.keysym.sym on key down
     switch (m_event.key.keysym.sym)
     {
-        case SDLK_h:
+        case SDLK_j:
             return new MoveCommand(p_piece, LEFT);
+        case SDLK_k:
+            return new MoveCommand(p_piece, DOWN);
         case SDLK_l:
             return new MoveCommand(p_piece, RIGHT);
-        case SDLK_j:
-            return new MoveCommand(p_piece, DOWN);
+        case SDLK_s:
+            return new StoreCommand(p_piece);
+        case SDLK_d:
+            return new DropCommand(p_piece);
         case SDLK_r:
             return new RotateCommand(p_piece);
         case SDLK_SPACE:

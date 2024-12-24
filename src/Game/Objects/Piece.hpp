@@ -2,22 +2,24 @@
 #define PIECE_H
 
 #include "Coordinate.hpp"
+#include "../Direction.hpp"
+#include "../Tile.hpp"
 #include <array>
-
-enum Direction { NONE, LEFT, RIGHT, DOWN };
 
 typedef struct Piece
 {
     // Constructor
-    Piece();
+    Piece(Tile type);
 
     // Methods
     std::array<Point, 4> translate(Direction dir);
 
     std::array<Point, 4> rotate();
 
-    std::array<Point, 4> swap();
-    
+    void swap();
+
+    void store();
+
     void draw();
 
     // Setters
@@ -25,14 +27,14 @@ typedef struct Piece
     { m_position = newPosition; }
 
     // Getters
-    const char type() { return m_type; }
+    Tile type() { return m_type; }
     
     std::array<Point, 4> position() { return m_position; }
 
 private:
     std::array<Point, 4> m_position;
 
-    char m_type;
+    Tile m_type, m_next, m_stored = NIL;
 } Piece;
 
 #endif

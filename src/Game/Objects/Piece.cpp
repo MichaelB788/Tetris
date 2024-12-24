@@ -8,14 +8,11 @@
 #include "Piece.hpp"
 #include "Mechanics.hpp"
 
-char _types[7] = {'I', 'O', 'T', 'S', 'Z', 'L', 'J'};
-
-Piece::Piece() 
-{
-    srand(time(0));
-    m_type = _types[rand() % 7];
-    m_position = Mechanics::giveNewPiece(m_type);
-};
+Piece::Piece(Tile type) : 
+    m_type(type),
+    m_next(Mechanics::assignTile()),
+    m_position(Mechanics::giveNewPiece(type))
+{}
 
 std::array<Point, 4> Piece::translate(Direction dir)
 {
@@ -56,11 +53,28 @@ void Piece::draw()
         Grid::set(point, m_type);
 }
 
-std::array<Point, 4> Piece::swap()
+void Piece::swap()
 {
-    srand(time(0));
-    m_type = _types[rand() % 7];
-    m_position = Mechanics::giveNewPiece(m_type);
+    m_type = m_next;
+    m_next = Mechanics::assignTile();
 
-    return m_position;
+    m_position = Mechanics::giveNewPiece(m_type);
+}
+
+void Piece::store()
+{
+    if (m_stored == NIL) {
+        // Store the current piece and swap it with a new one
+        m_stored = m_type;
+        m_type = m_next;
+        m_next = Mechanics::assignTile();
+    }
+    else {
+        // Swap the current piece with the one stored
+        Tile temp = m_type;
+        m_type = m_stored;
+        m_stored = temp;
+    }
+
+    m_position = Mechanics::giveNewPiece(m_type);
 }

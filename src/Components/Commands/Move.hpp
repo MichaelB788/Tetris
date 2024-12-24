@@ -10,14 +10,12 @@ struct MoveCommand : public Command
     MoveCommand(Piece* piece, Direction direction) :
         p_piece(piece), 
         m_direction(direction),
-        newPosition(piece->position())
+        oldPosition(piece->position())
     {}
 
     void execute() override;
 
     void undo() override;
-
-    void display() override;
     
 private:
     Piece* p_piece;

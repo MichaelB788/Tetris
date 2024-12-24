@@ -5,27 +5,17 @@
 
 void MoveCommand::execute()
 {
-    oldPosition = newPosition;
     newPosition = p_piece->translate(m_direction);
 
     if (Mechanics::collidesObject(p_piece))
         enforceCollision();
 
-    else display();
+    else Grid::clear(oldPosition);
 }
 
 void MoveCommand::undo()
 {
     p_piece->setPosition(oldPosition);
-}
-
-void MoveCommand::display()
-{
-    for (Point& point : oldPosition)
-        Grid::set(point, '#');
-
-    for (Point& point : newPosition)
-        Grid::set(point, p_piece->type());
 }
 
 void MoveCommand::enforceCollision()
@@ -35,6 +25,6 @@ void MoveCommand::enforceCollision()
     if (m_direction == DOWN)
     {
         Mechanics::ground(p_piece);
-        newPosition = p_piece->swap();
+        p_piece->swap();
     }
 }

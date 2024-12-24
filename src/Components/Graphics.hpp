@@ -2,6 +2,7 @@
 #define GRAPHICS_H
 
 #include <SDL2/SDL.h>
+#include "../Game/Tile.hpp"
 
 /*
  * A structure which handles game rendering given an SDL Renderer.
@@ -16,11 +17,11 @@ typedef struct GraphicsModule
 
     ~GraphicsModule();
 
-    void setColor(char id);
+    void setColor(Tile id);
 
     void drawBoard();
 
-    void drawTile(int x, int y, char id);
+    void drawTile(int x, int y, Tile id);
 
     void clearAndPresentFrame();
 

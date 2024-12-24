@@ -13,36 +13,29 @@ GraphicsModule::~GraphicsModule()
     p_renderer = nullptr;
 }
 
-void GraphicsModule::setColor(char id)
+void GraphicsModule::setColor(Tile id)
 {
     switch (id)
     {
-        case 'I':
-        case 'i':
+        case I: case i:
             SDL_SetRenderDrawColor(p_renderer, 0, 255, 255, 1);
             break;
-        case 'O':
-        case 'o':
+        case O: case o:
             SDL_SetRenderDrawColor(p_renderer, 255, 255, 0, 1);
             break;
-        case 'T':
-        case 't':
+        case T: case t:
             SDL_SetRenderDrawColor(p_renderer, 255, 0, 255, 1);
             break;
-        case 'S':
-        case 's':
+        case S: case s:
             SDL_SetRenderDrawColor(p_renderer, 0, 255, 0, 1);
             break;
-        case 'Z':
-        case 'z':
+        case Z: case z:
             SDL_SetRenderDrawColor(p_renderer, 255, 0, 0, 1);
             break;
-        case 'L':
-        case 'l':
+        case L: case l:
             SDL_SetRenderDrawColor(p_renderer, 255, 145, 0, 1);
             break;
-        case 'J':
-        case 'j':
+        case J: case j:
             SDL_SetRenderDrawColor(p_renderer, 0, 0, 255, 1);
             break;
         default:
@@ -59,7 +52,7 @@ void GraphicsModule::drawBoard()
                      Grid::tileAt(col, row));
 }
 
-void GraphicsModule::drawTile(int x, int y, char id)
+void GraphicsModule::drawTile(int x, int y, Tile id)
 {
     SDL_Rect tile;
     tile.x = tileSize * x;
@@ -67,7 +60,7 @@ void GraphicsModule::drawTile(int x, int y, char id)
     tile.h = tileSize;
     tile.w = tileSize;
 
-    if (id == '#')
+    if ( id == _ )
     {
         SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
         SDL_RenderDrawRect(p_renderer, &tile);

@@ -16,8 +16,6 @@ struct DropCommand : public Command
 
     void undo() override;
 
-    void display() override;
-    
 private:
     Piece* p_piece;
 

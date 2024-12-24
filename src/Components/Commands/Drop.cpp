@@ -5,8 +5,7 @@
 
 void DropCommand::execute()
 {
-    for (Point& point : newPosition)
-        Grid::set(point, '#');
+    Grid::clear(newPosition);
 
     while (!Mechanics::collidesObject(p_piece))
     {
@@ -16,17 +15,12 @@ void DropCommand::execute()
 
     undo();
 
-    display();
+    Mechanics::ground(p_piece);
+
+    p_piece->swap();
 }
 
 void DropCommand::undo()
 {
     p_piece->setPosition(oldPosition);
-}
-
-void DropCommand::display()
-{
-    Mechanics::ground(p_piece);
-
-    newPosition = p_piece->swap();
 }

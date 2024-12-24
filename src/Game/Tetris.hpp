@@ -1,8 +1,10 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
-#include "Objects/Piece.hpp"
 #include <SDL2/SDL.h>
+
+#include "Objects/Piece.hpp"
+#include "Objects/Mechanics.hpp"
 
 typedef class Tetris
 {
@@ -15,7 +17,7 @@ private:
         HARD = 100 
     }; 
 
-    Piece m_piece;
+    Piece m_piece = Piece(Mechanics::assignTile());
 
     Difficulty m_difficulty = EASY;
 

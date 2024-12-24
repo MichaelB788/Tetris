@@ -1,14 +1,14 @@
 #include "Mechanics.hpp"
 
 #include <array>
-#include <iostream>
 #include <locale>
+#include <stdexcept>
 
 #include "Coordinate.hpp"
 #include "Grid.hpp"
 #include "Piece.hpp"
 
-std::array<Point, 4> Mechanics::giveNewPiece(char type)
+std::array<Point, 4> Mechanics::giveNewPiece(Tile type)
 {
     /*
      * Each shape is represented by an array of four Points
@@ -19,26 +19,29 @@ std::array<Point, 4> Mechanics::giveNewPiece(char type)
      * */
     switch (type)
     {
-        case 'I':
+        case I:
             return {Point(5, 2), Point(5, 1), Point(5, 3), Point(5, 4)};
-        case 'O':
+        case O:
             return {Point(5, 1), Point(6, 1), Point(5, 2), Point(6, 2)};
-        case 'T':
+        case T:
             return {Point(5, 1), Point(4, 1), Point(6, 1), Point(5, 2)};
-        case 'S':
+        case S:
             return {Point(5, 2), Point(4, 2), Point(5, 1), Point(6, 1)};
-        case 'Z':
+        case Z:
             return {Point(5, 2), Point(4, 1), Point(5, 1), Point(6, 2)};
-        case 'L':
+        case L:
             return {Point(5, 2), Point(5, 1), Point(5, 3), Point(6, 3)};
-        case 'J':
+        case J:
             return {Point(6, 2), Point(6, 1), Point(6, 3), Point(5, 3)};
-        default: {
-            Grid::printGrid();
-            std::cerr << "Unkown char given to Mechanics::giveNewPiece(char type): " << type << std::endl;
-            throw;
-        }
+        default: 
+            throw std::invalid_argument("Did not recieve valid Tile value");
     }
+}
+
+Tile Mechanics::assignTile()
+{
+    srand(time(0)); // Seed with current time
+    return Tile(rand() % 7);
 }
 
 bool Mechanics::collidesObject(Piece* target)
@@ -47,7 +50,7 @@ bool Mechanics::collidesObject(Piece* target)
     {
         char currTile = Grid::tileAt(p);
 
-        if (currTile != '#' &&
+        if (currTile != _ &&
             currTile != target->type())  
             return true;
     }
@@ -57,7 +60,8 @@ bool Mechanics::collidesObject(Piece* target)
 
 void Mechanics::ground(Piece* target)
 {
+    Tile groundedTile = Tile(target->type() + 7);
+
     for (Point& p: target->position())
-        Grid::set(p, std::tolower(target->type(),
-                                  std::locale())); 
+        Grid::set(p, groundedTile); 
 }

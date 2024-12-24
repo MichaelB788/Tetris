@@ -3,12 +3,6 @@
 
 #include "Grid.hpp"
 
-/* The following functions are used to help navigate
- * the "2D array."
- *
- * These values should not be modified and may only be
- * used in this file.
- * */
 enum Dimensions { ROWS = 21, COLS = 12 };
 
 static unsigned int pointAt(unsigned int x, unsigned int y)
@@ -16,57 +10,52 @@ static unsigned int pointAt(unsigned int x, unsigned int y)
     return x + (y * COLS);
 }
 
-static bool isFloor(char tile)
-{
-    return 'i' <= tile && tile <= 'z';
-}
-
 /* 
- * Grid Dimensions: 20 x 12
+ * Grid Dimensions: 21 x 12
  *
  * Character's are used to represents tiles with 
  * special behaviors.
  * */
-static std::array<char, ROWS * COLS> grid = {
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|',
-       '|', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '|'
-    };
+static std::array<Tile, ROWS * COLS> grid = {
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+    W, _, _, _, _, _, _, _, _, _, _, W,  
+};
 
-char Grid::tileAt(unsigned int x, unsigned int y)
+Tile Grid::tileAt(unsigned int x, unsigned int y)
 {
     return grid[pointAt(x, y)];
 }
 
-char Grid::tileAt(Point point)
+Tile Grid::tileAt(Point point)
 {
     return grid[pointAt(point.getX(), point.getY())];
 }
 
-void Grid::set(unsigned int x, unsigned int y, char newElement)
+void Grid::set(unsigned int x, unsigned int y, Tile newElement)
 {
     grid[pointAt(x, y)] = newElement;
 }
 
-void Grid::set(Point point, char newElement)
+void Grid::set(Point point, Tile newElement)
 {
     grid[pointAt(point.getX(), point.getY())] = newElement;
 }
@@ -76,25 +65,24 @@ void Grid::clear(unsigned int row)
     while (row > 0)
     {
         for (int col = COLS - 1; col > 0; col--)
-        {
-            // if (row == 0) set(col, row, '#');
             set(col, row, tileAt(col, row - 1));
-        }
         row--;
     }
 }
 
-// Check each row and see if it does not contain '#'
+void Grid::clear(std::array<Point, 4> target)
+{
+    for (Point& point : target)
+        set( point, _ );
+}
+
 bool Grid::hasFullRow(unsigned int row)
 {
-    unsigned int x = 1;
-
-    while (tileAt(x, row) != '|')
-    {
-        if (tileAt(x, row) == '#' || !isFloor(tileAt(x, row)))
+    // Tiles with values < 7 are playable pieces
+    for (int x = 1; x < 12; x++)
+        if (tileAt(x, row) < 7 ||
+            tileAt(x, row) == _ )
             return false;
-        else x++;
-    }
 
     return true;
 }

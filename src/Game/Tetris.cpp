@@ -44,8 +44,6 @@ Tetris::Tetris()
     }
 
     std::cout << "Points earned: " << m_points << std::endl;
-    // Testing
-    Grid::printGrid();
 }
 
 void Tetris::updateGame()

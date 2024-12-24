@@ -3,11 +3,14 @@
 
 #include <array>
 #include "Coordinate.hpp"
+#include "../Tile.hpp"
 #include "Piece.hpp"
 
 namespace Mechanics 
 {
-    std::array<Point, 4> giveNewPiece(char type);
+    std::array<Point, 4> giveNewPiece(Tile type);
+    
+    Tile assignTile();
 
     bool collidesObject(Piece* target);
 

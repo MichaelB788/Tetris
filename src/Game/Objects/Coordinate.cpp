@@ -1,4 +1,3 @@
-#include <cmath> 
 #include "Coordinate.hpp"
 
 void Point::translateX(int amount)

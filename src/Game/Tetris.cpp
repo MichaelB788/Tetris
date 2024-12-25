@@ -12,7 +12,6 @@
 #include "../API/GameCore.hpp"
 
 #include "Objects/Grid.hpp"
-#include "Objects/Piece.hpp"
 
 Tetris::Tetris()
 {
@@ -24,8 +23,12 @@ Tetris::Tetris()
      * Eventhandler will handle SDL events and Player movement.
      * */
     GameCore core;
-    GraphicsModule graphics = GraphicsModule(core.m_Renderer);
-    EventHandler handler = EventHandler(&m_piece, m_running);
+
+    GraphicsModule graphics = GraphicsModule(core.m_Renderer,
+                                             &m_piece);
+
+    EventHandler handler = EventHandler(&m_piece,
+                                        m_running);
     
     m_piece.draw();
 

@@ -28,6 +28,10 @@ typedef struct Piece
 
     // Getters
     Tile type() { return m_type; }
+
+    Tile next() { return m_next; }
+
+    Tile stored() { return m_stored; }
     
     std::array<Point, 4> position() { return m_position; }
 

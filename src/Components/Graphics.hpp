@@ -3,33 +3,40 @@
 
 #include <SDL2/SDL.h>
 #include "../Game/Tile.hpp"
+#include "../Game/Objects/Piece.hpp"
 
-/*
- * A structure which handles game rendering given an SDL Renderer.
+/* Handles the visuals.
  *
- * This structure paints squares based on a set tilesize, 40 pixels.
- * It's primary objective is to clear the screen, and then draw a
- * 10x20 grid.
- **/
-typedef struct GraphicsModule
+ * Draws the board to the left and game stats to
+ * the right of the window. 
+ * */
+struct GraphicsModule
 {
-    GraphicsModule(SDL_Renderer* ren);
+    // Constructor
+    GraphicsModule(SDL_Renderer* ren,
+                   Piece* piece) :
+    p_renderer(ren),
+    p_piece(piece) {};
 
-    ~GraphicsModule();
+    // Method
+    void clearAndPresentFrame();
 
+private:
+    // Members
+    unsigned int const tileSize = 40;
+
+    SDL_Renderer* p_renderer;
+
+    Piece* p_piece;
+
+    // Methods
     void setColor(Tile id);
 
     void drawBoard();
 
     void drawTile(int x, int y, Tile id);
 
-    void clearAndPresentFrame();
-
-    private:
-
-    unsigned int const tileSize = 40;
-
-    SDL_Renderer* p_renderer;
-} GraphicsModule;
+    void drawStats();
+};
 
 #endif

@@ -1,16 +1,22 @@
 #include <SDL2/SDL.h>
 
 #include "Graphics.hpp"
+#include "../API/Screen.hpp"
 #include "../Game/Objects/Grid.hpp"
+#include "../Game/Objects/Mechanics.hpp"
 
-GraphicsModule::GraphicsModule(SDL_Renderer* ren)
+void GraphicsModule::clearAndPresentFrame()
 {
-    p_renderer = ren;
-}
+    // Clear
+    SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
+    SDL_RenderClear(p_renderer);
 
-GraphicsModule::~GraphicsModule()
-{
-    p_renderer = nullptr;
+    // Draw
+    drawBoard();
+    drawStats();
+
+    // Present
+    SDL_RenderPresent(p_renderer); 
 }
 
 void GraphicsModule::setColor(Tile id)
@@ -45,43 +51,48 @@ void GraphicsModule::setColor(Tile id)
 
 void GraphicsModule::drawBoard()
 {
-    // Draws every tile on the grid except for the surrounding border.
+    // row and col set to 1 to skip drawing the walls
     for (int row = 1; row < 21; row++)
         for (int col = 1; col < 11; col++)
-            drawTile(col - 1, row - 1,
+            // Draw the board starting at the top left
+            // corner of the screen.
+            drawTile(col - 1,
+                     row - 1,
                      Grid::tileAt(col, row));
 }
 
 void GraphicsModule::drawTile(int x, int y, Tile id)
 {
     SDL_Rect tile;
-    tile.x = tileSize * x;
-    tile.y = tileSize * y;
-    tile.h = tileSize;
-    tile.w = tileSize;
+    tile.x = tileSize * x, tile.y = tileSize * y;
+    tile.h = tileSize, tile.w = tileSize;
 
-    if ( id == _ )
-    {
-        SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
-        SDL_RenderDrawRect(p_renderer, &tile);
-    } 
-    else 
+    // Fill the tile if it is a piece.
+    if (id < 14)
     {
         setColor(id);
         SDL_RenderFillRect(p_renderer, &tile);
-
-        SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
-        SDL_RenderDrawRect(p_renderer, &tile);
     } 
+
+    // Draw a rectangle around all tiles
+    SDL_SetRenderDrawColor(p_renderer, 0, 0, 150, 0);
+    SDL_RenderDrawRect(p_renderer, &tile);
 } 
 
-void GraphicsModule::clearAndPresentFrame()
+void GraphicsModule::drawStats()
 {
-    SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
+    Tile next = p_piece->next(), stored = p_piece->stored();
 
-    SDL_RenderClear(p_renderer);
+    for (Point& point :
+         Mechanics::giveNewPiece(next))
+            drawTile(NEXT_PIECE_X + point.getX(),
+                     NEXT_PIECE_Y + point.getY(),
+                     next);
 
-    drawBoard();
-
-    SDL_RenderPresent(p_renderer); 
+    if (stored != NIL)
+        for (Point& point :
+        Mechanics::giveNewPiece(stored))
+            drawTile(STORED_PIECE_X + point.getX(),
+                     STORED_PIECE_Y + point.getY(),
+                     stored);
 }

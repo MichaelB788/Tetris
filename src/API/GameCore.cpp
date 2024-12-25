@@ -2,26 +2,32 @@
 #include <assert.h>
 
 #include "GameCore.hpp"
+#include "Screen.hpp"
 
 GameCore::GameCore()
 {
-    m_Window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_SHOWN);
+    m_Window = SDL_CreateWindow("Tetris",
+                                SDL_WINDOWPOS_CENTERED,
+                                SDL_WINDOWPOS_CENTERED,
+                                SCREEN_WIDTH,
+                                SCREEN_LENGTH,
+                                SDL_WINDOW_SHOWN);
 
-    assert((m_Window != NULL));
+    m_Renderer = SDL_CreateRenderer(m_Window,
+                                    -1, // the index of the rendering driver
+                                    SDL_RENDERER_ACCELERATED);
 
-    m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
-
-    assert((m_Renderer != NULL));
+    assert(m_Window != NULL && m_Renderer != NULL);
 }
 
 // Destructors
 GameCore::~GameCore()
 {
+    // Destroy everything
     SDL_DestroyWindow(m_Window);
-    m_Window = nullptr;
-
     SDL_DestroyRenderer(m_Renderer);
-    m_Renderer = nullptr;
 
+    // Set to null and quit
+    m_Renderer = nullptr, m_Window = nullptr;
     SDL_Quit();
 }

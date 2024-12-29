@@ -1,5 +1,5 @@
 #include "Drop.hpp"
-#include "../../Game/Objects/Mechanics.hpp"
+#include "../../Game/Mechanics.hpp"
 #include "../../Game/Objects/Grid.hpp"
 #include <array>
 

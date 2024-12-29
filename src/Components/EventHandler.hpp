@@ -9,7 +9,7 @@
  * A class which handles events from the keyboard and manipulates
  * the Player object outside of its scope through a pointer.
  * */
-typedef class EventHandler 
+class EventHandler 
 {
     SDL_Event m_event;
 
@@ -25,6 +25,6 @@ public:
 
     void processInput();
 
-} EventHandler;
+};
 
 #endif

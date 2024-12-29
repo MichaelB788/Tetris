@@ -1,6 +1,6 @@
 #include "Rotate.hpp"
 #include "../../Game/Objects/Grid.hpp"
-#include "../../Game/Objects/Mechanics.hpp"
+#include "../../Game/Mechanics.hpp"
 
 void RotateCommand::execute()
 {

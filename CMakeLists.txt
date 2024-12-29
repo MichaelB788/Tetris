@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 
 # Link SDL2
 find_package(SDL2 REQUIRED)
-target_link_libraries(${PROJECT_NAME} "-lSDL2 -lSDL2main")
+target_link_libraries(${PROJECT_NAME} "-lSDL2 -lSDL2_ttf -lSDL2main")
 
 # Library to use (All of the components and game objects under src/)
 add_subdirectory(src)

@@ -2,21 +2,23 @@
 #define GRAPHICS_H
 
 #include <SDL2/SDL.h>
-#include "../Game/Tile.hpp"
 #include "../Game/Objects/Piece.hpp"
+#include <SDL2/SDL_ttf.h>
 
 /* Handles the visuals.
  *
  * Draws the board to the left and game stats to
  * the right of the window. 
  * */
-struct GraphicsModule
+struct Graphics
 {
     // Constructor
-    GraphicsModule(SDL_Renderer* ren,
-                   Piece* piece) :
+    Graphics(SDL_Renderer* ren,
+             TTF_Font* font,
+             Piece& piece) :
     p_renderer(ren),
-    p_piece(piece) {};
+    p_font(font),
+    m_piece(piece) {};
 
     // Method
     void clearAndPresentFrame();
@@ -26,17 +28,10 @@ private:
     unsigned int const tileSize = 40;
 
     SDL_Renderer* p_renderer;
+        
+    TTF_Font* p_font;
 
-    Piece* p_piece;
-
-    // Methods
-    void setColor(Tile id);
-
-    void drawBoard();
-
-    void drawTile(int x, int y, Tile id);
-
-    void drawStats();
+    Piece& m_piece;
 };
 
 #endif

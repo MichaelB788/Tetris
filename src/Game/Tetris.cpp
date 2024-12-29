@@ -7,11 +7,9 @@
 
 #include "../Components/Graphics.hpp"
 #include "../Components/EventHandler.hpp"
-#include "../Components/Commands/Move.hpp"
 
-#include "../API/GameCore.hpp"
+#include "../api/SDL-Subsystems.hpp"
 
-#include "Objects/Grid.hpp"
 
 Tetris::Tetris()
 {
@@ -22,10 +20,12 @@ Tetris::Tetris()
      *
      * Eventhandler will handle SDL events and Player movement.
      * */
-    GameCore core;
+    SDL_Subsystems core;
 
-    GraphicsModule graphics = GraphicsModule(core.m_Renderer,
-                                             &m_piece);
+    Graphics graphics =
+        Graphics(core.renderer(),
+                 core.font(),
+                 m_piece);
 
     EventHandler handler = EventHandler(&m_piece,
                                         m_running);
@@ -51,30 +51,12 @@ Tetris::Tetris()
 
 void Tetris::updateGame()
 {
-    checkForFullRow();
-  
-    invokeGravity();
-    
-    m_piece.draw();
-}
+    Mechanics::checkFullRow(m_points);
 
-void Tetris::invokeGravity()
-{
     if (m_points > 20) m_difficulty = NORMAL;
     else if (m_points > 50) m_difficulty = HARD;
-
-    if (m_timer % m_difficulty == 0)
-        MoveCommand(&m_piece, DOWN).execute();
-}
-
-void Tetris::checkForFullRow()
-{
-    for (int row = 0; row < 22; row++)
-    {
-        if (Grid::hasFullRow(row))
-        { 
-            Grid::clear(row);
-            m_points++;   
-        }
-    }
+  
+    Mechanics::invokeGravity(&m_piece, m_timer, m_difficulty);
+    
+    m_piece.draw();
 }

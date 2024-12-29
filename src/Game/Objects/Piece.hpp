@@ -2,8 +2,7 @@
 #define PIECE_H
 
 #include "Coordinate.hpp"
-#include "../Direction.hpp"
-#include "../Tile.hpp"
+#include "../Variables.hpp"
 #include <array>
 
 typedef struct Piece

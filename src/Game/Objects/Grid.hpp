@@ -3,8 +3,8 @@
 
 #include <array>
 
+#include "../Variables.hpp"
 #include "Coordinate.hpp"
-#include "../Tile.hpp"
 
 namespace Grid 
 {

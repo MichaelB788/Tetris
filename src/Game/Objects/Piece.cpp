@@ -6,7 +6,7 @@
 #include "Coordinate.hpp"
 #include "Grid.hpp"
 #include "Piece.hpp"
-#include "Mechanics.hpp"
+#include "../Mechanics.hpp"
 
 Piece::Piece(Tile type) : 
     m_type(type),

@@ -1,7 +1,9 @@
 add_library(GameLibrary SHARED
-    API/GameCore.cpp 
+    api/SDL-Subsystems.cpp 
 
     Components/Graphics.cpp
+    Components/Draw.cpp
+
     Components/EventHandler.cpp
     Components/Commands/Move.cpp
     Components/Commands/Rotate.cpp
@@ -11,6 +13,6 @@ add_library(GameLibrary SHARED
     Game/Objects/Coordinate.cpp
     Game/Objects/Grid.cpp
     Game/Objects/Piece.cpp
-    Game/Objects/Mechanics.cpp
+    Game/Mechanics.cpp
     Game/Tetris.cpp
 )

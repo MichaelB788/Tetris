@@ -2,8 +2,8 @@
 #define DRAW_H
 
 #include <SDL2/SDL.h>
-#include "../Game/Variables.hpp"
-#include "../Game/Objects/Piece.hpp"
+#include "../../Game/Variables.hpp"
+#include "../../Game/Objects/Piece.hpp"
 
 namespace Draw
 {

@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include "Commands/Command.hpp"
-#include "../Game/Objects/Piece.hpp"
+#include "../../Game/Objects/Piece.hpp"
 
 /*
  * A class which handles events from the keyboard and manipulates
@@ -12,12 +12,12 @@
  * */
 class EventHandler 
 {
-    Piece* p_piece;
+    Piece& p_piece;
 
     Command* keydown(SDL_Event event);
 
 public:
-    EventHandler(Piece* piece) : p_piece(piece) {}
+    EventHandler(Piece& piece) : p_piece(piece) {}
 
     void processInput(SDL_Event event);
 

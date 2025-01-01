@@ -2,14 +2,14 @@
 #define ROTATE_H
 
 #include "Command.hpp"
-#include "../../Game/Objects/Piece.hpp"
+#include "../../../Game/Objects/Piece.hpp"
 #include <array>
 
 struct RotateCommand : public Command
 {
-    RotateCommand(Piece* piece) :
+    RotateCommand(Piece& piece) :
         p_piece(piece), 
-        newPosition(piece->position())
+        newPosition(piece.position())
     {}
 
     void execute() override;
@@ -17,7 +17,7 @@ struct RotateCommand : public Command
     void undo() override;
 
 private:
-    Piece* p_piece;
+    Piece& p_piece;
     
     std::array<Point, 4> newPosition;
 

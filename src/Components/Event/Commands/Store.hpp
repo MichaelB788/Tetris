@@ -2,13 +2,13 @@
 #define STORE_H
 
 #include "Command.hpp"
-#include "../../Game/Objects/Piece.hpp"
+#include "../../../Game/Objects/Piece.hpp"
 
 struct StoreCommand : public Command
 {
-    StoreCommand(Piece* piece) :
+    StoreCommand(Piece& piece) :
         p_piece(piece), 
-        oldPosition(piece->position())
+        oldPosition(piece.position())
     {}
 
     void execute() override;
@@ -16,7 +16,7 @@ struct StoreCommand : public Command
     void undo() override {};
     
 private:
-    Piece* p_piece;
+    Piece& p_piece;
             
     std::array<Point, 4> oldPosition;
 };

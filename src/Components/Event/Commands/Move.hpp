@@ -2,15 +2,15 @@
 #define MOVE_H
 
 #include "Command.hpp"
-#include "../../Game/Objects/Piece.hpp"
+#include "../../../Game/Objects/Piece.hpp"
 #include <array>
 
 struct MoveCommand : public Command 
 {
-    MoveCommand(Piece* piece, Direction direction) :
+    MoveCommand(Piece& piece, Direction direction) :
         p_piece(piece), 
         m_direction(direction),
-        oldPosition(piece->position())
+        oldPosition(piece.position())
     {}
 
     void execute() override;
@@ -18,7 +18,7 @@ struct MoveCommand : public Command
     void undo() override;
     
 private:
-    Piece* p_piece;
+    Piece& p_piece;
             
     Direction m_direction;
 

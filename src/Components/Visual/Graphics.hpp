@@ -3,9 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
-#include <iostream>
-#include "../Game/Objects/Piece.hpp"
-#include "../api/sdl/Renderer.hpp"
+#include "../../Game/Objects/Piece.hpp"
 
 /* Handles the visuals.
  *
@@ -15,8 +13,8 @@
 struct Graphics
 {
     // Constructor
-    Graphics(Renderer& ren, Piece& piece) :
-        p_renderer(ren.get()),
+    Graphics(SDL_Renderer* ren, Piece& piece) :
+        p_renderer(ren),
         m_piece(piece) {};
 
     // Method

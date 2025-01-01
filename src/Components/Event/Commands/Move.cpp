@@ -1,11 +1,11 @@
 #include "Move.hpp"
-#include "../../Game/Mechanics.hpp"
-#include "../../Game/Objects/Grid.hpp"
+#include "../../../Game/Mechanics.hpp"
+#include "../../../Game/Objects/Grid.hpp"
 #include <array>
 
 void MoveCommand::execute()
 {
-    newPosition = p_piece->translate(m_direction);
+    newPosition = p_piece.translate(m_direction);
 
     if (Mechanics::collidesObject(p_piece))
         enforceCollision();
@@ -15,7 +15,7 @@ void MoveCommand::execute()
 
 void MoveCommand::undo()
 {
-    p_piece->setPosition(oldPosition);
+    p_piece.setPosition(oldPosition);
 }
 
 void MoveCommand::enforceCollision()
@@ -25,6 +25,6 @@ void MoveCommand::enforceCollision()
     if (m_direction == DOWN)
     {
         Mechanics::ground(p_piece);
-        p_piece->swap();
+        p_piece.swap();
     }
 }

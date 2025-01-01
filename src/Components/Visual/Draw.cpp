@@ -2,8 +2,8 @@
 #include <SDL2/SDL_render.h>
 
 #include "Draw.hpp"
-#include "../Game/Mechanics.hpp"
-#include "../Game/Objects/Grid.hpp"
+#include "../../Game/Mechanics.hpp"
+#include "../../Game/Objects/Grid.hpp"
 
 void Draw::setColor(Tile id, SDL_Renderer* p_renderer)
 {

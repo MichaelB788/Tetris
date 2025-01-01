@@ -2,8 +2,10 @@
 #define GRAPHICS_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+#include <iostream>
 #include "../Game/Objects/Piece.hpp"
-#include <SDL2/SDL_ttf.h>
+#include "../api/sdl/Renderer.hpp"
 
 /* Handles the visuals.
  *
@@ -13,12 +15,9 @@
 struct Graphics
 {
     // Constructor
-    Graphics(SDL_Renderer* ren,
-             TTF_Font* font,
-             Piece& piece) :
-    p_renderer(ren),
-    p_font(font),
-    m_piece(piece) {};
+    Graphics(Renderer& ren, Piece& piece) :
+        p_renderer(ren.get()),
+        m_piece(piece) {};
 
     // Method
     void clearAndPresentFrame();
@@ -29,8 +28,6 @@ private:
 
     SDL_Renderer* p_renderer;
         
-    TTF_Font* p_font;
-
     Piece& m_piece;
 };
 

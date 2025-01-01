@@ -4,7 +4,7 @@
 #include <locale>
 #include <stdexcept>
 
-#include "../Components/Commands/Move.hpp"
+#include "../Components/Event/Commands/Move.hpp"
 
 #include "Objects/Coordinate.hpp"
 #include "Objects/Grid.hpp"
@@ -46,29 +46,29 @@ Tile Mechanics::assignTile()
     return Tile(rand() % 7);
 }
 
-bool Mechanics::collidesObject(Piece* target)
+bool Mechanics::collidesObject(Piece target)
 {
-    for (Point& p : target->position())
+    for (Point& p : target.position())
     {
         char currTile = Grid::tileAt(p);
 
         if (currTile != _ &&
-            currTile != target->type())  
+            currTile != target.type())  
             return true;
     }
 
     return false;
 }
 
-void Mechanics::ground(Piece* target)
+void Mechanics::ground(Piece target)
 {
-    Tile groundedTile = Tile(target->type() + 7);
+    Tile groundedTile = Tile(target.type() + 7);
 
-    for (Point& p: target->position())
+    for (Point& p: target.position())
         Grid::set(p, groundedTile); 
 }
 
-void Mechanics::invokeGravity(Piece* piece,
+void Mechanics::invokeGravity(Piece piece,
                               unsigned int time,
                               Difficulty &difficulty)
 {

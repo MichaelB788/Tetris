@@ -5,10 +5,11 @@
 #include "Tetris.hpp"
 #include "Mechanics.hpp"
 
-#include "../Components/Graphics.hpp"
-#include "../Components/EventHandler.hpp"
+#include "../Components/Context.hpp"
 
-Tetris::Tetris() : m_piece(Piece(Mechanics::assignTile()))
+Tetris::Tetris() :
+    m_piece(Piece(Mechanics::assignTile())),
+    m_context(m_core.m_renderer, m_piece)
 {
     /* GameCore initializes SDL subsystems such as SDL_Render
      * and SDL_window.
@@ -17,10 +18,6 @@ Tetris::Tetris() : m_piece(Piece(Mechanics::assignTile()))
      *
      * Eventhandler will handle SDL events and Player movement.
      * */
-    Graphics graphics =
-        Graphics(m_core.m_renderer, m_piece);
-
-    EventHandler handler = EventHandler(&m_piece);
     
     m_piece.draw();
 
@@ -31,11 +28,11 @@ Tetris::Tetris() : m_piece(Piece(Mechanics::assignTile()))
         m_timer++;
 
         if (SDL_PollEvent(&m_event))
-            handler.processInput(m_event);
+            m_context.m_handler.processInput(m_event);
 
         updateGame();
         
-        graphics.clearAndPresentFrame();
+        m_context.m_graphics.clearAndPresentFrame();
             
         SDL_Delay(5);
     }
@@ -50,7 +47,7 @@ void Tetris::updateGame()
     if (m_points > 20) m_difficulty = NORMAL;
     else if (m_points > 50) m_difficulty = HARD;
   
-    Mechanics::invokeGravity(&m_piece, m_timer, m_difficulty);
+    Mechanics::invokeGravity(m_piece, m_timer, m_difficulty);
     
     m_piece.draw();
 }

@@ -12,11 +12,11 @@ namespace Mechanics
     
     Tile assignTile();
 
-    bool collidesObject(Piece* target);
+    bool collidesObject(Piece target);
 
-    void ground(Piece* target);
+    void ground(Piece target);
 
-    void invokeGravity(Piece* piece,
+    void invokeGravity(Piece piece,
                        unsigned int time,
                        Difficulty &difficulty);
 

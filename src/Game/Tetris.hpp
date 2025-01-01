@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "../api/Core.hpp"
+#include "../Components/Context.hpp"
 #include "Objects/Piece.hpp"
 
 typedef class Tetris
@@ -11,6 +12,8 @@ typedef class Tetris
 private:
     // Members 
     Core m_core;
+
+    Context m_context;
 
     SDL_Event m_event;
 

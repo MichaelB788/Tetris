@@ -7,6 +7,7 @@ add_library(GameLibrary SHARED
 
     Components/Visual/Graphics.cpp
     Components/Visual/Draw.cpp
+    Components/Visual/Text.cpp
 
     Components/Event/EventHandler.cpp
     Components/Event/Commands/Move.cpp

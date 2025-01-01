@@ -16,7 +16,7 @@ namespace Mechanics
 
     void ground(Piece target);
 
-    void invokeGravity(Piece piece,
+    void invokeGravity(Piece& piece,
                        unsigned int time,
                        Difficulty &difficulty);
 

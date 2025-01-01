@@ -68,7 +68,7 @@ void Mechanics::ground(Piece target)
         Grid::set(p, groundedTile); 
 }
 
-void Mechanics::invokeGravity(Piece piece,
+void Mechanics::invokeGravity(Piece& piece,
                               unsigned int time,
                               Difficulty &difficulty)
 {

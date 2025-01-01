@@ -1,17 +1,14 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_render.h>
 #include <iostream>
 #include <cstdlib>
 
 #include "Tetris.hpp"
+#include "Mechanics.hpp"
 
 #include "../Components/Graphics.hpp"
 #include "../Components/EventHandler.hpp"
 
-#include "../api/SDL-Subsystems.hpp"
-
-
-Tetris::Tetris()
+Tetris::Tetris() : m_piece(Piece(Mechanics::assignTile()))
 {
     /* GameCore initializes SDL subsystems such as SDL_Render
      * and SDL_window.
@@ -20,24 +17,21 @@ Tetris::Tetris()
      *
      * Eventhandler will handle SDL events and Player movement.
      * */
-    SDL_Subsystems core;
-
     Graphics graphics =
-        Graphics(core.renderer(),
-                 core.font(),
-                 m_piece);
+        Graphics(m_core.m_renderer, m_piece);
 
-    EventHandler handler = EventHandler(&m_piece,
-                                        m_running);
+    EventHandler handler = EventHandler(&m_piece);
     
     m_piece.draw();
 
     // Game loop
-    while (m_running)
+    while (m_event.type != SDL_QUIT &&
+           m_event.key.keysym.sym != SDLK_q)
     {
         m_timer++;
 
-        handler.processInput();
+        if (SDL_PollEvent(&m_event))
+            handler.processInput(m_event);
 
         updateGame();
         

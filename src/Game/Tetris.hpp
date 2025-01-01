@@ -3,27 +3,28 @@
 
 #include <SDL2/SDL.h>
 
+#include "../api/Core.hpp"
 #include "Objects/Piece.hpp"
-#include "Mechanics.hpp"
 
 typedef class Tetris
 {
 private:
     // Members 
+    Core m_core;
+
+    SDL_Event m_event;
 
     unsigned int m_timer = 0, m_points = 0;
 
-    bool m_running = true;
-
     Difficulty m_difficulty = EASY;
 
-    Piece m_piece = Piece(Mechanics::assignTile());
+    Piece m_piece;
 
     // Functions
     void updateGame();
+
 public:
     Tetris();
-
 } Tetris;
 
 #endif

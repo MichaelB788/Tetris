@@ -2,6 +2,7 @@
 #define EVENT_HANDLER_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include "Commands/Command.hpp"
 #include "../Game/Objects/Piece.hpp"
 
@@ -11,19 +12,14 @@
  * */
 class EventHandler 
 {
-    SDL_Event m_event;
-
     Piece* p_piece;
 
-    bool& m_gameState;
-
-    Command* keydown();
+    Command* keydown(SDL_Event event);
 
 public:
-    EventHandler(Piece* piece, bool& gameState) :
-        p_piece(piece), m_gameState(gameState){}
+    EventHandler(Piece* piece) : p_piece(piece) {}
 
-    void processInput();
+    void processInput(SDL_Event event);
 
 };
 

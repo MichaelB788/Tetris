@@ -1,6 +1,7 @@
 #include "EventHandler.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include "Commands/Command.hpp"
 #include "Commands/Move.hpp"
@@ -8,30 +9,20 @@
 #include "Commands/Drop.hpp"
 #include "Commands/Store.hpp"
 
-void EventHandler::processInput()
+void EventHandler::processInput(SDL_Event event)
 {
-    while (SDL_PollEvent(&m_event))
+    if (event.type == SDL_KEYDOWN)
     {
-        switch(m_event.type)
-        {
-            case SDL_QUIT:
-                m_gameState = false;
-            case SDL_KEYDOWN: {
-                Command* command = keydown();
-                if (command) command->execute();
-                delete command;
-                break;
-            }
-            default:
-                break;
-        }
+        Command* command = keydown(event);
+        if (command) command->execute();
+        delete command;
     }
 }
 
-Command* EventHandler::keydown()
+Command* EventHandler::keydown(SDL_Event event)
 {
     // Handle event.key.keysym.sym on key down
-    switch (m_event.key.keysym.sym)
+    switch (event.key.keysym.sym)
     {
         case SDLK_j:
             return new MoveCommand(p_piece, LEFT);

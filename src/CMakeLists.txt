@@ -1,5 +1,8 @@
 add_library(GameLibrary SHARED
-    api/SDL-Subsystems.cpp 
+    api/sdl/Window.cpp 
+    api/sdl/Renderer.cpp 
+    api/sdl/Font.cpp 
+    api/Core.cpp 
 
     Components/Graphics.cpp
     Components/Draw.cpp

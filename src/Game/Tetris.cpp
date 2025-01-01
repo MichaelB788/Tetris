@@ -11,16 +11,6 @@ Tetris::Tetris() :
     m_piece(Piece(Mechanics::assignTile())),
     m_context(m_core.m_renderer, m_piece)
 {
-    /* GameCore initializes SDL subsystems such as SDL_Render
-     * and SDL_window.
-     *
-     * GraphicsModule will use the renderer to draw on the screen.
-     *
-     * Eventhandler will handle SDL events and Player movement.
-     * */
-    
-    m_piece.draw();
-
     // Game loop
     while (m_event.type != SDL_QUIT &&
            m_event.key.keysym.sym != SDLK_q)

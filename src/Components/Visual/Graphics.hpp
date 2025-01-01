@@ -3,7 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include "../../Game/Objects/Piece.hpp"
+#include "Text.hpp"
 
 /* Handles the visuals.
  *
@@ -13,18 +15,23 @@
 struct Graphics
 {
     // Constructor
-    Graphics(SDL_Renderer* ren, Piece& piece) :
-        p_renderer(ren),
-        m_piece(piece) {};
+    Graphics(SDL_Renderer* ren, TTF_Font* font,
+             Piece& piece, unsigned int points);
 
     // Method
     void clearAndPresentFrame();
 
 private:
     // Members
-    unsigned int const tileSize = 40;
+    SDL_Renderer* m_renderer;
 
-    SDL_Renderer* p_renderer;
+    SDL_Color m_textColor = { 255, 255, 255, 255 };
+
+    Text m_points;
+
+    Text m_nextmsg;
+
+    Text m_storedmsg;
         
     Piece& m_piece;
 };

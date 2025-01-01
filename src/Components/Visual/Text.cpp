@@ -57,8 +57,8 @@ void Text::set(unsigned int x, unsigned int y,
 {
     m_pos.x = x;
     m_pos.y = y;
-    m_pos.w += w;
-    m_pos.h += h;
+    m_pos.w = w;
+    m_pos.h = h;
 }
 
 void Text::renderText()

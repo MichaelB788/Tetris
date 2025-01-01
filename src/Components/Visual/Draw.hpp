@@ -4,10 +4,11 @@
 #include <SDL2/SDL.h>
 #include "../../Game/Variables.hpp"
 #include "../../Game/Objects/Piece.hpp"
+#include "Text.hpp"
 
 namespace Draw
 {
-    unsigned int const tileSize = 40;
+    unsigned int const TILE_SIZE = 40;
 
     void setColor(Tile id, SDL_Renderer* p_renderer);
 
@@ -17,7 +18,7 @@ namespace Draw
 
     void nextAndStored(Piece& piece, SDL_Renderer* p_renderer);
 
-    void text(int x, int y, SDL_Texture* text);
+    void text(Text& text, int x, int y);
 };
 
 #endif

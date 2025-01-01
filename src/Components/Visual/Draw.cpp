@@ -50,8 +50,8 @@ void Draw::board(SDL_Renderer* p_renderer)
 void Draw::tile(int x, int y, Tile id, SDL_Renderer* p_renderer)
 {
     SDL_Rect tile;
-    tile.x = tileSize * x, tile.y = tileSize * y;
-    tile.h = tileSize, tile.w = tileSize;
+    tile.x = TILE_SIZE * x, tile.y = TILE_SIZE * y;
+    tile.h = TILE_SIZE, tile.w = TILE_SIZE;
 
     // Fill the tile if it is a piece.
     if (id < 14)
@@ -67,33 +67,35 @@ void Draw::tile(int x, int y, Tile id, SDL_Renderer* p_renderer)
 
 void Draw::nextAndStored(Piece& piece, SDL_Renderer* p_renderer)
 {
-    const unsigned int 
+    unsigned int const
         X_POS = 9,
-        Y_POS_NEXT_PIECE = 5,
-        Y_POS_STORED_PIECE = 10;
+        Y_POS_NEXT_PIECE = 2,
+        Y_POS_STORED_PIECE = 9;
 
-    Tile
-        next = piece.next(),
+    Tile next = piece.next(), 
         stored = piece.stored();
 
     for (Point& point : Mechanics::giveNewPiece(next))
     {
-        Draw::tile(X_POS + point.getX(),
-                   Y_POS_NEXT_PIECE + point.getY(),
-                   next,
-                   p_renderer);
+        Draw::tile(X_POS + point.getX(), Y_POS_NEXT_PIECE + point.getY(),
+                   next, p_renderer);
     }
 
     if (stored != NIL)
         for (Point& point : Mechanics::giveNewPiece(stored))
         {
-            Draw::tile(X_POS + point.getX(),
-                       Y_POS_STORED_PIECE + point.getY(),
-                       stored,
-                       p_renderer);
+            Draw::tile(X_POS + point.getX(), Y_POS_STORED_PIECE + point.getY(),
+                       stored, p_renderer);
         }
 }
 
-void Draw::text(int x, int y, SDL_Texture* text)
+void Draw::text(Text& text, int x, int y)
 {
+    unsigned int const
+        HEIGHT = TILE_SIZE * 2,
+        WIDTH = HEIGHT * 2;
+
+    text.set(x * TILE_SIZE, y * TILE_SIZE, WIDTH, HEIGHT);
+
+    text.renderText();
 }

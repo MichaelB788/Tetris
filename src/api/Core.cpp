@@ -17,7 +17,7 @@ Core::Core() :
                         -1, 
                         SDL_RENDERER_ACCELERATED)),
 
-    m_font(Font("../font/Micro_5/Micro5-Regular.ttf", 8))
+    m_font(Font("../font/Jersey_10/Jersey10-Regular.ttf", 20))
 {}
 
 Core::~Core()

@@ -9,7 +9,8 @@
 
 Tetris::Tetris() :
     m_piece(Piece(Mechanics::assignTile())),
-    m_context(m_core.m_renderer, m_piece)
+    m_context(m_core.m_renderer, m_core.m_font,
+              m_piece, m_points)
 {
     // Game loop
     while (m_event.type != SDL_QUIT &&

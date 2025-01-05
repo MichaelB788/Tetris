@@ -35,42 +35,48 @@ Follow the setup guide for your compiler.
 
 On macOS: You can install SDL2 via Homebrew:
 
-`brew install sdl2`
+```bash
+brew install sdl2
+```
 
 On Linux: Install SDL2 through your package manager:
 
-`sudo apt-get install libsdl2-dev`
+```bash
+sudo apt-get install libsdl2-dev
+```
 
 Clone the repository:
 
-``
-git clone https://github.com/yourusername/tetris-clone.git
-cd tetris-clone
-``
+```bash
+git clone https://github.com/MichaelB788/tetris-game.git
+```
 
-Navigate to the project folder and create a build directory:
+Navigate to the project's root folder and create a build directory:
 
-``
+```bash
 mkdir build
 cd build
 cmake ..
 make
-``
+```
 
 Run the game:
 
-`./tetris`
+```bash
+./Tetris
+```
 
 # Controls
 
-Arrow Keys:
-- Left Arrow: Move the tetromino left.
+- h: Move the tetromino left.
 
-- Right Arrow: Move the tetromino right.
+- l: Move the tetromino right.
 
-- Down Arrow: Move the tetromino down faster (soft drop).
+- j: Move the tetromino down faster (soft drop).
 
-- Up Arrow: Rotate the tetromino.
+- k: Rotate the tetromino.
+
+- s: Store the tetromino.
 
 - Spacebar: Hard drop (instantly drops the tetromino to the bottom).
 

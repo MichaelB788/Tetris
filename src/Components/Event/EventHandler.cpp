@@ -22,18 +22,16 @@ Command* EventHandler::keydown(SDL_Event event)
     // Handle event.key.keysym.sym on key down
     switch (event.key.keysym.sym)
     {
-        case SDLK_j:
+        case SDLK_LEFT:
             return new MoveCommand(p_piece, LEFT);
-        case SDLK_k:
-            return new MoveCommand(p_piece, DOWN);
-        case SDLK_l:
+        case SDLK_RIGHT:
             return new MoveCommand(p_piece, RIGHT);
+        case SDLK_DOWN:
+            return new MoveCommand(p_piece, DOWN);
+        case SDLK_UP:
+            return new RotateCommand(p_piece);
         case SDLK_s:
             return new StoreCommand(p_piece);
-        case SDLK_d:
-            return new DropCommand(p_piece);
-        case SDLK_r:
-            return new RotateCommand(p_piece);
         case SDLK_SPACE:
             return new DropCommand(p_piece);
         default:

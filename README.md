@@ -1,140 +1,53 @@
-# tetris-game
+# Table of Contents
 
-This project is a simple implementation of the classic Tetris game using C++ and the
-SDL2 library.
+1. [Tetris](#tetris)
 
-The game features the traditional gameplay of Tetris, where the player controls falling
-tetrominoes, rotating and placing them in a grid to complete full lines.
+2. [Dependencies](#dependencies)
+	 - [Windows Dependencies](#windows-dependencies)
+	 - [Linux Dependencies](#linux-dependencies)
 
-Completed lines are popped out of the stack.
+3. [License](#license)
 
-## Features
+# Tetris
 
-- Tetrominoes (I, O, T, L, J, S, Z) that can be rotated and moved.
+A simple game of Tetris implemented using C++ and SDL2. It is designed to be a fun and educational project for myself and others who want to learn
+more about game development, C++, and high-level graphics rendering. The game is compatible with both Linux and Windows operating systems, using
+CMake for building the project and vcpkg for managing dependencies.
 
-- Line clearing and score tracking.
+# Dependencies
 
-- Game over condition when blocks reach the top of the screen.
+Before you can build and run the Tetris game, you need to install the following dependencies:
 
-- Keyboard controls.
- 
-## Requirements
+### Windows Dependencies
 
-### Software Dependencies:
+- Visual Studio 2019 or later (with C++ development tools)
+	-	See [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/) for instructions on how to install Visual Studio. 
 
-- C++ compiler (e.g., g++, clang++)
+- vcpkg (for managing dependencies)
+	- See [vcpkg GitHub Repository](https://github.com/microsoft/vcpkg)
 
-- SDL2: Simple DirectMedia Layer 2.0 (for graphics, input, and window management)
+### Linux Dependencies
 
-- CMake
+- GCC or Clang (C++ compiler)
+	- You can install GCC or Clang using your package manager. For example, on Ubuntu, you can run:
+		```bash
+		sudo apt install build-essential
+		```
 
-## Installation:
+- CMake (for building the project)
+	- You can install CMake using your package manager. For example, on Ubuntu, you can run:
+		```bash
+		sudo apt install cmake
+		```
 
-On Windows: Download the SDL2 development libraries from SDL's website.
-Follow the setup guide for your compiler.
+- SDL2 (Simple DirectMedia Layer 2)
+	- You can install SDL2 using your package manager. For example, on Ubuntu, you can run:
+		```bash
+		sudo apt install libsdl2-dev
+		```
 
-On macOS: You can install SDL2 via Homebrew:
-
-```bash
-brew install sdl2
-```
-
-On Linux: Install SDL2 through your package manager:
-
-```bash
-sudo apt-get install libsdl2-dev
-```
-
-Clone the repository:
-
-```bash
-git clone https://github.com/MichaelB788/tetris-game.git
-```
-
-Navigate to the project's root folder and create a build directory:
-
-```bash
-mkdir build
-cd build
-cmake ..
-make
-```
-
-Run the game:
-
-```bash
-./Tetris
-```
-
-# Controls
-
-- h: Move the tetromino left.
-
-- l: Move the tetromino right.
-
-- j: Move the tetromino down faster (soft drop).
-
-- k: Rotate the tetromino.
-
-- s: Store the tetromino.
-
-- Spacebar: Hard drop (instantly drops the tetromino to the bottom).
-
-- Esc: Quit the game.
-
-# Project Structure
-
-```bash
-src
-├── api
-│   ├── Core.cpp                # Stores all SDL2 subsystems
-│   ├── Core.hpp
-│   └── sdl                     # Uses SDL2 and SDL_TTF font
-│       ├── Font.cpp
-│       ├── Font.hpp
-│       ├── Renderer.cpp
-│       ├── Renderer.hpp
-│       ├── Window.cpp
-│       └── Window.hpp
-├── CMakeLists.txt
-├── Components
-│   ├── Context.cpp             # Stores visual resources and input handler
-│   ├── Context.hpp
-│   ├── Event
-│   │   ├── Commands            # Commands are children of the base class Command.hpp
-│   │   │   ├── Command.hpp
-│   │   │   ├── Drop.cpp
-│   │   │   ├── Drop.hpp
-│   │   │   ├── Move.cpp
-│   │   │   ├── Move.hpp
-│   │   │   ├── Rotate.cpp
-│   │   │   ├── Rotate.hpp
-│   │   │   ├── Store.cpp
-│   │   │   └── Store.hpp
-│   │   ├── EventHandler.cpp    # Handles user input after polling events 
-│   │   └── EventHandler.hpp
-│   └── Visual 
-│       ├── Draw.cpp
-│       ├── Draw.hpp
-│       ├── Graphics.cpp        # Handles graphical interface
-│       ├── Graphics.hpp
-│       ├── Text.cpp
-│       └── Text.hpp
-├── Game
-│   ├── Mechanics.cpp           # Rules for tetromino
-│   ├── Mechanics.hpp
-│   ├── Objects
-│   │   ├── Coordinate.cpp
-│   │   ├── Coordinate.hpp
-│   │   ├── Grid.cpp
-│   │   ├── Grid.hpp
-│   │   ├── Piece.cpp
-│   │   └── Piece.hpp
-│   ├── Tetris.cpp              # Game loop
-│   ├── Tetris.hpp
-│   └── Variables.hpp           # Global enums
-└── main.cpp
-```
+- vcpkg (for managing dependencies)
+	- See [vcpkg GitHub Repository](https://github.com/microsoft/vcpkg)
 
 # License
 

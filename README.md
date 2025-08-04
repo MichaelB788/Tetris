@@ -18,36 +18,31 @@ CMake for building the project and vcpkg for managing dependencies.
 
 Before you can build and run the Tetris game, you need to install the following dependencies:
 
-### Windows Dependencies
+### Windows Dependencies 
 
 - Visual Studio 2019 or later (with C++ development tools)
 	-	See [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/) for instructions on how to install Visual Studio. 
-
 - vcpkg (for managing dependencies)
 	- See [vcpkg GitHub Repository](https://github.com/microsoft/vcpkg)
 
 ### Linux Dependencies
 
 - GCC or Clang (C++ compiler)
-	- You can install GCC or Clang using your package manager. For example, on Ubuntu, you can run:
-		```bash
-		sudo apt install build-essential
-		```
-
 - CMake (for building the project)
-	- You can install CMake using your package manager. For example, on Ubuntu, you can run:
-		```bash
-		sudo apt install cmake
-		```
-
 - SDL2 (Simple DirectMedia Layer 2)
-	- You can install SDL2 using your package manager. For example, on Ubuntu, you can run:
-		```bash
-		sudo apt install libsdl2-dev
-		```
+- SDL2_ttf (for loading fonts)
 
-- vcpkg (for managing dependencies)
-	- See [vcpkg GitHub Repository](https://github.com/microsoft/vcpkg)
+**You can install these dependencies using your package manager**. For example, on Ubuntu or Debian-based systems, you can run:
+	```bash
+	sudo apt install build-essential cmake libsdl2-dev libsdl2-ttf-dev
+	```
+For more information on how to install SDL2 and SDL2_ttf, refer to the [SDL2 Wiki](https://wiki.libsdl.org/Installation).
+
+> Note: Though not required on Linux, vcpkg can also be installed and used. However, it might just be easier and faster to use your Linux package manager.
+
+### Building and Running the Game
+
+This project is not yet ready for building and running. Instructions will be added in the future.
 
 # License
 

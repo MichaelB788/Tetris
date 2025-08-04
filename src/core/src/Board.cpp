@@ -1,7 +1,7 @@
 #include <array>
 #include <cstdio>
 
-#include "Grid.hpp"
+#include "../include/Board.hpp"
 
 enum Dimensions { ROWS = 21, COLS = 12 };
 

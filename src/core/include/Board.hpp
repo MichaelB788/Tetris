@@ -1,11 +1,18 @@
-#ifndef GRID_H
-#define GRID_H
+#ifndef BOARD_H
+#define BOARD_H
 
 #include <array>
+#include <array>
+#include <cctype>
+#include <cstdlib>
+#include <ctime>
 
-#include "../Variables.hpp"
+#include "Tetromino.hpp"
+#include "Mechanics.hpp"
+#include "GameConstants.hpp"
 #include "Coordinate.hpp"
 
+// TODO: Create a 2D array data structure
 namespace Grid 
 {
     Tile tileAt(unsigned int x, unsigned int y);

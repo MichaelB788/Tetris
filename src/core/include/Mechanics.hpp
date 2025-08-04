@@ -2,9 +2,15 @@
 #define MECHANICS_H
 
 #include <array>
-#include "Variables.hpp"
-#include "Objects/Coordinate.hpp"
-#include "Objects/Piece.hpp"
+#include <locale>
+#include <stdexcept>
+
+#include "GameConstants.hpp"
+#include "Coordinate.hpp"
+#include "Tetromino.hpp"
+#include "Command.hpp"
+#include "Coordinate.hpp"
+#include "Tetromino.hpp"
 
 namespace Mechanics 
 {
@@ -12,11 +18,11 @@ namespace Mechanics
     
     Tile assignTile();
 
-    bool collidesObject(Piece target);
+    bool collidesObject(Tetromino target);
 
-    void ground(Piece target);
+    void ground(Tetromino target);
 
-    void invokeGravity(Piece& piece,
+    void invokeGravity(Tetromino& piece,
                        unsigned int time,
                        Difficulty &difficulty);
 

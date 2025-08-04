@@ -1,5 +1,4 @@
-#ifndef DRAW_H
-#define DRAW_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include "../../Game/Variables.hpp"
@@ -20,5 +19,3 @@ namespace Draw
 
     void text(Text& text, int x, int y);
 };
-
-#endif

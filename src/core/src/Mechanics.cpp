@@ -1,14 +1,4 @@
-#include "Mechanics.hpp"
-
-#include <array>
-#include <locale>
-#include <stdexcept>
-
-#include "../Components/Event/Commands/Move.hpp"
-
-#include "Objects/Coordinate.hpp"
-#include "Objects/Grid.hpp"
-#include "Objects/Piece.hpp"
+#include "../include/Mechanics.hpp"
 
 std::array<Point, 4> Mechanics::giveNewPiece(Tile type)
 {
@@ -46,34 +36,35 @@ Tile Mechanics::assignTile()
     return Tile(rand() % 7);
 }
 
-bool Mechanics::collidesObject(Piece target)
+bool Mechanics::collidesObject(Tetromino TetrominoActor)
 {
-    for (Point& p : target.position())
+    for (Point& p : TetrominoActor.position())
     {
         char currTile = Grid::tileAt(p);
 
         if (currTile != _ &&
-            currTile != target.type())  
+            currTile != TetrominoActor.type())  
             return true;
     }
 
     return false;
 }
 
-void Mechanics::ground(Piece target)
+void Mechanics::ground(Tetromino TetrominoActor)
 {
-    Tile groundedTile = Tile(target.type() + 7);
+    Tile groundedTile = Tile(TetrominoActor.type() + 7);
 
-    for (Point& p: target.position())
+    for (Point& p: TetrominoActor.position())
         Grid::set(p, groundedTile); 
 }
 
-void Mechanics::invokeGravity(Piece& piece,
+// TODO: Fix this function by creating a MoveDOWNCommand
+void Mechanics::invokeGravity(Tetromino& TetrominoActor,
                               unsigned int time,
                               Difficulty &difficulty)
 {
     if (time % difficulty == 0)
-        MoveCommand(piece, DOWN).execute();
+        MoveDOWNCommand(TetrominoActor).execute();
 }
 
 void Mechanics::checkFullRow(unsigned int &points)

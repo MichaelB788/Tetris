@@ -1,12 +1,3 @@
-#include <array>
-#include <cctype>
-#include <cstdlib>
-#include <ctime>
-
-#include "Coordinate.hpp"
-#include "Grid.hpp"
-#include "Piece.hpp"
-#include "../Mechanics.hpp"
 
 Piece::Piece(Tile type) : 
     m_type(type),

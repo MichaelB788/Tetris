@@ -33,9 +33,11 @@ Before you can build and run the Tetris game, you need to install the following 
 - SDL2_ttf (for loading fonts)
 
 **You can install these dependencies using your package manager**. For example, on Ubuntu or Debian-based systems, you can run:
-	```bash
-	sudo apt install build-essential cmake libsdl2-dev libsdl2-ttf-dev
-	```
+
+```bash
+sudo apt install build-essential cmake libsdl2-dev libsdl2-ttf-dev
+```
+
 For more information on how to install SDL2 and SDL2_ttf, refer to the [SDL2 Wiki](https://wiki.libsdl.org/Installation).
 
 > Note: Though not required on Linux, vcpkg can also be installed and used. However, it might just be easier and faster to use your Linux package manager.

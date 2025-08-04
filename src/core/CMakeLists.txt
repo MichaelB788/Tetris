@@ -22,3 +22,8 @@ add_library(TetrisCoreLibrary STATIC
 	${CORE_HEADERS}
 	${CORE_SOURCES}
 )
+
+target_include_directories(TetrisCoreLibrary PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include/TetrisCoreLibrary>
+)

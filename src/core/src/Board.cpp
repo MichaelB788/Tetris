@@ -1,64 +1,7 @@
 #include <array>
 #include <cstdio>
 
-#include "../include/Board.hpp"
-
-enum Dimensions { ROWS = 21, COLS = 12 };
-
-static unsigned int pointAt(unsigned int x, unsigned int y)
-{
-    return x + (y * COLS);
-}
-
-/* 
- * Grid Dimensions: 21 x 12
- *
- * Character's are used to represents tiles with 
- * special behaviors.
- * */
-static std::array<Tile, ROWS * COLS> grid = {
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-    W, _, _, _, _, _, _, _, _, _, _, W,  
-};
-
-Tile Grid::tileAt(unsigned int x, unsigned int y)
-{
-    return grid[pointAt(x, y)];
-}
-
-Tile Grid::tileAt(Point point)
-{
-    return grid[pointAt(point.getX(), point.getY())];
-}
-
-void Grid::set(unsigned int x, unsigned int y, Tile newElement)
-{
-    grid[pointAt(x, y)] = newElement;
-}
-
-void Grid::set(Point point, Tile newElement)
-{
-    grid[pointAt(point.getX(), point.getY())] = newElement;
-}
+#include "Board.hpp"
 
 void Grid::clear(unsigned int row)
 {

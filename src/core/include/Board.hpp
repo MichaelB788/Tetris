@@ -3,68 +3,31 @@
 #include <algorithm>
 
 #include "GameConstants.hpp"
-#include "Coordinate.hpp"
+#include "Vector2.hpp"
+#include "Flat2DArray.hpp"
 
 /**
- *	@breif: An Array2 object is a custom data structure which uses a one-dimensional array to represent a two-dimensional array.
- *
- *	@tparam: T Type of element.
- *	@tparam: N Number of elements.
- * */
-
-template <typename T, size_t Rows, size_t Cols>
-struct Array2 {
-private:
-	T m_Data[Rows * Cols];
-
-public:
-	using value_type = T;
-	using reference = T&;
-	using const_reference = const T&;
-	using size_type = size_t;
-	using different_type = ptrdiff_t;
-	using pointer = T*;
-	using const_pointer = const T*;
-
-	constexpr size_t size() const { return Rows * Cols; }
-
-	reference operator()(size_t row, size_t col) { return m_Data[row * Cols + col]; }
-	const_reference operator()(size_t row, size_t col) const { return m_Data[row * Cols + col]; };
-
-	Array2(std::initializer_list<T> args) { std::copy(args.begin(), args.end(), m_Data); }
-};
-
-/**
- *	@breif: Board is a 2D space which tracks the state of Tetromino.
- * */
-
+ *	@breif: The game board is a 10 x 20 grid of Tile which tracks the state of
+ *  Tetromino.
+ * 
+ * The board should be responsible for checking the following: 
+ * - Get and set tile states at specific coordinates
+ * - Check if a position is valid/within bounds
+ * - Clear the entire board or reset to an empty state
+ * - Check if a tile is occupied or empty
+ */ 
 class Board
 {
 private:
-	Array2<Tile, 10, 20> m_State =
-	{
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-		_, _, _, _, _, _, _, _, _, _,
-	};
+	Flat2DArray<Tile, BoardDimension::WIDTH, BoardDimension::HEIGHT> m_State;
 
 public:
 	Board() = default;
+
+	Tile getTileAt(const Vector2& coordinate) const { return m_State(coordinate.x, coordinate.y); }
+	void setTileAt(const Vector2& coordinate, const Tile& newTile) const { m_State(coordinate.x, coordinate.y) = newTile; }
+
+	bool isValidPosition(const Vector2& coordinate) const;
+	bool isOccupied(const Vector2& coordinate) const;
+	void clearBoard();
 };

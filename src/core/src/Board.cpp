@@ -3,42 +3,24 @@
 
 #include "Board.hpp"
 
-void Grid::clear(unsigned int row)
+void Board::clearBoard()
 {
-    while (row > 0)
-    {
-        for (int col = COLS - 1; col > 0; col--)
-            set(col, row, tileAt(col, row - 1));
-        row--;
-    }
+		for (unsigned int y = 0; y < BoardDimension::HEIGHT; ++y)
+		{
+			for (unsigned int x = 0; x < BoardDimension::WIDTH; ++x)
+			{
+				m_State(x, y) = Tile::Empty;
+			}
+		}
 }
 
-void Grid::clear(std::array<Point, 4> target)
+// TODO: Implement the isValidPosition and isOccupied methods
+bool Board::isValidPosition(const Vector2& coordinate) const
 {
-    for (Point& point : target)
-        set( point, _ );
+	return coordinate.x >= 0 && coordinate.x < BoardDimension::WIDTH &&
+				 coordinate.y >= 0 && coordinate.y < BoardDimension::HEIGHT &&
 }
 
-bool Grid::hasFullRow(unsigned int row)
+bool Board::isOccupied(const Vector2& coordinate) const
 {
-    // Tiles with values < 7 are playable pieces
-    for (int x = 1; x < 12; x++)
-        if (tileAt(x, row) < 7 ||
-            tileAt(x, row) == _ )
-            return false;
-
-    return true;
-}
-
-// FOR TESTING ONLY
-void Grid::printGrid()
-{
-    for (int row = 0; row < ROWS; row++)
-    {
-        for (int col = 0; col < COLS; col++)
-        {
-            printf("%c", Grid::tileAt(col, row));
-        }
-    printf("\n");
-    }
 }

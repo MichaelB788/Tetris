@@ -1,33 +1,18 @@
-#ifndef VARIABLES_H
-#define VARIABLES_H
+#pragma once
 
-enum Direction
+enum Direction { LEFT, RIGHT, DOWN };
+
+enum Difficulty { EASY = 200, NORMAL = 100, HARD = 50 }; 
+enum GameState { RUNNING, GAME_OVER, PAUSED, EXIT };
+
+enum BoardDimension { WIDTH = 10, HEIGHT = 20 };
+
+enum PieceType { I, O, T, Z, S, J, L, NONE };
+enum TileState { FALLING, GROUNDED, EMPTY };
+struct Tile
 {
-    LEFT,
-    RIGHT,
-    DOWN
+	PieceType m_Type;
+	TileState m_State;
+
+	Tile() : m_Type(NONE), m_State(EMPTY) {};
 };
-
-enum Difficulty
-{
-    EASY = 200,
-    NORMAL = 100,
-    HARD = 50 
-}; 
-
-enum Tile
-{
-    // Playable piece types [0 - 6]
-    I, O, T, Z, S, J, L,
-
-    // Unplayable piece types [7 - 13]
-    // Note: to ground a piece, add it by 7
-    i, o, t, z, s, j, l,
-    
-    // Wall and free spaces 
-    // Note: Starts at 99 to avoid grounding an
-    // already grounded piece
-    W = 99, _, NIL 
-};
-
-#endif 

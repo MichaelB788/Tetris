@@ -12,7 +12,7 @@ set(CORE_HEADERS
 set(CORE_SOURCES
 	src/Board.cpp
 	src/Command.cpp
-	src/Coordinate.cpp
+	
 	src/EventHandler.cpp
 	src/Mechanics.cpp
 	src/Tetromino.cpp

@@ -38,6 +38,8 @@ public:
 	* Otherwise, copy as many elements as possible and fill the rest with default values.
 	* 
 	* Complexity: O(n) where n is the size of the initializer_list or the array size, whichever is smaller.
+	* 
+	* @param args Initializer list of elements to initialize the array.
 	*/
 	Flat2DArray(std::initializer_list<T> args)
 	{

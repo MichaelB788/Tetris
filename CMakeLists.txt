@@ -13,4 +13,6 @@ project(
 
 add_subdirectory(src/core)
 add_subdirectory(src/app)
-add_subdirectory(src/render)
+
+# NOTE: The render module is not yet ready for implementation.
+# add_subdirectory(src/render)

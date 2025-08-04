@@ -10,13 +10,12 @@ set(CORE_HEADERS
 )
 
 set(CORE_SOURCES
-	src/Board.hpp
-	src/Command.hpp
-	src/Coordinate.hpp
-	src/EventHandler.hpp
-	src/GameConstants.hpp
-	src/Mechanics.hpp
-	src/Tetromino.hpp
+	src/Board.cpp
+	src/Command.cpp
+	src/Coordinate.cpp
+	src/EventHandler.cpp
+	src/Mechanics.cpp
+	src/Tetromino.cpp
 )
 
 add_library(TetrisCoreLibrary STATIC

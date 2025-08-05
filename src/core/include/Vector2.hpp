@@ -8,7 +8,7 @@
  */
 struct Vector2
 {
-  int x, y;  ///< X and Y coordinates of the vector
+  int x, y;
 
   /**
    * @brief Default constructor - initializes vector to origin (0, 0)
@@ -17,6 +17,7 @@ struct Vector2
 
   /**
    * @brief Parameterized constructor
+   * 
    * @param x The x-coordinate
    * @param y The y-coordinate
    */
@@ -24,12 +25,14 @@ struct Vector2
 
   /**
    * @brief Copy constructor
+   * 
    * @param other The Vector2 to copy from
    */
   Vector2(const Vector2& other) : x(other.x), y(other.y) {};
 
   /**
    * @brief Assignment operator
+   * 
    * @param other The Vector2 to assign from
    * @return Reference to this vector for chaining
    */
@@ -44,11 +47,8 @@ struct Vector2
 
   /**
    * @brief Rotates this vector 90 degrees counterclockwise around a given origin point
+   * 
    * @param origin The point to rotate around
-   *
-   * Uses the 2D rotation matrix for 90° counterclockwise:
-   * [0 -1] [x]   [-y]
-   * [1  0] [y] = [x ]
    */
   void rotate_counterclockwise_90(const Vector2& origin)
   {
@@ -64,4 +64,18 @@ struct Vector2
     x = origin.x + rotated_x;
     y = origin.y + rotated_y;
   }
+
+  /**
+	 * @brief returns a new Vector2 that is one unit above this vector
+   * 
+	 * @return Vector2 The new vector above the current one
+   */
+	Vector2 getAbove() const { return Vector2(x, y - 1); }
+
+  /**
+	 * @brief returns a new Vector2 that is one unit below this vector
+   * 
+	 * @return Vector2 The new vector below the current one
+   */
+	Vector2 getBelow() const { return Vector2(x, y + 1); }
 };

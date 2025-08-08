@@ -8,7 +8,6 @@
 #include "GameConstants.hpp"
 #include "Vector2.hpp"
 #include "Flat2DArray.hpp"
-#include "Tetromino.hpp"
 
 /**
  * @file Playfield.hpp
@@ -115,7 +114,7 @@ public:
 	 * @param position The position to place it at
 	 * @return true if placement is valid and successful
 	 */
-	bool canPlacePiece(const Tetromino& piece, const Vector2& position) const;
+	// bool canPlacePiece(const Tetromino& piece, const Vector2& position) const;
 
 	/**
 	 * @brief Places a tetromino permanently on the board (locks it down)
@@ -123,5 +122,5 @@ public:
 	 * @param piece The tetromino to place
 	 * @param position The position to place it at
 	 */
-	void placePiece(const Tetromino& piece, const Vector2& position);
+	// void placePiece(const Tetromino& piece, const Vector2& position);
 };

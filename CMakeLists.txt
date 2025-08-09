@@ -12,6 +12,7 @@ project(
 	DESCRIPTION "Tetris remade with C++ and SDL2"
 	LANGUAGES CXX
 )
+enable_testing()
 
 # Subdirectories
 add_subdirectory(src/core)

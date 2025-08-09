@@ -1,5 +1,3 @@
-enable_testing()
-
 find_package(Catch2 CONFIG REQUIRED) 
 
 include_directories(${PROJECT_SOURCE_DIR}/src/core/include)

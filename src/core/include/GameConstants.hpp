@@ -1,24 +1,39 @@
 #pragma once
+#include <stdint.h>
 
-enum class Direction { LEFT, RIGHT, DOWN };
-
-/**
- * @enum Difficulty
- *
- * @brief Game difficulty levels defined by drop interval in milliseconds.
- * @note These may need to be tweaked as it uses magic numbers.
- */
-enum class Difficulty {
-	EASY = 200,     ///< Easy mode - 200ms between drops
-	NORMAL = 100,   ///< Normal mode - 100ms between drops
-	HARD = 50       ///< Hard mode - 50ms between drops
+enum class Direction : uint8_t
+{
+	LEFT,
+	RIGHT,
+	DOWN
 };
 
-enum class GameState { RUNNING, GAME_OVER, PAUSED, EXIT };
+enum class Difficulty : uint8_t
+{
+	EASY,
+	NORMAL,
+	HARD
+};
 
-enum class TetrominoType { I, O, T, Z, S, J, L, NONE };
+enum class GameState : uint8_t
+{
+	RUNNING,
+	GAME_OVER,
+	PAUSED,
+	EXIT
+};
 
-enum class TileState { FALLING, GROUNDED, EMPTY, STORED };
+enum class TileType : uint8_t
+{
+	NONE = 0,
+	I, O, T, Z, S, J, L
+};
+
+enum class TileRole : uint8_t
+{
+	NONE = 0,
+	ACTIVE, GROUNDED, GHOST
+};
 
 /**
  * @brief Represents a single tile in the Tetris playfield.
@@ -26,18 +41,20 @@ enum class TileState { FALLING, GROUNDED, EMPTY, STORED };
  */
 struct Tile
 {
-	TetrominoType type;
-	TileState state;
+	TileType type;
+	TileRole role;
 
-	Tile() : type(TetrominoType::NONE), state(TileState::EMPTY) {}
-	Tile(const TetrominoType& type, const TileState& state) : type(type), state(state) {}
+	Tile() : type(TileType::NONE), role(TileRole::NONE) {}
+	Tile(const TileType& type, const TileRole& role) : type(type), role(role) {}
 
-	bool isEmpty() const { return state == TileState::EMPTY; }
-	bool isGrounded() const { return state == TileState::GROUNDED; }
+	bool isEmpty() const { return type == TileType::NONE; }
+	bool isGrounded() const { return role == TileRole::GROUNDED; }
+	bool isActive() const { return role == TileRole::ACTIVE; }
+	bool isGhost() const { return role == TileRole::GHOST; }
 	void resetTile()
 	{
-		type = TetrominoType::NONE;
-		state = TileState::EMPTY;
+		type = TileType::NONE;
+		role = TileRole::NONE;
 	}
 };
 

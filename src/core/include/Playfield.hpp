@@ -6,13 +6,7 @@
 #include <vector>
 
 #include "GameConstants.hpp"
-#include "Vector2.hpp"
 #include "Flat2DArray.hpp"
-
-/**
- * @file Playfield.hpp
- * @brief Defines the Matrix class for managing the Tetris game board state.
- */
 
  /**
 	* @class Playfield
@@ -28,80 +22,27 @@
 class Playfield
 {
 private:
-	/**
-	 * @brief Internal 2D array storing the board's tile states.
-	 */
 	Flat2DArray<Tile, GameConfig::BOARD_WIDTH, GameConfig::BOARD_HEIGHT + GameConfig::BUFFER_ZONE> m_PlayfieldMatrix;
 
-	/**
-	 * @brief Replaces a row in the playfield with another row.
-	 * 
-	 * @param replacedRow The index of the row to be replaced
-	 * @param targetRow The index of the row to copy from
-	 */
-	void replaceRow(unsigned int replacedRow, unsigned int targetRow);
-
 public:
-	/**
-	 * @brief Default constructor - initializes an empty board.
-	 */
 	Playfield() = default;
 
-	/**
-	 * @brief Clears the entire board, resetting all tiles to empty state.
-	 */
 	void clearBoard();
-
-	/**
-	 * @brief Checks if the tile at the given coordinate is occupied.
-	 *
-	 * @param coordinate The position to check (x, y coordinates)
-	 * @return true if the tile is occupied (contains a Tetromino piece)
-	 * @return false if the tile is empty
-	 */
-	bool isOccupied(const Vector2& coordinate) const { return m_PlayfieldMatrix(coordinate).isGrounded(); };
-
-	/**
-	 * @brief Retrieves the tile at the specified coordinate.
-	 *
-	 * @param coordinate The position to query (x, y coordinates)
-	 * @return Tile The tile object at the given position
-	 */
-	const Tile& getTileAt(const Vector2& coordinate) const { return m_PlayfieldMatrix(coordinate); };
-
-	/**
-	 * @brief Sets the tile at the specified coordinate to a new value.
-	 *
-	 * @param coordinate The position to modify (x, y coordinates)
-	 * @param newTile The new tile value to set at the position
-	 */
-	void setTileAt(const Vector2& coordinate, const Tile& newTile) { m_PlayfieldMatrix(coordinate) = newTile; };
-
-	/**
-	 * @brief Checks if an entire row is completely filled
-	 * 
-	 * @param row The row index to check
-	 * @return true if all tiles in the row are occupied
-	 */
+	bool isOccupied(unsigned int x, unsigned int y) const { return m_PlayfieldMatrix(x, y).isGrounded(); };
+	const Tile& getTileAt(unsigned int x, unsigned int y) const { return m_PlayfieldMatrix(x, y); };
+	void setTileAt(unsigned int x, unsigned int y, const Tile& newTile) { m_PlayfieldMatrix(x, y) = newTile; };
 	bool isRowComplete(unsigned int row) const;
-
-	/**
-	 * @brief Checks if an entire row is completely empty
-	 * 
-	 * @param row The row index to check
-	 * @return true if all tiles in the row are empty
-	 */
 	bool isRowEmpty(unsigned int row) const;
 
 	/**
-	 * @brief Checks if any rows are completely filled and marks them for clearing
+	 * @brief Searches the entire board and marks the rows which are completely filled, designed to be used with clearRows.
 	 * 
 	 * @return Vector of row indices that are complete
 	 */
 	std::vector<unsigned int> getCompletedRows() const;
 
 	/**
-	 * @brief Removes completed rows and drops rows above downward
+	 * @brief Removes all rows from the playfield. Pulls any floating rows down to the row above the lowest populated row.
 	 * 
 	 * @param completedRows Vector of row indices to clear
 	 */

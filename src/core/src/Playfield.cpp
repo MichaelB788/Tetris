@@ -50,7 +50,7 @@ void Playfield::clearRows(const std::vector<unsigned int>& completedRows)
 
 		if (nextRow > -1)
 		{
-			for (unsigned int col = 0; i < GameConfig::BOARD_WIDTH; col++) {
+			for (unsigned int col = 0; col < GameConfig::BOARD_WIDTH; col++) {
 				m_PlayfieldMatrix(col, row) = m_PlayfieldMatrix(col, nextRow);
 			}
 		}

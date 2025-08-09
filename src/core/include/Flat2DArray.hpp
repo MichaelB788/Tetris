@@ -2,8 +2,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include "Vector2.hpp"
-
 /**
  * @brief A flat 2D array that stores elements in column-major order using a 1D array internally.
  *
@@ -14,103 +12,73 @@
  * @tparam Cols Number of columns (width)
  * @tparam Rows Number of rows (height)
  *
- * @note Elements are stored in column-major order: (col, row) maps to index [col * Rows + row]
- * @note This means all elements in column 0 are stored first, then column 1, etc.
+ * @note Elements are stored in column-major order: (col, row) maps to index [row * Rows + col]
+ * @note Input coordinates should be zero-based.
  */
 template <typename T, size_t Cols, size_t Rows>
-struct Flat2DArray {
+struct Flat2DArray
+{
 private:
+  T m_Data[Cols * Rows];
 
-	/**
-	 * @brief Internal storage for the 2D array, represented as a flat 1D array.
-	 */
-	T m_Data[Cols * Rows];
-
-	/**
-	 * @brief Computes the flat index for a given 2D coordinate.
-	 *
-	 * @param coordinate The 2D coordinate to convert
-	 * @return The computed flat index in the internal array
-	 */
-	unsigned int computeFlatIndex(const Vector2& coordinate) { return coordinate.x * Rows + coordinate.y; }
-
-	bool isValidCoordinate(const Vector2& cooridnate) {
-		size_t index = computeFlatIndex(coodinate);
-		return index < size() && index >= 0;
-	}
-
-	bool isValidIndex(size_t index) { return index < size() && index >= 0; } 
+  unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * Rows + x; }
 
 public:
-	using reference = T&;
-	using const_reference = const T&;
+  struct iterator
+  {
+  public:
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = T*;
+    using reference = T&;
 
-	constexpr size_t size() const { return Cols * Rows; }
+    iterator(pointer ptr) : m_ptr(ptr) {}
 
-	/**
-	 * @brief Accesses an element at the specified 2D coordinate.
-	 *
-	 * @param coordinate The 2D coordinate (x, y) to access
-	 * @return Reference to the element at the specified coordinate
-	 */
-	reference operator()(const Vector2& coordinate) {
-		assert(isValidCoordinate(coordinate) && "This coordinate is out of bounds!");
-		return m_Data[computeFlatIndex(coordinate)];
-	}
+    reference operator*() const { return *m_ptr;  }
+    pointer operator->() { return m_ptr; }
+    iterator& operator++() { m_ptr++; return *this; }
+    iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
 
-	/**
-	 * @brief Accesses an element at the specified 2D coordinate (const version).
-	 *
-	 * @param coordinate The 2D coordinate (x, y) to access
-	 * @return Const reference to the element at the specified coordinate
-	 */
-	const_reference operator()(const Vector2& coordinate) const {
-		assert(isValidCoordinate(coordinate) && "This coordinate is out of bounds!");
-		return m_Data[computeFlatIndex(coordinate)];
-	};
+    bool operator==(const iterator& other) { return m_ptr == other.m_ptr; }
+    bool operator!=(const iterator& other) { return m_ptr != other.m_ptr; }
 
-	/**
-	 * @brief Accesses an element at the specified index in the flat array.
-	 *
-	 * @param index The index to access (0 to Cols * Rows - 1)
-	 * @return Reference to the element at the specified index
-	 *
-	 * @note This operator is provided for convenience, using 2D coordinates is preferred for clarity.
-	 */
-	reference operator[](unsigned int index) {
-		assert(isValidIndext(index) && "This index is out of bounds!");
-		return m_Data[index];
-	}
+  private:
+    pointer m_ptr;
+  };
 
-	/**
-	 * @brief Accesses an element at the specified index in the flat array (const version).
-	 *
-	 * @param index The index to access (0 to Cols * Rows - 1)
-	 * @return Reference to the element at the specified index
-	 *
-	 * @note This operator is provided for convenience, using 2D coordinates is preferred for clarity.
-	 */
-	const_reference operator[](unsigned int index) const {
-		assert(isValidIndext(index) && "This index is out of bounds!");
-		return m_Data[index];
-	};
+	using value_type = T;
+	using pointer = T*;
+  using reference = T &;
+  using const_reference = const T &;
 
-	/**
-	 * @brief Constructor that initializes the array with an initializer list.
-	 *
-	 * @param args Initializer list of elements to initialize the array.
-	 */
-	Flat2DArray(std::initializer_list<T> args)
-	{
-		if (args.size() == Cols * Rows) std::copy(args.begin(), args.end(), m_Data);
-		else {
-			std::fill(m_Data, m_Data + Cols * Rows, T());
-			std::copy_n(args.begin(), std::min(args.size(), Cols * Rows), m_Data);
-		}
-	}
+  constexpr size_t size() const { return Cols * Rows; }
+  iterator begin() { return iterator(&m_Data[0]); }
+  iterator end() { return iterator(&m_Data[Cols * Rows]); }
 
-	/**
-	 * @brief Default constructor initializes all elements to their default value.
-	 */
-	Flat2DArray() { std::fill(m_Data, m_Data + Cols * Rows, T()) };
+  reference operator()(unsigned int x, unsigned int y) { return m_Data[computeFlatIndex(x, y)]; }
+  const_reference operator()(unsigned int x, unsigned int y) const { return m_Data[computeFlatIndex(x, y)]; }
+
+  /**
+   * @brief Constructor that initializes the array with an initializer list.
+   * 
+	 * If the number of elements in the initializer list is less than Cols * Rows,
+	 * then the remaining elements will be initialized to their default value.
+	 * Otherwise, it will fill the array with the provided elements.
+   *
+   * @param args Initializer list of elements to initialize the array.
+   */
+  Flat2DArray(std::initializer_list<T> args)
+  {
+    auto copy_size = std::min(args.size(), Cols * Rows);
+    std::copy_n(args.begin(), copy_size, m_Data);
+    if (copy_size < Cols * Rows) {
+      std::fill(m_Data + copy_size, m_Data + Cols * Rows, T{});
+    }
+  }
+
+  /**
+   * @brief Default constructor initializes all elements to their default value.
+   */
+  Flat2DArray() { std::fill(m_Data, m_Data + Cols * Rows, T{}); }
 };

@@ -24,40 +24,12 @@ private:
   unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * Rows + x; }
 
 public:
-  struct iterator
-  {
-  public:
-    using iterator_category = std::forward_iterator_tag;
-    using difference_type = std::ptrdiff_t;
-    using value_type = T;
-    using pointer = T*;
-    using reference = T&;
-
-    iterator(pointer ptr) : m_ptr(ptr) {}
-
-    reference operator*() const { return *m_ptr;  }
-    pointer operator->() { return m_ptr; }
-    iterator& operator++() { m_ptr++; return *this; }
-    iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
-
-    bool operator==(const iterator& other) { return m_ptr == other.m_ptr; }
-    bool operator!=(const iterator& other) { return m_ptr != other.m_ptr; }
-
-  private:
-    pointer m_ptr;
-  };
-
-	using value_type = T;
-	using pointer = T*;
-  using reference = T &;
-  using const_reference = const T &;
+  using reference = T&;
+  using const_reference = const T&;
 
   constexpr size_t size() const { return Cols * Rows; }
-  iterator begin() { return iterator(&m_Data[0]); }
-  iterator end() { return iterator(&m_Data[Cols * Rows]); }
-
-  reference operator()(unsigned int x, unsigned int y) { return m_Data[computeFlatIndex(x, y)]; }
-  const_reference operator()(unsigned int x, unsigned int y) const { return m_Data[computeFlatIndex(x, y)]; }
+  constexpr reference operator()(unsigned int x, unsigned int y) { return m_Data[computeFlatIndex(x, y)]; }
+  constexpr const_reference operator()(unsigned int x, unsigned int y) const { return m_Data[computeFlatIndex(x, y)]; }
 
   /**
    * @brief Constructor that initializes the array with an initializer list.

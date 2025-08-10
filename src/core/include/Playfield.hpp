@@ -22,7 +22,7 @@
 class Playfield
 {
 private:
-	Flat2DArray<Tile, GameConfig::BOARD_WIDTH, GameConfig::BOARD_HEIGHT + GameConfig::BUFFER_ZONE> m_PlayfieldMatrix;
+	Flat2DArray<Tile, GameConfig::BOARD_WIDTH, GameConfig::BOARD_HEIGHT> m_PlayfieldMatrix;
 
 public:
 	Playfield() = default;

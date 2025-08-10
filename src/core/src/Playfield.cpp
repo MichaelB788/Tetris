@@ -2,11 +2,9 @@
 
 void Playfield::clearBoard()
 {
-	// TODO: Implement an iterator for Flat2DArray and replace this with a ranged loop to make the code cleaner and more efficient
-	unsigned int totalCells = GameConfig::BOARD_WIDTH * GameConfig::BOARD_HEIGHT + GameConfig::BUFFER_ZONE;
-	for (int y = 0; y < GameConfig::BOARD_WIDTH; y++)
-		for (int x = 0; x < GameConfig::BOARD_HEIGHT; x++)
-			m_PlayfieldMatrix(x, y).resetTile();
+	for (unsigned int row = 0; row < GameConfig::BOARD_HEIGHT; row++)
+		for (unsigned int col = 0; col < GameConfig::BOARD_WIDTH; col++)
+			m_PlayfieldMatrix(col, row).resetTile();
 }
 
 bool Playfield::isRowComplete(unsigned int row) const

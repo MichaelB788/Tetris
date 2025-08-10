@@ -100,26 +100,40 @@ TEST_CASE("Const correctness", "[Flat2DArray, unit]")
   REQUIRE(IntegerMatrix(0, 0) == 1);
 }
 
-TEST_CASE("Iterator", "[Flat2DArray, unit]")
+TEST_CASE("Indexing", "[Flat2DArray, unit]")
 {
 	SECTION("Integer Matrix Iterator")
 	{
-		Flat2DArray<int, 2, 2> Matrix{ 1, 2, 3, 4 };
+    const int rows = 2, cols = 2;
+		Flat2DArray<int, cols, rows> Matrix{ 1, 2, 3, 4 };
+
 		int sum = 0;
-		for (const auto& v : Matrix) sum += v;
-		CHECK(sum == 10);
+    for (int y = 0; y < rows; y++)
+      for (int x = 0; x < cols; x++)
+        sum += Matrix(x, y);
+
+		REQUIRE(sum == 10);
 	}
 
   SECTION("Tile Matrix Iterator") 
   {
+    const int rows = 2, cols = 2;
     Tile O = Tile(TileType::O, TileRole::ACTIVE);
-    Flat2DArray<Tile, 2, 2> Matrix =
+    Flat2DArray<Tile, rows, cols> Matrix =
     {
       O, O,
       O, O
     };
 
-    for (auto& tile : Matrix) tile.resetTile();
-    CHECK(Matrix(1, 1).isEmpty());
+    for (int y = 0; y < rows; y++)
+      for (int x = 0; x < cols; x++)
+        Matrix(x, y).resetTile();
+
+    bool allIsEmpty = true;
+    for (int y = 0; y < rows; y++)
+      for (int x = 0; x < cols; x++)
+        allIsEmpty = Matrix(x, y).isEmpty();
+
+    REQUIRE(allIsEmpty);
   }
 }

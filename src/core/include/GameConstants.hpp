@@ -59,5 +59,5 @@ struct Tile
 };
 
 namespace GameConfig {
-	static constexpr unsigned int BOARD_WIDTH = 10, BOARD_HEIGHT = 20, BUFFER_ZONE = 2;
+	static constexpr unsigned int BOARD_WIDTH = 10, BOARD_HEIGHT = 24;
 };

@@ -1,13 +1,15 @@
-find_package(Catch2 CONFIG REQUIRED) 
-
-include_directories(${PROJECT_SOURCE_DIR}/src/core/include)
-
 set(CORE_TEST_SOURCES
   testFlat2DArray.cpp
+	testPlayfield.cpp
+	# TODO Add more tests for other core components
 )
 
 add_executable(core_tests ${CORE_TEST_SOURCES})
-target_link_libraries(core_tests Catch2::Catch2WithMain) 
+
+target_link_libraries(core_tests PRIVATE 
+	tetris_core
+	Catch2::Catch2WithMain
+) 
 
 include(CTest)
 include(Catch)

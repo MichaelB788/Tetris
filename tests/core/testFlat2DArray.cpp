@@ -158,7 +158,7 @@ TEST_CASE("Indexing", "[Flat2DArray, unit]")
   SECTION("Tile Matrix Iterator") 
   {
     const int rows = 2, cols = 2;
-    Tile O = Tile(TileType::O, TileRole::ACTIVE);
+    Tile O = Tile(Type::O, Role::ACTIVE);
     Flat2DArray<Tile, rows, cols> Matrix =
     {
       O, O,

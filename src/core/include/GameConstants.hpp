@@ -23,13 +23,13 @@ enum class GameState : uint8_t
 	EXIT
 };
 
-enum class TileType : uint8_t
+enum class Type : uint8_t
 {
 	NONE = 0,
 	I, O, T, Z, S, J, L
 };
 
-enum class TileRole : uint8_t
+enum class Role : uint8_t
 {
 	NONE = 0,
 	ACTIVE, GROUNDED, GHOST
@@ -41,20 +41,20 @@ enum class TileRole : uint8_t
  */
 struct Tile
 {
-	TileType type;
-	TileRole role;
+	Type type;
+	Role role;
 
-	Tile() : type(TileType::NONE), role(TileRole::NONE) {}
-	Tile(const TileType& type, const TileRole& role) : type(type), role(role) {}
+	Tile() : type(Type::NONE), role(Role::NONE) {}
+	Tile(const Type& type, const Role& role) : type(type), role(role) {}
 
-	bool isEmpty() const { return type == TileType::NONE; }
-	bool isGrounded() const { return role == TileRole::GROUNDED; }
-	bool isActive() const { return role == TileRole::ACTIVE; }
-	bool isGhost() const { return role == TileRole::GHOST; }
+	bool isEmpty() const { return type == Type::NONE; }
+	bool isGrounded() const { return role == Role::GROUNDED; }
+	bool isActive() const { return role == Role::ACTIVE; }
+	bool isGhost() const { return role == Role::GHOST; }
 	void resetTile()
 	{
-		type = TileType::NONE;
-		role = TileRole::NONE;
+		type = Type::NONE;
+		role = Role::NONE;
 	}
 };
 

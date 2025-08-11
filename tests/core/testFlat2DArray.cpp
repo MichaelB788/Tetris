@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include <iostream>
 
 #include "Flat2DArray.hpp"
 #include "GameConstants.hpp"
@@ -7,10 +8,29 @@ TEST_CASE("Flat2DArray Construction", "[unit, Flat2DArray]")
 {
   SECTION("Default construction")
   {
-    Flat2DArray<int, 3, 2> IntegerMatrix;
+    Flat2DArray<int, 5, 5> IntegerMatrix;
 
-    REQUIRE(IntegerMatrix.size() == 6);
-    CHECK(IntegerMatrix(0, 0) == 0);
+    REQUIRE(IntegerMatrix.size() == (5 * 5));
+    for (int y = 0; y < 5; y++) {
+      for (int x = 0; x < 5; x++) {
+        INFO("Checking element at position (" << x << ", " << y << ")");
+        REQUIRE(IntegerMatrix(x, y) == 0);
+      }
+    }
+  }
+
+  SECTION("Default construction with a 10x22 array")
+  {
+    const Flat2DArray<int, 10, 22> IntegerMatrix;
+
+    REQUIRE(IntegerMatrix.size() == (10 * 22));
+
+    for (int y = 0; y < 22; y++) {
+      for (int x = 0; x < 10; x++) {
+        INFO("Checking element at position (" << x << ", " << y << ")");
+        REQUIRE(IntegerMatrix(x, y) == 0);
+      }
+    }
   }
 
   SECTION("Initializer list construction")
@@ -22,10 +42,14 @@ TEST_CASE("Flat2DArray Construction", "[unit, Flat2DArray]")
     };
 
     REQUIRE(IntegerMatrix.size() == 4);
-		CHECK(IntegerMatrix(0, 0) == 1);
-		CHECK(IntegerMatrix(1, 0) == 2);
-		CHECK(IntegerMatrix(0, 1) == 3);
-		CHECK(IntegerMatrix(1, 1) == 4);
+
+    int i = 1;
+    for (int y = 0; y < 2; y++) {
+      for (int x = 0; x < 2; x++) {
+        INFO("Checking element at position (" << x << ", " << y << ")");
+        REQUIRE(IntegerMatrix(x, y) == i++);
+      }
+    }
 
     Flat2DArray<int, 2, 2> PartiallyFilledMatrix = 
     {
@@ -104,15 +128,31 @@ TEST_CASE("Indexing", "[Flat2DArray, unit]")
 {
 	SECTION("Integer Matrix Iterator")
 	{
-    const int rows = 2, cols = 2;
-		Flat2DArray<int, cols, rows> Matrix{ 1, 2, 3, 4 };
+    const int rows = 5, cols = 5;
+		const Flat2DArray<int, cols, rows> Matrix
+    {
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5
+    };
+    CHECK(Matrix(4, 4) == 5);
+    REQUIRE_NOTHROW(Matrix(0, 4));
+	}
 
-		int sum = 0;
-    for (int y = 0; y < rows; y++)
-      for (int x = 0; x < cols; x++)
-        sum += Matrix(x, y);
-
-		REQUIRE(sum == 10);
+	SECTION("Cooridnate (5, 5) should throw an exception")
+	{
+    const int rows = 5, cols = 5;
+		const Flat2DArray<int, cols, rows> Matrix
+    {
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5,
+      1, 2, 3, 4, 5
+    };
+    REQUIRE_THROWS(Matrix(5, 5));
 	}
 
   SECTION("Tile Matrix Iterator") 

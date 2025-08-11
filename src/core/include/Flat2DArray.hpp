@@ -1,6 +1,15 @@
+// Throw only in debug mode
+#ifndef NDEBUG
+#define THROW_OUT_OF_RANGE_IF(condition, message) \
+    if (condition) throw std::out_of_range(message)
+#else
+#define THROW_OUT_OF_RANGE_IF(condition, message) ((void)0)
+#endif
+
 #include <initializer_list>
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
 
 /**
  * @brief A flat 2D array that stores elements in column-major order using a 1D array internally.
@@ -12,7 +21,7 @@
  * @tparam Cols Number of columns (width)
  * @tparam Rows Number of rows (height)
  *
- * @note Elements are stored in column-major order: (col, row) maps to index [row * Rows + col]
+ * @note Elements are stored in column-major order: (x, y) maps to index [y * Cols + x]
  * @note Input coordinates should be zero-based.
  */
 template <typename T, size_t Cols, size_t Rows>
@@ -21,15 +30,25 @@ struct Flat2DArray
 private:
   T m_Data[Cols * Rows];
 
-  unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * Rows + x; }
+  /**
+   * @breif Computes the flat index of an (x, y) cooridnate in COLUMN MAJOR order.
+   */
+	unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * Cols + x; }
 
 public:
   using reference = T&;
   using const_reference = const T&;
 
   constexpr size_t size() const { return Cols * Rows; }
-  constexpr reference operator()(unsigned int x, unsigned int y) { return m_Data[computeFlatIndex(x, y)]; }
-  constexpr const_reference operator()(unsigned int x, unsigned int y) const { return m_Data[computeFlatIndex(x, y)]; }
+
+  constexpr reference operator()(unsigned int x, unsigned int y) {
+    THROW_OUT_OF_RANGE_IF((x * y < 0 || x * y >= Cols * Rows), "This index is out of bounds!");
+    return m_Data[computeFlatIndex(x, y)];
+  }
+  constexpr const_reference operator()(unsigned int x, unsigned int y) const {
+    THROW_OUT_OF_RANGE_IF((x * y < 0 || x * y >= Cols * Rows), "This index is out of bounds!");
+    return m_Data[computeFlatIndex(x, y)];
+  }
 
   /**
    * @brief Constructor that initializes the array with an initializer list.

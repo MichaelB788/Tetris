@@ -2,9 +2,11 @@
 
 void Playfield::clearBoard()
 {
-	for (unsigned int row = 0; row < GameConfig::BOARD_HEIGHT; row++)
-		for (unsigned int col = 0; col < GameConfig::BOARD_WIDTH; col++)
+	for (unsigned int row = 0; row < GameConfig::BOARD_HEIGHT; row++) {
+		for (unsigned int col = 0; col < GameConfig::BOARD_WIDTH; col++) {
 			m_PlayfieldMatrix(col, row).resetTile();
+		}
+	}
 }
 
 bool Playfield::isRowComplete(unsigned int row) const
@@ -34,8 +36,7 @@ std::vector<unsigned int> Playfield::getCompletedRows() const
 
 void Playfield::clearRows(const std::vector<unsigned int>& completedRows)
 {
-	for (const auto& row: completedRows)
-	{
+	for (const auto& row : completedRows) {
 		for (unsigned int col = 0; col < GameConfig::BOARD_WIDTH; col++) {
 			m_PlayfieldMatrix(col, row).resetTile();
 		}

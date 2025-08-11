@@ -25,13 +25,13 @@ enum class GameState : uint8_t
 
 enum class Type : uint8_t
 {
-	NONE = 0,
+	ERROR = 0, NONE,
 	I, O, T, Z, S, J, L
 };
 
 enum class Role : uint8_t
 {
-	NONE = 0,
+	ERROR = 0, NONE,
 	ACTIVE, GROUNDED, GHOST
 };
 
@@ -48,9 +48,12 @@ struct Tile
 	Tile(const Type& type, const Role& role) : type(type), role(role) {}
 
 	bool isEmpty() const { return type == Type::NONE; }
+	bool isError() const { return type == Type::ERROR; }
+
 	bool isGrounded() const { return role == Role::GROUNDED; }
 	bool isActive() const { return role == Role::ACTIVE; }
 	bool isGhost() const { return role == Role::GHOST; }
+
 	void resetTile()
 	{
 		type = Type::NONE;

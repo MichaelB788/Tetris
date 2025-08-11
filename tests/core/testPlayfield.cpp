@@ -102,11 +102,32 @@ TEST_CASE("Board State Management", "[Playfield, unit]")
     }
   }
 
+  SECTION("Playfield at() function")
+  {
+    const Playfield board;
+    REQUIRE(board.at(0, 0).isEmpty());
+
+    REQUIRE(board.at(100, 100).isError());
+    REQUIRE(board.at(-100, -100).isError());
+  }
+
+  SECTION("Playfield set() function")
+  {
+    Playfield board;
+    REQUIRE(board.set(0, 0, Tile(Type::O, Role::ACTIVE)));
+
+    REQUIRE_FALSE(board.set(100, 100, Tile(Type::O, Role::ACTIVE)));
+    REQUIRE_FALSE(board.set(-100, -100, Tile(Type::O, Role::ACTIVE)));
+  }
+
   SECTION("Playfield isOccupied() function")
   {
     Playfield board;
-    board.set(5, 10, Tile(Type::O, Role::GROUNDED));
+    REQUIRE(board.set(5, 10, Tile(Type::O, Role::GROUNDED)));
     REQUIRE(board.isOccupied(5, 10));
-    REQUIRE_FALSE(board.isOccupied(0, 0));
+
+    CHECK_FALSE(board.isOccupied(0, 0));
+    CHECK(board.isOccupied(100, 100));
+    CHECK(board.isOccupied(-100, -100));
   }
 }

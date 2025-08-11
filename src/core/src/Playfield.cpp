@@ -1,5 +1,23 @@
 #include "Playfield.hpp"
 
+const Tile& Playfield::at(unsigned int x, unsigned int y) const
+{
+	if (x * y >= size()) return Tile(Type::ERROR, Role::ERROR);
+	else return m_PlayfieldMatrix(x, y);
+}
+
+bool Playfield::set(unsigned int x, unsigned int y, const Tile& newTile)
+{
+	if (x * y >= size()) return false;
+	else m_PlayfieldMatrix(x, y) = newTile; return true;
+}
+
+bool Playfield::isOccupied(unsigned int x, unsigned int y) const
+{
+	if (x * y >= size()) return true;
+	else return m_PlayfieldMatrix(x, y).isGrounded();
+}
+
 void Playfield::clearBoard()
 {
 	for (unsigned int row = 0; row < GameConfig::BOARD_HEIGHT; row++) {

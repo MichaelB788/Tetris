@@ -2,7 +2,6 @@
 
 #include <initializer_list>
 #include <algorithm>
-#include <cassert>
 #include <vector>
 
 #include "GameConstants.hpp"
@@ -30,9 +29,9 @@ public:
 	void clearBoard();
 	unsigned int size() const { return GameConfig::BOARD_WIDTH * GameConfig::BOARD_HEIGHT; }
 
-	const Tile& at(unsigned int x, unsigned int y) const { return m_PlayfieldMatrix(x, y); }
-	void set(unsigned int x, unsigned int y, const Tile& newTile) { m_PlayfieldMatrix(x, y) = newTile; };
-	bool isOccupied(unsigned int x, unsigned int y) const { return m_PlayfieldMatrix(x, y).isGrounded(); };
+	const Tile& at(unsigned int x, unsigned int y) const;
+	bool set(unsigned int x, unsigned int y, const Tile& newTile);
+	bool isOccupied(unsigned int x, unsigned int y) const;
 
 	bool isRowComplete(unsigned int row) const;
 	bool isRowEmpty(unsigned int row) const;

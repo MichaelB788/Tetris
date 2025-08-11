@@ -1,3 +1,5 @@
+#pragma once
+
 // Throw only in debug mode
 #ifndef NDEBUG
 #define THROW_OUT_OF_RANGE_IF(condition, message) \

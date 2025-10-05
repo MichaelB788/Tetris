@@ -1,10 +1,9 @@
 #include <SDL2/SDL.h>
 
-#include "src/core/Game/Tetris.hpp"
+#include "app/tetris.hpp"
 
 int main (int argc, char **argv)
 {
-	Tetris tetris;
-
+	Tetris app;
 	return 0;
 }

@@ -3,8 +3,18 @@
 #include <SDL2/SDL.h>
 #include <array>
 #include "core/tetromino.hpp"
+#include "util/data-structures.hpp"
+#include "util/game-constants.hpp"
 
-struct Tetris {
+class Tetris {
+	private:
+		SDL_Window* m_window = nullptr;
+		SDL_Renderer* m_renderer = nullptr;
+
+		bool initSDL();
+		void closeSDL();
+
+	public:
 		Tetris();
 };
 

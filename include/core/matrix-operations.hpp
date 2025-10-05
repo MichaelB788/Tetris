@@ -4,7 +4,7 @@
 #include "util/data-structures.hpp"
 #include "util/game-constants.hpp"
 
-// @brief Manages the Tetris matrix (playfield) state and operations.
+/// @brief Manages the Tetris matrix (playfield) state and operations.
 namespace MatrixOperation {
 	inline void clear(TetrisMatrix& matrix) { for (uint8_t x = 0; x < matrix.WIDTH; x++) for (uint8_t y = 0; y < matrix.HEIGHT; y++) matrix(x, y) = TileState::EMPTY; };
 	bool isRowComplete(TetrisMatrix& matrix, unsigned int row);

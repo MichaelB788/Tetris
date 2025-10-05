@@ -1,4 +1,6 @@
 add_library(tetris_core
-	#sources
-	Playfield.cpp
+	matrix-operations.cpp
+  tetromino.cpp
+  tetromino-operations.cpp
 )
+add_library(Tetris::Core ALIAS tetris_core)

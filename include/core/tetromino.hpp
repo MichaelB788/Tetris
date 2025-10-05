@@ -1,21 +1,18 @@
 #ifndef TETROMINO_H
 #define TETROMINO_H
 #include <array>
+#include <map>
 #include "util/data-structures.hpp"
+#include "util/game-constants.hpp"
 
-/* *
- * @breif Tetromino structs contain data, namely: color and an array of tiles representing the shape.
- * */
+/// @brief A piece of a certain type. Contains information regarding it's shape.
 struct Tetromino {
-	enum class Type : uint8_t { I, O, T, Z, S, J, L };
-	enum class Color : uint8_t { LIGHT_BLUE, ORANGE, BLUE, GREEN, RED, PURPLE, YELLOW, WHITE };
-	enum class Role : uint8_t { NONE = 0, ACTIVE, GROUNDED, GHOST };
+  enum class Type : uint8_t { I, O, T, Z, S, J, L };
+  Type m_type;
+  std::array<Vector2, 4> m_coordinates;
 
-	Type m_type;
-	Color m_color;
-	Role m_role;
-	std::array<Vector2, 4> m_position;
-	Tetromino(Type type, Color color, Role role) : m_type(type), m_color(color), m_role(role) {};
+  /// @param type A Tetromino::Type; I, O, T, Z, S, J, L
+  Tetromino(Type type);
 };
 
 #endif

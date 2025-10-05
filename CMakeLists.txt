@@ -1,13 +1,9 @@
-# Cmake configuration
 cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Installs Catch2 by fetching the github repo if on Linux
-
-# Project details
 project(
 	Tetris
 	VERSION 1.0
@@ -15,13 +11,12 @@ project(
 	LANGUAGES CXX
 )
 
-# Subdirectories
-add_subdirectory(src/core)
-# NOTE: The render and app modules are not yet ready for implementation.
-# add_subdirectory(src/app)
-# add_subdirectory(src/render)
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/include)
 
-# Enable testing in debug mode
+add_subdirectory(src/core)
+#add_subdirectory(src/render)
+add_subdirectory(src/app)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	find_package(Catch2 3 REQUIRED)
 

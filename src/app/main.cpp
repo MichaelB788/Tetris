@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 
-#include "Game/Tetris.hpp"
+#include "src/core/Game/Tetris.hpp"
 
 int main (int argc, char **argv)
 {

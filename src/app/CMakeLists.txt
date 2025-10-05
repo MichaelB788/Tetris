@@ -1,18 +1,16 @@
-add_library(TetrisAppLibrary
-	Game/Tetris.cpp
+add_library(tetris_app
+	Tetris.cpp
 )
 
-target_include_directories(TetrisAppLibrary PUBLIC Game)
+set(EXECUTABLE_NAME ${CMAKE_PROJECT_NAME})
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+add_executable(${EXECUTABLE_NAME} main.cpp)
 
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC 
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC 
 	SDL2::SDL2
 	SDL2::SDL2main
 	SDL2_ttf::SDL2_ttf
 )
-
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE TetrisAppLibrary)

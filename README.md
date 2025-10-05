@@ -149,6 +149,11 @@ cmake .. -DCMAKE_BUILD_TYPE="Debug"
 cmake .. -DCMAKE_BUILD_TYPE="Release"
 ```
 
+> Note: There isn't a build or release mode yet, so this should suffice
+```bash
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+```
+
 # Running Unit Tests
 
 A more in depth guide for running unit tests on Windows and Linux will be added later.

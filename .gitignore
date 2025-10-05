@@ -4,3 +4,4 @@ out/
 .vscode/
 .vs/
 vcpkg_installed/
+.cache/

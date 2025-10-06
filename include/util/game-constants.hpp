@@ -6,8 +6,9 @@
 enum class TileState : uint8_t {
   EMPTY = 0,
   ACTIVE,
-  GROUNDED,
   GHOST,
+  GROUNDED,
+  WALL
 };
 
 /// @brief Dimensions of the window

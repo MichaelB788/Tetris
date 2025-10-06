@@ -14,6 +14,27 @@ bool MatrixOperation::isRowEmpty(TetrisMatrix& matrix, unsigned int row) {
 	return true;
 }
 
+bool MatrixOperation::canPlace(Tetromino& piece, TetrisMatrix& matrix) {
+  for (auto& coordinate : piece.m_coordinates) {
+    if (matrix(coordinate) == TileState::GROUNDED || matrix(coordinate) == TileState::WALL) {
+      return false;
+    }
+  }
+  return true;
+}
+
+void MatrixOperation::place(Tetromino& piece, TetrisMatrix& matrix) {
+  for (auto& coordinate : piece.m_coordinates) {
+    matrix(coordinate) == TileState::ACTIVE;
+  }
+}
+
+void MatrixOperation::remove(Tetromino& piece, TetrisMatrix& matrix) {
+  for (auto& coordinate : piece.m_coordinates) {
+    matrix(coordinate) == TileState::EMPTY;
+  }
+}
+
 const std::vector<unsigned int> MatrixOperation::getCompletedRows(TetrisMatrix& matrix) {
 	std::vector<unsigned int> completedRows;
 	for (unsigned int row = 0; row < matrix.HEIGHT; row++) {
@@ -47,7 +68,3 @@ void MatrixOperation::clearRows(TetrisMatrix& matrix, const std::vector<unsigned
     }
 	}
 }
-
-// bool MatrixOperation::canPlacePiece(const Tetromino& piece, const Vector2& position) const {}
-
-// void MatrixOperation::placePiece(const Tetromino& piece, const Vector2& position) {}

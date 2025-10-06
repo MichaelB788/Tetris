@@ -3,12 +3,16 @@
 #include <vector>
 #include "util/data-structures.hpp"
 #include "util/game-constants.hpp"
+#include "core/tetromino.hpp"
 
 /// @brief Manages the Tetris matrix (playfield) state and operations.
 namespace MatrixOperation {
 	inline void clear(TetrisMatrix& matrix) { for (uint8_t x = 0; x < matrix.WIDTH; x++) for (uint8_t y = 0; y < matrix.HEIGHT; y++) matrix(x, y) = TileState::EMPTY; };
 	bool isRowComplete(TetrisMatrix& matrix, unsigned int row);
 	bool isRowEmpty(TetrisMatrix& matrix, unsigned int row);
+  bool canPlace(Tetromino& piece, TetrisMatrix& matrix);
+  void place(Tetromino& piece, TetrisMatrix& matrix);
+  void remove(Tetromino& piece, TetrisMatrix& matrix);
 
   /**
    * @brief Searches the matrix top-down to find rows that are full.

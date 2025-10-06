@@ -12,5 +12,11 @@ Tetromino::Tetromino(Type type) : m_type(type)
       {Type::L, {(0, 0), (0, 1), (1, 1), (2, 1)}},
   };
 
+  const uint8_t OFFSET = 5; 
+
   m_coordinates = shapes[type];
+  for (auto& coordinate : m_coordinates) {
+    coordinate.x += OFFSET;
+    coordinate.y += OFFSET;
+  }
 }

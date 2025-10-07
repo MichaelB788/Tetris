@@ -2,7 +2,7 @@
 #define TETRIS_H
 #include <SDL2/SDL.h>
 #include <array>
-#include "util/data-structures.hpp"
+#include "util/vector2.hpp"
 #include "util/game-constants.hpp"
 #include "core/tetromino.hpp"
 #include "core/matrix-operations.hpp"

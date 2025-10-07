@@ -1,7 +1,7 @@
 #ifndef MATRIX_OPERATIONS_H
 #define MATRIX_OPERATIONS_H
 #include <vector>
-#include "util/data-structures.hpp"
+#include "util/vector2.hpp"
 #include "util/game-constants.hpp"
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"

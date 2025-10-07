@@ -2,7 +2,7 @@
 #define TETROMINO_OPERATIONS_H
 #include <array>
 #include <random>
-#include "util/data-structures.hpp"
+#include "util/vector2.hpp"
 #include "core/tetromino.hpp"
 
 namespace TetrominoOperation {

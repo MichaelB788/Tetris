@@ -2,7 +2,7 @@
 #define TETROMINO_H
 #include <array>
 #include <map>
-#include "util/data-structures.hpp"
+#include "util/vector2.hpp"
 #include "util/game-constants.hpp"
 
 /// @brief A piece of a certain type. Contains information regarding it's shape.

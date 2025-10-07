@@ -2,20 +2,22 @@
 #define TETRIS_H
 #include <SDL2/SDL.h>
 #include <array>
-#include "core/tetromino.hpp"
 #include "util/data-structures.hpp"
 #include "util/game-constants.hpp"
+#include "core/tetromino.hpp"
+#include "core/matrix-operations.hpp"
 
 class Tetris {
-	private:
-		SDL_Window* m_window = nullptr;
-		SDL_Renderer* m_renderer = nullptr;
+private:
+  SDL_Window* m_window = nullptr;
+  SDL_Renderer* m_renderer = nullptr;
 
-		bool initSDL();
-		void closeSDL();
+  bool initSDL();
+  void closeSDL();
+  void update(Matrix& playfield, Tetromino& player);
 
-	public:
-		Tetris();
+public:
+  Tetris();
 };
 
 #endif

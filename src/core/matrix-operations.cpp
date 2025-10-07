@@ -1,20 +1,29 @@
 #include "core/matrix-operations.hpp"
 
-bool MatrixOperation::isRowComplete(TetrisMatrix& matrix, unsigned int row) {
-	for (unsigned int col = 0; col < matrix.WIDTH; col++) {
+void MatrixOperation::clear(Matrix& matrix) {
+  for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
+    for (unsigned int x = 0; x < MatrixDimensions::WIDTH; x++) {
+      if (x == 0 || x == MatrixDimensions::WIDTH - 1) matrix(x, y) = TileState::WALL; 
+      else matrix(x, y) = TileState::EMPTY;
+    }
+  }
+}
+
+bool MatrixOperation::isRowComplete(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
 		if (matrix(col, row) == TileState::EMPTY) return false;
 	}
 	return true;
 }
 
-bool MatrixOperation::isRowEmpty(TetrisMatrix& matrix, unsigned int row) {
-	for (unsigned int col = 0; col < matrix.WIDTH; col++) {
+bool MatrixOperation::isRowEmpty(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
 		if (matrix(col, row) == TileState::GROUNDED) return false;
 	}
 	return true;
 }
 
-bool MatrixOperation::canPlace(Tetromino& piece, TetrisMatrix& matrix) {
+bool MatrixOperation::canPlace(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     if (matrix(coordinate) == TileState::GROUNDED || matrix(coordinate) == TileState::WALL) {
       return false;
@@ -23,30 +32,30 @@ bool MatrixOperation::canPlace(Tetromino& piece, TetrisMatrix& matrix) {
   return true;
 }
 
-void MatrixOperation::place(Tetromino& piece, TetrisMatrix& matrix) {
+void MatrixOperation::place(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     matrix(coordinate) == TileState::ACTIVE;
   }
 }
 
-void MatrixOperation::remove(Tetromino& piece, TetrisMatrix& matrix) {
+void MatrixOperation::remove(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     matrix(coordinate) == TileState::EMPTY;
   }
 }
 
-const std::vector<unsigned int> MatrixOperation::getCompletedRows(TetrisMatrix& matrix) {
+const std::vector<unsigned int> MatrixOperation::getCompletedRows(Matrix& matrix) {
 	std::vector<unsigned int> completedRows;
-	for (unsigned int row = 0; row < matrix.HEIGHT; row++) {
+	for (unsigned int row = 0; row < MatrixDimensions::HEIGHT; row++) {
 		if (MatrixOperation::isRowComplete(matrix, row)) completedRows.push_back(row);
 	}
 	return completedRows;
 }
 
-void MatrixOperation::clearRows(TetrisMatrix& matrix, const std::vector<unsigned int>& completedRows) {
+void MatrixOperation::clearRows(Matrix& matrix, const std::vector<unsigned int>& completedRows) {
   // Empty all of the rows in completed rows
 	for (const auto& row: completedRows) {
-		for (unsigned int col = 0; col < matrix.WIDTH; col++) {
+		for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
 			matrix(col, row) = TileState::EMPTY;
 		}
 	}
@@ -58,7 +67,7 @@ void MatrixOperation::clearRows(TetrisMatrix& matrix, const std::vector<unsigned
 		while (MatrixOperation::isRowEmpty(matrix, nextRow) && nextRow > -1) nextRow--;
 
 		if (nextRow > -1) {
-			for (unsigned int col = 0; col < matrix.WIDTH; col++) {
+			for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
 				matrix(col, row) = matrix(col, nextRow);
         matrix(col, nextRow) = TileState::EMPTY;
 			}

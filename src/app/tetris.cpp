@@ -31,22 +31,25 @@ void Tetris::closeSDL()
   SDL_Quit();
 }
 
+void Tetris::update(Matrix& playfield, Tetromino& player) {
+}
+
 Tetris::Tetris()
 {
   initSDL();
 
+  // Initialize game assets
   Tetromino piece = Tetromino(Tetromino::Type::I);
-  std::cout << "Hello World!" << std::endl;
-  TetrisMatrix playfield;
+  std::cout << "Hello World! I have a " << static_cast<unsigned int>(piece.m_type) << std::endl;
+  Matrix playfield;
+  MatrixOperation::clear(playfield);
 
+  // Game loop
   SDL_Event e;
   bool quit = false;
-  while (quit == false)
-  {
-    while (SDL_PollEvent(&e))
-    {
-      if (e.type == SDL_QUIT)
-        quit = true;
+  while (quit == false) {
+    while (SDL_PollEvent(&e)) {
+      if (e.type == SDL_QUIT) quit = true;
     }
   }
 

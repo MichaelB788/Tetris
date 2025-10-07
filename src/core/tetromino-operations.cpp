@@ -20,9 +20,8 @@ void TetrominoOperation::rotate(Tetromino& piece) {
 }
 
 void move(Tetromino& piece, Direction dir) {
-  for (auto& tile : piece.m_coordinates) {
-    switch (dir)
-    {
+  for (auto &tile : piece.m_coordinates) {
+    switch (dir) {
     case Direction::RIGHT:
       tile.x++;
       break;
@@ -36,4 +35,11 @@ void move(Tetromino& piece, Direction dir) {
       break;
     }
   }
+}
+
+Tetromino::Type TetrominoOperation::generateRandomType() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> distrib(1, 7);
+  return Tetromino::Type(distrib(gen));
 }

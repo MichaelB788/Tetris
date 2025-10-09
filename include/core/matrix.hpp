@@ -9,7 +9,15 @@ namespace MatrixDimensions
   constexpr unsigned int WIDTH = 12, HEIGHT = 24;
 }
 
-/// @brief A 10 x 24 matrix. Data stored within the Matrix are of TileState.
+enum class TileState : uint8_t {
+  EMPTY = 0,
+  ACTIVE,
+  GHOST,
+  GROUNDED,
+  WALL
+};
+
+/// @brief The Tetris playfield. Tiles are stored and represented by their state.
 class Matrix
 {
 private:
@@ -23,6 +31,7 @@ private:
   inline const unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * MatrixDimensions::WIDTH + x; }
 
 public:
+
   Matrix() = default;
 
   inline TileState &operator()(unsigned int x, unsigned int y) {

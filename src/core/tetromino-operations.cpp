@@ -1,21 +1,22 @@
 #include "core/tetromino-operations.hpp"
 
 void TetrominoOperation::rotate(Tetromino& piece) {
-  // HACK: This is assuming index 2 is actually the center of the piece.
-  Vector2 origin = piece.m_coordinates[2];
+  // NOTE: The pivot should ALWAYS be the first Vector2. See the Tetromino constructor.
+  constexpr unsigned int PIVOT_INDEX = 0;
+  Vector2 pivot = piece.m_coordinates[PIVOT_INDEX];
 
   for (auto &coordinate : piece.m_coordinates) {
-    // Translate to origin
-    int8_t dx = coordinate.x - origin.x;
-    int8_t dy = coordinate.y - origin.y;
-
-    // Rotate 90° counterclockwise: (x,y) -> (-y,x)
-    int8_t rotated_x = -dy;
-    int8_t rotated_y = dx;
-
-    // Translate back
-    coordinate.x = origin.x + rotated_x;
-    coordinate.y = origin.y + rotated_y;
+    /**
+     * Translate to pivot
+     * Rotate 90° counterclockwise: (x,y) -> (-y,x)
+     * Translate back
+     **/
+    int dx = coordinate.x - pivot.x;
+    int dy = coordinate.y - pivot.y;
+    int rotated_x = -dy;
+    int rotated_y = dx;
+    coordinate.x = pivot.x + rotated_x;
+    coordinate.y = pivot.y + rotated_y;
   }
 }
 
@@ -40,6 +41,6 @@ void move(Tetromino& piece, Direction dir) {
 Tetromino::Type TetrominoOperation::generateRandomType() {
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distrib(1, 7);
+  std::uniform_int_distribution<> distrib(0, 6);
   return Tetromino::Type(distrib(gen));
 }

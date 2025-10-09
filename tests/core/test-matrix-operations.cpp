@@ -109,10 +109,10 @@ TEST_CASE("Iterator", "[Flat2DArray, unit]")
 		CHECK(sum == 10);
 	}
 
-  SECTION("Tile Matrix Iterator") 
+  SECTION("TileState Matrix Iterator") 
   {
-    Tile O = Tile(TileType::O, TileRole::ACTIVE);
-    Flat2DArray<Tile, 2, 2> Matrix =
+    TileState O = TileState(TileType::O, TileRole::ACTIVE);
+    Flat2DArray<TileState, 2, 2> Matrix =
     {
       O, O,
       O, O

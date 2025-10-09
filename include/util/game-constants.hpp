@@ -3,13 +3,6 @@
 #include <cstdint>
 
 /// @brief States which the current tile may take, such as being empty or active
-enum class TileState : uint8_t {
-  EMPTY = 0,
-  ACTIVE,
-  GHOST,
-  GROUNDED,
-  WALL
-};
 
 /// @brief Dimensions of the window
 enum Screen {

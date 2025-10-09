@@ -7,10 +7,10 @@ std::array<Vector2, 8> Vector2Operation::adjacentCellsArray(Vector2& pivot) {
    * -1  0, 0  0, 1  0
    * -1  1, 0  1, 1  1
    */
-  const int STARTING_POS_X = pivot.x - 1; 
-  const int STARTING_POS_Y = pivot.y - 1; 
-  const int ENDING_POS_X = pivot.x + 1; 
-  const int ENDING_POS_Y = pivot.y + 1; 
+  const int STARTING_POS_X = pivot.x - 1;
+  const int STARTING_POS_Y = pivot.y - 1;
+  const int ENDING_POS_X = pivot.x + 1;
+  const int ENDING_POS_Y = pivot.y + 1;
   std::array<Vector2, 8> adjacentCells;
   unsigned int index = 0;
 
@@ -23,20 +23,4 @@ std::array<Vector2, 8> Vector2Operation::adjacentCellsArray(Vector2& pivot) {
   }
 
   return adjacentCells;
-}
-
-const std::map<CardinalDirection, Vector2> Vector2Operation::adjacentCellsMap(Vector2& pivot) {
-  std::array<Vector2, 8> adjacentCellsArr = adjacentCellsArray(pivot);
-  const std::map<CardinalDirection, Vector2> adjacentCellsMap {
-		{ CardinalDirection::NORTH_WEST, adjacentCellsArr[0] },
-		{ CardinalDirection::NORTH,			 adjacentCellsArr[1] },
-		{ CardinalDirection::NORTH_EAST, adjacentCellsArr[2] },
-		{ CardinalDirection::EAST,			 adjacentCellsArr[3] },
-		{ CardinalDirection::SOUTH_EAST, adjacentCellsArr[4] },
-		{ CardinalDirection::SOUTH, 		 adjacentCellsArr[5] },
-		{ CardinalDirection::WEST, 			 adjacentCellsArr[6] },
-		{ CardinalDirection::SOUTH_WEST, adjacentCellsArr[7] },
-	};
-
-  return adjacentCellsMap;
 }

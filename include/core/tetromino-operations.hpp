@@ -3,6 +3,7 @@
 #include <array>
 #include <random>
 #include "util/vector2.hpp"
+#include "util/game-constants.hpp"
 #include "core/tetromino.hpp"
 
 namespace TetrominoOperation {

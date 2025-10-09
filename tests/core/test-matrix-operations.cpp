@@ -1,7 +1,6 @@
-#include <catch2/catch_test_macros.hpp>
-
-#include "Flat2DArray.hpp"
-#include "GameConstants.hpp"
+#include <catch2/catch.hpp>
+#include "core/matrix.hpp"
+#include "core/matrix-operations.hpp"
 
 TEST_CASE("Flat2DArray Construction", "[unit, Flat2DArray]")
 {

@@ -39,7 +39,7 @@ Tetris::Tetris()
   initSDL();
 
   // Initialize game assets
-  Tetromino piece = Tetromino(Tetromino::Type::I);
+  Tetromino piece = Tetromino(TetrominoOperation::generateRandomType(), Vector2(5, 5));
   std::cout << "Hello World! I have a " << static_cast<unsigned int>(piece.m_type) << std::endl;
   Matrix playfield;
   MatrixOperation::clear(playfield);

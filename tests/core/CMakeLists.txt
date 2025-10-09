@@ -1,16 +1,15 @@
 set(CORE_TEST_SOURCES
-  testFlat2DArray.cpp
-	testPlayfield.cpp
-	# TODO Add more tests for other core components
+  test-matrix-operations.cpp
 )
 
-add_executable(core_tests ${CORE_TEST_SOURCES})
+set(EXECUTABLE_NAME "core-tests")
+add_executable(${EXECUTABLE_NAME} ${CORE_TEST_SOURCES})
 
-target_link_libraries(core_tests PRIVATE 
-	tetris_core
-	Catch2::Catch2WithMain
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE 
+	Catch2::Catch2
+  Tetris::Core
 ) 
 
 include(CTest)
 include(Catch)
-catch_discover_tests(core_tests)
+catch_discover_tests(${EXECUTABLE_NAME})

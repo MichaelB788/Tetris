@@ -6,6 +6,7 @@
 #include "util/game-constants.hpp"
 #include "core/tetromino.hpp"
 #include "core/matrix-operations.hpp"
+#include "core/tetromino-operations.hpp"
 
 class Tetris {
 private:

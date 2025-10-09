@@ -3,8 +3,13 @@
 void MatrixOperation::clear(Matrix& matrix) {
   for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
     for (unsigned int x = 0; x < MatrixDimensions::WIDTH; x++) {
-      if (x == 0 || x == MatrixDimensions::WIDTH - 1) matrix(x, y) = TileState::WALL; 
-      else matrix(x, y) = TileState::EMPTY;
+      if (x == 0 || x == MatrixDimensions::WIDTH - 1) {
+        matrix(x, y) = TileState::WALL;
+      } else if (y == MatrixDimensions::HEIGHT - 1) {
+        matrix(x, y) = TileState::GROUND;
+      } else {
+        matrix(x, y) = TileState::EMPTY;
+      }
     }
   }
 }
@@ -18,14 +23,14 @@ bool MatrixOperation::isRowComplete(Matrix& matrix, unsigned int row) {
 
 bool MatrixOperation::isRowEmpty(Matrix& matrix, unsigned int row) {
 	for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
-		if (matrix(col, row) == TileState::GROUNDED) return false;
+		if (matrix(col, row) == TileState::GROUND) return false;
 	}
 	return true;
 }
 
 bool MatrixOperation::canPlace(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
-    if (matrix(coordinate) == TileState::GROUNDED || matrix(coordinate) == TileState::WALL) {
+    if (matrix(coordinate) == TileState::GROUND || matrix(coordinate) == TileState::WALL) {
       return false;
     }
   }

@@ -2,8 +2,6 @@
 #define GAME_CONSTANTS_H
 #include <cstdint>
 
-/// @brief States which the current tile may take, such as being empty or active
-
 /// @brief Dimensions of the window
 enum Screen {
   WIDTH = 600,

@@ -6,7 +6,7 @@
 
 namespace MatrixDimensions
 {
-  const unsigned int WIDTH = 12, HEIGHT = 24;
+  constexpr unsigned int WIDTH = 12, HEIGHT = 24;
 }
 
 /// @brief A 10 x 24 matrix. Data stored within the Matrix are of TileState.
@@ -14,8 +14,13 @@ class Matrix
 {
 private:
   std::array<TileState, MatrixDimensions::WIDTH * MatrixDimensions::HEIGHT> m_data{};
-  inline const unsigned int computeFlatIndex(Vector2 coordinate) const { return coordinate.y * MatrixDimensions::HEIGHT + coordinate.x; }
-  inline const unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * MatrixDimensions::HEIGHT + x; }
+  inline const unsigned int computeFlatIndex(Vector2 coordinate) const {
+    if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= WIDTH || coordinate.y >= HEIGHT) {
+      return 0;
+    }
+    else return coordinate.y * MatrixDimensions::WIDTH + coordinate.x;
+  }
+  inline const unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * MatrixDimensions::WIDTH + x; }
 
 public:
   Matrix() = default;

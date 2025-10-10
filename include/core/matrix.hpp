@@ -9,8 +9,9 @@ namespace MatrixDimensions {
   constexpr unsigned int WIDTH = 12, HEIGHT = 25;
 }
 
-enum class TileState : uint8_t {
-  EMPTY = 0,
+enum class TileState : int8_t {
+	INVALID = -1,
+  EMPTY,
   ACTIVE,
   GHOST,
   GROUND,
@@ -22,13 +23,14 @@ class Matrix
 {
 private:
   std::array<TileState, MatrixDimensions::WIDTH * MatrixDimensions::HEIGHT> m_data;
-  inline constexpr unsigned int computeFlatIndex(Vector2 coordinate) const {
-    if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= WIDTH || coordinate.y >= HEIGHT) {
-      return 0;
-    }
-    else return coordinate.y * MatrixDimensions::WIDTH + coordinate.x;
+
+	// TODO: Add a method to verify coordinates
+  inline constexpr unsigned int computeFlatIndex(Vector2 vec) const {
+    return vec.y * MatrixDimensions::WIDTH + vec.x;
   }
-  inline constexpr unsigned int computeFlatIndex(unsigned int x, unsigned int y) const { return y * MatrixDimensions::WIDTH + x; }
+  inline constexpr unsigned int computeFlatIndex(unsigned int x, unsigned int y) const {
+    return y * MatrixDimensions::WIDTH + x;
+  }
 
 public:
 
@@ -40,11 +42,11 @@ public:
   inline const TileState &operator()(unsigned int x, unsigned int y) const {
     return m_data[computeFlatIndex(x, y)];
   }
-  inline TileState &operator()(Vector2 coordinate) {
-    return m_data[computeFlatIndex(coordinate)];
+  inline TileState &operator()(Vector2 vec) {
+    return m_data[computeFlatIndex(vec)];
   }
-  inline const TileState &operator()(Vector2 coordinate) const {
-    return m_data[computeFlatIndex(coordinate)];
+  inline const TileState &operator()(Vector2 vec) const {
+    return m_data[computeFlatIndex(vec)];
   }
 };
 

@@ -1,7 +1,6 @@
 #ifndef TETROMINO_H
 #define TETROMINO_H
 #include <array>
-#include <map>
 #include <stdint.h>
 #include "util/vector2.hpp"
 #include "util/vector2-operations.hpp"

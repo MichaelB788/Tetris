@@ -5,3 +5,4 @@ out/
 .vs/
 vcpkg_installed/
 .cache/
+*.vim

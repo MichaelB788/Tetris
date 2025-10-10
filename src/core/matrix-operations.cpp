@@ -15,14 +15,14 @@ void MatrixOperation::clear(Matrix& matrix) {
 }
 
 bool MatrixOperation::isRowComplete(Matrix& matrix, unsigned int row) {
-	for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
+	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
 		if (matrix(col, row) == TileState::EMPTY) return false;
 	}
 	return true;
 }
 
 bool MatrixOperation::isRowEmpty(Matrix& matrix, unsigned int row) {
-	for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
+	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
 		if (matrix(col, row) == TileState::GROUND) return false;
 	}
 	return true;
@@ -39,19 +39,19 @@ bool MatrixOperation::canPlace(Tetromino& piece, Matrix& matrix) {
 
 void MatrixOperation::place(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
-    matrix(coordinate) == TileState::ACTIVE;
+    matrix(coordinate) = TileState::ACTIVE;
   }
 }
 
 void MatrixOperation::remove(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
-    matrix(coordinate) == TileState::EMPTY;
+    matrix(coordinate) = TileState::EMPTY;
   }
 }
 
 const std::vector<unsigned int> MatrixOperation::getCompletedRows(Matrix& matrix) {
 	std::vector<unsigned int> completedRows;
-	for (unsigned int row = 0; row < MatrixDimensions::HEIGHT; row++) {
+	for (unsigned int row = 0; row < MatrixDimensions::HEIGHT - 1; row++) {
 		if (MatrixOperation::isRowComplete(matrix, row)) completedRows.push_back(row);
 	}
 	return completedRows;
@@ -60,7 +60,7 @@ const std::vector<unsigned int> MatrixOperation::getCompletedRows(Matrix& matrix
 void MatrixOperation::clearRows(Matrix& matrix, const std::vector<unsigned int>& completedRows) {
   // Empty all of the rows in completed rows
 	for (const auto& row: completedRows) {
-		for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
+		for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
 			matrix(col, row) = TileState::EMPTY;
 		}
 	}
@@ -72,7 +72,7 @@ void MatrixOperation::clearRows(Matrix& matrix, const std::vector<unsigned int>&
 		while (MatrixOperation::isRowEmpty(matrix, nextRow) && nextRow > -1) nextRow--;
 
 		if (nextRow > -1) {
-			for (unsigned int col = 0; col < MatrixDimensions::WIDTH; col++) {
+			for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
 				matrix(col, row) = matrix(col, nextRow);
         matrix(col, nextRow) = TileState::EMPTY;
 			}

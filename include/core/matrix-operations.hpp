@@ -3,6 +3,7 @@
 #include "util/vector2.hpp"
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
+#include <array>
 
 /// @brief Manages the Tetris matrix (playfield) state and operations.
 namespace MatrixOperation {
@@ -15,9 +16,9 @@ namespace MatrixOperation {
 	void clearRow(Matrix& matrix, unsigned int row);
 	void fillRow(Matrix& matrix, TileState tile, unsigned int row);
 
-  bool canPlaceTetromino(Tetromino& piece, Matrix& matrix);
-  void placeTetromino(Tetromino& piece, Matrix& matrix);
-  void removeTetromino(Tetromino& piece, Matrix& matrix);
+  bool canPlaceTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
+  void placeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
+  void removeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
 
 	void dropFloatingRows(Matrix& matrix);
 	void clearCompletedRows(Matrix& matrix);

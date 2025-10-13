@@ -48,23 +48,25 @@ void MatrixOperation::fillRow(Matrix& matrix, TileState tile, unsigned int row) 
 	}
 }
 
-bool MatrixOperation::canPlaceTetromino(Tetromino& piece, Matrix& matrix) {
-  for (auto& coordinate : piece.m_coordinates) {
-    if (matrix(coordinate) == TileState::GROUND || matrix(coordinate) == TileState::WALL) {
+bool MatrixOperation::canPlaceTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+  for (auto& coordinate : coordinates) {
+		if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= MatrixDimensions::WIDTH || coordinate.y >= MatrixDimensions::HEIGHT) {
+			return false;
+		} else if (matrix(coordinate) == TileState::GROUND || matrix(coordinate) == TileState::WALL) {
       return false;
     }
   }
   return true;
 }
 
-void MatrixOperation::placeTetromino(Tetromino& piece, Matrix& matrix) {
-  for (auto& coordinate : piece.m_coordinates) {
+void MatrixOperation::placeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+  for (auto& coordinate : coordinates) {
     matrix(coordinate) = TileState::ACTIVE;
   }
 }
 
-void MatrixOperation::removeTetromino(Tetromino& piece, Matrix& matrix) {
-  for (auto& coordinate : piece.m_coordinates) {
+void MatrixOperation::removeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+  for (auto& coordinate : coordinates) {
     matrix(coordinate) = TileState::EMPTY;
   }
 }

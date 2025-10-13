@@ -50,27 +50,42 @@ TEST_CASE("Tetromino placement, removal, and verification in Matrix", "[MatrixOp
 
 	SECTION("Checking placement of Tetromino in invalid coordinates")
 	{
-		Tetromino badTet = Tetromino(Tetromino::Type::I, Vector2(0, 0));
-		REQUIRE_FALSE(MatrixOperation::canPlaceTetromino(badTet, mat));
+		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(0, 0));
+		REQUIRE_FALSE(MatrixOperation::canPlaceTetromino(tet.m_coordinates, mat));
+	}
+
+	SECTION("Should not be able to place Tetromino out of bounds")
+	{
+		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(-1000, -1000));
+		REQUIRE_FALSE(MatrixOperation::canPlaceTetromino(tet.m_coordinates, mat));
+	}
+
+	SECTION("Should not be able to place Tetromino indexed exactly at MatrixDimensions::WIDTH or MatrixDimensions::HEIGHT")
+	{
+		Tetromino tet = Tetromino(Tetromino::Type::O, Vector2(MatrixDimensions::WIDTH, 5));
+		REQUIRE_FALSE(MatrixOperation::canPlaceTetromino(tet.m_coordinates, mat));
+
+		Tetromino tet2 = Tetromino(Tetromino::Type::O, Vector2(0, MatrixDimensions::HEIGHT));
+		REQUIRE_FALSE(MatrixOperation::canPlaceTetromino(tet.m_coordinates, mat));
 	}
 
 	SECTION("Checking placement of Tetromino in valid coordinates")
 	{
-		Tetromino goodTet = Tetromino(Tetromino::Type::O, Vector2(6, 6));
-		REQUIRE(MatrixOperation::canPlaceTetromino(goodTet, mat));
+		Tetromino tet = Tetromino(Tetromino::Type::O, Vector2(6, 6));
+		REQUIRE(MatrixOperation::canPlaceTetromino(tet.m_coordinates, mat));
 	}
 
 	SECTION("Placing Tetromino I at row 6") 
 	{
 		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(1, 6));
-		MatrixOperation::placeTetromino(tet, mat);
+		MatrixOperation::placeTetromino(tet.m_coordinates, mat);
 		REQUIRE_FALSE(MatrixOperation::rowIsEmpty(mat, 6));
 	}
 
 	SECTION("Removing Tetromino I at row 6")
 	{
 		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(1, 6));
-		MatrixOperation::removeTetromino(tet, mat);
+		MatrixOperation::removeTetromino(tet.m_coordinates, mat);
 		REQUIRE(MatrixOperation::rowIsEmpty(mat, 6));
 	}
 }

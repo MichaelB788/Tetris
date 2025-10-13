@@ -13,6 +13,7 @@ enum class Direction : uint8_t {
   NONE,
   RIGHT,
   LEFT,
+	UP,
   DOWN
 };
 

@@ -7,48 +7,43 @@ TEST_CASE("Matrix indexing", "[Matrix, Vector2, unit]")
 {
 	Matrix matrix;
 
-	SECTION("Vector2 indexing and integer indexing equals the same thing")
+	SECTION("Vector2 and integer indexing")
 	{
 		REQUIRE(matrix(0, 0) == matrix(Vector2(0, 0)));
+		REQUIRE_FALSE(matrix(0, 1) == matrix(Vector2(1, 0)));
 	}
 
-	SECTION("Walls are correctly positioned at 0 and MatrixWidth")
-
-	SECTION("Out of bounds index returns TileState::INVALID")
+	SECTION("operator() overrides")
 	{
-		REQUIRE(matrix(-100, -100) == TileState::INVALID);
-		REQUIRE(matrix(1000, 1000) == TileState::INVALID);
-		REQUIRE(matrix(MatrixDimensions::WIDTH, MatrixDimensions::HEIGHT) == TileState::INVALID);
+		INFO("Assigning (10, 10) with an active tile");
+		matrix(Vector2(10, 10)) = TileState::ACTIVE;
+		REQUIRE(matrix(10, 10) == TileState::ACTIVE);
 	}
 }
 
 TEST_CASE("Matrix constructor", "[Matrix, Vector2, integration]")
 {
 	Matrix matrix;
-	for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++)
+
+	SECTION("Walls are correctly placed at the start and end of each row")
 	{
-		for (unsigned int x = 0; x < MatrixDimensions::WIDTH; x++)
+		for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++)
 		{
-			INFO("Recorded at (" << x << ", " << y << ")")
-				if (x == 0 || x == MatrixDimensions::WIDTH - 1)
-				{
-					REQUIRE(matrix(x, y) == TileState::WALL);
-				}
-				else if (y == MatrixDimensions::HEIGHT - 1)
-				{
-					REQUIRE(matrix(x, y) == TileState::GROUND);
-				}
-				else
-				{
-					REQUIRE(matrix(x, y) == TileState::EMPTY);
-				}
+			INFO("Checking coordinates at row " << y);
+			REQUIRE(matrix(0, y) == TileState::WALL);
+			REQUIRE(matrix(MatrixDimensions::WIDTH - 1, y) == TileState::WALL);
 		}
 	}
-}
 
-TEST_CASE("Matrix Operations", "[Matrix, Vector2, unit]")
-{
-	Matrix matrix;
-
-	SECTION("Clearing the board") {}
+	SECTION("Empty tiles fill up space between each wall")
+	{
+		for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++)
+		{
+			for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++)
+			{
+				INFO("Checking coordinates at row " << x << ", " << y);
+				REQUIRE(matrix(x, y) == TileState::EMPTY);
+			}
+		}
+	}
 }

@@ -1,12 +1,12 @@
 #include "core/matrix-operations.hpp"
+#include "core/matrix.hpp"
+#include <vector>
 
 void MatrixOperation::clear(Matrix& matrix) {
   for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
     for (unsigned int x = 0; x < MatrixDimensions::WIDTH; x++) {
       if (x == 0 || x == MatrixDimensions::WIDTH - 1) {
         matrix(x, y) = TileState::WALL;
-      } else if (y == MatrixDimensions::HEIGHT - 1) {
-        matrix(x, y) = TileState::GROUND;
       } else {
         matrix(x, y) = TileState::EMPTY;
       }
@@ -14,21 +14,41 @@ void MatrixOperation::clear(Matrix& matrix) {
   }
 }
 
-bool MatrixOperation::isRowComplete(Matrix& matrix, unsigned int row) {
+bool MatrixOperation::rowIsComplete(Matrix& matrix, unsigned int row) {
 	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
-		if (matrix(col, row) == TileState::EMPTY) return false;
+		if (matrix(col, row) != TileState::GROUND) return false;
 	}
 	return true;
 }
 
-bool MatrixOperation::isRowEmpty(Matrix& matrix, unsigned int row) {
+bool MatrixOperation::rowIsPopulated(Matrix& matrix, unsigned int row) {
+	unsigned int populatedTiles = 0;
 	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
-		if (matrix(col, row) == TileState::GROUND) return false;
+		if (matrix(col, row) == TileState::GROUND) populatedTiles++;
+	}
+	return populatedTiles > 0 && populatedTiles < 10;
+}
+
+bool MatrixOperation::rowIsEmpty(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+		if (matrix(col, row) != TileState::EMPTY) return false;
 	}
 	return true;
 }
 
-bool MatrixOperation::canPlace(Tetromino& piece, Matrix& matrix) {
+void MatrixOperation::clearRow(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+		matrix(col, row) = TileState::EMPTY;
+	}
+}
+
+void MatrixOperation::fillRow(Matrix& matrix, TileState tile, unsigned int row) {
+	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+		matrix(col, row) = tile;
+	}
+}
+
+bool MatrixOperation::canPlaceTetromino(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     if (matrix(coordinate) == TileState::GROUND || matrix(coordinate) == TileState::WALL) {
       return false;
@@ -37,48 +57,46 @@ bool MatrixOperation::canPlace(Tetromino& piece, Matrix& matrix) {
   return true;
 }
 
-void MatrixOperation::place(Tetromino& piece, Matrix& matrix) {
+void MatrixOperation::placeTetromino(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     matrix(coordinate) = TileState::ACTIVE;
   }
 }
 
-void MatrixOperation::remove(Tetromino& piece, Matrix& matrix) {
+void MatrixOperation::removeTetromino(Tetromino& piece, Matrix& matrix) {
   for (auto& coordinate : piece.m_coordinates) {
     matrix(coordinate) = TileState::EMPTY;
   }
 }
 
-const std::vector<unsigned int> MatrixOperation::getCompletedRows(Matrix& matrix) {
-	std::vector<unsigned int> completedRows;
-	for (unsigned int row = 0; row < MatrixDimensions::HEIGHT - 1; row++) {
-		if (MatrixOperation::isRowComplete(matrix, row)) completedRows.push_back(row);
-	}
-	return completedRows;
-}
+void MatrixOperation::dropFloatingRows(Matrix& matrix) {
+	for (unsigned int emptyRow = MatrixDimensions::HEIGHT - 1; emptyRow > 0; emptyRow--) {
+		if (rowIsEmpty(matrix, emptyRow)) {
+			int nextRow = emptyRow - 1;
 
-void MatrixOperation::clearRows(Matrix& matrix, const std::vector<unsigned int>& completedRows) {
-  // Empty all of the rows in completed rows
-	for (const auto& row: completedRows) {
-		for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
-			matrix(col, row) = TileState::EMPTY;
-		}
-	}
+			while (nextRow > -1) {
+				if (rowIsEmpty(matrix, nextRow)) nextRow--;
+				else break;
+			}
 
-  // Bring down populated rows that were above completed rows (which are empty rows at this point)
-  // NOTE: We start at the end of completedRows because we want to fix the rows of the board starting from the bottom
-	for (unsigned int row = completedRows.back(); row > 0; row--) {
-		int nextRow = row - 1;
-		while (MatrixOperation::isRowEmpty(matrix, nextRow) && nextRow > -1) nextRow--;
-
-		if (nextRow > -1) {
-			for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
-				matrix(col, row) = matrix(col, nextRow);
-        matrix(col, nextRow) = TileState::EMPTY;
+			if (nextRow > -1) {
+				for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++) {
+					matrix(x, emptyRow) = matrix(x, nextRow);
+					matrix(x, nextRow) = TileState::EMPTY;
+				}
+			} else {
+				break;
 			}
 		}
-		else {
-      break;
-    }
+	}
+}
+
+void MatrixOperation::clearCompletedRows(Matrix& matrix) {
+	for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
+		if (rowIsComplete(matrix, y)) {
+			for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++) {
+				matrix(x, y) = TileState::EMPTY;
+			}
+		}
 	}
 }

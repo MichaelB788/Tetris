@@ -7,8 +7,8 @@
 #include "core/tetromino.hpp"
 
 namespace TetrominoOperation {
-  void rotate(Tetromino& piece);
   void move(Tetromino& piece, Direction dir);
+  void rotate(Tetromino& piece);
   Tetromino::Type generateRandomType();
 }
 

@@ -3,7 +3,6 @@
 #include <array>
 #include <stdint.h>
 #include "util/vector2.hpp"
-#include "util/vector2-operations.hpp"
 
 /// @brief A piece of a certain type. Contains information regarding it's shape.
 struct Tetromino {

@@ -4,36 +4,26 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
-#include "../../Game/Objects/Piece.hpp"
-#include "Text.hpp"
 
-/* Handles the visuals.
- *
- * Draws the board to the left and game stats to
- * the right of the window. 
- * */
+struct Text
+{
+	// render text at x, y, setting w, h
+	// render the score
+};
+
+namespace Draw
+{
+	// Tile size constant
+	// set color
+	// draw the board
+	// draw a tile
+	// draw next and stored pieces
+	// draw text
+};
+
 struct Graphics
 {
-    // Constructor
-    Graphics(SDL_Renderer* ren, TTF_Font* font,
-             Piece& piece, unsigned int points);
-
-    // Method
-    void clearAndPresentFrame();
-
-private:
-    // Members
-    SDL_Renderer* m_renderer;
-
-    SDL_Color m_textColor = { 255, 255, 255, 255 };
-
-    Text m_points;
-
-    Text m_nextmsg;
-
-    Text m_storedmsg;
-        
-    Piece& m_piece;
+	// draw frames
 };
 
 #endif

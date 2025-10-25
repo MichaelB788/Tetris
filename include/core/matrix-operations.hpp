@@ -6,7 +6,7 @@
 #include <array>
 
 /// @brief Manages the Tetris matrix (playfield) state and operations.
-namespace MatrixOperation {
+namespace matrix_operation {
 	void clear(Matrix& matrix);
 
 	bool rowIsComplete(Matrix& matrix, unsigned int row);

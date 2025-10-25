@@ -1,5 +1,6 @@
 #include <iostream> // for testing
 #include "app/tetris.hpp"
+#include "core/event-handler.hpp"
 
 bool Tetris::initSDL()
 {
@@ -39,16 +40,21 @@ Tetris::Tetris()
   initSDL();
 
   // Initialize game assets
-  Tetromino piece = Tetromino(TetrominoOperation::generateRandomType(), Vector2(5, 5));
+  Tetromino piece = Tetromino(tetromino_operation::generateRandomType(), Vector2(5, 5));
   std::cout << "Hello World! I have a " << static_cast<unsigned int>(piece.m_type) << std::endl;
   Matrix playfield;
 
   // Game loop
-  SDL_Event e;
+  SDL_Event event;
   bool quit = false;
   while (quit == false) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) quit = true;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+				quit = true
+			}
+			else if (event.type == SDL_KEYDOWN) {
+				event_handler::handle(event, piece, playfield);
+			}
     }
   }
 

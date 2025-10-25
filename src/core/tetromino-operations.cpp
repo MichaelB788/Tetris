@@ -1,6 +1,6 @@
 #include "core/tetromino-operations.hpp"
 
-void TetrominoOperation::rotate(Tetromino& piece) {
+void tetromino_operation::rotate(Tetromino& piece) {
 	if (piece.m_type != Tetromino::Type::O) {
 		// NOTE: The pivot should ALWAYS be the first Vector2. See the Tetromino constructor.
 		constexpr unsigned int PIVOT_INDEX = 0;
@@ -22,7 +22,7 @@ void TetrominoOperation::rotate(Tetromino& piece) {
 	}
 }
 
-void TetrominoOperation::move(Tetromino& piece, Direction dir) {
+void tetromino_operation::move(Tetromino& piece, Direction dir) {
   for (auto &tile : piece.m_coordinates) {
     switch (dir) {
     case Direction::RIGHT:
@@ -43,7 +43,7 @@ void TetrominoOperation::move(Tetromino& piece, Direction dir) {
   }
 }
 
-Tetromino::Type TetrominoOperation::generateRandomType() {
+Tetromino::Type tetromino_operation::generateRandomType() {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> distrib(0, 6);

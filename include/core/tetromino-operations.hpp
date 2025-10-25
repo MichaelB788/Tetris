@@ -6,7 +6,7 @@
 #include "util/game-constants.hpp"
 #include "core/tetromino.hpp"
 
-namespace TetrominoOperation {
+namespace tetromino_operation {
   void move(Tetromino& piece, Direction dir);
   void rotate(Tetromino& piece);
   Tetromino::Type generateRandomType();

@@ -7,6 +7,7 @@
 #include "core/tetromino.hpp"
 #include "core/matrix-operations.hpp"
 #include "core/tetromino-operations.hpp"
+#include "core/event-handler.hpp"
 
 class Tetris {
 private:

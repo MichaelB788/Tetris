@@ -1,40 +1,50 @@
-#include "EventHandler.hpp"
+#include "core/event-handler.hpp"
 
-#include <SDL2/SDL.h>
-#include "Commands/Command.hpp"
-#include "Commands/Move.hpp"
-#include "Commands/Rotate.hpp"
-#include "Commands/Drop.hpp"
-#include "Commands/Store.hpp"
-
-void EventHandler::processInput(SDL_Event event)
+void event_handler::handle(SDL_Event& event, Tetromino& actor, Matrix& matrix)
 {
-    if (event.type == SDL_KEYDOWN)
-    {
-        Command* command = keydown(event);
-        if (command) command->execute();
-        delete command;
-    }
+	switch (event.key.keysym.sym)
+	{
+		// handle input
+		case SDLK_LEFT:
+		case SDLK_RIGHT:
+		case SDLK_DOWN:
+		case SDLK_UP:
+		case SDLK_s:
+		case SDLK_SPACE:
+		default:
+			break;
+	}
 }
 
-Command* EventHandler::keydown(SDL_Event event)
-{
-    // Handle event.key.keysym.sym on key down
-    switch (event.key.keysym.sym)
-    {
-        case SDLK_LEFT:
-            return new MoveCommand(p_piece, LEFT);
-        case SDLK_RIGHT:
-            return new MoveCommand(p_piece, RIGHT);
-        case SDLK_DOWN:
-            return new MoveCommand(p_piece, DOWN);
-        case SDLK_UP:
-            return new RotateCommand(p_piece);
-        case SDLK_s:
-            return new StoreCommand(p_piece);
-        case SDLK_SPACE:
-            return new DropCommand(p_piece);
-        default:
-            return NULL;
-    }
+void event_handler::command::move(Tetromino& actor, Direction dir, Matrix& scene) {
+	std::array<Vector2, 4> previousCoordinates = actor.m_coordinates;
+	tetromino_operation::move(actor, dir);
+
+	if (matrix_operation::canPlaceTetromino(actor.m_coordinates, scene)) {
+		matrix_operation::removeTetromino(previousCoordinates, scene);
+		matrix_operation::placeTetromino(actor.m_coordinates, scene);
+	} else {
+		actor.m_coordinates = previousCoordinates;
+	}
+}
+
+void event_handler::command::rotate(Tetromino& actor, Matrix& scene) {
+	std::array<Vector2, 4> previousCoordinates = actor.m_coordinates;
+	tetromino_operation::rotate(actor);
+
+	// TODO: Implement RSS and come back to this
+	if (matrix_operation::canPlaceTetromino(actor.m_coordinates, scene)) {
+		matrix_operation::removeTetromino(previousCoordinates, scene);
+		matrix_operation::placeTetromino(actor.m_coordinates, scene);
+	} else {
+		actor.m_coordinates = previousCoordinates;
+	}
+}
+
+void event_handler::command::drop(Tetromino& actor, Matrix& scene) {
+	while (matrix_operation::canPlaceTetromino(actor.m_coordinates, scene)) {
+		tetromino_operation::move(actor, Direction::DOWN);
+	}
+	tetromino_operation::move(actor, Direction::UP);
+	matrix_operation::placeTetromino(actor.m_coordinates, scene);
 }

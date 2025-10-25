@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "util/vector2.hpp"
 
-namespace MatrixDimensions {
+namespace matrix_dimensions {
   constexpr unsigned int WIDTH = 12;
 	constexpr unsigned int HEIGHT = 24;
 }
@@ -21,13 +21,13 @@ enum class TileState : int8_t {
 class Matrix
 {
 private:
-  std::array<TileState, MatrixDimensions::WIDTH * MatrixDimensions::HEIGHT> m_data;
+  std::array<TileState, matrix_dimensions::WIDTH * matrix_dimensions::HEIGHT> m_data;
 
   inline constexpr unsigned int computeFlatIndex(Vector2 vec) const {
-    return vec.y * MatrixDimensions::WIDTH + vec.x;
+    return vec.y * matrix_dimensions::WIDTH + vec.x;
   }
   inline constexpr unsigned int computeFlatIndex(unsigned int x, unsigned int y) const {
-    return y * MatrixDimensions::WIDTH + x;
+    return y * matrix_dimensions::WIDTH + x;
   }
 public:
   Matrix();

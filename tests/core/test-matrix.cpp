@@ -27,19 +27,19 @@ TEST_CASE("Matrix constructor", "[Matrix, Vector2, integration]")
 
 	SECTION("Walls are correctly placed at the start and end of each row")
 	{
-		for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++)
+		for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++)
 		{
 			INFO("Checking coordinates at row " << y);
 			REQUIRE(matrix(0, y) == TileState::WALL);
-			REQUIRE(matrix(MatrixDimensions::WIDTH - 1, y) == TileState::WALL);
+			REQUIRE(matrix(matrix_dimensions::WIDTH - 1, y) == TileState::WALL);
 		}
 	}
 
 	SECTION("Empty tiles fill up space between each wall")
 	{
-		for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++)
+		for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++)
 		{
-			for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++)
+			for (unsigned int x = 1; x < matrix_dimensions::WIDTH - 1; x++)
 			{
 				INFO("Checking coordinates at row " << x << ", " << y);
 				REQUIRE(matrix(x, y) == TileState::EMPTY);

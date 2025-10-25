@@ -2,10 +2,10 @@
 #include "core/matrix.hpp"
 #include <vector>
 
-void MatrixOperation::clear(Matrix& matrix) {
-  for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
-    for (unsigned int x = 0; x < MatrixDimensions::WIDTH; x++) {
-      if (x == 0 || x == MatrixDimensions::WIDTH - 1) {
+void matrix_operation::clear(Matrix& matrix) {
+  for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++) {
+    for (unsigned int x = 0; x < matrix_dimensions::WIDTH; x++) {
+      if (x == 0 || x == matrix_dimensions::WIDTH - 1) {
         matrix(x, y) = TileState::WALL;
       } else {
         matrix(x, y) = TileState::EMPTY;
@@ -14,43 +14,43 @@ void MatrixOperation::clear(Matrix& matrix) {
   }
 }
 
-bool MatrixOperation::rowIsComplete(Matrix& matrix, unsigned int row) {
-	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+bool matrix_operation::rowIsComplete(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 1; col < matrix_dimensions::WIDTH - 1; col++) {
 		if (matrix(col, row) != TileState::GROUND) return false;
 	}
 	return true;
 }
 
-bool MatrixOperation::rowIsPopulated(Matrix& matrix, unsigned int row) {
+bool matrix_operation::rowIsPopulated(Matrix& matrix, unsigned int row) {
 	unsigned int populatedTiles = 0;
-	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+	for (unsigned int col = 1; col < matrix_dimensions::WIDTH - 1; col++) {
 		if (matrix(col, row) == TileState::GROUND) populatedTiles++;
 	}
 	return populatedTiles > 0 && populatedTiles < 10;
 }
 
-bool MatrixOperation::rowIsEmpty(Matrix& matrix, unsigned int row) {
-	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+bool matrix_operation::rowIsEmpty(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 1; col < matrix_dimensions::WIDTH - 1; col++) {
 		if (matrix(col, row) != TileState::EMPTY) return false;
 	}
 	return true;
 }
 
-void MatrixOperation::clearRow(Matrix& matrix, unsigned int row) {
-	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+void matrix_operation::clearRow(Matrix& matrix, unsigned int row) {
+	for (unsigned int col = 1; col < matrix_dimensions::WIDTH - 1; col++) {
 		matrix(col, row) = TileState::EMPTY;
 	}
 }
 
-void MatrixOperation::fillRow(Matrix& matrix, TileState tile, unsigned int row) {
-	for (unsigned int col = 1; col < MatrixDimensions::WIDTH - 1; col++) {
+void matrix_operation::fillRow(Matrix& matrix, TileState tile, unsigned int row) {
+	for (unsigned int col = 1; col < matrix_dimensions::WIDTH - 1; col++) {
 		matrix(col, row) = tile;
 	}
 }
 
-bool MatrixOperation::canPlaceTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+bool matrix_operation::canPlaceTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
   for (auto& coordinate : coordinates) {
-		if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= MatrixDimensions::WIDTH || coordinate.y >= MatrixDimensions::HEIGHT) {
+		if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= matrix_dimensions::WIDTH || coordinate.y >= matrix_dimensions::HEIGHT) {
 			return false;
 		} else if (matrix(coordinate) == TileState::GROUND || matrix(coordinate) == TileState::WALL) {
       return false;
@@ -59,20 +59,20 @@ bool MatrixOperation::canPlaceTetromino(std::array<Vector2, 4>& coordinates, Mat
   return true;
 }
 
-void MatrixOperation::placeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+void matrix_operation::placeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
   for (auto& coordinate : coordinates) {
     matrix(coordinate) = TileState::ACTIVE;
   }
 }
 
-void MatrixOperation::removeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
+void matrix_operation::removeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix) {
   for (auto& coordinate : coordinates) {
     matrix(coordinate) = TileState::EMPTY;
   }
 }
 
-void MatrixOperation::dropFloatingRows(Matrix& matrix) {
-	for (unsigned int emptyRow = MatrixDimensions::HEIGHT - 1; emptyRow > 0; emptyRow--) {
+void matrix_operation::dropFloatingRows(Matrix& matrix) {
+	for (unsigned int emptyRow = matrix_dimensions::HEIGHT - 1; emptyRow > 0; emptyRow--) {
 		if (rowIsEmpty(matrix, emptyRow)) {
 			int nextRow = emptyRow - 1;
 
@@ -82,7 +82,7 @@ void MatrixOperation::dropFloatingRows(Matrix& matrix) {
 			}
 
 			if (nextRow > -1) {
-				for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++) {
+				for (unsigned int x = 1; x < matrix_dimensions::WIDTH - 1; x++) {
 					matrix(x, emptyRow) = matrix(x, nextRow);
 					matrix(x, nextRow) = TileState::EMPTY;
 				}
@@ -93,10 +93,10 @@ void MatrixOperation::dropFloatingRows(Matrix& matrix) {
 	}
 }
 
-void MatrixOperation::clearCompletedRows(Matrix& matrix) {
-	for (unsigned int y = 0; y < MatrixDimensions::HEIGHT; y++) {
+void matrix_operation::clearCompletedRows(Matrix& matrix) {
+	for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++) {
 		if (rowIsComplete(matrix, y)) {
-			for (unsigned int x = 1; x < MatrixDimensions::WIDTH - 1; x++) {
+			for (unsigned int x = 1; x < matrix_dimensions::WIDTH - 1; x++) {
 				matrix(x, y) = TileState::EMPTY;
 			}
 		}

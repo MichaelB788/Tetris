@@ -1,7 +1,7 @@
 set(CORE_TEST_SOURCES
 	test-matrix.cpp
   test-matrix-operations.cpp
-	test-tetromino-operations.cpp
+	test-tetromino.cpp
 )
 
 set(EXECUTABLE_NAME "core-tests")

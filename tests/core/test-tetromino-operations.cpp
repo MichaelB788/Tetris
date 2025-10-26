@@ -7,46 +7,46 @@
 
 TEST_CASE("Moving Tetromino", "[tetromino_operation, unit]") {
 	SECTION("Moving an I piece LEFT") {
-		Tetromino I = Tetromino(Tetromino::Type::I, Vector2(0, 0));
-		std::array<Vector2, 4> before = I.m_coordinates;
+		Tetromino I = Tetromino(TetrominoType::I, Vector2(0, 0));
+		std::array<Vector2, 4> before = I.coordinates();
 
-		tetromino_operation::move(I, Direction::LEFT);
+		I.moveLeft();
 		for (unsigned int i = 0; i < 4; i++) {
-			REQUIRE(I.m_coordinates[i].x == before[i].x - 1);
-			REQUIRE(I.m_coordinates[i].y == before[i].y);
+			REQUIRE(I.coordinates()[i].x == before[i].x - 1);
+			REQUIRE(I.coordinates()[i].y == before[i].y);
 		}
 	}
 	SECTION("Moving an I piece RIGHT") {
-		Tetromino I = Tetromino(Tetromino::Type::I, Vector2(0, 0));
-		std::array<Vector2, 4> before = I.m_coordinates;
+		Tetromino I = Tetromino(TetrominoType::I, Vector2(0, 0));
+		std::array<Vector2, 4> before = I.coordinates();
 
-		tetromino_operation::move(I, Direction::RIGHT);
+		I.moveRight();
 		for (unsigned int i = 0; i < 4; i++) {
-			REQUIRE(I.m_coordinates[i].x == before[i].x + 1);
-			REQUIRE(I.m_coordinates[i].y == before[i].y);
+			REQUIRE(I.coordinates()[i].x == before[i].x + 1);
+			REQUIRE(I.coordinates()[i].y == before[i].y);
 		}
 	}
 	SECTION("Moving an I piece DOWN") {
-		Tetromino I = Tetromino(Tetromino::Type::I, Vector2(0, 0));
-		std::array<Vector2, 4> before = I.m_coordinates;
+		Tetromino I = Tetromino(TetrominoType::I, Vector2(0, 0));
+		std::array<Vector2, 4> before = I.coordinates();
 
-		tetromino_operation::move(I, Direction::DOWN);
+		I.moveDown();
 		for (unsigned int i = 0; i < 4; i++) {
-			REQUIRE(I.m_coordinates[i].x == before[i].x);
-			REQUIRE(I.m_coordinates[i].y == before[i].y + 1);
+			REQUIRE(I.coordinates()[i].x == before[i].x);
+			REQUIRE(I.coordinates()[i].y == before[i].y + 1);
 		}
 	}
 }
 
 TEST_CASE("Rotating a Tetromino 90 Degrees Counterclockwise", "[tetromino_operation, unit]") {
 	SECTION("Rotating an O piece should not be possible") {
-		Tetromino O = Tetromino(Tetromino::Type::O, Vector2(0, 0));
-		std::array<Vector2, 4> before = O.m_coordinates;
+		Tetromino O = Tetromino(TetrominoType::O, Vector2(0, 0));
+		std::array<Vector2, 4> before = O.coordinates();
 
-		tetromino_operation::rotate(O);
+		O.rotateClockwise();
 		for (unsigned int i = 0; i < 4; i++) {
-			REQUIRE(O.m_coordinates[i].x == before[i].x);
-			REQUIRE(O.m_coordinates[i].y == before[i].y);
+			REQUIRE(O.coordinates()[i].x == before[i].x);
+			REQUIRE(O.coordinates()[i].y == before[i].y);
 		}
 	}
 }

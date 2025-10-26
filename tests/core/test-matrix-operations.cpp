@@ -50,42 +50,42 @@ TEST_CASE("Tetromino placement, removal, and verification in Matrix", "[matrix_o
 
 	SECTION("Checking placement of Tetromino in invalid coordinates")
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(0, 0));
-		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.m_coordinates, mat));
+		Tetromino tet = Tetromino(TetrominoType::I, Vector2(0, 0));
+		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.coordinates(), mat));
 	}
 
 	SECTION("Should not be able to place Tetromino out of bounds")
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(-1000, -1000));
-		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.m_coordinates, mat));
+		Tetromino tet = Tetromino(TetrominoType::I, Vector2(-1000, -1000));
+		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.coordinates(), mat));
 	}
 
 	SECTION("Should not be able to place Tetromino indexed exactly at matrix_dimensions::WIDTH or matrix_dimensions::HEIGHT")
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::O, Vector2(matrix_dimensions::WIDTH, 5));
-		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.m_coordinates, mat));
+		Tetromino tet = Tetromino(TetrominoType::O, Vector2(matrix_dimensions::WIDTH, 5));
+		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.coordinates(), mat));
 
-		Tetromino tet2 = Tetromino(Tetromino::Type::O, Vector2(0, matrix_dimensions::HEIGHT));
-		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.m_coordinates, mat));
+		Tetromino tet2 = Tetromino(TetrominoType::O, Vector2(0, matrix_dimensions::HEIGHT));
+		REQUIRE_FALSE(matrix_operation::canPlaceTetromino(tet.coordinates(), mat));
 	}
 
 	SECTION("Checking placement of Tetromino in valid coordinates")
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::O, Vector2(6, 6));
-		REQUIRE(matrix_operation::canPlaceTetromino(tet.m_coordinates, mat));
+		Tetromino tet = Tetromino(TetrominoType::O, Vector2(6, 6));
+		REQUIRE(matrix_operation::canPlaceTetromino(tet.coordinates(), mat));
 	}
 
 	SECTION("Placing Tetromino I at row 6") 
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(1, 6));
-		matrix_operation::placeTetromino(tet.m_coordinates, mat);
+		Tetromino tet = Tetromino(TetrominoType::I, Vector2(1, 6));
+		matrix_operation::placeTetromino(tet.coordinates(), mat);
 		REQUIRE_FALSE(matrix_operation::rowIsEmpty(mat, 6));
 	}
 
 	SECTION("Removing Tetromino I at row 6")
 	{
-		Tetromino tet = Tetromino(Tetromino::Type::I, Vector2(1, 6));
-		matrix_operation::removeTetromino(tet.m_coordinates, mat);
+		Tetromino tet = Tetromino(TetrominoType::I, Vector2(1, 6));
+		matrix_operation::removeTetromino(tet.coordinates(), mat);
 		REQUIRE(matrix_operation::rowIsEmpty(mat, 6));
 	}
 }

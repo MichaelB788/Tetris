@@ -3,8 +3,7 @@
 #include <array>
 #include <stdint.h>
 #include "util/vector2.hpp"
-
-enum class TetrominoType : uint8_t { I, O, T, Z, S, J, L };
+#include "core/tile-state.hpp"
 
 /// @brief Holds data about the Tetromino's position and type, and can manipulate this data through movement and rotation.
 class Tetromino {

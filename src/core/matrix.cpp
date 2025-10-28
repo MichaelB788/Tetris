@@ -1,6 +1,4 @@
 #include "core/matrix.hpp"
-#include "util/game-constants.hpp"
-#include <array>
 
 constexpr Matrix::Matrix() {
   for (int i = 0; i < m_data.size(); i++) {
@@ -21,6 +19,10 @@ void Matrix::set(unsigned int x, unsigned int y, TetrominoType type) {
 	m_data[y * WIDTH + x].occupy(type); 
 }
 
+void Matrix::set(unsigned int x, unsigned int y, MatrixTile type) {
+	m_data[y * WIDTH + x] = type; 
+}
+
 void Matrix::clearMatrix() {
   for (int i = 0; i < m_data.size(); i++) {
 		if ( i % WIDTH > 0 && i % WIDTH < WIDTH - 1 )
@@ -28,18 +30,22 @@ void Matrix::clearMatrix() {
   }
 }
 
-void clearAndDropCompletedRows();
+void Matrix::clearAndDropCompletedRows() {
+	clearRows();
+	dropRows(getPopulatedRows());
+};
 
-void Matrix::placeTetromino(Tetromino& actor) {
+bool Matrix::placeTetromino(Tetromino& actor) {
 	bool success = true;
 	for (const auto& c : actor.coordinates()) {
-		if (!isWithinBounds(c)) success = false;
+		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) success = false;
 	}
 	if (success) {
 		for (const auto& c : actor.coordinates()) {
 			set(c.x, c.y, actor.type());
 		}
 	}
+	return success;
 }
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
@@ -64,23 +70,41 @@ constexpr bool Matrix::isRowPopulated(unsigned int row) const {
 }
 
 void Matrix::clearRow(unsigned int row) {
-	for (unsigned int col = 1; col < WIDTH - 1; col++) {
+	for (unsigned int col = 1; col < WIDTH - 1; col++)
 		get(col, row).clear();
-	}
 }
 
-void Matrix::fillRow(MatrixTile tile, unsigned int row, TetrominoType type) {
-	for (unsigned int col = 1; col < WIDTH - 1; col++) {
+void Matrix::fillRow(unsigned int row, TetrominoType type) {
+	for (unsigned int col = 1; col < WIDTH - 1; col++)
 		set(col, row, type);
+}
+
+void Matrix::replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow) {
+	for (unsigned int col = 1; col < WIDTH - 1; col++) {
+		set(col, replacedRow, get(col, clearedRow));
+		get(col, clearedRow).clear();
 	}
 }
 
 void Matrix::clearRows() {
-	for (unsigned int y = 0; y < HEIGHT; y++) {
-		if (isRowComplete(y)) {
-			for (unsigned int x = 1; x < WIDTH - 1; x++) {
-				get(x, y).clear();
-			}
+	for (unsigned int row = 0; row < HEIGHT; row++)
+		if (isRowComplete(row)) clearRow(row);
+}
+
+constexpr std::array<bool, Matrix::HEIGHT> Matrix::getPopulatedRows() const {
+	std::array<bool, HEIGHT> populatedRows;
+	for (unsigned int row = HEIGHT - 1; row >= 0; row--) {
+		populatedRows.at(row) = ( isRowPopulated(row) ) ? true : false;
+	}
+	return populatedRows;
+}
+
+void Matrix::dropRows(const std::array<bool, HEIGHT>& rows) {
+	for (unsigned int i = 0; i < HEIGHT - 1; i++) {
+		if (rows.at(i) == 0) {
+			unsigned int j = 0;
+			while (rows.at(j) == 0 && j < HEIGHT) j++; 
+			if (j < HEIGHT) replaceAndClearRow(i, j);
 		}
 	}
 }

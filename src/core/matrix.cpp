@@ -47,6 +47,9 @@ bool Matrix::placeTetromino(Tetromino& actor) {
 	}
 	return success;
 }
+constexpr bool Matrix::isWithinBounds(const Vector2& coordinate) const {
+	return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < m_data.size() && coordinate.y < m_data.size();
+};
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
 	for (unsigned int x = 1; x < WIDTH - 1; x++) {

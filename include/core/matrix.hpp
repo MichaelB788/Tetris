@@ -23,9 +23,7 @@ public:
 	bool placeTetromino(Tetromino& actor);
 
 protected:
-	inline constexpr bool isWithinBounds(const Vector2& coordinate) const {
-		return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < m_data.size() && coordinate.y < m_data.size();
-	};
+	constexpr bool isWithinBounds(const Vector2& coordinate) const;
 	constexpr bool isRowComplete(unsigned int row) const;
 	constexpr bool isRowEmpty(unsigned int row) const;
 	constexpr bool isRowPopulated(unsigned int row) const;
@@ -40,10 +38,6 @@ protected:
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
-
-#ifdef DEBUG
-	friend test_matrix
-#endif
 };
 
 #endif

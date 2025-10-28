@@ -1,5 +1,9 @@
-#include <iostream> // for testing
 #include "app/tetris.hpp"
+
+enum Screen {
+  WIDTH = 600,
+  HEIGHT = 600
+};
 
 bool Tetris::initSDL()
 {

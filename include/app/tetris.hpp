@@ -1,13 +1,9 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 #include <SDL2/SDL.h>
-#include <array>
-#include "util/vector2.hpp"
-#include "util/game-constants.hpp"
 #include "core/tetromino.hpp"
-#include "core/matrix-operations.hpp"
+#include "core/matrix.hpp"
 #include "core/tetromino-operations.hpp"
-#include "core/event-handler.hpp"
 
 class Tetris {
 private:

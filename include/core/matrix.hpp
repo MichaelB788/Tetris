@@ -11,25 +11,26 @@ public:
 	static constexpr unsigned int WIDTH = 12;
 	static constexpr unsigned int HEIGHT = 24;
 
-	constexpr Matrix();
+	Matrix();
 
 	MatrixTile& get(unsigned int x, unsigned int y);
 	const MatrixTile& get(unsigned int x, unsigned int y) const;
-	void set(unsigned int x, unsigned int y, TetrominoType type);
-	void set(unsigned int x, unsigned int y, MatrixTile type);
 
 	void clearMatrix();
 	void clearAndDropCompletedRows();
 	bool placeTetromino(Tetromino& actor);
 
 protected:
+	void occupy(unsigned int x, unsigned int y, TetrominoType type);
+	void set(unsigned int x, unsigned int y, MatrixTile type);
+
 	constexpr bool isWithinBounds(const Vector2& coordinate) const;
 	constexpr bool isRowComplete(unsigned int row) const;
 	constexpr bool isRowEmpty(unsigned int row) const;
 	constexpr bool isRowPopulated(unsigned int row) const;
 
 	void clearRow(unsigned int row);
-	void fillRow(unsigned int row, TetrominoType type);
+	void fillRow(unsigned int row, MatrixTile tile);
 	void replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow);
 	void clearRows();
 

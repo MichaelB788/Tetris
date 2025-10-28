@@ -1,6 +1,6 @@
 #include "core/matrix.hpp"
 
-constexpr Matrix::Matrix() {
+Matrix::Matrix() {
   for (int i = 0; i < m_data.size(); i++) {
 		m_data[i] = ( i % WIDTH == 0 || i % WIDTH == WIDTH - 1 ) ?
 			MatrixTile(TileState::WALL) : MatrixTile(TileState::EMPTY);
@@ -15,7 +15,7 @@ const MatrixTile& Matrix::get(unsigned int x, unsigned int y) const {
 	return m_data[y * WIDTH + x];
 }
 
-void Matrix::set(unsigned int x, unsigned int y, TetrominoType type) {
+void Matrix::occupy(unsigned int x, unsigned int y, TetrominoType type) {
 	m_data[y * WIDTH + x].occupy(type); 
 }
 
@@ -42,7 +42,7 @@ bool Matrix::placeTetromino(Tetromino& actor) {
 	}
 	if (success) {
 		for (const auto& c : actor.coordinates()) {
-			set(c.x, c.y, actor.type());
+			occupy(c.x, c.y, actor.type());
 		}
 	}
 	return success;
@@ -77,9 +77,9 @@ void Matrix::clearRow(unsigned int row) {
 		get(col, row).clear();
 }
 
-void Matrix::fillRow(unsigned int row, TetrominoType type) {
+void Matrix::fillRow(unsigned int row, MatrixTile tile) {
 	for (unsigned int col = 1; col < WIDTH - 1; col++)
-		set(col, row, type);
+		set(col, row, tile);
 }
 
 void Matrix::replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow) {

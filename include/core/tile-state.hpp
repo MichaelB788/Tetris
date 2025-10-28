@@ -33,6 +33,7 @@ struct MatrixTile {
 		state = TileState::EMPTY;
 		type = std::nullopt;
 	}
+	inline void ground() { if (type.has_value()) state = TileState::GROUND; }
 };
 
 #endif

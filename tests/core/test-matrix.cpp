@@ -1,49 +1,42 @@
 #define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
-#include "util/vector2.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include "core/tile-state.hpp"
 #include "core/matrix.hpp"
+#include "core/tetromino.hpp"
 
-TEST_CASE("Matrix indexing", "[Matrix, Vector2, unit]")
-{
-	Matrix matrix;
-
-	SECTION("Vector2 and integer indexing")
-	{
-		REQUIRE(matrix(0, 0) == matrix(Vector2(0, 0)));
-		REQUIRE_FALSE(matrix(0, 1) == matrix(Vector2(1, 0)));
-	}
-
-	SECTION("operator() overrides")
-	{
-		INFO("Assigning (10, 10) with an active tile");
-		matrix(Vector2(10, 10)) = TileState::ACTIVE;
-		REQUIRE(matrix(10, 10) == TileState::ACTIVE);
-	}
-}
-
-TEST_CASE("Matrix constructor", "[Matrix, Vector2, integration]")
+TEST_CASE("Matrix constructor", "[Matrix, unit]")
 {
 	Matrix matrix;
 
 	SECTION("Walls are correctly placed at the start and end of each row")
 	{
-		for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++)
+		for (unsigned int y = 0; y < matrix.HEIGHT; y++)
 		{
 			INFO("Checking coordinates at row " << y);
-			REQUIRE(matrix(0, y) == TileState::WALL);
-			REQUIRE(matrix(matrix_dimensions::WIDTH - 1, y) == TileState::WALL);
+			REQUIRE(matrix.get(0, y).isImpermiable());
+			REQUIRE(matrix.get(matrix.WIDTH - 1, y).isImpermiable());
 		}
 	}
 
 	SECTION("Empty tiles fill up space between each wall")
 	{
-		for (unsigned int y = 0; y < matrix_dimensions::HEIGHT; y++)
+		for (unsigned int y = 0; y < matrix.HEIGHT; y++)
 		{
-			for (unsigned int x = 1; x < matrix_dimensions::WIDTH - 1; x++)
+			for (unsigned int x = 1; x < matrix.WIDTH - 1; x++)
 			{
 				INFO("Checking coordinates at row " << x << ", " << y);
-				REQUIRE(matrix(x, y) == TileState::EMPTY);
+				REQUIRE(matrix.get(x, y).isEmpty());
 			}
 		}
+	}
+}
+
+TEST_CASE("Placing Tetromino", "[Matrix, Tetromino, unit]") 
+{
+	Matrix matrix;
+
+	SECTION("Placing a Tetromino in a invalid position")
+	{
+		Tetromino t;
 	}
 }

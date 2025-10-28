@@ -14,11 +14,14 @@ namespace matrix_operation {
 	bool rowIsEmpty(Matrix& matrix, unsigned int row);
 
 	void clearRow(Matrix& matrix, unsigned int row);
-	void fillRow(Matrix& matrix, TileState tile, unsigned int row);
+	void fillRow(Matrix& matrix, MatrixTile tile, unsigned int row);
 
-  bool canPlaceTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
-  void placeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
-  void removeTetromino(std::array<Vector2, 4>& coordinates, Matrix& matrix);
+  bool isWithinBounds(const Vector2& coordinate, Matrix& matrix);
+
+  inline void placeTetromino(Tetromino& actor, Matrix& matrix) {
+		for (auto& coordinate : actor.coordinates())
+			matrix(coordinate).occupy(actor.type());
+	};
 
 	void dropFloatingRows(Matrix& matrix);
 	void clearCompletedRows(Matrix& matrix);

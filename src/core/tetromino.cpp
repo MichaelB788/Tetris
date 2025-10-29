@@ -1,5 +1,12 @@
 #include "core/tetromino.hpp"
 
+TetrominoType Tetromino::typeGenerator() {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> distrib(0, 6);
+  return TetrominoType(distrib(gen));
+}
+
 Tetromino::Tetromino(TetrominoType type, Vector2 pivot) : m_type(type) {
 	switch(type) {
 		case TetrominoType::I:
@@ -74,5 +81,12 @@ void Tetromino::rotate(bool clockwise) {
 			vec.x = m_coordinates[PIVOT].x + rotated.x;
 			vec.y = m_coordinates[PIVOT].x + rotated.y;
 		}
+	}
+}
+
+void Tetromino::move(int dx, int dy) {
+	for (auto& vec : m_coordinates) {
+		vec.x += dx;
+		vec.y += dx;
 	}
 }

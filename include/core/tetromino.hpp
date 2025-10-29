@@ -5,28 +5,28 @@
 #include <random>
 #include "util/vector2.hpp"
 #include "core/tile-state.hpp"
+#include "core/shape.hpp"
 
 /// @brief Holds data about the Tetromino's position and type, and can manipulate this data through movement and rotation.
 class Tetromino {
 public:
-	Tetromino(TetrominoType type);
+	Tetromino() : m_shape(generateRandomType()) {};
+	Tetromino(TetrominoType type) : m_shape(type) {};
 	
-	constexpr TetrominoType type() { return m_type; }
-	constexpr std::array<Vector2, 4>& coordinates() { return m_coordinates; }
+	constexpr TetrominoType type() { return m_shape.type(); }
+	constexpr std::array<Vector2, 4>& coordinates() { return m_shape.coordinates(); }
 
 	/// @breif Translates the Tetromino while preserving its shape
-	void move(int dx, int dy);
-	inline void rotateClockwise() { rotate(true); };
-	inline void rotateCounterclockwise() { rotate(false); };
+	inline void shift(int dx, int dy) { m_shape.shift(dx, dy); }
+	void move(int x, int y);
 
-protected:
-	void rotate(bool clockwise);
+	// TODO: Implement SRS by expanding these functions
+	inline void rotateClockwise() { m_shape.rotate90Degrees(true); }
+	inline void rotateCounterclockwise() { m_shape.rotate90Degrees(false); }
 
 private:
-  static TetrominoType typeGenerator();
-
-	TetrominoType m_type;
-	std::array<Vector2, 4> m_coordinates;
+	Shape m_shape;
+  static TetrominoType generateRandomType();
 };
 
 #endif

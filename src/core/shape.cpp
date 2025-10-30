@@ -72,6 +72,9 @@ std::array<Vector2, 4> Shape::Generator::getShape(TetrominoType& type) {
 				pivot + Vector2(0, 1),
 				pivot + Vector2(1, 1)
 			};
-		default: break;
+		default:
+			return {
+				pivot, pivot, pivot, pivot
+			};
 	}
 }

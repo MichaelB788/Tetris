@@ -1,6 +1,6 @@
 add_library(tetris_core
+	shape.cpp
   tetromino.cpp
-  tetromino-operations.cpp
   matrix.cpp
 )
 add_library(Tetris::Core ALIAS tetris_core)

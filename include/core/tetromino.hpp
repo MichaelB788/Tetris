@@ -13,16 +13,15 @@ public:
 	Tetromino() : m_shape(generateRandomType()) {};
 	Tetromino(TetrominoType type) : m_shape(type) {};
 	
-	constexpr TetrominoType type() { return m_shape.type(); }
-	constexpr std::array<Vector2, 4>& coordinates() { return m_shape.coordinates(); }
+	inline TetrominoType type() { return m_shape.type(); }
+	inline std::array<Vector2, 4> coordinates() { return m_shape.coordinates(); }
 
 	/// @breif Translates the Tetromino while preserving its shape
 	inline void shift(int dx, int dy) { m_shape.shift(dx, dy); }
-	void move(int x, int y);
 
 	// TODO: Implement SRS by expanding these functions
-	inline void rotateClockwise() { m_shape.rotate90Degrees(true); }
-	inline void rotateCounterclockwise() { m_shape.rotate90Degrees(false); }
+	void rotateClockwise();
+	void rotateCounterclockwise();
 
 private:
 	Shape m_shape;

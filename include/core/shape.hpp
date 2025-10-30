@@ -8,8 +8,8 @@ class Shape {
 public:
 	Shape(TetrominoType type);
 	
-	inline std::array<Vector2, 4>& coordinates() { return m_coordinates; } 
-	inline TetrominoType& type() { return m_type; }
+	const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
+	inline TetrominoType type() { return m_type; }
 
 	void shift(int dx, int dy);
 	void rotate90Degrees(bool clockwise);

@@ -12,6 +12,7 @@ private:
   bool initSDL();
   void closeSDL();
   void update(Matrix& playfield, Tetromino& player);
+	void gameLoop();
 
 public:
   Tetris();

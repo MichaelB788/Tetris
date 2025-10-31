@@ -38,17 +38,12 @@ void Tetris::closeSDL()
 void Tetris::update(Matrix& playfield, Tetromino& player) {
 }
 
-Tetris::Tetris()
-{
-  initSDL();
-
-  // Initialize game assets
-  Tetromino piece = Tetromino(tetromino_operation::generateRandomType(), Vector2(5, 5));
+void Tetris::gameLoop() {
+  Tetromino piece = Tetromino();
   Matrix playfield;
-
-  // Game loop
   SDL_Event event;
   bool quit = false;
+
   while (quit == false) {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
@@ -58,6 +53,13 @@ Tetris::Tetris()
 			}
     }
   }
+}
+
+Tetris::Tetris()
+{
+  initSDL();
+
+	gameLoop();
 
   closeSDL();
 }

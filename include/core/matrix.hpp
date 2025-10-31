@@ -18,8 +18,9 @@ public:
 
 	void clearMatrix();
 	void clearAndDropCompletedRows();
-	bool placeTetromino(Tetromino& actor);
-	bool removeTetromino(Tetromino& actor);
+	bool canPlace(Tetromino& actor);
+	bool place(Tetromino& actor);
+	bool remove(Tetromino& actor);
 
 protected:
 	void occupy(unsigned int x, unsigned int y, TetrominoType type);
@@ -27,19 +28,19 @@ protected:
 
 	// === Query ===
 	constexpr bool isWithinBounds(const Vector2& coordinate) const;
-	constexpr bool isRowComplete(unsigned int row) const;
-	constexpr bool isRowEmpty(unsigned int row) const;
-	constexpr bool isRowPopulated(unsigned int row) const;
+	constexpr bool isComplete(unsigned int row) const;
+	constexpr bool isEmpty(unsigned int row) const;
+	constexpr bool isPopulated(unsigned int row) const;
 
 	// === Operations ===
-	void clearRow(unsigned int row);
-	void fillRow(unsigned int row, MatrixTile tile);
-	void replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow);
+	void clear(unsigned int row);
+	void fill(unsigned int row, MatrixTile tile);
+	void replaceAndClear(unsigned int replacedRow, unsigned int clearedRow);
 	void clearFilledRows();
 
 	// === Gravity logic ===
-	constexpr std::array<bool, HEIGHT> flagPopulatedRows() const;
-	void dropRows(const std::array<bool, HEIGHT>& floatingRows);
+	constexpr std::array<bool, HEIGHT> getRowState() const;
+	void dropFloatingRows(const std::array<bool, HEIGHT>& rowState);
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;

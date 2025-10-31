@@ -39,18 +39,18 @@ TEST_CASE("Placing Tetromino", "[Matrix, Tetromino, unit]")
 	SECTION("Placing a Tetromino in a invalid position")
 	{
 		Tetromino T = Tetromino(TetrominoType::T, {0, 0});
-		REQUIRE_FALSE(matrix.placeTetromino(T));
-		CHECK_FALSE(matrix.removeTetromino(T));
+		REQUIRE_FALSE(matrix.place(T));
+		CHECK_FALSE(matrix.remove(T));
 
 		T.shift(-999, -999);
-		REQUIRE_FALSE(matrix.placeTetromino(T));
+		REQUIRE_FALSE(matrix.place(T));
 	}
 
 	SECTION("Placing a Tetromino in a valid position")
 	{
 		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
-		REQUIRE(matrix.placeTetromino(O));
+		REQUIRE(matrix.place(O));
 		O.shift(Vector2::down);
-		REQUIRE(matrix.placeTetromino(O));
+		REQUIRE(matrix.place(O));
 	}
 }

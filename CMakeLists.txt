@@ -19,7 +19,7 @@ add_subdirectory(src/core)
 add_subdirectory(src/app)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	find_package(Catch2 CONFIG REQUIRED)
+	find_package(Catch2 3 REQUIRED)
 
   if (NOT Catch2_FOUND AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     add_subdirectory(extern/)

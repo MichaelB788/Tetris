@@ -7,7 +7,7 @@ set(EXECUTABLE_NAME "core-tests")
 add_executable(${EXECUTABLE_NAME} ${CORE_TEST_SOURCES})
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE 
-	Catch2::Catch2
+	Catch2::Catch2WithMain
   Tetris::Core
 ) 
 

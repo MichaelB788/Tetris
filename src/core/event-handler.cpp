@@ -1,6 +1,6 @@
 #include "core/event-handler.hpp"
 
-void event_handler::handle(SDL_Event& event, Tetromino& actor, Matrix& matrix)
+void EventHandler::handle(SDL_Event& event)
 {
 	switch (event.key.keysym.sym)
 	{

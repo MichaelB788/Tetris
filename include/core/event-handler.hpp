@@ -3,20 +3,26 @@
 #include <SDL2/SDL_events.h>
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
-#include "core/matrix-operations.hpp"
-#include "core/tetromino-operations.hpp"
-#include "util/game-constants.hpp"
 
+class EventHandler {
+public:
+	EventHandler(Matrix& matrix, Tetromino& tetromino)
+		: m_scene(matrix),
+			m_actor(tetromino)
+	{}; 
 
-namespace event_handler {
-	void handle(SDL_Event& event, Tetromino& actor, Matrix& matrix);
+	void handle(SDL_Event& event);
 
-	namespace command {
-		void move(Tetromino& actor, Direction dir, Matrix& scene);
-		void rotate(Tetromino& actor, Matrix& scene);
-		void drop(Tetromino& actor, Matrix& scene);
-		void store(Tetromino& actor, Matrix& scene);
-	}
+private:
+	Matrix& m_scene;
+	Tetromino& m_actor;
+};
+
+namespace command {
+	void move(Tetromino& actor, Direction dir, Matrix& scene);
+	void rotate(Tetromino& actor, Matrix& scene);
+	void drop(Tetromino& actor, Matrix& scene);
+	void store(Tetromino& actor, Matrix& scene);
 }
 
 #endif

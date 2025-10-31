@@ -13,6 +13,7 @@ project(
 
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/include)
 
+add_subdirectory(src/util)
 add_subdirectory(src/core)
 #add_subdirectory(src/render)
 add_subdirectory(src/app)

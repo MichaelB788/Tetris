@@ -1,8 +1,8 @@
 #include "core/shape.hpp"
+#include "core/tile-state.hpp"
 
-Shape::Shape(TetrominoType type) : m_type(type) {
-	m_coordinates = Shape::Generator::getShape(type);
-	m_pivot = Shape::Generator::pivot;
+Shape::Shape(TetrominoType type, Vector2 pivot) : m_type(type), m_pivot(pivot) {
+	m_coordinates = Shape::Generator::getShape(m_type, m_pivot);
 }
 
 void Shape::shift(int dx, int dy) {
@@ -11,17 +11,19 @@ void Shape::shift(int dx, int dy) {
 	for (auto& vec : m_coordinates) vec + translation;
 }
 
-void Shape::rotate90Degrees(bool clockwise) {
+void Shape::rotateClockwise() {
 	for (auto &vec : m_coordinates) {
-		Vector2 translation = vec - m_pivot;
-		Vector2 rotated = clockwise ?
-			Vector2(translation.y, -translation.x) : Vector2(-translation.y, translation.x);
-		vec.x = m_pivot.x + rotated.x;
-		vec.y = m_pivot.x + rotated.y;
+		vec.rotate90Degrees(true, m_pivot);
 	}
 }
 
-std::array<Vector2, 4> Shape::Generator::getShape(TetrominoType& type) {
+void Shape::rotateCounterclockwise() {
+	for (auto &vec : m_coordinates) {
+		vec.rotate90Degrees(false, m_pivot);
+	}
+}
+
+std::array<Vector2, 4> Shape::Generator::getShape(TetrominoType& type, Vector2& pivot) {
 	switch(type) {
 		case TetrominoType::I:
 			return {

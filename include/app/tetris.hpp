@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include "core/tetromino.hpp"
 #include "core/matrix.hpp"
-#include "core/tetromino-operations.hpp"
 
 class Tetris {
 private:

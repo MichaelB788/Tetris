@@ -6,26 +6,26 @@
 
 class Shape {
 public:
-	Shape(TetrominoType type);
+	Shape(TetrominoType type, Vector2 pivot);
 	
-	const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
-	inline TetrominoType type() { return m_type; }
+	inline const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
+	inline const TetrominoType type() const { return m_type; } 
 
 	void shift(int dx, int dy);
-	void rotate90Degrees(bool clockwise);
+	virtual void rotateClockwise();
+	virtual void rotateCounterclockwise();
 
-	class Generator;
+protected:
+	TetrominoType m_type;
 	
 private:
-	TetrominoType m_type;
 	std::array<Vector2, 4> m_coordinates;
 	Vector2 m_pivot;
+	class Generator;
 };
 
-class Shape::Generator {
-public:
-	static constexpr Vector2 pivot = Vector2(0, 0);
-	static std::array<Vector2, 4> getShape(TetrominoType& type);
+struct Shape::Generator {
+	static std::array<Vector2, 4> getShape(TetrominoType& type, Vector2& pivot);
 };
 
 #endif

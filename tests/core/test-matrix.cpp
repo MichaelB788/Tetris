@@ -1,3 +1,4 @@
+#include "util/vector2.hpp"
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
 #include "core/tile-state.hpp"
@@ -37,6 +38,19 @@ TEST_CASE("Placing Tetromino", "[Matrix, Tetromino, unit]")
 
 	SECTION("Placing a Tetromino in a invalid position")
 	{
-		Tetromino t;
+		Tetromino T = Tetromino(TetrominoType::T, {0, 0});
+		REQUIRE_FALSE(matrix.placeTetromino(T));
+		CHECK_FALSE(matrix.removeTetromino(T));
+
+		T.shift(-999, -999);
+		REQUIRE_FALSE(matrix.placeTetromino(T));
+	}
+
+	SECTION("Placing a Tetromino in a valid position")
+	{
+		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
+		REQUIRE(matrix.placeTetromino(O));
+		O.shift(Vector2::down);
+		REQUIRE(matrix.placeTetromino(O));
 	}
 }

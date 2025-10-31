@@ -12,6 +12,8 @@ public:
 	inline const TetrominoType type() const { return m_type; } 
 
 	void shift(int dx, int dy);
+	void shift(const Vector2& translation);
+
 	virtual void rotateClockwise();
 	virtual void rotateCounterclockwise();
 

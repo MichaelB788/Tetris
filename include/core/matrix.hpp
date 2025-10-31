@@ -19,23 +19,27 @@ public:
 	void clearMatrix();
 	void clearAndDropCompletedRows();
 	bool placeTetromino(Tetromino& actor);
+	bool removeTetromino(Tetromino& actor);
 
 protected:
 	void occupy(unsigned int x, unsigned int y, TetrominoType type);
 	void set(unsigned int x, unsigned int y, MatrixTile type);
 
+	// === Query ===
 	constexpr bool isWithinBounds(const Vector2& coordinate) const;
 	constexpr bool isRowComplete(unsigned int row) const;
 	constexpr bool isRowEmpty(unsigned int row) const;
 	constexpr bool isRowPopulated(unsigned int row) const;
 
+	// === Operations ===
 	void clearRow(unsigned int row);
 	void fillRow(unsigned int row, MatrixTile tile);
 	void replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow);
-	void clearRows();
+	void clearFilledRows();
 
-	constexpr std::array<bool, HEIGHT> getPopulatedRows() const;
-	void dropRows(const std::array<bool, HEIGHT>& populatedRows);
+	// === Gravity logic ===
+	constexpr std::array<bool, HEIGHT> flagPopulatedRows() const;
+	void dropRows(const std::array<bool, HEIGHT>& floatingRows);
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;

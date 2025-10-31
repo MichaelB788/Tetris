@@ -31,22 +31,30 @@ void Matrix::clearMatrix() {
 }
 
 void Matrix::clearAndDropCompletedRows() {
-	clearRows();
-	dropRows(getPopulatedRows());
+	clearFilledRows();
+	dropRows(flagPopulatedRows());
 };
 
 bool Matrix::placeTetromino(Tetromino& actor) {
-	bool success = true;
 	for (const auto& c : actor.coordinates()) {
-		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) success = false;
+		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) return false;
 	}
-	if (success) {
-		for (const auto& c : actor.coordinates()) {
-			occupy(c.x, c.y, actor.type());
-		}
+	for (const auto& c : actor.coordinates()) {
+		occupy(c.x, c.y, actor.type());
 	}
-	return success;
+	return true;
 }
+
+bool Matrix::removeTetromino(Tetromino& actor) {
+	for (const auto& c : actor.coordinates()) {
+		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) return false;
+	}
+	for (const auto& c : actor.coordinates()) {
+		get(c.x, c.y).clear();
+	}
+	return true;
+}
+
 constexpr bool Matrix::isWithinBounds(const Vector2& coordinate) const {
 	return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < m_data.size() && coordinate.y < m_data.size();
 };
@@ -89,12 +97,12 @@ void Matrix::replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRo
 	}
 }
 
-void Matrix::clearRows() {
+void Matrix::clearFilledRows() {
 	for (unsigned int row = 0; row < HEIGHT; row++)
 		if (isRowComplete(row)) clearRow(row);
 }
 
-constexpr std::array<bool, Matrix::HEIGHT> Matrix::getPopulatedRows() const {
+constexpr std::array<bool, Matrix::HEIGHT> Matrix::flagPopulatedRows() const {
 	std::array<bool, HEIGHT> populatedRows;
 	for (unsigned int row = HEIGHT - 1; row >= 0; row--) {
 		populatedRows.at(row) = ( isRowPopulated(row) ) ? true : false;
@@ -102,11 +110,11 @@ constexpr std::array<bool, Matrix::HEIGHT> Matrix::getPopulatedRows() const {
 	return populatedRows;
 }
 
-void Matrix::dropRows(const std::array<bool, HEIGHT>& rows) {
+void Matrix::dropRows(const std::array<bool, HEIGHT>& floatingRows) {
 	for (unsigned int i = 0; i < HEIGHT - 1; i++) {
-		if (rows.at(i) == 0) {
+		if (floatingRows.at(i) == 0) {
 			unsigned int j = 0;
-			while (rows.at(j) == 0 && j < HEIGHT) j++; 
+			while (floatingRows.at(j) == 0 && j < HEIGHT) j++; 
 			if (j < HEIGHT) replaceAndClearRow(i, j);
 		}
 	}

@@ -7,6 +7,60 @@ Matrix::Matrix() {
   }
 }
 
+void Matrix::clearMatrix() {
+  for (int i = 0; i < m_data.size(); i++) {
+		if ( i % WIDTH > 0 && i % WIDTH < WIDTH - 1 )
+			m_data[i].clear();
+  }
+}
+
+void Matrix::clearLines() {
+	clearFilledRows();
+	dropFloatingRows(getRowState());
+};
+
+bool Matrix::assignActor(Tetromino* actor) {
+	if (tetrominoIsWithinBounds(actor)) {
+		p_actor = actor;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Matrix::placeActor() {
+	if (tetrominoIsWithinBounds(p_actor)) {
+		for (const auto& c : p_actor->coordinates()) {
+			get(c.x, c.y).occupy(p_actor->type());
+		}
+	}
+}
+
+void Matrix::groundActor() {
+	if (tetrominoIsWithinBounds(p_actor)) {
+		for (const auto& c : p_actor->coordinates()) {
+			get(c.x, c.y).ground();
+		}
+	}
+}
+
+void Matrix::removeActor() {
+	if (tetrominoIsWithinBounds(p_actor)) {
+		for (const auto& c : p_actor->coordinates()) {
+			get(c.x, c.y).clear();
+		}
+	}
+}
+
+bool Matrix::actorCollidesGround() {
+	if (tetrominoIsWithinBounds(p_actor)) {
+		for (const auto& c : p_actor->coordinates()) {
+			if (get(c.x, c.y).isGround()) return true;
+		}
+	}
+	return false;
+}
+
 MatrixTile& Matrix::get(unsigned int x, unsigned int y) {
 	return m_data[y * WIDTH + x];
 }
@@ -15,60 +69,25 @@ const MatrixTile& Matrix::get(unsigned int x, unsigned int y) const {
 	return m_data[y * WIDTH + x];
 }
 
-void Matrix::occupy(unsigned int x, unsigned int y, TetrominoType type) {
-	m_data[y * WIDTH + x].occupy(type); 
-}
-
 void Matrix::set(unsigned int x, unsigned int y, MatrixTile type) {
 	m_data[y * WIDTH + x] = type; 
 }
 
-void Matrix::clearMatrix() {
-  for (int i = 0; i < m_data.size(); i++) {
-		if ( i % WIDTH > 0 && i % WIDTH < WIDTH - 1 )
-			m_data[i].clear();
-  }
-}
-
-void Matrix::clearAndDropCompletedRows() {
-	clearFilledRows();
-	dropRows(flagPopulatedRows());
-};
-
-bool Matrix::placeTetromino(Tetromino& actor) {
-	for (const auto& c : actor.coordinates()) {
-		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) return false;
+bool Matrix::tetrominoIsWithinBounds(const Tetromino* tetromino) const {
+	if (tetromino != nullptr)
+	{
+		for (const auto& c : tetromino->coordinates()) {
+			if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
+		}
+		return true;
+	} else {
+		return false;
 	}
-	for (const auto& c : actor.coordinates()) {
-		occupy(c.x, c.y, actor.type());
-	}
-	return true;
-}
-
-bool Matrix::removeTetromino(Tetromino& actor) {
-	for (const auto& c : actor.coordinates()) {
-		if (!isWithinBounds(c) || get(c.x, c.y).isImpermiable()) return false;
-	}
-	for (const auto& c : actor.coordinates()) {
-		get(c.x, c.y).clear();
-	}
-	return true;
-}
-
-constexpr bool Matrix::isWithinBounds(const Vector2& coordinate) const {
-	return coordinate.x >= 0 && coordinate.y >= 0 && coordinate.x < m_data.size() && coordinate.y < m_data.size();
 };
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
 	for (unsigned int x = 1; x < WIDTH - 1; x++) {
 		if (get(x, row).isEmpty()) return false;
-	}
-	return true;
-}
-
-constexpr bool Matrix::isRowEmpty(unsigned int row) const {
-	for (unsigned int x = 1; x < WIDTH - 1; x++) {
-		if (get(x, row).isImpermiable()) return false;
 	}
 	return true;
 }
@@ -90,7 +109,7 @@ void Matrix::fillRow(unsigned int row, MatrixTile tile) {
 		set(col, row, tile);
 }
 
-void Matrix::replaceAndClearRow(unsigned int replacedRow, unsigned int clearedRow) {
+void Matrix::replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow) {
 	for (unsigned int col = 1; col < WIDTH - 1; col++) {
 		set(col, replacedRow, get(col, clearedRow));
 		get(col, clearedRow).clear();
@@ -102,7 +121,7 @@ void Matrix::clearFilledRows() {
 		if (isRowComplete(row)) clearRow(row);
 }
 
-constexpr std::array<bool, Matrix::HEIGHT> Matrix::flagPopulatedRows() const {
+constexpr std::array<bool, Matrix::HEIGHT> Matrix::getRowState() const {
 	std::array<bool, HEIGHT> populatedRows;
 	for (unsigned int row = HEIGHT - 1; row >= 0; row--) {
 		populatedRows.at(row) = ( isRowPopulated(row) ) ? true : false;
@@ -110,12 +129,12 @@ constexpr std::array<bool, Matrix::HEIGHT> Matrix::flagPopulatedRows() const {
 	return populatedRows;
 }
 
-void Matrix::dropRows(const std::array<bool, HEIGHT>& floatingRows) {
+void Matrix::dropFloatingRows(const std::array<bool, HEIGHT>& rowState) {
 	for (unsigned int i = 0; i < HEIGHT - 1; i++) {
-		if (floatingRows.at(i) == 0) {
+		if (rowState.at(i) == 0) {
 			unsigned int j = 0;
-			while (floatingRows.at(j) == 0 && j < HEIGHT) j++; 
-			if (j < HEIGHT) replaceAndClearRow(i, j);
+			while (rowState.at(j) == 0 && j < HEIGHT) j++; 
+			if (j < HEIGHT) replaceAndClearRows(i, j);
 		}
 	}
 }

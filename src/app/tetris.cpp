@@ -1,9 +1,5 @@
 #include "app/tetris.hpp"
 
-enum Screen {
-  WIDTH = 600,
-  HEIGHT = 600
-};
 
 bool Tetris::initSDL()
 {
@@ -25,14 +21,6 @@ bool Tetris::initSDL()
   }
 
   return success;
-}
-
-void Tetris::closeSDL()
-{
-  SDL_DestroyWindow(m_window);
-  m_window = nullptr;
-
-  SDL_Quit();
 }
 
 void Tetris::update(Matrix& playfield, Tetromino& player) {
@@ -57,9 +45,6 @@ void Tetris::gameLoop() {
 
 Tetris::Tetris()
 {
-  initSDL();
-
 	gameLoop();
-
-  closeSDL();
+  SDL_Quit();
 }

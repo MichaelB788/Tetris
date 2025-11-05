@@ -36,7 +36,7 @@ install_package() {
 		done
 	elif command -v pacman &> /dev/null; then
 		for arg in "$@"; do
-			sudo pacman -Ss $arg
+			sudo pacman -S $arg
 		done
 	elif command -v dnf &> /dev/null; then
 		for arg in "$@"; do

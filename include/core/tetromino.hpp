@@ -1,30 +1,41 @@
-#ifndef TETROMINO_H
-#define TETROMINO_H
-#include <stdint.h>
+#ifndef TETROMINO_OPERATIONS_H
+#define TETROMINO_OPERATIONS_H
+#include <array>
 #include <random>
-#include "util/vector2.hpp"
 #include "core/tile-state.hpp"
-#include "core/shape.hpp"
+#include "util/vector2.hpp"
 
-/// @brief Holds data about the Tetromino's position and type, and can manipulate this data through movement and rotation.
-struct Tetromino : public Shape {
+class Tetromino {
+public:
 	/// @brief Generates a Tetromino of a random type centered at (0, 0)
-	inline Tetromino() : Shape(getRandomType(), {0, 0}) {};
+	Tetromino();
 
 	/// @brief Generates a Tetromino of a certain type centered at (0, 0)
-	inline Tetromino(TetrominoType type) : Shape(type, {0, 0}) {};
+	Tetromino(TetrominoType type);
 
 	/// @brief Generates a Tetromino of a random type centered at the given position
-	inline Tetromino(Vector2 initialPos) : Shape(getRandomType(), initialPos) {};
+	Tetromino(Vector2 initialPos);
 
 	/// @brief Generates a Tetromino of a certain type at the given position
-	inline Tetromino(TetrominoType type, Vector2 initialPos) : Shape(type, initialPos) {};
+	Tetromino(TetrominoType type, Vector2 initialPos);
+	
+	inline const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
+	inline const TetrominoType type() const { return m_type; } 
 
-	void rotateClockwise() override;
+	void shift(int dx, int dy);
+	void shift(const Vector2& translation);
 
-	void rotateCounterclockwise() override;
+	void rotateClockwise();
+	void rotateCounterclockwise();
 
+private:
   static TetrominoType getRandomType();
+	static std::array<Vector2, 4> generateShape(TetrominoType& type, Vector2& pivot);
+
+private:
+	std::array<Vector2, 4> m_coordinates;
+	TetrominoType m_type;
+	Vector2 m_pivot;
 };
 
 #endif

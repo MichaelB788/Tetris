@@ -40,6 +40,8 @@ public:
 	 */
 	bool actorCollidesGround();
 
+	friend class MatrixRenderer;
+
 private:
 	MatrixTile& get(unsigned int x, unsigned int y);
 	const MatrixTile& get(unsigned int x, unsigned int y) const;

@@ -1,18 +1,15 @@
-#include "Renderer.hpp"
+#include "util/renderer.hpp"
 #include <iostream>
 
-Renderer::Renderer(SDL_Window* window, int index, Uint32 flags)
+Renderer::Renderer(SDL_Window* window)
 {
-    ren = SDL_CreateRenderer(window, index, flags); 
+	p_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
 
-    if ( !ren )
-    {
-        std::cout << "Failed to load renderer: " <<
-            SDL_GetError() << std::endl;
-    }
+	if ( !p_renderer ) std::cout << "Failed to load renderer: " << SDL_GetError() << std::endl;
 }
 
 Renderer::~Renderer()
 {
-    SDL_DestroyRenderer(ren);
+	SDL_DestroyRenderer(p_renderer);
+	p_renderer = nullptr;
 }

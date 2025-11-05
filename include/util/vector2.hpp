@@ -29,22 +29,22 @@ struct Vector2 {
 	}
 
 	/// @brief Shorthand for Vector2(0, -1)
-	static const Vector2 up;
+	static constexpr Vector2 up() { return {0, -1}; }
 
 	/// @brief Shorthand for Vector2(0, 1)
-	static const Vector2 down;
+	static constexpr Vector2 down() { return {0, 1}; }
 
 	/// @brief Shorthand for Vector2(-1, 0)
-	static const Vector2 left;
+	static constexpr Vector2 left() { return {-1, 0}; }
 
 	/// @brief Shorthand for Vector2(1, 0)
-	static const Vector2 right;
+	static constexpr Vector2 right() { return {1, 0}; }
 
 	/// @brief Shorthand for Vector2(0, 0)
-	static const Vector2 zero;
+	static constexpr Vector2 zero() { return {0, 0}; }
 
 	/// @brief Shorthand for Vector2(1, 1)
-	static const Vector2 one;
+	static constexpr Vector2 one() { return {1, 1}; }
 };
 
 #endif

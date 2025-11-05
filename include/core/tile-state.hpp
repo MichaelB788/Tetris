@@ -1,9 +1,8 @@
 #ifndef TILE_STATE_H
 #define TILE_STATE_H
 #include <stdint.h>
-#include <optional>
 
-enum class TetrominoType : uint8_t { I, O, T, Z, S, J, L };
+enum class TetrominoType : int8_t { NONE = -1, I, O, T, Z, S, J, L };
 
 enum class TileState : uint8_t {
 	EMPTY,
@@ -15,7 +14,7 @@ enum class TileState : uint8_t {
 
 struct MatrixTile {
 	TileState state = TileState::EMPTY;
-	std::optional<TetrominoType> type = std::nullopt;
+	TetrominoType type = TetrominoType::NONE;
 
 	constexpr MatrixTile() = default;
 	constexpr MatrixTile(TileState ts) : state(ts) {};
@@ -23,7 +22,7 @@ struct MatrixTile {
 
 	inline constexpr bool isEmpty() const { return state == TileState::EMPTY; }
 	inline constexpr bool isGround() const { return state == TileState::GROUND; }
-	inline constexpr bool isImpermiable() const { return state == TileState::GROUND || state == TileState::WALL; }
+	inline constexpr bool isWall() const { return state == TileState::WALL; }
 
 	inline void occupy(TetrominoType t) {
 		state = TileState::ACTIVE;
@@ -31,9 +30,12 @@ struct MatrixTile {
 	}
 	inline void clear() {
 		state = TileState::EMPTY;
-		type = std::nullopt;
+		type = TetrominoType::NONE;
 	}
-	inline void ground() { if (type.has_value()) state = TileState::GROUND; }
+	inline void ground() {
+		if (type != TetrominoType::NONE)
+			state = TileState::GROUND;
+	}
 };
 
 #endif

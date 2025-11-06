@@ -1,17 +1,5 @@
 #include "core/tetromino.hpp"
 
-Tetromino::Tetromino() : m_pivot({0, 0}) {
-	m_type = getRandomType(); 
-	m_coordinates = generateShape(m_type, m_pivot);
-};
-
-Tetromino::Tetromino(TetrominoType type)
-	: m_pivot({0, 0}),
-		m_type(type)
-{
-	m_coordinates = generateShape(m_type, m_pivot);
-};
-
 Tetromino::Tetromino(Vector2 initialPos) : m_pivot(initialPos) {
 	m_type = getRandomType(); 
 	m_coordinates = generateShape(m_type, m_pivot);
@@ -23,6 +11,12 @@ Tetromino::Tetromino(TetrominoType type, Vector2 initialPos)
 {
 	m_coordinates = generateShape(m_type, m_pivot);
 };
+
+void Tetromino::operator=(const Tetromino& other) {
+	m_coordinates = other.m_coordinates;
+	m_type = other.m_type;
+	m_pivot = other.m_pivot;
+}
 
 void Tetromino::shift(int dx, int dy) {
 	const Vector2 translation{dx, dy}; 

@@ -6,14 +6,13 @@
 class GameState {
 public:
 	GameState();
-
-private:
 	void changeActor();
 
 private:
 	static constexpr unsigned int INIT_X = 5, INIT_Y = 5;
 	Matrix m_scene;
-	Tetromino m_actor;
+	Tetromino m_current{{INIT_X, INIT_Y}};
+	Tetromino m_next{{INIT_X, INIT_Y}};
 };
 
 #endif

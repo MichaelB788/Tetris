@@ -7,17 +7,13 @@
 
 class Tetromino {
 public:
-	/// @brief Generates a Tetromino of a random type centered at (0, 0)
-	Tetromino();
-
-	/// @brief Generates a Tetromino of a certain type centered at (0, 0)
-	Tetromino(TetrominoType type);
-
 	/// @brief Generates a Tetromino of a random type centered at the given position
 	Tetromino(Vector2 initialPos);
 
 	/// @brief Generates a Tetromino of a certain type at the given position
 	Tetromino(TetrominoType type, Vector2 initialPos);
+
+	void operator=(const Tetromino& other);
 	
 	inline const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
 	inline const TetrominoType type() const { return m_type; } 

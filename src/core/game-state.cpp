@@ -1,9 +1,9 @@
 #include "core/game-state.hpp"
 
-GameState::GameState() : m_actor(Tetromino({INIT_X, INIT_Y})) {
-	m_scene.assignActor(&m_actor);
+GameState::GameState()  {
+	m_scene.placeActor(m_current);
 }
 
 void GameState::changeActor() {
-	m_actor = Tetromino({INIT_X, INIT_Y});
+	m_current = Tetromino({INIT_X, INIT_Y});
 }

@@ -1,5 +1,4 @@
 add_library(tetris_core
-	shape.cpp
   tetromino.cpp
   matrix.cpp
 )

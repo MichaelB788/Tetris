@@ -24,8 +24,9 @@ public:
 	void rotateClockwise();
 	void rotateCounterclockwise();
 
-private:
   static TetrominoType getRandomType();
+
+private:
 	static std::array<Vector2, 4> generateShape(TetrominoType& type, Vector2& pivot);
 
 private:

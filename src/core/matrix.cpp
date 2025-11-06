@@ -55,6 +55,28 @@ bool Matrix::actorCollidesGround(const Tetromino& actor) {
 	return false;
 }
 
+bool Matrix::actorCollidesWall(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) return true;
+	for (const auto& c : actor.coordinates()) {
+		if (get(c.x, c.y).isWall()) return true;
+	}
+	return false;
+}
+
+bool Matrix::actorIsWithinBounds(const Tetromino& actor) const {
+	for (const auto& c : actor.coordinates()) {
+		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
+	}
+	return true;
+}
+
+bool Matrix::hasClearedLines() {
+	for (unsigned int row = 0; row < HEIGHT; row++) {
+		if (isRowComplete(row)) return true;
+	}
+	return false;
+}
+
 MatrixTile& Matrix::get(unsigned int x, unsigned int y) {
 	return m_data[y * WIDTH + x];
 }
@@ -66,13 +88,6 @@ const MatrixTile& Matrix::get(unsigned int x, unsigned int y) const {
 void Matrix::set(unsigned int x, unsigned int y, MatrixTile type) {
 	m_data[y * WIDTH + x] = type; 
 }
-
-bool Matrix::actorIsWithinBounds(const Tetromino& actor) const {
-	for (const auto& c : actor.coordinates()) {
-		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
-	}
-	return true;
-};
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
 	for (unsigned int x = 1; x < WIDTH - 1; x++) {

@@ -3,16 +3,29 @@
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
 
+// TODO: Implement game overs
+
 class GameState {
 public:
 	GameState();
-	void changeActor();
+	void update();
+
+	void switchToNextTetromino();
+	void swapActorWithStored();
+
+	void moveActorLeft();
+	void moveActorRight();
+	void moveActorDown();
 
 private:
 	static constexpr unsigned int INIT_X = 5, INIT_Y = 5;
+
 	Matrix m_scene;
-	Tetromino m_current{{INIT_X, INIT_Y}};
-	Tetromino m_next{{INIT_X, INIT_Y}};
+	
+	bool isSwapped = false;
+	Tetromino m_currentTetromino{{INIT_X, INIT_Y}};
+	Tetromino m_nextTetromino{{INIT_X, INIT_Y}};
+	Tetromino m_storedTetromino{TetrominoType::NONE, {INIT_X, INIT_Y}};
 };
 
 #endif

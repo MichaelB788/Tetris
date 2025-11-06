@@ -28,14 +28,17 @@ public:
 	/// @brief Grounds the current actor on the matrix, if present
 	void groundActor(const Tetromino& actor);
 
-	/* *
-	 * @brief Checks to see if the current actors coordinates collide with any grounded tiles
-	 * @return true if the actor exists and its cooridnates collide with one or more grounded tiles
-	 */
+	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
 	bool actorCollidesGround(const Tetromino& actor);
+
+	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
+	bool actorCollidesWall(const Tetromino& actor);
 
 	/// @brief Checks to see if the given actor can be placed on the Matrix
 	bool actorIsWithinBounds(const Tetromino& actor) const;
+
+	/// @brief Checks for cleared lines, returns true if at least one is found
+	bool hasClearedLines();
 
 	friend class MatrixRenderer;
 

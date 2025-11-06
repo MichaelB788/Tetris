@@ -4,7 +4,7 @@
 #include "core/tetromino.hpp"
 
 TEST_CASE("Moving Tetromino", "[tetromino_operation, unit]") {
-	Tetromino tet = Tetromino();
+	Tetromino tet = Tetromino({0, 0});
 	std::array<Vector2, 4> before = tet.coordinates();
 	tet.shift(10, 10);
 	for (int i = 0; i < 4; i++) {
@@ -15,7 +15,7 @@ TEST_CASE("Moving Tetromino", "[tetromino_operation, unit]") {
 
 TEST_CASE("Rotating a Tetromino", "[tetromino_operation, unit]") {
 	SECTION("Rotating an O piece should not be possible") {
-		Tetromino O = Tetromino(TetrominoType::O);
+		Tetromino O = Tetromino(TetrominoType::O, {0, 0});
 		std::array<Vector2, 4> before = O.coordinates();
 
 		O.rotateClockwise();

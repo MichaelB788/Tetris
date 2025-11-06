@@ -1,17 +1,17 @@
 #include "core/matrix.hpp"
 
 Matrix::Matrix() {
-  for (int i = 0; i < m_data.size(); i++) {
+	for (int i = 0; i < m_data.size(); i++) {
 		m_data[i] = ( i % WIDTH == 0 || i % WIDTH == WIDTH - 1 ) ?
 			MatrixTile(TileState::WALL) : MatrixTile(TileState::EMPTY);
-  }
+	}
 }
 
 void Matrix::clearMatrix() {
-  for (int i = 0; i < m_data.size(); i++) {
+	for (int i = 0; i < m_data.size(); i++) {
 		if ( i % WIDTH > 0 && i % WIDTH < WIDTH - 1 )
 			m_data[i].clear();
-  }
+	}
 }
 
 void Matrix::clearLines() {
@@ -19,44 +19,60 @@ void Matrix::clearLines() {
 	dropFloatingRows(getRowState());
 };
 
-bool Matrix::assignActor(Tetromino* actor) {
-	if (tetrominoIsWithinBounds(actor)) {
-		p_actor = actor;
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void Matrix::placeActor() {
-	if (tetrominoIsWithinBounds(p_actor)) {
-		for (const auto& c : p_actor->coordinates()) {
-			get(c.x, c.y).occupy(p_actor->type());
+void Matrix::placeActor(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) {
+		for (const auto& c : actor.coordinates()) {
+			get(c.x, c.y).occupy(actor.type());
 		}
+		m_ghost = actor;
+		placeGhost();
 	}
 }
 
-void Matrix::groundActor() {
-	if (tetrominoIsWithinBounds(p_actor)) {
-		for (const auto& c : p_actor->coordinates()) {
+void Matrix::groundActor(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) {
+		for (const auto& c : actor.coordinates()) {
 			get(c.x, c.y).ground();
 		}
+		removeGhost();
 	}
 }
 
-void Matrix::removeActor() {
-	if (tetrominoIsWithinBounds(p_actor)) {
-		for (const auto& c : p_actor->coordinates()) {
+void Matrix::removeActor(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) {
+		for (const auto& c : actor.coordinates()) {
 			get(c.x, c.y).clear();
 		}
+		removeGhost();
 	}
 }
 
-bool Matrix::actorCollidesGround() {
-	if (tetrominoIsWithinBounds(p_actor)) {
-		for (const auto& c : p_actor->coordinates()) {
-			if (get(c.x, c.y).isGround()) return true;
-		}
+bool Matrix::actorCollidesGround(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) return true;
+	for (const auto& c : actor.coordinates()) {
+		if (get(c.x, c.y).isGround()) return true;
+	}
+	return false;
+}
+
+bool Matrix::actorCollidesWall(const Tetromino& actor) {
+	if (actorIsWithinBounds(actor)) return true;
+	for (const auto& c : actor.coordinates()) {
+		if (get(c.x, c.y).isWall()) return true;
+	}
+	return false;
+}
+
+bool Matrix::actorIsWithinBounds(const Tetromino& actor) const {
+	for (const auto& c : actor.coordinates()) {
+		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
+	}
+	return true;
+}
+
+bool Matrix::hasClearedLines() {
+	for (unsigned int row = 0; row < HEIGHT; row++) {
+		if (isRowComplete(row)) return true;
 	}
 	return false;
 }
@@ -73,18 +89,6 @@ void Matrix::set(unsigned int x, unsigned int y, MatrixTile type) {
 	m_data[y * WIDTH + x] = type; 
 }
 
-bool Matrix::tetrominoIsWithinBounds(const Tetromino* tetromino) const {
-	if (tetromino != nullptr)
-	{
-		for (const auto& c : tetromino->coordinates()) {
-			if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
-		}
-		return true;
-	} else {
-		return false;
-	}
-};
-
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
 	for (unsigned int x = 1; x < WIDTH - 1; x++) {
 		if (get(x, row).isEmpty()) return false;
@@ -97,6 +101,22 @@ constexpr bool Matrix::isRowPopulated(unsigned int row) const {
 		if (get(x, row).isGround()) return true;
 	}
 	return false;
+}
+
+void Matrix::placeGhost() {
+	while (!actorCollidesGround(m_ghost) && actorIsWithinBounds(m_ghost)) {
+		m_ghost.shift(Vector2::down());
+	}
+	m_ghost.shift(Vector2::up());
+	for (const auto& c : m_ghost.coordinates()) {
+		get(c.x, c.y).occupyAsGhost(m_ghost.type());
+	}
+}
+
+void Matrix::removeGhost() {
+	for (const auto& c : m_ghost.coordinates()) {
+		get(c.x, c.y).clear();
+	}
 }
 
 void Matrix::clearRow(unsigned int row) {

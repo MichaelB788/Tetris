@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "util/window.hpp"
 #include "util/renderer.hpp"
+#include "core/game-state.hpp"
 
 class Tetris {
 public:
@@ -11,6 +12,7 @@ public:
 private:
 	void runGameLoop();
 	void updateFrame(SDL_Renderer* renderer);
+	GameState m_state; 
 };
 
 #endif

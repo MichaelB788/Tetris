@@ -29,6 +29,8 @@ void Tetris::runGameLoop() {
 			}
 		}
 
+		m_state.update();
+
 		updateFrame(renderer.getSDLRendererPointer());
 
 		SDL_Delay(100);

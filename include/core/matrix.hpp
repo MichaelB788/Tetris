@@ -19,26 +19,26 @@ public:
 	/// @brief Clears all completed lines and drops any floating lines.
 	void clearLines();
 
-	/* *
-	 * @brief Assigns internal non-owning reference to an external Tetromino.
-	 * @return true if the Tetromino could be placed on the board and the assignment was successful
-	 */
-	bool assignActor(Tetromino* actor);
-
 	/// @brief Places the current actor on the matrix, if present
-	void placeActor();
+	void placeActor(const Tetromino& actor);
 
 	/// @brief Removes the current actor on the matrix, if present
-	void removeActor();
+	void removeActor(const Tetromino& actor);
 
 	/// @brief Grounds the current actor on the matrix, if present
-	void groundActor();
+	void groundActor(const Tetromino& actor);
 
-	/* *
-	 * @brief Checks to see if the current actors coordinates collide with any grounded tiles
-	 * @return true if the actor exists and its cooridnates collide with one or more grounded tiles
-	 */
-	bool actorCollidesGround();
+	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
+	bool actorCollidesGround(const Tetromino& actor);
+
+	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
+	bool actorCollidesWall(const Tetromino& actor);
+
+	/// @brief Checks to see if the given actor can be placed on the Matrix
+	bool actorIsWithinBounds(const Tetromino& actor) const;
+
+	/// @brief Checks for cleared lines, returns true if at least one is found
+	bool hasClearedLines();
 
 	friend class MatrixRenderer;
 
@@ -48,11 +48,14 @@ private:
 	void set(unsigned int x, unsigned int y, MatrixTile tile);
 
 	// === Query ===
-	bool tetrominoIsWithinBounds(const Tetromino* tetromino) const;
 	constexpr bool isRowComplete(unsigned int row) const;
 	constexpr bool isRowPopulated(unsigned int row) const;
 
-	// === Operations ===
+	// === Ghost Operations ===
+	void placeGhost();
+	void removeGhost();
+
+	// === Row Operations ===
 	void clearRow(unsigned int row);
 	void fillRow(unsigned int row, MatrixTile tile);
 	void replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow);
@@ -64,7 +67,7 @@ private:
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
-	Tetromino* p_actor;
+	Tetromino m_ghost{TetrominoType::NONE, {5, 5}}; // Temporary value
 };
 
 #endif

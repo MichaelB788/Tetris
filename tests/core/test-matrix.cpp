@@ -12,26 +12,26 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Assigning a Tetromino in a invalid position")
 	{
 		Tetromino T = Tetromino(TetrominoType::T, {0, 0});
-		REQUIRE_FALSE(matrix.assignActor(&T));
+		REQUIRE_FALSE(matrix.actorIsWithinBounds(T));
 		T.shift(-999, -999);
-		REQUIRE_FALSE(matrix.assignActor(&T));
+		REQUIRE_FALSE(matrix.actorIsWithinBounds(T));
 	}
 
 	SECTION("Assigning a Tetromino in a valid position")
 	{
 		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
-		REQUIRE(matrix.assignActor(&O));
+		REQUIRE(matrix.actorIsWithinBounds(O));
 	}
 
 	SECTION("Grounding a Tetromino in a valid position")
 	{
 		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
-		CHECK(matrix.assignActor(&O));
-		matrix.placeActor();
-		matrix.groundActor();
+		CHECK(matrix.actorIsWithinBounds(O));
+		matrix.placeActor(O);
+		matrix.groundActor(O);
 
 		Tetromino T = Tetromino(TetrominoType::T, {5, 5});
-		CHECK(matrix.assignActor(&T));
-		REQUIRE(matrix.actorCollidesGround());
+		CHECK(matrix.actorIsWithinBounds(T));
+		REQUIRE(matrix.actorCollidesGround(T));
 	}
 }

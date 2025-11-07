@@ -1,5 +1,5 @@
-#ifndef RENDER_GAME_OBJECTS_H
-#define RENDER_GAME_OBJECTS_H
+#ifndef MATRIX_RENDERER_H
+#define MATRIX_RENDERER_H
 #include <SDL2/SDL_render.h>
 #include <stdint.h>
 #include "core/tile-state.hpp"

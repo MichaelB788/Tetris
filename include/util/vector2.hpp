@@ -16,12 +16,17 @@ struct Vector2 {
 
 	void rotate90Degrees(bool clockwise, const Vector2& pivot);
 
-	inline constexpr Vector2 operator+(const Vector2& other) const {
+	inline Vector2 operator+(const Vector2& other) const {
 		return Vector2(x + other.x, y + other.y);
 	}
 
-	inline constexpr Vector2 operator-(const Vector2& other) const {
+	inline Vector2 operator-(const Vector2& other) const {
 		return Vector2(x - other.x, y - other.y);
+	}
+
+	inline void operator+=(const Vector2& other) {
+		x += other.x;
+		y += other.y;
 	}
 
 	inline constexpr bool operator==(const Vector2& other) const {

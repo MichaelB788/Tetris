@@ -1,5 +1,5 @@
-#ifndef TETROMINO_OPERATIONS_H
-#define TETROMINO_OPERATIONS_H
+#ifndef TETROMINO_H
+#define TETROMINO_H
 #include <array>
 #include <random>
 #include "core/tile-state.hpp"
@@ -18,8 +18,8 @@ public:
 	inline const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
 	inline const TetrominoType type() const { return m_type; } 
 
-	void shift(int dx, int dy);
 	void shift(const Vector2& translation);
+	inline void shift(int dx, int dy) { shift({dx, dy}); }
 
 	void rotateClockwise();
 	void rotateCounterclockwise();

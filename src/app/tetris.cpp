@@ -1,6 +1,5 @@
 #include "app/tetris.hpp"
-#include <SDL_events.h>
-#include <SDL_render.h>
+#include <cstdio>
 
 Tetris::Tetris()
 {
@@ -27,7 +26,16 @@ void Tetris::runGameLoop() {
 			if (event.type == SDL_QUIT) {
 				quit = true;
 			} else if (event.type == SDL_KEYDOWN) {
-				// Handle event
+				if (event.key.keysym.sym == SDLK_j)
+					m_state.moveActorDown();
+				if (event.key.keysym.sym == SDLK_h)
+					m_state.moveActorLeft();
+				if (event.key.keysym.sym == SDLK_l)
+					m_state.moveActorRight();
+				if (event.key.keysym.sym == SDLK_r)
+					m_state.rotateActorClockwise();
+				if (event.key.keysym.sym == SDLK_t)
+					m_state.rotateActorClockwise();
 			}
 		}
 
@@ -35,7 +43,7 @@ void Tetris::runGameLoop() {
 
 		m_renderer.updateFrame();
 
-		SDL_Delay(100);
+		SDL_Delay(30);
 	}
 }
 

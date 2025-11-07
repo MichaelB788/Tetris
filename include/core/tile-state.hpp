@@ -20,7 +20,11 @@ struct MatrixTile {
 	constexpr MatrixTile(TileState ts) : state(ts) {};
 	constexpr MatrixTile(TileState ts, TetrominoType tt) : state(ts), type(tt) {};
 
-	inline constexpr bool isEmpty() const { return state == TileState::EMPTY; }
+	inline constexpr bool isEmpty() const {
+		return state == TileState::EMPTY
+				|| state == TileState::ACTIVE
+				|| state == TileState::GHOST;
+	}
 	inline constexpr bool isGround() const { return state == TileState::GROUND; }
 	inline constexpr bool isWall() const { return state == TileState::WALL; }
 
@@ -37,8 +41,7 @@ struct MatrixTile {
 		type = TetrominoType::NONE;
 	}
 	inline void ground() {
-		if (type != TetrominoType::NONE)
-			state = TileState::GROUND;
+		state = TileState::GROUND;
 	}
 };
 

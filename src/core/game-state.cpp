@@ -1,13 +1,9 @@
 #include "core/game-state.hpp"
 
-GameState::GameState(Renderer& renderer) : m_matrixRenderer(m_scene, renderer) {
-	m_scene.placeActor(m_currentTetromino);
-}
-
 void GameState::update() {
-	m_scene.placeActor(m_currentTetromino);
-	if (m_scene.hasClearedLines()) {
-		m_scene.clearLines();
+	m_matrix.placeActor(m_currentTetromino);
+	if (m_matrix.hasClearedLines()) {
+		m_matrix.clearLines();
 	}
 	m_matrixRenderer.renderMatrix();
 }
@@ -34,37 +30,59 @@ void GameState::swapActorWithStored() {
 }
 
 void GameState::moveActorLeft() {
-	m_scene.removeActor(m_currentTetromino);
+	m_matrix.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::left());
 
-	if (m_scene.actorCollidesWall(m_currentTetromino)) {
+	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::right());
-	} else {
-		m_scene.placeActor(m_currentTetromino);
 	}
+
+	m_matrix.placeActor(m_currentTetromino);
 }
 
 void GameState::moveActorRight() {
-	m_scene.removeActor(m_currentTetromino);
+	m_matrix.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::right());
 
-	if (m_scene.actorCollidesWall(m_currentTetromino)) {
+	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::left());
-	} else {
-		m_scene.placeActor(m_currentTetromino);
 	}
+
+	m_matrix.placeActor(m_currentTetromino);
 }
 
 void GameState::moveActorDown() {
-	m_scene.removeActor(m_currentTetromino);
+	m_matrix.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::down());
 
-	if (m_scene.actorCollidesGround(m_currentTetromino)) {
+	if (m_matrix.actorCollidesGround(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::up());
-		m_scene.placeActor(m_currentTetromino);
-		m_scene.groundActor(m_currentTetromino);
+		m_matrix.placeActor(m_currentTetromino);
+		m_matrix.groundActor(m_currentTetromino);
 		switchToNextTetromino();
 	} else {
-		m_scene.placeActor(m_currentTetromino);
+		m_matrix.placeActor(m_currentTetromino);
 	}
+}
+
+void GameState::rotateActorClockwise() {
+	m_matrix.removeActor(m_currentTetromino);
+	m_currentTetromino.rotateClockwise();
+
+	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
+		m_currentTetromino.rotateCounterclockwise();
+	}
+
+	m_matrix.placeActor(m_currentTetromino);
+}
+
+void GameState::rotateActorCounterclockwise() {
+	m_matrix.removeActor(m_currentTetromino);
+	m_currentTetromino.rotateCounterclockwise();
+
+	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
+		m_currentTetromino.rotateClockwise();
+	}
+
+	m_matrix.placeActor(m_currentTetromino);
 }

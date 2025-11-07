@@ -9,7 +9,8 @@
 
 class GameState {
 public:
-	GameState(Renderer& renderer);
+	GameState(Renderer& renderer) : m_matrixRenderer(m_matrix, renderer) {}
+
 	void update();
 
 	void switchToNextTetromino();
@@ -19,10 +20,14 @@ public:
 	void moveActorRight();
 	void moveActorDown();
 
-private:
-	static constexpr unsigned int INIT_X = 5, INIT_Y = 5;
+	// TODO: These functions are kind of fucked up! But they work, more or less...
+	void rotateActorClockwise();
+	void rotateActorCounterclockwise();
 
-	Matrix m_scene;
+private:
+	static const unsigned int INIT_X = 5, INIT_Y = 5;
+
+	Matrix m_matrix;
 	MatrixRenderer m_matrixRenderer;
 	
 	bool isSwapped = false;

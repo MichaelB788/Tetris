@@ -14,65 +14,72 @@ void Matrix::clearMatrix() {
 	}
 }
 
+bool Matrix::hasClearedLines() {
+	for (unsigned int row = 0; row < HEIGHT; row++) {
+		if (isRowComplete(row)) return true;
+	}
+	return false;
+}
+
 void Matrix::clearLines() {
 	clearFilledRows();
 	dropFloatingRows(getRowState());
 };
 
 void Matrix::placeActor(const Tetromino& actor) {
-	if (actorIsWithinBounds(actor)) {
+	if (!actorIsOutOfBounds(actor)) {
+		m_ghost = actor;
+		placeGhost();
+
 		for (const auto& c : actor.coordinates()) {
 			get(c.x, c.y).occupy(actor.type());
 		}
-		m_ghost = actor;
-		placeGhost();
 	}
 }
 
 void Matrix::groundActor(const Tetromino& actor) {
-	if (actorIsWithinBounds(actor)) {
+	if (!actorIsOutOfBounds(actor)) {
+		removeGhost();
 		for (const auto& c : actor.coordinates()) {
 			get(c.x, c.y).ground();
 		}
-		removeGhost();
 	}
 }
 
 void Matrix::removeActor(const Tetromino& actor) {
-	if (actorIsWithinBounds(actor)) {
+	if (!actorIsOutOfBounds(actor)) {
+		removeGhost();
 		for (const auto& c : actor.coordinates()) {
 			get(c.x, c.y).clear();
 		}
-		removeGhost();
 	}
 }
 
-bool Matrix::actorCollidesGround(const Tetromino& actor) {
-	if (actorIsWithinBounds(actor)) return true;
-	for (const auto& c : actor.coordinates()) {
-		if (get(c.x, c.y).isGround()) return true;
-	}
-	return false;
-}
-
-bool Matrix::actorCollidesWall(const Tetromino& actor) {
-	if (actorIsWithinBounds(actor)) return true;
-	for (const auto& c : actor.coordinates()) {
-		if (get(c.x, c.y).isWall()) return true;
+bool Matrix::actorCollidesGround(const Tetromino& actor) const {
+	if (actorIsOutOfBounds(actor)) {
+		return true;
+	} else {
+		for (const auto& c : actor.coordinates()) {
+			if (get(c.x, c.y).isGround()) return true;
+		}
 	}
 	return false;
 }
 
-bool Matrix::actorIsWithinBounds(const Tetromino& actor) const {
-	for (const auto& c : actor.coordinates()) {
-		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return false;
+bool Matrix::actorCollidesWall(const Tetromino& actor) const {
+	if (actorIsOutOfBounds(actor)) {
+		return true;
+	} else {
+		for (const auto& c : actor.coordinates()) {
+			if (get(c.x, c.y).isWall()) return true;
+		}
 	}
-	return true;
+	return false;
 }
 
-bool Matrix::hasClearedLines() {
-	for (unsigned int row = 0; row < HEIGHT; row++) {
-		if (isRowComplete(row)) return true;
+bool Matrix::actorIsOutOfBounds(const Tetromino& actor) const {
+	for (const auto& c : actor.coordinates()) {
+		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return true;
 	}
 	return false;
 }
@@ -104,7 +111,7 @@ constexpr bool Matrix::isRowPopulated(unsigned int row) const {
 }
 
 void Matrix::placeGhost() {
-	while (!actorCollidesGround(m_ghost)) {
+	while ( !actorCollidesGround(m_ghost) ) {
 		m_ghost.shift(Vector2::down());
 	}
 	m_ghost.shift(Vector2::up());
@@ -141,9 +148,9 @@ void Matrix::clearFilledRows() {
 		if (isRowComplete(row)) clearRow(row);
 }
 
-constexpr std::array<bool, Matrix::HEIGHT> Matrix::getRowState() const {
+std::array<bool, Matrix::HEIGHT> Matrix::getRowState() const {
 	std::array<bool, HEIGHT> populatedRows;
-	for (unsigned int row = HEIGHT - 1; row >= 0; row--) {
+	for (int row = HEIGHT - 1; row >= 0; row--) {
 		populatedRows.at(row) = ( isRowPopulated(row) ) ? true : false;
 	}
 	return populatedRows;

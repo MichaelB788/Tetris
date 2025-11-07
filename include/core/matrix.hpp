@@ -16,29 +16,19 @@ public:
 	/// @brief Reverts the Matrix to its original, empty state.
 	void clearMatrix();
 
+	/// @brief Checks for cleared lines, returns true if at least one is found
+	bool hasClearedLines();
+
 	/// @brief Clears all completed lines and drops any floating lines.
 	void clearLines();
 
-	/// @brief Places the current actor on the matrix, if present
 	void placeActor(const Tetromino& actor);
-
-	/// @brief Removes the current actor on the matrix, if present
 	void removeActor(const Tetromino& actor);
-
-	/// @brief Grounds the current actor on the matrix, if present
 	void groundActor(const Tetromino& actor);
 
-	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
-	bool actorCollidesGround(const Tetromino& actor);
-
-	/// @brief Checks to see if the current actors coordinates collide with any grounded tiles
-	bool actorCollidesWall(const Tetromino& actor);
-
-	/// @brief Checks to see if the given actor can be placed on the Matrix
-	bool actorIsWithinBounds(const Tetromino& actor) const;
-
-	/// @brief Checks for cleared lines, returns true if at least one is found
-	bool hasClearedLines();
+	bool actorCollidesGround(const Tetromino& actor) const;
+	bool actorCollidesWall(const Tetromino& actor) const;
+	bool actorIsOutOfBounds(const Tetromino& actor) const;
 
 	friend class MatrixRenderer;
 
@@ -62,7 +52,7 @@ private:
 	void clearFilledRows();
 
 	// === Gravity logic ===
-	constexpr std::array<bool, HEIGHT> getRowState() const;
+	std::array<bool, HEIGHT> getRowState() const;
 	void dropFloatingRows(const std::array<bool, HEIGHT>& rowState);
 
 private:

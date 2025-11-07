@@ -18,15 +18,9 @@ void Tetromino::operator=(const Tetromino& other) {
 	m_pivot = other.m_pivot;
 }
 
-void Tetromino::shift(int dx, int dy) {
-	const Vector2 translation{dx, dy}; 
-	m_pivot + translation;
-	for (auto& vec : m_coordinates) vec + translation;
-}
-
 void Tetromino::shift(const Vector2& translation) {
-	m_pivot + translation;
-	for (auto& vec : m_coordinates) vec + translation;
+	m_pivot += translation;
+	for (auto& vec : m_coordinates) vec += translation;
 }
 
 void Tetromino::rotateClockwise() {

@@ -1,6 +1,6 @@
 #include "core/game-state.hpp"
 
-GameState::GameState()  {
+GameState::GameState(Renderer& renderer) : m_matrixRenderer(m_scene, renderer) {
 	m_scene.placeActor(m_currentTetromino);
 }
 
@@ -9,6 +9,7 @@ void GameState::update() {
 	if (m_scene.hasClearedLines()) {
 		m_scene.clearLines();
 	}
+	m_matrixRenderer.renderMatrix();
 }
 
 void GameState::switchToNextTetromino() {
@@ -33,6 +34,7 @@ void GameState::swapActorWithStored() {
 }
 
 void GameState::moveActorLeft() {
+	m_scene.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::left());
 
 	if (m_scene.actorCollidesWall(m_currentTetromino)) {
@@ -43,6 +45,7 @@ void GameState::moveActorLeft() {
 }
 
 void GameState::moveActorRight() {
+	m_scene.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::right());
 
 	if (m_scene.actorCollidesWall(m_currentTetromino)) {
@@ -53,10 +56,12 @@ void GameState::moveActorRight() {
 }
 
 void GameState::moveActorDown() {
+	m_scene.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::down());
 
 	if (m_scene.actorCollidesGround(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::up());
+		m_scene.placeActor(m_currentTetromino);
 		m_scene.groundActor(m_currentTetromino);
 		switchToNextTetromino();
 	} else {

@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(
 	Tetris
-	VERSION 1.0
+	VERSION 2.0
 	DESCRIPTION "Tetris remade with C++ and SDL2"
 	LANGUAGES CXX
 )
@@ -15,7 +15,7 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_S
 
 add_subdirectory(src/util)
 add_subdirectory(src/core)
-#add_subdirectory(src/render)
+add_subdirectory(src/render)
 add_subdirectory(src/app)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -27,6 +27,4 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
   enable_testing()
   add_subdirectory(tests/core)
-  # add_subdirectory(tests/render)
-  # add_subdirectory(tests/app)
 endif()

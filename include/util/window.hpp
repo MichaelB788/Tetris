@@ -8,7 +8,8 @@ public:
 
 	Window(const char* title);
 	~Window();
-	inline SDL_Window* getSDLWindowPointer() const { return p_window; }
+
+	friend class Renderer;
 
 private:
 	SDL_Window* p_window = nullptr;

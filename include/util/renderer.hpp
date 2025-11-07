@@ -1,15 +1,22 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_rect.h>
 #include "util/window.hpp"
 
 class Renderer {
 public:
-	Renderer(Window& window);
+	enum class Color {
+		WHITE, GRAY
+	};
+
+	Renderer(Window& window) : r_window(window) {};
 	~Renderer();
-	bool initializeSDLRenderer(SDL_Window* window);
-	inline SDL_Renderer* getSDLRendererPointer() const { return p_renderer; }
-	void update();
+
+	void initializeSDLRenderer();
+	void clearFrame() const;
+	void updateFrame() const;
+	void drawRectangle(Color color, bool filled, int x, int y, int w, int h) const;
 
 private:
 	SDL_Renderer* p_renderer = nullptr;

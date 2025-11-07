@@ -4,15 +4,18 @@
 #include "util/window.hpp"
 #include "util/renderer.hpp"
 #include "core/game-state.hpp"
+#include "render/matrix-renderer.hpp"
 
 class Tetris {
 public:
   Tetris();
+	~Tetris();
 
 private:
 	void runGameLoop();
-	void updateFrame(SDL_Renderer* renderer);
-	GameState m_state; 
+	Window m_window = Window("Tetris");
+	Renderer m_renderer = Renderer(m_window);
+	GameState m_state{m_renderer}; 
 };
 
 #endif

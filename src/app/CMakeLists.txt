@@ -8,6 +8,7 @@ add_executable(${EXECUTABLE_NAME} main.cpp)
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE
   Tetris::App
   Tetris::Core
+	Tetris::Renderer
 )
 
 find_package(SDL2 CONFIG REQUIRED)

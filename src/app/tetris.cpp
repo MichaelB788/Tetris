@@ -9,18 +9,20 @@ Tetris::Tetris()
 	} else {
 		runGameLoop();
 	}
+}
 
+Tetris::~Tetris() {
 	SDL_Quit();
 }
 
-
 void Tetris::runGameLoop() {
+	m_renderer.initializeSDLRenderer();
 	SDL_Event event;
-	Window window = Window("Tetris");
-	Renderer renderer = Renderer(window);
 	bool quit = false;
 
 	while ( !quit ) {
+		m_renderer.clearFrame();
+
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				quit = true;
@@ -31,14 +33,9 @@ void Tetris::runGameLoop() {
 
 		m_state.update();
 
-		updateFrame(renderer.getSDLRendererPointer());
+		m_renderer.updateFrame();
 
 		SDL_Delay(100);
 	}
 }
 
-void Tetris::updateFrame(SDL_Renderer* renderer) {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
-}

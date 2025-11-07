@@ -104,7 +104,7 @@ constexpr bool Matrix::isRowPopulated(unsigned int row) const {
 }
 
 void Matrix::placeGhost() {
-	while (!actorCollidesGround(m_ghost) && actorIsWithinBounds(m_ghost)) {
+	while (!actorCollidesGround(m_ghost)) {
 		m_ghost.shift(Vector2::down());
 	}
 	m_ghost.shift(Vector2::up());

@@ -2,7 +2,7 @@
 
 void GameState::update() {
 	m_matrix.placeActor(m_currentTetromino);
-	if (m_matrix.hasClearedLines()) {
+	if (m_matrix.hasFilledLines()) {
 		m_matrix.clearLines();
 	}
 	m_matrixRenderer.renderMatrix();

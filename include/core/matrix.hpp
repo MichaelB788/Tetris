@@ -16,8 +16,8 @@ public:
 	/// @brief Reverts the Matrix to its original, empty state.
 	void clearMatrix();
 
-	/// @brief Checks for cleared lines, returns true if at least one is found
-	bool hasClearedLines();
+	/// @brief Checks for filled lines, returns true if at least one is found
+	bool hasFilledLines();
 
 	/// @brief Clears all completed lines and drops any floating lines.
 	void clearLines();
@@ -31,6 +31,7 @@ public:
 	bool actorIsOutOfBounds(const Tetromino& actor) const;
 
 	friend class MatrixRenderer;
+	friend class LineCreator;
 
 private:
 	MatrixTile& get(unsigned int x, unsigned int y);
@@ -47,7 +48,6 @@ private:
 
 	// === Row Operations ===
 	void clearRow(unsigned int row);
-	void fillRow(unsigned int row, MatrixTile tile);
 	void replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow);
 	void clearFilledRows();
 
@@ -58,6 +58,17 @@ private:
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
 	Tetromino m_ghost{TetrominoType::NONE, {5, 5}}; // Temporary value
+};
+
+/// @brief Creates lines on the Matrix. Mostly used for testing. 
+class LineCreator {
+public:
+	LineCreator(Matrix& matrix) : r_matrix(matrix) {};
+	void fillRow(unsigned int row, MatrixTile tile);
+	void partiallyFilledRow(unsigned int row, MatrixTile tile);
+
+private:
+	Matrix& r_matrix;
 };
 
 #endif

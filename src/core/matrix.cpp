@@ -14,7 +14,7 @@ void Matrix::clearMatrix() {
 	}
 }
 
-bool Matrix::hasClearedLines() {
+bool Matrix::hasFilledLines() {
 	for (unsigned int row = 0; row < HEIGHT; row++) {
 		if (isRowComplete(row)) return true;
 	}
@@ -131,11 +131,6 @@ void Matrix::clearRow(unsigned int row) {
 		get(col, row).clear();
 }
 
-void Matrix::fillRow(unsigned int row, MatrixTile tile) {
-	for (unsigned int col = 1; col < WIDTH - 1; col++)
-		set(col, row, tile);
-}
-
 void Matrix::replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow) {
 	for (unsigned int col = 1; col < WIDTH - 1; col++) {
 		set(col, replacedRow, get(col, clearedRow));
@@ -164,4 +159,14 @@ void Matrix::dropFloatingRows(const std::array<bool, HEIGHT>& rowState) {
 			if (j < HEIGHT) replaceAndClearRows(i, j);
 		}
 	}
+}
+
+void LineCreator::fillRow(unsigned int row, MatrixTile tile) {
+	for (unsigned int col = 1; col < Matrix::WIDTH - 1; col++)
+		r_matrix.set(col, row, tile);
+}
+
+void LineCreator::partiallyFilledRow(unsigned int row, MatrixTile tile) {
+	for (unsigned int col = 1; col < 5; col++)
+		r_matrix.set(col, row, tile);
 }

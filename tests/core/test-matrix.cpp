@@ -35,3 +35,8 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 		REQUIRE(matrix.actorCollidesGround(T));
 	}
 }
+
+TEST_CASE("Line operations") {
+	Matrix matrix;
+	LineCreator lc {matrix};
+}

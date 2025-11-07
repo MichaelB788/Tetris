@@ -20,7 +20,6 @@ public:
 	void moveActorRight();
 	void moveActorDown();
 
-	// TODO: These functions are kind of fucked up! But they work, more or less...
 	void rotateActorClockwise();
 	void rotateActorCounterclockwise();
 

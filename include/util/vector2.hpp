@@ -1,27 +1,41 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
+#include <stdint.h>
 
 /// @brief Stores two (x, y) coordinates.
 struct Vector2 {
 	int x{};
 	int y{};
 
+	enum class Rotation : uint8_t {
+		CLOCKWISE,
+		COUNTERCLOCKWISE
+	};
+	enum class Horizontal : uint8_t {
+		LEFT,
+		RIGHT
+	};
+	enum class Vertical : uint8_t {
+		UP,
+		DOWN
+	};
+
 	constexpr Vector2() = default;
 	constexpr Vector2(int x, int y) : x(x), y(y) {}
 
-	inline void translate(int dx, int dy) {
-		x += dx;
-		y += dy;
-	}
-
-	void rotate90Degrees(bool clockwise, const Vector2& pivot);
+	static void rotate90Degrees(Rotation rotation, Vector2& target, const Vector2& pivot);
 
 	inline Vector2 operator+(const Vector2& other) const {
-		return Vector2(x + other.x, y + other.y);
+		return {x + other.x, y + other.y};
 	}
 
 	inline Vector2 operator-(const Vector2& other) const {
-		return Vector2(x - other.x, y - other.y);
+		return {x - other.x, y - other.y};
+	}
+
+	/// @return the negation of the Vector2
+	inline constexpr Vector2 operator-() const {
+		return {x * -1, y * -1};
 	}
 
 	inline void operator+=(const Vector2& other) {

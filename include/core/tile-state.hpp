@@ -25,8 +25,11 @@ struct MatrixTile {
 				|| state == TileState::ACTIVE
 				|| state == TileState::GHOST;
 	}
+	inline constexpr bool isImpermiable() const {
+		return state == TileState::WALL
+				|| state == TileState::GROUND;
+	}
 	inline constexpr bool isGround() const { return state == TileState::GROUND; }
-	inline constexpr bool isWall() const { return state == TileState::WALL; }
 
 	inline void occupy(TetrominoType t) {
 		state = TileState::ACTIVE;

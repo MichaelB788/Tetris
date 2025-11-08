@@ -66,12 +66,12 @@ bool Matrix::actorCollidesGround(const Tetromino& actor) const {
 	return false;
 }
 
-bool Matrix::actorCollidesWall(const Tetromino& actor) const {
+bool Matrix::actorCollidesImpermiable(const Tetromino& actor) const {
 	if (actorIsOutOfBounds(actor)) {
 		return true;
 	} else {
 		for (const auto& c : actor.coordinates()) {
-			if (get(c.x, c.y).isWall()) return true;
+			if (get(c.x, c.y).isImpermiable()) return true;
 		}
 	}
 	return false;

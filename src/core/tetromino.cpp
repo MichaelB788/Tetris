@@ -1,40 +1,27 @@
 #include "core/tetromino.hpp"
 
-Tetromino::Tetromino(Vector2 initialPos) : m_pivot(initialPos) {
+Tetromino::Tetromino(Vector2 initialPos) {
 	m_type = getRandomType(); 
-	m_coordinates = generateShape(m_type, m_pivot);
+	m_coordinates = generateShape(m_type, initialPos);
 };
 
-Tetromino::Tetromino(TetrominoType type, Vector2 initialPos)
-	: m_type(type), 
-		m_pivot(initialPos)
-{
-	m_coordinates = generateShape(m_type, m_pivot);
+Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) : m_type(type) {
+	m_coordinates = generateShape(m_type, initialPos);
 };
 
 void Tetromino::operator=(const Tetromino& other) {
 	m_coordinates = other.m_coordinates;
 	m_type = other.m_type;
-	m_pivot = other.m_pivot;
 }
 
 void Tetromino::shift(const Vector2& translation) {
-	m_pivot += translation;
 	for (auto& vec : m_coordinates) vec += translation;
 }
 
-void Tetromino::rotateClockwise() {
+void Tetromino::rotate(Vector2::Rotation rotation) {
 	if (m_type != TetrominoType::O) {
-		for (auto &vec : m_coordinates) {
-			vec.rotate90Degrees(true, m_pivot);
-		}
-	}
-}
-
-void Tetromino::rotateCounterclockwise() {
-	if (m_type != TetrominoType::O) {
-		for (auto &vec : m_coordinates) {
-			vec.rotate90Degrees(false, m_pivot);
+		for (int i = 1; i < 4; i++) {
+			Vector2::rotate90Degrees(rotation, m_coordinates[i], m_coordinates[0]);
 		}
 	}
 }
@@ -50,9 +37,9 @@ std::array<Vector2, 4> Tetromino::generateShape(TetrominoType& type, Vector2& pi
 	switch(type) {
 		case TetrominoType::I:
 			return {
+				pivot,
 				pivot + Vector2::left() + Vector2::left(),
 				pivot + Vector2::left(),
-				pivot,
 				pivot + Vector2::right()
 			};
 		case TetrominoType::O:
@@ -64,38 +51,38 @@ std::array<Vector2, 4> Tetromino::generateShape(TetrominoType& type, Vector2& pi
 			};
 		case TetrominoType::T:
 			return {
-				pivot + Vector2::left(),
 				pivot,
+				pivot + Vector2::left(),
 				pivot + Vector2::right(),
 				pivot + Vector2::up()
 			};
 		case TetrominoType::Z:
 			return {
+				pivot,
 				pivot + Vector2::up() + Vector2::left(),
 				pivot + Vector2::up(),
-				pivot,
 				pivot + Vector2::right(),
 			};
 		case TetrominoType::S:
 			return {
-				pivot + Vector2::left(),
 				pivot,
-				pivot + Vector2::right(),
+				pivot + Vector2::left(),
+				pivot + Vector2::up(),
 				pivot + Vector2::up() + Vector2::right()
 			};
 		case TetrominoType::J:
 			return {
-				pivot + Vector2::up() + Vector2::left(),
-				pivot + Vector2::up(),
 				pivot,
+				pivot + Vector2::up() + Vector2::left(),
+				pivot + Vector2::left(),
 				pivot + Vector2::right(),
 			};
 		case TetrominoType::L:
 			return {
-				pivot + Vector2::left(),
 				pivot,
+				pivot + Vector2::up() + Vector2::right(),
 				pivot + Vector2::right(),
-				pivot + Vector2::up() + Vector2::right()
+				pivot + Vector2::left()
 			};
 		default:
 			return {

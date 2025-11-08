@@ -29,23 +29,15 @@ void GameState::swapActorWithStored() {
 	}
 }
 
-void GameState::moveActorLeft() {
+void GameState::moveActor(Vector2::Horizontal direction) {
 	m_matrix.removeActor(m_currentTetromino);
-	m_currentTetromino.shift(Vector2::left());
+	Vector2 translation = direction == Vector2::Horizontal::LEFT ?
+			Vector2::left()
+		: Vector2::right();
+	m_currentTetromino.shift(translation);
 
-	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
-		m_currentTetromino.shift(Vector2::right());
-	}
-
-	m_matrix.placeActor(m_currentTetromino);
-}
-
-void GameState::moveActorRight() {
-	m_matrix.removeActor(m_currentTetromino);
-	m_currentTetromino.shift(Vector2::right());
-
-	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
-		m_currentTetromino.shift(Vector2::left());
+	if (m_matrix.actorCollidesImpermiable(m_currentTetromino)) {
+		m_currentTetromino.shift(-translation);
 	}
 
 	m_matrix.placeActor(m_currentTetromino);
@@ -65,24 +57,12 @@ void GameState::moveActorDown() {
 	}
 }
 
-void GameState::rotateActorClockwise() {
+void GameState::rotateActor(Vector2::Rotation rotationDirection) {
 	m_matrix.removeActor(m_currentTetromino);
-	m_currentTetromino.rotateClockwise();
-
-	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
-		m_currentTetromino.rotateCounterclockwise();
-	}
-
-	m_matrix.placeActor(m_currentTetromino);
-}
-
-void GameState::rotateActorCounterclockwise() {
-	m_matrix.removeActor(m_currentTetromino);
-	m_currentTetromino.rotateCounterclockwise();
-
-	if (m_matrix.actorCollidesWall(m_currentTetromino)) {
-		m_currentTetromino.rotateClockwise();
-	}
+	m_currentTetromino.rotate(rotationDirection);
+	Vector2 translation = rotationDirection == Vector2::Rotation::CLOCKWISE ?
+			Vector2::right()
+		: Vector2::left();
 
 	m_matrix.placeActor(m_currentTetromino);
 }

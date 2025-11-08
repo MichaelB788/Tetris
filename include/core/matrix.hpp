@@ -27,7 +27,7 @@ public:
 	void groundActor(const Tetromino& actor);
 
 	bool actorCollidesGround(const Tetromino& actor) const;
-	bool actorCollidesWall(const Tetromino& actor) const;
+	bool actorCollidesImpermiable(const Tetromino& actor) const;
 	bool actorIsOutOfBounds(const Tetromino& actor) const;
 
 	friend class MatrixRenderer;

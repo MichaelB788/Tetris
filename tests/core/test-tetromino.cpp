@@ -20,7 +20,7 @@ TEST_CASE("Tetromino Rotation", "[Tetromino, unit]") {
 		Tetromino O = Tetromino(TetrominoType::O, {0, 0});
 		std::array<Vector2, 4> before = O.coordinates();
 
-		O.rotateClockwise();
+		O.rotate(Vector2::Rotation::CLOCKWISE);
 
 		for (unsigned int i = 0; i < before.size(); i++) {
 			REQUIRE(O.coordinates()[i] == before[i]);
@@ -31,8 +31,8 @@ TEST_CASE("Tetromino Rotation", "[Tetromino, unit]") {
 		Tetromino T1 = {{0, 0}};
 		Tetromino T2 = T1;
 
-		T1.rotateClockwise();
-		T2.rotateCounterclockwise();
+		T1.rotate(Vector2::Rotation::CLOCKWISE);
+		T2.rotate(Vector2::Rotation::COUNTERCLOCKWISE);
 
 		bool allEqual = true;
 		for (unsigned int i = 0; i < T1.coordinates().size(); i++) {
@@ -49,8 +49,8 @@ TEST_CASE("Tetromino Rotation", "[Tetromino, unit]") {
 		Tetromino tetromino = {{0, 0}};
 		std::array<Vector2, 4> before = tetromino.coordinates();
 
-		tetromino.rotateClockwise();
-		tetromino.rotateCounterclockwise();
+		tetromino.rotate(Vector2::Rotation::CLOCKWISE);
+		tetromino.rotate(Vector2::Rotation::COUNTERCLOCKWISE);
 
 		for (unsigned int i = 0; i < before.size(); i++) {
 			REQUIRE(tetromino.coordinates()[i] == before[i]);

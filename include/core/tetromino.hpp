@@ -21,8 +21,7 @@ public:
 	void shift(const Vector2& translation);
 	inline void shift(int dx, int dy) { shift({dx, dy}); }
 
-	void rotateClockwise();
-	void rotateCounterclockwise();
+	void rotate(Vector2::Rotation rotation);
 
   static TetrominoType getRandomType();
 
@@ -32,7 +31,6 @@ private:
 private:
 	std::array<Vector2, 4> m_coordinates;
 	TetrominoType m_type;
-	Vector2 m_pivot;
 };
 
 #endif

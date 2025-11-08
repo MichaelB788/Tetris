@@ -16,12 +16,10 @@ public:
 	void switchToNextTetromino();
 	void swapActorWithStored();
 
-	void moveActorLeft();
-	void moveActorRight();
+	void moveActor(Vector2::Horizontal direction);
 	void moveActorDown();
 
-	void rotateActorClockwise();
-	void rotateActorCounterclockwise();
+	void rotateActor(Vector2::Rotation rotationDirection);
 
 private:
 	static const unsigned int INIT_X = 5, INIT_Y = 5;

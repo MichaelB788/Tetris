@@ -12,7 +12,18 @@ public:
 	/// @brief Generates a Tetromino of a certain type at the given position
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
-	inline const std::array<Vector2, 4>& coordinates() const { return m_coordinates; } 
+	using iterator = std::array<Vector2, 4>::iterator;
+	using const_iterator = std::array<Vector2, 4>::const_iterator;
+
+	iterator begin() { return m_coordinates.begin(); }
+	iterator end() { return m_coordinates.end(); }
+
+	const_iterator begin() const { return m_coordinates.begin(); }
+	const_iterator end() const { return m_coordinates.end(); }
+
+	const_iterator cbegin() const { return m_coordinates.cbegin(); }
+	const_iterator cend() const { return m_coordinates.cend(); }
+
 	inline const TetrominoType type() const { return m_type; } 
 	/// @brief Get the pivot of the Tetromino, which acts as the center of rotatation
 	const Vector2 pivot() const;
@@ -26,10 +37,8 @@ public:
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
 	void rotate(Vector2::Rotation rotation);
 
-	/// @brief Uses std::random_device to generate a random Tetromino type
-  static TetrominoType getRandomType();
-
 private:
+  static TetrominoType getRandomType();
 	static constexpr std::array<Vector2, 4> generateShape(TetrominoType type, Vector2 pivot);
 
 private:

@@ -38,5 +38,5 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 
 TEST_CASE("Line operations") {
 	Matrix matrix;
-	LineCreator lc {matrix};
+	matrix(5, 5).ground(TetrominoType::T);
 }

@@ -24,8 +24,8 @@ void Tetromino::shift(const Vector2& translation) {
 
 void Tetromino::rotate(Vector2::Rotation rotation) {
 	if (m_type != TetrominoType::O) {
-		for (int i = 0; i < 4; i++) {
-			m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
+		for (int i = 1; i < 4; i++) {
+			m_coordinates[i].rotate90Degrees(rotation, pivot());
 		}
 	}
 }
@@ -37,7 +37,7 @@ TetrominoType Tetromino::getRandomType() {
 	return TetrominoType(distrib(gen));
 }
 
-std::array<Vector2, 4> Tetromino::generateShape(TetrominoType& type, Vector2& pivot) {
+constexpr std::array<Vector2, 4> Tetromino::generateShape(TetrominoType type, Vector2 pivot) {
 	switch(type) {
 		case TetrominoType::I:
 			return {

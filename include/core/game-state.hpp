@@ -5,13 +5,12 @@
 #include "util/renderer.hpp"
 #include "render/matrix-renderer.hpp"
 
-// TODO: Implement game overs
-
 class GameState {
 public:
 	GameState(Renderer& renderer) : m_matrixRenderer(m_matrix, renderer) {}
 
 	void update();
+	void gameOver();
 
 	void switchToNextTetromino();
 	void swapActorWithStored();

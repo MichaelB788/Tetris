@@ -2,6 +2,10 @@
 #include <cstdio>
 
 Tetris::Tetris()
+	: m_window("Tetris"), 
+		m_renderer(m_window),
+		m_gameState(m_renderer),
+		m_eventHandler(m_gameState)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -36,5 +40,6 @@ void Tetris::runGameLoop() {
 
 		SDL_Delay(30);
 	}
+	{};
 }
 

@@ -7,7 +7,7 @@
 class Renderer {
 public:
 	enum class Color {
-		WHITE, GRAY
+		WHITE, GRAY, BLACK
 	};
 
 	Renderer(Window& window) : r_window(window) {};

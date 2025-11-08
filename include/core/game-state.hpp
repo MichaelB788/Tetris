@@ -7,7 +7,12 @@
 
 class GameState {
 public:
-	GameState(Renderer& renderer) : m_matrixRenderer(m_matrix, renderer) {}
+	GameState(Renderer& renderer)
+		: m_matrixRenderer(m_matrix, renderer),
+			m_currentTetromino(generateRandomTetromino()),
+			m_nextTetromino(generateRandomTetromino()),
+			m_storedTetromino(TetrominoType::NONE, {INIT_X, INIT_Y})
+	{};
 
 	void update();
 	void gameOver();
@@ -22,15 +27,20 @@ public:
 	void rotateActor(Vector2::Rotation rotationDirection);
 
 private:
-	static const unsigned int INIT_X = 5, INIT_Y = 5;
+	inline const Tetromino generateRandomTetromino() {
+		return Tetromino({INIT_X, INIT_Y});
+	};
+
+private:
+	static constexpr unsigned int INIT_X = 5, INIT_Y = 5;
 
 	Matrix m_matrix;
-	MatrixRenderer m_matrixRenderer;
+	const MatrixRenderer m_matrixRenderer;
 	
-	bool isSwapped = false;
-	Tetromino m_currentTetromino{{INIT_X, INIT_Y}};
-	Tetromino m_nextTetromino{{INIT_X, INIT_Y}};
-	Tetromino m_storedTetromino{TetrominoType::NONE, {INIT_X, INIT_Y}};
+	bool m_isSwapped = false;
+	Tetromino m_currentTetromino;
+	Tetromino m_nextTetromino;
+	Tetromino m_storedTetromino;
 };
 
 #endif

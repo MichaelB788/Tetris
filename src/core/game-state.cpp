@@ -13,9 +13,10 @@ void GameState::gameOver() {
 }
 
 void GameState::switchToNextTetromino() {
-	isSwapped = false;
+	m_isSwapped = false;
 	m_currentTetromino = m_nextTetromino;
-	m_currentTetromino = Tetromino({INIT_X, INIT_Y});
+	m_currentTetromino = generateRandomTetromino();
+
 	while (m_matrix.actorCollidesGround(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::up());
 		if (m_matrix.actorIsOutOfBounds(m_currentTetromino)) {
@@ -26,14 +27,14 @@ void GameState::switchToNextTetromino() {
 }
 
 void GameState::swapActorWithStored() {
-	if (!isSwapped) {
+	if (!m_isSwapped) {
 		m_matrix.removeActor(m_currentTetromino);
-		isSwapped = true;
+		m_isSwapped = true;
 
 		if (m_storedTetromino.type() == TetrominoType::NONE) {
 			m_storedTetromino = m_currentTetromino;
 			m_currentTetromino = m_nextTetromino;
-			m_nextTetromino = Tetromino(Tetromino::getRandomType(), {INIT_X, INIT_Y});
+			m_nextTetromino = generateRandomTetromino();
 		} else {
 			const Tetromino temp = m_storedTetromino;
 			m_storedTetromino = m_currentTetromino;
@@ -60,7 +61,6 @@ void GameState::moveActorDown() {
 
 	if (m_matrix.actorCollidesGround(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::up());
-		m_matrix.placeActor(m_currentTetromino);
 		m_matrix.groundActor(m_currentTetromino);
 		switchToNextTetromino();
 	}

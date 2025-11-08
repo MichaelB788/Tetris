@@ -13,6 +13,19 @@ public:
 
 	Matrix();
 
+	inline const MatrixTile& operator()(unsigned int x, unsigned int y) const {
+		return m_data[mapIndex(x, y)];
+	};
+	inline const MatrixTile& operator()(Vector2 vec) const {
+		return m_data[mapIndex(vec)];
+	};
+	inline MatrixTile& operator()(unsigned int x, unsigned int y) {
+		return m_data[mapIndex(x, y)];
+	};
+	inline MatrixTile& operator()(Vector2 vec) {
+		return m_data[mapIndex(vec)];
+	};
+
 	/// @brief Reverts the Matrix to its original, empty state.
 	void clearMatrix();
 
@@ -31,13 +44,13 @@ public:
 	bool actorIsOutOfBounds(const Tetromino& actor) const;
 	bool isActorOnLeft(const Tetromino& actor) const;
 
-	friend class MatrixRenderer;
-	friend class LineCreator;
-
 private:
-	MatrixTile& get(unsigned int x, unsigned int y);
-	const MatrixTile& get(unsigned int x, unsigned int y) const;
-	void set(unsigned int x, unsigned int y, MatrixTile tile);
+	constexpr size_t mapIndex(unsigned int x, unsigned int y) const {
+		return y * WIDTH + x;
+	};
+	constexpr size_t mapIndex(Vector2 vec) const {
+		return vec.y * WIDTH + vec.x;
+	};
 
 	// === Query ===
 	constexpr bool isRowComplete(unsigned int row) const;
@@ -59,17 +72,6 @@ private:
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
 	Tetromino m_ghost{TetrominoType::NONE, {5, 5}}; // Temporary value
-};
-
-/// @brief Creates lines on the Matrix. Mostly used for testing. 
-class LineCreator {
-public:
-	LineCreator(Matrix& matrix) : r_matrix(matrix) {};
-	void fillRow(unsigned int row, MatrixTile tile);
-	void partiallyFilledRow(unsigned int row, MatrixTile tile);
-
-private:
-	Matrix& r_matrix;
 };
 
 #endif

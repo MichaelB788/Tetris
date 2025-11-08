@@ -1,8 +1,7 @@
 #include "util/renderer.hpp"
 #include <SDL2/SDL_render.h>
 
-Renderer::~Renderer()
-{
+Renderer::~Renderer() {
 	SDL_DestroyRenderer(p_renderer);
 	p_renderer = nullptr;
 }
@@ -30,10 +29,17 @@ void Renderer::updateFrame() const {
 }
 
 void Renderer::drawRectangle(Color color, bool filled, int x, int y, int w, int h) const {
-	if (color == Color::WHITE)
-		SDL_SetRenderDrawColor(p_renderer, 255, 255, 255, 0);
-	else 
-		SDL_SetRenderDrawColor(p_renderer, 100, 100, 100, 0);
+	switch (color) {
+		case Color::WHITE:
+			SDL_SetRenderDrawColor(p_renderer, 255, 255, 255, 0);
+			break;
+		case Color::GRAY:
+			SDL_SetRenderDrawColor(p_renderer, 100, 100, 100, 0);
+			break;
+		case Color::BLACK: default:
+			SDL_SetRenderDrawColor(p_renderer, 0, 0, 0, 0);
+			break;
+	}
 
 	SDL_Rect rect;
 	rect.x = x;

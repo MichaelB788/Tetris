@@ -1,8 +1,6 @@
 #ifndef MATRIX_RENDERER_H
 #define MATRIX_RENDERER_H
 #include <SDL2/SDL_render.h>
-#include <stdint.h>
-#include "core/tile-state.hpp"
 #include "core/matrix.hpp"
 #include "util/renderer.hpp"
 
@@ -12,12 +10,12 @@ public:
 		r_matrix(matrix),
 		r_renderer(renderer)
 	{};
-	void renderMatrix();
+	void renderMatrix() const;
 
 private:
-	constexpr static unsigned int TILE_SIZE = 40;
-	Matrix& r_matrix;
-	Renderer& r_renderer;
+	static constexpr unsigned int TILE_SIZE = 40;
+	const Matrix& r_matrix;
+	const Renderer& r_renderer;
 };
 
 #endif

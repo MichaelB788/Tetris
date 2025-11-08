@@ -17,10 +17,12 @@ public:
 
 private:
 	void runGameLoop();
-	Window m_window {"Tetris"};
-	Renderer m_renderer {m_window};
-	GameState m_gameState {m_renderer}; 
-	EventHandler m_eventHandler {m_gameState};
+
+private:
+	Window m_window;
+	Renderer m_renderer;
+	GameState m_gameState; 
+	EventHandler m_eventHandler;
 };
 
 #endif

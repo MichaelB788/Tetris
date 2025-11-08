@@ -41,7 +41,7 @@ void Matrix::groundActor(const Tetromino& actor) {
 	if (!actorIsOutOfBounds(actor)) {
 		removeGhost();
 		for (const auto& c : actor.coordinates()) {
-			get(c.x, c.y).ground();
+			get(c.x, c.y).ground(actor.type());
 		}
 	}
 }
@@ -82,6 +82,11 @@ bool Matrix::actorIsOutOfBounds(const Tetromino& actor) const {
 		if (c.x < 0 || c.y < 0 || c.x >= WIDTH || c.y >= HEIGHT) return true;
 	}
 	return false;
+}
+
+bool Matrix::isActorOnLeft(const Tetromino& actor) const {
+	int value = WIDTH - actor.pivot().x;
+	return value > WIDTH / 2;
 }
 
 MatrixTile& Matrix::get(unsigned int x, unsigned int y) {

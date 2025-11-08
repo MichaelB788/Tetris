@@ -18,6 +18,7 @@ public:
 
 	void moveActor(Vector2::Horizontal direction);
 	void moveActorDown();
+	void dropActor();
 
 	void rotateActor(Vector2::Rotation rotationDirection);
 

@@ -35,6 +35,10 @@ struct MatrixTile {
 		state = TileState::ACTIVE;
 		type = t;
 	}
+	inline void ground(TetrominoType t) {
+		state = TileState::GROUND;
+		type = t;
+	}
 	inline void occupyAsGhost(TetrominoType t) {
 		state = TileState::GHOST;
 		type = t;
@@ -42,9 +46,6 @@ struct MatrixTile {
 	inline void clear() {
 		state = TileState::EMPTY;
 		type = TetrominoType::NONE;
-	}
-	inline void ground() {
-		state = TileState::GROUND;
 	}
 };
 

@@ -29,6 +29,7 @@ public:
 	bool actorCollidesGround(const Tetromino& actor) const;
 	bool actorCollidesImpermiable(const Tetromino& actor) const;
 	bool actorIsOutOfBounds(const Tetromino& actor) const;
+	bool isActorOnLeft(const Tetromino& actor) const;
 
 	friend class MatrixRenderer;
 	friend class LineCreator;

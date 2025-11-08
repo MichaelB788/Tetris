@@ -1,5 +1,4 @@
 #include "app/tetris.hpp"
-#include "util/vector2.hpp"
 #include <cstdio>
 
 Tetris::Tetris()
@@ -27,11 +26,11 @@ void Tetris::runGameLoop() {
 			if (event.type == SDL_QUIT) {
 				quit = true;
 			} else if (event.type == SDL_KEYDOWN) {
-				// event handler
+				m_eventHandler.handleInput(event);
 			}
 		}
 
-		m_state.update();
+		m_gameState.update();
 
 		m_renderer.updateFrame();
 

@@ -3,10 +3,12 @@
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_render.h>
+
 #include "util/window.hpp"
 #include "util/renderer.hpp"
+
 #include "core/game-state.hpp"
-#include "render/matrix-renderer.hpp"
+#include "core/event-handler.hpp"
 
 class Tetris {
 public:
@@ -15,9 +17,10 @@ public:
 
 private:
 	void runGameLoop();
-	Window m_window = Window("Tetris");
-	Renderer m_renderer = Renderer(m_window);
-	GameState m_state{m_renderer}; 
+	Window m_window {"Tetris"};
+	Renderer m_renderer {m_window};
+	GameState m_gameState {m_renderer}; 
+	EventHandler m_eventHandler {m_gameState};
 };
 
 #endif

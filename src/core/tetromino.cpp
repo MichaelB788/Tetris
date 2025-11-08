@@ -14,14 +14,18 @@ void Tetromino::operator=(const Tetromino& other) {
 	m_type = other.m_type;
 }
 
+const Vector2 Tetromino::pivot() const {
+	return m_coordinates[0];
+}
+
 void Tetromino::shift(const Vector2& translation) {
 	for (auto& vec : m_coordinates) vec += translation;
 }
 
 void Tetromino::rotate(Vector2::Rotation rotation) {
 	if (m_type != TetrominoType::O) {
-		for (int i = 1; i < 4; i++) {
-			Vector2::rotate90Degrees(rotation, m_coordinates[i], m_coordinates[0]);
+		for (int i = 0; i < 4; i++) {
+			m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
 		}
 	}
 }

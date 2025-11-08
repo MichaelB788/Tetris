@@ -23,7 +23,7 @@ struct Vector2 {
 	constexpr Vector2() = default;
 	constexpr Vector2(int x, int y) : x(x), y(y) {}
 
-	static void rotate90Degrees(Rotation rotation, Vector2& target, const Vector2& pivot);
+	void rotate90Degrees(Rotation rotation, const Vector2& pivot);
 
 	inline Vector2 operator+(const Vector2& other) const {
 		return {x + other.x, y + other.y};

@@ -2,6 +2,7 @@
 #define GAME_STATE_H
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
+#include "core/super-rotation-system.hpp"
 #include "util/renderer.hpp"
 #include "render/matrix-renderer.hpp"
 
@@ -10,8 +11,9 @@ public:
 	GameState(Renderer& renderer)
 		: m_matrixRenderer(m_matrix, renderer),
 			m_currentTetromino(generateRandomTetromino()),
+			m_SRS(m_currentTetromino),
 			m_nextTetromino(generateRandomTetromino()),
-			m_storedTetromino(Tetromino::Type::NONE, {INIT_X, INIT_Y})
+			m_storedTetromino(TetrominoType::NONE, {INIT_X, INIT_Y})
 	{};
 
 	void update();
@@ -39,6 +41,8 @@ private:
 	
 	bool m_isSwapped = false;
 	Tetromino m_currentTetromino;
+	SuperRotationSystem m_SRS;
+
 	Tetromino m_nextTetromino;
 	Tetromino m_storedTetromino;
 };

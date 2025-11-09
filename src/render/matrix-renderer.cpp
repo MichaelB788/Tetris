@@ -5,13 +5,13 @@ void MatrixRenderer::renderMatrix() const {
 	{
 		for (unsigned int x = 0; x < Matrix::WIDTH; x++)
 		{
-			if (r_matrix(x, y).state == TileState::EMPTY) {
+			if (r_matrix(x, y).state == MatrixTile::State::EMPTY) {
 				r_renderer.drawRectangle(
 						Renderer::Color::GRAY, false, x * TILE_SIZE, y * TILE_SIZE,
 						TILE_SIZE, TILE_SIZE
 						);
 			}
-			else if (r_matrix(x, y).state == TileState::ACTIVE || r_matrix(x, y).state == TileState::GROUND)
+			else if (r_matrix(x, y).state == MatrixTile::State::ACTIVE || r_matrix(x, y).state == MatrixTile::State::GROUND)
 			{
 				r_renderer.drawRectangle(
 						Renderer::Color::WHITE, true, x * TILE_SIZE, y * TILE_SIZE,

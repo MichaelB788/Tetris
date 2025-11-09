@@ -1,6 +1,6 @@
 #ifndef MATRIX_TILE_H
 #define MATRIX_TILE_H
-#include "core/tetromino.hpp"
+#include "core/tetromino-type.hpp"
 
 struct MatrixTile {
 	enum class State : uint8_t {
@@ -12,11 +12,11 @@ struct MatrixTile {
 	};
 
 	State state = State::EMPTY;
-	Tetromino::Type type = Tetromino::Type::NONE;
+	TetrominoType type = TetrominoType::NONE;
 
 	constexpr MatrixTile() = default;
 	constexpr MatrixTile(State ts) : state(ts) {};
-	constexpr MatrixTile(State ts, Tetromino::Type tt) : state(ts), type(tt) {};
+	constexpr MatrixTile(State ts, TetrominoType tt) : state(ts), type(tt) {};
 
 	inline constexpr bool isEmpty() const {
 		return state == State::EMPTY
@@ -29,21 +29,21 @@ struct MatrixTile {
 	}
 	inline constexpr bool isGround() const { return state == State::GROUND; }
 
-	inline void occupy(Tetromino::Type t) {
+	inline void occupy(TetrominoType t) {
 		state = State::ACTIVE;
 		type = t;
 	}
-	inline void ground(Tetromino::Type t) {
+	inline void ground(TetrominoType t) {
 		state = State::GROUND;
 		type = t;
 	}
-	inline void occupyAsGhost(Tetromino::Type t) {
+	inline void occupyAsGhost(TetrominoType t) {
 		state = State::GHOST;
 		type = t;
 	}
 	inline void clear() {
 		state = State::EMPTY;
-		type = Tetromino::Type::NONE;
+		type = TetrominoType::NONE;
 	}
 };
 

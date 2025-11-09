@@ -3,29 +3,18 @@
 #include <array>
 #include <random>
 #include "util/vector2.hpp"
+#include "util/cyclic-int8_t.hpp"
+#include "core/tetromino-type.hpp"
 
 class Tetromino {
 public:
-	/// @brief Types of Tetromino available for use. `Type` may be `NONE` in the case of unknown values.
-	enum class Type : int8_t {
-		NONE = -1, I, O, T, Z, S, J, L
-	};
-
-	/// @brief The four states of rotation a Tetromino takes
-	enum RotationState {
-		COUNTERCLOCKWISE = -1, ZERO = 0, CLOCKWISE = 1, TWO = 2
-	};
-
 	/// @brief Generates a Tetromino of a random type centered at `initialPos`
 	Tetromino(Vector2 initialPos);
 	/// @brief Generates a Tetromino of `Tetromino::Type type` centered at `initialPos`
-	Tetromino(Tetromino::Type type, Vector2 initialPos);
+	Tetromino(TetrominoType type, Vector2 initialPos);
 
-	/// @return An immutable copy of this Tetromino's type
-	inline Tetromino::Type type() const { return m_type; } 
-
-	/// @brief Sets the coordinates and type of this Tetromino to `other`
-	void operator=(const Tetromino& other);
+	inline TetrominoType type() const { return m_type; } 
+	inline CyclicInt8_t rotationState() const { return m_rotationState; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
 	void shift(Vector2 translation);
@@ -49,13 +38,8 @@ public:
 
 private:
 	std::array<Vector2, 4> m_coordinates;
-	Tetromino::Type m_type;
-	int m_rotationState = 0;
-};
-
-struct SRS {
-	std::array<Vector2, 5> Normal_Offset_Data = ;
-	std::array<Vector2, 5> I_Offset_Data = ;
+	TetrominoType m_type;
+	CyclicInt8_t m_rotationState = {-1, 4};
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "core/matrix.hpp"
 
-Matrix::Matrix() {
+Matrix::Matrix() : m_ghost(TetrominoType::NONE, {0, 0}) {
 	for (int i = 0; i < m_data.size(); i++) {
 		m_data[i] = ( i % WIDTH == 0 || i % WIDTH == WIDTH - 1 )
 			? MatrixTile(MatrixTile::State::WALL)
@@ -15,26 +15,11 @@ void Matrix::clearMatrix() {
 	}
 }
 
-bool Matrix::hasFilledLines() {
-	for (unsigned int row = 0; row < HEIGHT; row++) {
-		if (isRowComplete(row)) return true;
+void Matrix::checkAndClearLines() {
+	if (clearFilledRows()) {
+		dropFloatingRows(getRowState());
 	}
-	return false;
-}
-
-void Matrix::clearLines() {
-	clearFilledRows();
-	dropFloatingRows(getRowState());
 };
-
-// TODO: Instead of returning a bool, return an int or Vector2 telling the direction
-// an out of bounds Tetromino block is.
-Vector2 Matrix::positionOfOutOfBounds(const Tetromino& actor) const {
-	// Ideally you would get a Vector2(1, 0)
-	for (const auto& block : actor) {
-		if ()
-	}
-}
 
 void Matrix::placeActor(const Tetromino& actor) {
 	if (!actorIsOutOfBounds(actor)) {
@@ -66,23 +51,15 @@ void Matrix::removeActor(const Tetromino& actor) {
 }
 
 bool Matrix::actorCollidesGround(const Tetromino& actor) const {
-	if (actorIsOutOfBounds(actor)) {
-		return true;
-	} else {
-		for (const auto& block : actor) {
-			if (m_data[mapIndex(block)].isGround()) return true;
-		}
+	for (const auto& block : actor) {
+		if (m_data[mapIndex(block)].isGround()) return true;
 	}
 	return false;
 }
 
 bool Matrix::actorCollidesImpermiable(const Tetromino& actor) const {
-	if (actorIsOutOfBounds(actor)) {
-		return true;
-	} else {
-		for (const auto& block : actor) {
-			if (m_data[mapIndex(block)].isImpermiable()) return true;
-		}
+	for (const auto& block : actor) {
+		if (m_data[mapIndex(block)].isImpermiable()) return true;
 	}
 	return false;
 }
@@ -92,23 +69,6 @@ bool Matrix::actorIsOutOfBounds(const Tetromino& actor) const {
 		if (block.x < 0 || block.y < 0 || block.x >= WIDTH || block.y >= HEIGHT) return true;
 	}
 	return false;
-}
-
-Vector2 distanceOutOfBounds(const Tetromino& actor) {
-	Vector2 outOfBounds = {0, 0};
-	for (const auto& block : actor) {
-	}
-}
-
-Vector2 Matrix::howFarOutIsVec2(Vector2 vec) {
-	int dx, dy;
-	dx = (vec.x > WIDTH / 2)
-		? vec.x - WIDTH
-		: 0 - vec.x;
-	dy = (vec.y > HEIGHT / 2)
-		? vec.y - HEIGHT
-		: 0 - vec.y;
-	return {dx, dy};
 }
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {
@@ -153,9 +113,14 @@ void Matrix::replaceAndClearRows(unsigned int replacedRow, unsigned int clearedR
 	}
 }
 
-void Matrix::clearFilledRows() {
+bool Matrix::clearFilledRows() {
+	bool cleared = false;
 	for (unsigned int row = 0; row < HEIGHT; row++)
-		if (isRowComplete(row)) clearRow(row);
+		if (isRowComplete(row)) {
+			cleared = true;
+			clearRow(row);
+		}
+	return cleared;
 }
 
 std::array<bool, Matrix::HEIGHT> Matrix::getRowState() const {

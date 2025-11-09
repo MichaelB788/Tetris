@@ -2,9 +2,7 @@
 
 void GameState::update() {
 	m_matrix.placeActor(m_currentTetromino);
-	if (m_matrix.hasFilledLines()) {
-		m_matrix.clearLines();
-	}
+	m_matrix.checkAndClearLines();
 	m_matrixRenderer.renderMatrix();
 }
 
@@ -31,7 +29,7 @@ void GameState::swapActorWithStored() {
 		m_matrix.removeActor(m_currentTetromino);
 		m_isSwapped = true;
 
-		if (m_storedTetromino.type() == Tetromino::Type::NONE) {
+		if (m_storedTetromino.type() == TetrominoType::NONE) {
 			m_storedTetromino = m_currentTetromino;
 			m_currentTetromino = m_nextTetromino;
 			m_nextTetromino = generateRandomTetromino();
@@ -59,7 +57,8 @@ void GameState::moveActorDown() {
 	m_matrix.removeActor(m_currentTetromino);
 	m_currentTetromino.shift(Vector2::down());
 
-	if (m_matrix.actorCollidesGround(m_currentTetromino)) {
+	if (m_matrix.actorCollidesGround(m_currentTetromino)
+			|| m_matrix.actorIsOutOfBounds(m_currentTetromino)) {
 		m_currentTetromino.shift(Vector2::up());
 		m_matrix.groundActor(m_currentTetromino);
 		switchToNextTetromino();
@@ -81,7 +80,7 @@ void GameState::rotateActor(Vector2::Rotation rotationDirection) {
 	m_matrix.removeActor(m_currentTetromino);
 	m_currentTetromino.rotate(rotationDirection);
 
-	while (m_matrix.actorCollidesImpermiable(m_currentTetromino)) {
-		m_currentTetromino.shift(m_matrix.distanceOutOfBounds());
+	if (m_matrix.actorCollidesImpermiable(m_currentTetromino)) {
+		// m_currentTetromino.shift(m_matrix.distanceOutOfBounds());
 	}
 }

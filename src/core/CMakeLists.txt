@@ -1,6 +1,7 @@
 add_library(tetris_core
   tetromino.cpp
   matrix.cpp
+	super-rotation-system.cpp
 	game-state.cpp
 	event-handler.cpp
 )

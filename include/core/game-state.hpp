@@ -11,7 +11,7 @@ public:
 		: m_matrixRenderer(m_matrix, renderer),
 			m_currentTetromino(generateRandomTetromino()),
 			m_nextTetromino(generateRandomTetromino()),
-			m_storedTetromino(TetrominoType::NONE, {INIT_X, INIT_Y})
+			m_storedTetromino(Tetromino::Type::NONE, {INIT_X, INIT_Y})
 	{};
 
 	void update();
@@ -32,7 +32,7 @@ private:
 	};
 
 private:
-	static constexpr unsigned int INIT_X = 5, INIT_Y = 5;
+	static constexpr unsigned int INIT_X = 5, INIT_Y = 2;
 
 	Matrix m_matrix;
 	const MatrixRenderer m_matrixRenderer;

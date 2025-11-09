@@ -3,8 +3,8 @@
 Matrix::Matrix() {
 	for (int i = 0; i < m_data.size(); i++) {
 		m_data[i] = ( i % WIDTH == 0 || i % WIDTH == WIDTH - 1 )
-			? MatrixTile(TileState::WALL)
-			: MatrixTile(TileState::EMPTY);
+			? MatrixTile(MatrixTile::State::WALL)
+			: MatrixTile(MatrixTile::State::EMPTY);
 	}
 }
 
@@ -26,6 +26,15 @@ void Matrix::clearLines() {
 	clearFilledRows();
 	dropFloatingRows(getRowState());
 };
+
+// TODO: Instead of returning a bool, return an int or Vector2 telling the direction
+// an out of bounds Tetromino block is.
+Vector2 Matrix::positionOfOutOfBounds(const Tetromino& actor) const {
+	// Ideally you would get a Vector2(1, 0)
+	for (const auto& block : actor) {
+		if ()
+	}
+}
 
 void Matrix::placeActor(const Tetromino& actor) {
 	if (!actorIsOutOfBounds(actor)) {
@@ -85,11 +94,21 @@ bool Matrix::actorIsOutOfBounds(const Tetromino& actor) const {
 	return false;
 }
 
-// TODO: Instead of returning a bool, return an int or Vector2 telling the direction
-// an out of bounds Tetromino block is.
-bool Matrix::isActorOnLeft(const Tetromino& actor) const {
-	int value = WIDTH - actor.pivot().x;
-	return value > WIDTH / 2;
+Vector2 distanceOutOfBounds(const Tetromino& actor) {
+	Vector2 outOfBounds = {0, 0};
+	for (const auto& block : actor) {
+	}
+}
+
+Vector2 Matrix::howFarOutIsVec2(Vector2 vec) {
+	int dx, dy;
+	dx = (vec.x > WIDTH / 2)
+		? vec.x - WIDTH
+		: 0 - vec.x;
+	dy = (vec.y > HEIGHT / 2)
+		? vec.y - HEIGHT
+		: 0 - vec.y;
+	return {dx, dy};
 }
 
 constexpr bool Matrix::isRowComplete(unsigned int row) const {

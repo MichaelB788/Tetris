@@ -3,7 +3,7 @@
 #include <array>
 #include <stdint.h>
 #include "core/tetromino.hpp"
-#include "core/tile-state.hpp"
+#include "core/matrix-tile.hpp"
 
 /// @brief The Tetris playfield manages its own state as well as any given Tetromino.
 class Matrix {
@@ -42,7 +42,8 @@ public:
 	bool actorCollidesGround(const Tetromino& actor) const;
 	bool actorCollidesImpermiable(const Tetromino& actor) const;
 	bool actorIsOutOfBounds(const Tetromino& actor) const;
-	bool isActorOnLeft(const Tetromino& actor) const;
+
+	Vector2 distanceOutOfBounds(const Tetromino& actor);
 
 private:
 	constexpr size_t mapIndex(unsigned int x, unsigned int y) const {
@@ -53,6 +54,7 @@ private:
 	};
 
 	// === Query ===
+	Vector2 howFarOutIsVec2(Vector2 vec);
 	constexpr bool isRowComplete(unsigned int row) const;
 	constexpr bool isRowPopulated(unsigned int row) const;
 
@@ -71,7 +73,7 @@ private:
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
-	Tetromino m_ghost{TetrominoType::NONE, {5, 5}}; // Temporary value
+	Tetromino m_ghost{Tetromino::Type::NONE, {5, 5}}; // Temporary value
 };
 
 #endif

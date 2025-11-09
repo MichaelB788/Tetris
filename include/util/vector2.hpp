@@ -3,7 +3,7 @@
 #include <ostream>
 #include <stdint.h>
 
-/// @brief Stores two (x, y) coordinates.
+/// @brief Stores and manages two `int` coordinates in (x, y) format.
 struct Vector2 {
 	int x{};
 	int y{};

@@ -3,10 +3,10 @@
 #include <ostream>
 #include <stdint.h>
 
-/// @brief Stores and manages two `int` coordinates in (x, y) format.
+/// @brief Stores and manages two `int8_t` coordinates in (x, y) format.
 struct Vector2 {
-	int x{};
-	int y{};
+	int8_t x{};
+	int8_t y{};
 
 	enum class Rotation : uint8_t {
 		CLOCKWISE,
@@ -50,7 +50,7 @@ struct Vector2 {
 
 	/// @brief Converts the object data to readable string format. Used for debugging.
 	friend std::ostream& operator<<(std::ostream& os, const Vector2& vec) {
-		os << "(" << vec.x << ", " << vec.y << ")";
+		os << "(" << static_cast<int>(vec.x) << ", " << static_cast<int>(vec.y) << ")";
 		return os;
 	}
 

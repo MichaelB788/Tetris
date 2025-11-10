@@ -67,11 +67,7 @@ void GameState::moveActorDown() {
 
 void GameState::dropActor() {
 	m_matrix.removeActor(m_currentTetromino);
-
-	while (!m_matrix.actorCollidesGround(m_currentTetromino)) {
-		m_currentTetromino.shift(Vector2::down());
-	}
-	m_currentTetromino.shift(Vector2::up());
+	m_matrix.dropActor(m_currentTetromino);
 	m_matrix.groundActor(m_currentTetromino);
 	switchToNextTetromino();
 }

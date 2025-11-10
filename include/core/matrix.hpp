@@ -35,6 +35,7 @@ public:
 	void placeActor(const Tetromino& actor);
 	void removeActor(const Tetromino& actor);
 	void groundActor(const Tetromino& actor);
+	void dropActor(Tetromino& actor);
 
 	bool actorCollidesGround(const Tetromino& actor) const;
 	bool actorCollidesImpermiable(const Tetromino& actor) const;
@@ -43,10 +44,10 @@ public:
 private:
 	constexpr size_t mapIndex(unsigned int x, unsigned int y) const {
 		return y * WIDTH + x;
-	};
+	}
 	constexpr size_t mapIndex(Vector2 vec) const {
 		return vec.y * WIDTH + vec.x;
-	};
+	}
 
 	// === Query ===
 	constexpr bool isRowComplete(unsigned int row) const;

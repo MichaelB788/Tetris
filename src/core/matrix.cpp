@@ -50,7 +50,15 @@ void Matrix::removeActor(const Tetromino& actor) {
 	}
 }
 
+void Matrix::dropActor(Tetromino& actor) {
+	while (!actorCollidesGround(actor)) {
+		actor.shift(Vector2::down());
+	}
+	actor.shift(Vector2::up());
+}
+
 bool Matrix::actorCollidesGround(const Tetromino& actor) const {
+	if (actorIsOutOfBounds(actor)) return true;
 	for (const auto& block : actor) {
 		if (m_data[mapIndex(block)].isGround()) return true;
 	}
@@ -58,6 +66,7 @@ bool Matrix::actorCollidesGround(const Tetromino& actor) const {
 }
 
 bool Matrix::actorCollidesImpermiable(const Tetromino& actor) const {
+	if (actorIsOutOfBounds(actor)) return true;
 	for (const auto& block : actor) {
 		if (m_data[mapIndex(block)].isImpermiable()) return true;
 	}
@@ -86,10 +95,7 @@ constexpr bool Matrix::isRowPopulated(unsigned int row) const {
 }
 
 void Matrix::placeGhost() {
-	while ( !actorCollidesGround(m_ghost) ) {
-		m_ghost.shift(Vector2::down());
-	}
-	m_ghost.shift(Vector2::up());
+	dropActor(m_ghost);
 	for (const auto& block : m_ghost) {
 		m_data[mapIndex(block)].occupyAsGhost(m_ghost.type());
 	}
@@ -115,7 +121,7 @@ void Matrix::replaceAndClearRows(unsigned int replacedRow, unsigned int clearedR
 
 bool Matrix::clearFilledRows() {
 	bool cleared = false;
-	for (unsigned int row = 0; row < HEIGHT; row++)
+	for (unsigned int row = 0; row < HEIGHT - 1; row++)
 		if (isRowComplete(row)) {
 			cleared = true;
 			clearRow(row);

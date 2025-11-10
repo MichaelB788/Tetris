@@ -6,7 +6,7 @@
 
 class MatrixRenderer {
 public:
-	MatrixRenderer(Matrix& matrix, Renderer& renderer) :
+	MatrixRenderer(const Matrix& matrix, const Renderer& renderer) :
 		r_matrix(matrix),
 		r_renderer(renderer)
 	{};

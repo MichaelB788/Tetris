@@ -3,7 +3,7 @@
 #include <array>
 #include <random>
 #include "util/vector2.hpp"
-#include "util/cyclic-int8_t.hpp"
+#include "util/compass.hpp"
 #include "core/tetromino-type.hpp"
 
 class Tetromino {
@@ -14,7 +14,8 @@ public:
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
 	inline TetrominoType type() const { return m_type; } 
-	inline CyclicInt8_t rotationState() const { return m_rotationState; } 
+	inline Compass::Direction rotationState() const { return m_rotationCompass.value(); } 
+	inline Vector2 center() const { return m_coordinates[0]; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
 	void shift(Vector2 translation);
@@ -39,7 +40,7 @@ public:
 private:
 	std::array<Vector2, 4> m_coordinates;
 	TetrominoType m_type;
-	CyclicInt8_t m_rotationState = {-1, 4};
+	Compass m_rotationCompass;
 };
 
 #endif

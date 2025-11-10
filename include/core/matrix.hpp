@@ -2,6 +2,7 @@
 #define MATRIX_H
 #include <array>
 #include <stdint.h>
+#include <cassert>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 
@@ -26,32 +27,37 @@ public:
 		return m_data[mapIndex(vec)];
 	};
 
-	/// @brief Reverts the Matrix to its original, empty state.
-	void clearMatrix();
+	void assignActor(const Tetromino* actor);
 
-	/// @brief Clears all completed lines and drops any floating lines.
+	bool tetrominoIsOutOfBounds(const Tetromino& tetromino) const;
+	void dropTetromino(Tetromino& tetromino) const;
+
+	void clearMatrix();
 	void checkAndClearLines();
 
-	void placeActor(const Tetromino& actor);
-	void removeActor(const Tetromino& actor);
-	void groundActor(const Tetromino& actor);
-	void dropActor(Tetromino& actor);
+	void placeActor();
+	void removeActor();
+	void groundActor();
 
-	bool actorCollidesGround(const Tetromino& actor) const;
-	bool actorCollidesImpermiable(const Tetromino& actor) const;
-	bool actorIsOutOfBounds(const Tetromino& actor) const;
+	bool actorCollidesGround() const;
+	bool actorCollidesImpermiable() const;
 
 private:
 	constexpr size_t mapIndex(unsigned int x, unsigned int y) const {
-		return y * WIDTH + x;
+		size_t index = y * WIDTH + x;
+		assert(index >= 0 && index < m_data.size() && "Attempting to access element outside range of m_data");
+		return index;
 	}
 	constexpr size_t mapIndex(Vector2 vec) const {
-		return vec.y * WIDTH + vec.x;
+		size_t index = vec.y * WIDTH + vec.x;
+		assert(index >= 0 && index < m_data.size() && "Attempting to access element outside range of m_data");
+		return index;
 	}
 
 	// === Query ===
-	constexpr bool isRowComplete(unsigned int row) const;
-	constexpr bool isRowPopulated(unsigned int row) const;
+	bool isRowComplete(unsigned int row) const;
+	bool isRowEmpty(unsigned int row) const;
+	bool tetrominoCollides(const Tetromino& tetromino, MatrixTile::State state) const;
 
 	// === Ghost Operations ===
 	void placeGhost();
@@ -61,14 +67,14 @@ private:
 	void clearRow(unsigned int row);
 	void replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow);
 	bool clearFilledRows();
-
-	// === Gravity logic ===
-	std::array<bool, HEIGHT> getRowState() const;
-	void dropFloatingRows(const std::array<bool, HEIGHT>& rowState);
+	void dropFloatingRows();
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
-	Tetromino m_ghost;
+
+	/// @note This is a non-owning reference.
+	const Tetromino* p_actor;
+	Tetromino m_ghost {TetrominoType::NONE, {5, 5}};
 };
 
 #endif

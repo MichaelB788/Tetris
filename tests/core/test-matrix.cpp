@@ -1,7 +1,6 @@
 #include "util/vector2.hpp"
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
-#include "core/tile-state.hpp"
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
 
@@ -12,27 +11,28 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Assigning a Tetromino in a invalid position")
 	{
 		Tetromino T = Tetromino(TetrominoType::T, {0, 0});
-		REQUIRE(matrix.actorIsOutOfBounds(T));
+		REQUIRE(matrix.tetrominoIsOutOfBounds(T));
 		T.shift(-999, -999);
-		REQUIRE(matrix.actorIsOutOfBounds(T));
+		REQUIRE(matrix.tetrominoIsOutOfBounds(T));
 	}
 
 	SECTION("Assigning a Tetromino in a valid position")
 	{
 		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
-		REQUIRE_FALSE(matrix.actorIsOutOfBounds(O));
+		REQUIRE_FALSE(matrix.tetrominoIsOutOfBounds(O));
 	}
 
 	SECTION("Grounding a Tetromino in a valid position")
 	{
 		Tetromino O = Tetromino(TetrominoType::O, {5, 5});
-		CHECK_FALSE(matrix.actorIsOutOfBounds(O));
-		matrix.placeActor(O);
-		matrix.groundActor(O);
+		CHECK_FALSE(matrix.tetrominoIsOutOfBounds(O));
+		matrix.assignActor(&O);
+		matrix.groundActor();
 
 		Tetromino T = Tetromino(TetrominoType::T, {5, 5});
-		CHECK_FALSE(matrix.actorIsOutOfBounds(T));
-		REQUIRE(matrix.actorCollidesGround(T));
+		CHECK_FALSE(matrix.tetrominoIsOutOfBounds(T));
+		matrix.assignActor(&T);
+		REQUIRE(matrix.actorCollidesGround());
 	}
 }
 

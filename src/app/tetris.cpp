@@ -22,6 +22,7 @@ void Tetris::runGameLoop() {
 	m_renderer.initializeSDLRenderer();
 	SDL_Event event;
 	bool quit = false;
+	int timer = 0; // For testing, may need a more sophisticated method than this
 
 	while ( !quit ) {
 		m_renderer.clearFrame();
@@ -34,10 +35,12 @@ void Tetris::runGameLoop() {
 			}
 		}
 
+		if (timer % 50 == 0) m_gameState.moveActorDown();
 		m_gameState.update();
 
 		m_renderer.updateFrame();
 
+		timer++;
 		SDL_Delay(30);
 	}
 	{};

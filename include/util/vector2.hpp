@@ -5,8 +5,8 @@
 
 /// @brief Stores and manages two `int8_t` coordinates in (x, y) format.
 struct Vector2 {
-	int8_t x{};
-	int8_t y{};
+	int x{};
+	int y{};
 
 	enum class Rotation : uint8_t {
 		CLOCKWISE,
@@ -50,7 +50,7 @@ struct Vector2 {
 
 	/// @brief Converts the object data to readable string format. Used for debugging.
 	friend std::ostream& operator<<(std::ostream& os, const Vector2& vec) {
-		os << "(" << static_cast<int>(vec.x) << ", " << static_cast<int>(vec.y) << ")";
+		os << "(" << vec.x << ", " << vec.y << ")";
 		return os;
 	}
 

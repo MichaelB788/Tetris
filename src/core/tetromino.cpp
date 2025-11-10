@@ -2,10 +2,14 @@
 
 namespace {
 	TetrominoType getRandomType() {
+		using Type = TetrominoType;
+		std::array<TetrominoType, 7> types { Type::I, Type::O, Type::J, Type::L, Type::S, Type::Z, Type::Z };
+
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> distrib(0, 6);
-		return TetrominoType(distrib(gen));
+		std::uniform_int_distribution<> distrib(0, types.size() - 1);
+
+		return types[distrib(gen)];
 	}
 
 	constexpr std::array<Vector2, 4> generateShape(TetrominoType type, Vector2 pivot) {
@@ -88,9 +92,5 @@ void Tetromino::rotate(Vector2::Rotation rotation) {
 			m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
 		}
 	}
-	if (rotation == Vector2::Rotation::CLOCKWISE) {
-		++m_rotationState;
-	} else {
-		--m_rotationState;
-	}
+	m_rotationCompass.rotate(rotation);
 }

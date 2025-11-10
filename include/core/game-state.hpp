@@ -13,9 +13,7 @@ public:
 			m_nextTetromino(generateRandomTetromino()),
 			m_storedTetromino(TetrominoType::NONE, {INIT_X, INIT_Y}),
 			m_matrixRenderer(m_matrix, renderer)
-	{
-		m_matrix.assignActor(&m_currentTetromino);
-	};
+	{}
 
 	void update();
 	void gameOver();
@@ -32,6 +30,7 @@ public:
 private:
 	void performSRSTests();
 	Vector2 wallKickTranslation() const;
+	void resetTetromino();
 	inline const Tetromino generateRandomTetromino() {
 		return Tetromino({INIT_X, INIT_Y});
 	};

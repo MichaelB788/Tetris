@@ -8,29 +8,6 @@ Matrix::Matrix() {
 	}
 }
 
-void Matrix::assignActor(const Tetromino* actor) {
-	if (!tetrominoIsOutOfBounds(*actor)) {
-		p_actor = actor;
-	}
-	assert(p_actor && "Could not assign Tetromino because it was out of bounds");
-}
-
-bool Matrix::tetrominoIsOutOfBounds(const Tetromino& actor) const {
-	for (const auto& block : actor) {
-		if (block.x < 0 || block.y < 0 || block.x >= WIDTH || block.y >= HEIGHT) return true;
-	}
-	return false;
-}
-
-void Matrix::dropTetromino(Tetromino& actor) const {
-	bool shifted = false;
-	while (!tetrominoCollides(actor, MatrixTile::State::GROUND)) {
-		actor.shift(Vector2::down());
-		shifted = true;
-	}
-	if (shifted) actor.shift(Vector2::up());
-}
-
 void Matrix::clearMatrix() {
 	for (int i = 0; i < m_data.size(); i++) {
 		if ( i % WIDTH > 0 && i % WIDTH < WIDTH - 1 )
@@ -38,82 +15,97 @@ void Matrix::clearMatrix() {
 	}
 }
 
-void Matrix::checkAndClearLines() {
-	if (clearFilledRows()) {
-		dropFloatingRows();
-		removeGhost();
+unsigned int Matrix::clearAndDropLines() {
+	unsigned int clearedLines = 0;
+	unsigned int firstClearedRow = 0;
+
+	for (unsigned int row = 0; row < HEIGHT; row++) {
+		if (doesRowOnlyContain(row, MatrixTile::State::GROUND)) {
+			clearRow(row);
+			clearedLines++;
+			firstClearedRow = row; // Since we're searching from top to bottom, this will naturally end up being the lowest row.
+		}
 	}
+
+	if (clearedLines > 0) {
+		dropRowsAbove(firstClearedRow);
+	}
+
+	return clearedLines;
 };
 
-void Matrix::placeActor() {
-	m_ghost = *p_actor;
-	placeGhost();
-
-	for (const auto& block : *p_actor) {
-		m_data[mapIndex(block)].occupy(p_actor->type());
+void Matrix::placeActor(const Tetromino& actor) {
+	if (!isActorOutOfBounds(actor)) {
+		for (const auto& block : actor) {
+			m_data[mapIndex(block)].occupy(actor.type());
+		}
 	}
 }
 
-void Matrix::groundActor() {
-	removeGhost();
-	for (const auto& block : *p_actor) {
-		m_data[mapIndex(block)].ground(p_actor->type());
+void Matrix::lockDownActor(const Tetromino& actor) {
+	if (!isActorOutOfBounds(actor)) {
+		for (const auto& block : actor) {
+			m_data[mapIndex(block)].ground(actor.type());
+		}
 	}
 }
 
-void Matrix::removeActor() {
-	removeGhost();
-	for (const auto& block : *p_actor) {
-		m_data[mapIndex(block)].clear();
+void Matrix::removeActor(const Tetromino& actor) {
+	if (!isActorOutOfBounds(actor)) {
+		for (const auto& block : actor) {
+			m_data[mapIndex(block)].clear();
+		}
 	}
 }
 
-bool Matrix::actorCollidesGround() const {
-	return tetrominoCollides(*p_actor, MatrixTile::State::GROUND);
+Tetromino Matrix::calculateDropPosition(const Tetromino& actor) const {
+	Tetromino droppedTetromino = actor;
+	bool tetrominoHasShifted = false;
+	while (!doesActorCollideGround(droppedTetromino)) {
+		droppedTetromino.shift(Vector2::down());
+		tetrominoHasShifted = true;
+	}
+	if (tetrominoHasShifted)
+		droppedTetromino.shift(Vector2::up());
+	return droppedTetromino;
 }
 
-bool Matrix::actorCollidesImpermiable() const {
-	if (tetrominoIsOutOfBounds(*p_actor)) return true;
+bool Matrix::doesActorCollideGround(const Tetromino& actor) const {
+	if (isActorOutOfBounds(actor)) return true;
+	for (const auto& block : actor) {
+		if (m_data[mapIndex(block)].isGround()) return true;
+	}
+	return false;
+}
 
-	for (const auto& block : *p_actor) {
+bool Matrix::doesActorCollideImpermeable(const Tetromino& actor) const {
+	if (isActorOutOfBounds(actor)) return true;
+	for (const auto& block : actor) {
 		if (m_data[mapIndex(block)].isImpermiable()) return true;
 	}
 	return false;
 }
 
-bool Matrix::isRowComplete(unsigned int row) const {
-	for (unsigned int col = 1; col < WIDTH - 1; col++) {
-		if (m_data[mapIndex(col, row)].isEmpty()) return false;
-	}
-	return true;
-}
-
-bool Matrix::isRowEmpty(unsigned int row) const {
-	for (unsigned int col = 1; col < WIDTH - 1; col++) {
-		if (m_data[mapIndex(col, row)].isGround()) return false;
-	}
-	return true;
-}
-
-bool Matrix::tetrominoCollides(const Tetromino& tetromino, MatrixTile::State state) const {
-	if (tetrominoIsOutOfBounds(tetromino)) return true;
-	for (const auto& block : tetromino) {
-		if (m_data[mapIndex(block)].state == state) return true;
+bool Matrix::isActorOutOfBounds(const Tetromino& actor) const {
+	for (const auto& block : actor) {
+		if (block.x < 0 || block.y < 0 || block.x >= WIDTH || block.y >= HEIGHT) return true;
 	}
 	return false;
 }
 
-void Matrix::placeGhost() {
-	dropTetromino(m_ghost);
-	for (const auto& block : m_ghost) {
-		m_data[mapIndex(block)].occupyAsGhost(m_ghost.type());
+bool Matrix::doesRowContain(unsigned int row, MatrixTile::State state) const {
+	for (unsigned int col = 1; col < WIDTH - 1; col++) {
+		if (m_data[mapIndex(col, row)].state == state) return true;
 	}
+	return false;
 }
 
-void Matrix::removeGhost() {
-	for (const auto& block : m_ghost) {
-		m_data[mapIndex(block)].clear();
+bool Matrix::doesRowOnlyContain(unsigned int row, MatrixTile::State state) const {
+	bool success = true;
+	for (unsigned int col = 1; col < WIDTH - 1; col++) {
+		if (m_data[mapIndex(col, row)].state != state) success = false;
 	}
+	return success;
 }
 
 void Matrix::clearRow(unsigned int row) {
@@ -121,29 +113,15 @@ void Matrix::clearRow(unsigned int row) {
 		m_data[mapIndex(col, row)].clear();
 }
 
-void Matrix::replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow) {
-	for (unsigned int col = 1; col < WIDTH - 1; col++) {
-		m_data[mapIndex(col, replacedRow)] = m_data[mapIndex(col, clearedRow)];
-		m_data[mapIndex(col, clearedRow)].clear();
-	}
-}
-
-bool Matrix::clearFilledRows() {
-	bool cleared = false;
-	for (unsigned int row = 0; row < HEIGHT; row++)
-		if (isRowComplete(row)) {
-			clearRow(row);
-			cleared = true;
-		}
-	return cleared;
-}
-
-void Matrix::dropFloatingRows() {
-	for (int emptyRow = HEIGHT - 1; emptyRow > 0; emptyRow--) {
-		if (isRowEmpty(emptyRow)) {
-			for (int populatedRow = emptyRow - 1; populatedRow >= 0; populatedRow--) {
-				if (!isRowEmpty(populatedRow)) {
-					replaceAndClearRows(emptyRow, populatedRow);
+void Matrix::dropRowsAbove(unsigned int startingRow) {
+	for (int emptyRow = startingRow; emptyRow > 0; emptyRow--) {
+		if (doesRowOnlyContain(startingRow, MatrixTile::State::EMPTY)) {
+			for (int nonEmptyRow = emptyRow - 1; nonEmptyRow >= 0; nonEmptyRow--) {
+				if (doesRowContain(nonEmptyRow, MatrixTile::State::GROUND)) {
+					for (unsigned int col = 1; col < WIDTH - 1; col++) {
+						m_data[mapIndex(col, emptyRow)] = m_data[mapIndex(col, nonEmptyRow)];
+						m_data[mapIndex(col, nonEmptyRow)].clear();
+					}
 				}
 			}
 		}

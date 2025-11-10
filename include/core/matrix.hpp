@@ -1,8 +1,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include <array>
+#include <stdexcept>
 #include <stdint.h>
-#include <cassert>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 
@@ -11,70 +11,71 @@ class Matrix {
 public:
 	static constexpr unsigned int WIDTH = 12;
 	static constexpr unsigned int HEIGHT = 24;
+	static constexpr Vector2 INITIAL_POS = {5, 2};
 
 	Matrix();
 
-	inline const MatrixTile& operator()(unsigned int x, unsigned int y) const {
+	const MatrixTile& operator()(unsigned int x, unsigned int y) const {
 		return m_data[mapIndex(x, y)];
 	};
-	inline const MatrixTile& operator()(Vector2 vec) const {
-		return m_data[mapIndex(vec)];
-	};
-	inline MatrixTile& operator()(unsigned int x, unsigned int y) {
-		return m_data[mapIndex(x, y)];
-	};
-	inline MatrixTile& operator()(Vector2 vec) {
+	const MatrixTile& operator()(Vector2 vec) const {
 		return m_data[mapIndex(vec)];
 	};
 
-	void assignActor(const Tetromino* actor);
-
-	bool tetrominoIsOutOfBounds(const Tetromino& tetromino) const;
-	void dropTetromino(Tetromino& tetromino) const;
-
+	/// @brief Reverts the Matrix to its original, empty state.
 	void clearMatrix();
-	void checkAndClearLines();
 
-	void placeActor();
-	void removeActor();
-	void groundActor();
+	/* *
+	 * @brief Clears all completed lines and drops any floating lines on the Matrix.
+	 * @return The number of lines cleared
+	 */
+	unsigned int clearAndDropLines();
 
-	bool actorCollidesGround() const;
-	bool actorCollidesImpermiable() const;
+	/// @brief Marks the actors tiles as active in the Matrix
+	void placeActor(const Tetromino& actor);
+
+	/// @brief Marks the actors tiles as empty in the Matrix
+	void removeActor(const Tetromino& actor);
+
+	/// @brief Marks the actors tiles as grounded in the Matrix
+	void lockDownActor(const Tetromino& actor);
+
+	/// @brief Determines if the actor is overlapping any grounded tiles
+	bool doesActorCollideGround(const Tetromino& actor) const;
+
+	/// @brief Determines if the actor is overlapping any wall or grounded tiles
+	bool doesActorCollideImpermeable(const Tetromino& actor) const;
+
+	/// @brief Determines if the actor is out of bounds of the Matrix
+	bool isActorOutOfBounds(const Tetromino& actor) const;
+
+	/* *
+	 * @brief Creates a copy of the actor and simulates a drop command, bringing the Tetromino
+	 * down to the lowest empty position on the Matrix.
+	 * @return The Tetromino copy used in the simulation.
+	 * */
+	Tetromino calculateDropPosition(const Tetromino& actor) const;
 
 private:
-	constexpr size_t mapIndex(unsigned int x, unsigned int y) const {
-		size_t index = y * WIDTH + x;
-		assert(index >= 0 && index < m_data.size() && "Attempting to access element outside range of m_data");
-		return index;
+	const size_t mapIndex(unsigned int x, unsigned int y) const {
+		return ( x >= WIDTH || y >= HEIGHT )
+			? throw std::out_of_range("Attempting to access element outside of Matrix")
+			: y * WIDTH + x;
 	}
-	constexpr size_t mapIndex(Vector2 vec) const {
-		size_t index = vec.y * WIDTH + vec.x;
-		assert(index >= 0 && index < m_data.size() && "Attempting to access element outside range of m_data");
-		return index;
+	const size_t mapIndex(Vector2 vec) const {
+		return mapIndex(vec.x, vec.y);
 	}
 
-	// === Query ===
-	bool isRowComplete(unsigned int row) const;
-	bool isRowEmpty(unsigned int row) const;
-	bool tetrominoCollides(const Tetromino& tetromino, MatrixTile::State state) const;
+	// Row Queries
+	bool doesRowContain(unsigned int row, MatrixTile::State state) const;
+	bool doesRowOnlyContain(unsigned int row, MatrixTile::State state) const;
 
-	// === Ghost Operations ===
-	void placeGhost();
-	void removeGhost();
-
-	// === Row Operations ===
+	// Row Operations
 	void clearRow(unsigned int row);
-	void replaceAndClearRows(unsigned int replacedRow, unsigned int clearedRow);
-	bool clearFilledRows();
-	void dropFloatingRows();
+	void dropRowsAbove(unsigned int startingRow);
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
-
-	/// @note This is a non-owning reference.
-	const Tetromino* p_actor;
-	Tetromino m_ghost {TetrominoType::NONE, {5, 5}};
 };
 
 #endif

@@ -18,7 +18,16 @@ public:
 	const MatrixTile& operator()(unsigned int x, unsigned int y) const {
 		return m_data[mapIndex(x, y)];
 	};
+
 	const MatrixTile& operator()(Vector2 vec) const {
+		return m_data[mapIndex(vec)];
+	};
+
+	MatrixTile& operator()(unsigned int x, unsigned int y) {
+		return m_data[mapIndex(x, y)];
+	};
+
+	MatrixTile& operator()(Vector2 vec) {
 		return m_data[mapIndex(vec)];
 	};
 

@@ -29,15 +29,15 @@ struct MatrixTile {
 	}
 	inline constexpr bool isGround() const { return state == State::GROUND; }
 
-	inline void occupy(TetrominoType t) {
+	inline void setActive(TetrominoType t) {
 		state = State::ACTIVE;
 		type = t;
 	}
-	inline void ground(TetrominoType t) {
+	inline void setGround(TetrominoType t) {
 		state = State::GROUND;
 		type = t;
 	}
-	inline void occupyAsGhost(TetrominoType t) {
+	inline void setGhost(TetrominoType t) {
 		state = State::GHOST;
 		type = t;
 	}

@@ -37,7 +37,7 @@ unsigned int Matrix::clearAndDropLines() {
 void Matrix::placeActor(const Tetromino& actor) {
 	if (!isActorOutOfBounds(actor)) {
 		for (const auto& block : actor) {
-			m_data[mapIndex(block)].occupy(actor.type());
+			m_data[mapIndex(block)].setActive(actor.type());
 		}
 	}
 }
@@ -45,7 +45,7 @@ void Matrix::placeActor(const Tetromino& actor) {
 void Matrix::lockDownActor(const Tetromino& actor) {
 	if (!isActorOutOfBounds(actor)) {
 		for (const auto& block : actor) {
-			m_data[mapIndex(block)].ground(actor.type());
+			m_data[mapIndex(block)].setGround(actor.type());
 		}
 	}
 }
@@ -61,17 +61,21 @@ void Matrix::removeActor(const Tetromino& actor) {
 Tetromino Matrix::calculateDropPosition(const Tetromino& actor) const {
 	Tetromino droppedTetromino = actor;
 	bool tetrominoHasShifted = false;
+
 	while (!doesActorCollideGround(droppedTetromino)) {
 		droppedTetromino.shift(Vector2::down());
 		tetrominoHasShifted = true;
 	}
+
 	if (tetrominoHasShifted)
 		droppedTetromino.shift(Vector2::up());
+
 	return droppedTetromino;
 }
 
 bool Matrix::doesActorCollideGround(const Tetromino& actor) const {
 	if (isActorOutOfBounds(actor)) return true;
+
 	for (const auto& block : actor) {
 		if (m_data[mapIndex(block)].isGround()) return true;
 	}
@@ -80,6 +84,7 @@ bool Matrix::doesActorCollideGround(const Tetromino& actor) const {
 
 bool Matrix::doesActorCollideImpermeable(const Tetromino& actor) const {
 	if (isActorOutOfBounds(actor)) return true;
+
 	for (const auto& block : actor) {
 		if (m_data[mapIndex(block)].isImpermiable()) return true;
 	}

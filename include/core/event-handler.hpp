@@ -5,11 +5,10 @@
 
 class EventHandler {
 public:
-	EventHandler(GameState& gameState) : r_gameState(gameState) {};
-	void handleInput(SDL_Event& event);
+	EventHandler() {};
+	void handleInput(SDL_Event& event, GameState& gameState);
 
 private:
-	GameState& r_gameState;
 };
 
 #endif

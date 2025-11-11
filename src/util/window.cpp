@@ -1,7 +1,7 @@
 #include "util/window.hpp"
 
 Window::Window(const char* title) {
-	p_window = SDL_CreateWindow(title,
+	sdlWindow = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			WIDTH,
@@ -9,13 +9,13 @@ Window::Window(const char* title) {
 			SDL_WINDOW_RESIZABLE
 			);
 
-	if (!p_window) {
+	if (!sdlWindow) {
 		printf("Failed to load window: %s\n", SDL_GetError());
 	}
 }
 
 Window::~Window()
 {
-	SDL_DestroyWindow(p_window);
-	p_window = nullptr;
+	SDL_DestroyWindow(sdlWindow);
+	sdlWindow = nullptr;
 }

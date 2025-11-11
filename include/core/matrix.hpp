@@ -15,19 +15,19 @@ public:
 	Matrix();
 
 	const MatrixTile& operator()(unsigned int x, unsigned int y) const {
-		return m_data[mapIndex(x, y)];
+		return matrix[mapIndex(x, y)];
 	};
 
 	const MatrixTile& operator()(Vector2 vec) const {
-		return m_data[mapIndex(vec)];
+		return matrix[mapIndex(vec)];
 	};
 
 	MatrixTile& operator()(unsigned int x, unsigned int y) {
-		return m_data[mapIndex(x, y)];
+		return matrix[mapIndex(x, y)];
 	};
 
 	MatrixTile& operator()(Vector2 vec) {
-		return m_data[mapIndex(vec)];
+		return matrix[mapIndex(vec)];
 	};
 
 	/// @brief Reverts the Matrix to its original, empty state.
@@ -84,7 +84,7 @@ private:
 	void dropRowsAbove(unsigned int startingRow);
 
 private:
-	std::array<MatrixTile, WIDTH * HEIGHT> m_data;
+	std::array<MatrixTile, WIDTH * HEIGHT> matrix;
 };
 
 #endif

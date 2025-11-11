@@ -1,7 +1,7 @@
 #include "core/super-rotation-system.hpp"
 
 const std::array<Vector2, 5> SRS::offset_data(const Tetromino& tetromino) {
-	if (tetromino.type() == TetrominoType::I) {
+	if (tetromino.getType() == TetrominoType::I) {
 		return I_offset_data(tetromino.rotationState());
 	} else {
 		return standard_offset_data(tetromino.rotationState());

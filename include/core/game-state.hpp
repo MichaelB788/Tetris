@@ -3,16 +3,18 @@
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
 #include "core/super-rotation-system.hpp"
-#include "util/renderer.hpp"
-#include "render/matrix-renderer.hpp"
 
-class GameState {
-public:
-	GameState(const Renderer& renderer)
-		: m_currentTetromino(generateRandomTetromino()),
-			m_nextTetromino(generateRandomTetromino()),
-			m_storedTetromino(generateNullTetromino()),
-			m_matrixRenderer(m_matrix, renderer)
+struct GameState {
+	bool currentHasBeenSwapped = false;
+	Matrix matrix;
+	Tetromino currentTetromino;
+	Tetromino nextTetromino;
+	Tetromino storedTetromino;
+
+	GameState()
+		: currentTetromino(generateRandomTetromino()),
+			nextTetromino(generateRandomTetromino()),
+			storedTetromino(generateNullTetromino())
 	{}
 
 	void update();
@@ -37,15 +39,6 @@ private:
 	inline const Tetromino generateNullTetromino() {
 		return Tetromino(TetrominoType::NONE, {Matrix::TETROMINO_INITIAL_POS});
 	};
-
-private:
-	Matrix m_matrix;
-	MatrixRenderer m_matrixRenderer;
-	
-	bool m_currentHasBeenSwapped = false;
-	Tetromino m_currentTetromino;
-	Tetromino m_nextTetromino;
-	Tetromino m_storedTetromino;
 };
 
 #endif

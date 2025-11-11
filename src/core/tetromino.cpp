@@ -3,7 +3,7 @@
 namespace {
 	TetrominoType getRandomType() {
 		using Type = TetrominoType;
-		std::array<TetrominoType, 7> types { Type::I, Type::O, Type::J, Type::L, Type::S, Type::Z, Type::Z };
+		std::array<TetrominoType, 7> types { Type::I, Type::O, Type::J, Type::L, Type::S, Type::Z, Type::T };
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -72,23 +72,23 @@ namespace {
 }
 
 Tetromino::Tetromino(Vector2 initialPos) {
-	m_type = getRandomType(); 
-	m_coordinates = generateShape(m_type, initialPos);
+	type = getRandomType(); 
+	blocks = generateShape(type, initialPos);
 };
 
-Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) {
-	m_coordinates = generateShape(m_type, initialPos);
+Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) : type(type) {
+	blocks = generateShape(this->type, initialPos);
 };
 
 void Tetromino::shift(Vector2 translation) {
-	for (auto& vec : m_coordinates) {
+	for (auto& vec : blocks) {
 		vec += translation;
 	}
 }
 
 void Tetromino::rotate(Vector2::Rotation rotation) {
 	for (int i = 1; i < 4; i++) {
-		m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
+		blocks[i].rotate90Degrees(rotation, blocks[0]);
 	}
-	m_rotationCompass.rotate(rotation);
+	rotationCompass.rotate(rotation);
 }

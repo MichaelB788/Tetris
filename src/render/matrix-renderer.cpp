@@ -1,30 +1,30 @@
 #include "render/matrix-renderer.hpp"
 
-void MatrixRenderer::renderMatrixUsingSDL() const {
+void MatrixRenderer::renderMatrixUsingSDL(const Matrix& matrix, const Renderer& renderer) const {
 	for (unsigned int y = 0; y < Matrix::HEIGHT; y++)
 	{
 		for (unsigned int x = 0; x < Matrix::WIDTH; x++)
 		{
-			if (r_matrix(x, y).state == MatrixTile::State::EMPTY) {
-				r_renderer.drawRectangle(
+			if (matrix(x, y).state == MatrixTile::State::EMPTY) {
+				renderer.drawRectangle(
 						Renderer::Color::GRAY, false, x * TILE_SIZE, y * TILE_SIZE,
 						TILE_SIZE, TILE_SIZE
 						);
 			}
-			else if (r_matrix(x, y).state == MatrixTile::State::ACTIVE || r_matrix(x, y).state == MatrixTile::State::GROUND)
+			else if (matrix(x, y).state == MatrixTile::State::ACTIVE || matrix(x, y).state == MatrixTile::State::GROUND)
 			{
-				r_renderer.drawRectangle(
+				renderer.drawRectangle(
 						Renderer::Color::WHITE, true, x * TILE_SIZE, y * TILE_SIZE,
 						TILE_SIZE, TILE_SIZE
 						);
-				r_renderer.drawRectangle(
+				renderer.drawRectangle(
 						Renderer::Color::BLACK, false, x * TILE_SIZE, y * TILE_SIZE,
 						TILE_SIZE, TILE_SIZE
 						);
 			}
 			else
 			{
-				r_renderer.drawRectangle(
+				renderer.drawRectangle(
 						Renderer::Color::WHITE, false, x * TILE_SIZE, y * TILE_SIZE,
 						TILE_SIZE, TILE_SIZE
 						);

@@ -13,9 +13,9 @@ public:
 	/// @brief Generates a Tetromino of `Tetromino::Type type` centered at `initialPos`
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
-	inline TetrominoType type() const { return m_type; } 
-	inline Compass::Direction rotationState() const { return m_rotationCompass.value(); } 
-	inline Vector2 center() const { return m_coordinates[0]; } 
+	inline TetrominoType getType() const { return type; } 
+	inline Compass::Direction rotationState() const { return rotationCompass.value(); } 
+	inline Vector2 center() const { return blocks[0]; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
 	void shift(Vector2 translation);
@@ -28,19 +28,19 @@ public:
 	using iterator = std::array<Vector2, 4>::iterator;
 	using const_iterator = std::array<Vector2, 4>::const_iterator;
 
-	iterator begin() { return m_coordinates.begin(); }
-	iterator end() { return m_coordinates.end(); }
+	iterator begin() { return blocks.begin(); }
+	iterator end() { return blocks.end(); }
 
-	const_iterator begin() const { return m_coordinates.begin(); }
-	const_iterator end() const { return m_coordinates.end(); }
+	const_iterator begin() const { return blocks.begin(); }
+	const_iterator end() const { return blocks.end(); }
 
-	const_iterator cbegin() const { return m_coordinates.cbegin(); }
-	const_iterator cend() const { return m_coordinates.cend(); }
+	const_iterator cbegin() const { return blocks.cbegin(); }
+	const_iterator cend() const { return blocks.cend(); }
 
 private:
-	std::array<Vector2, 4> m_coordinates;
-	TetrominoType m_type;
-	Compass m_rotationCompass;
+	std::array<Vector2, 4> blocks;
+	TetrominoType type;
+	Compass rotationCompass;
 };
 
 #endif

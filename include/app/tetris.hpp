@@ -3,10 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_render.h>
-
 #include "util/window.hpp"
 #include "util/renderer.hpp"
-
+#include "render/matrix-renderer.hpp"
 #include "core/game-state.hpp"
 #include "core/event-handler.hpp"
 
@@ -19,10 +18,13 @@ private:
 	void runGameLoop();
 
 private:
-	Window m_window;
-	Renderer m_renderer;
-	GameState m_gameState; 
-	EventHandler m_eventHandler;
+	GameState gameState; 
+
+	Window window;
+	Renderer renderer;
+	MatrixRenderer matrixRenderer;
+
+	EventHandler eventHandler;
 };
 
 #endif

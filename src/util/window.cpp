@@ -1,6 +1,7 @@
 #include "util/window.hpp"
 
-Window::Window(const char* title) {
+bool Window::initializeSDLWindow(const char* title) {
+	bool success = true;
 	sdlWindow = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
@@ -11,11 +12,15 @@ Window::Window(const char* title) {
 
 	if (!sdlWindow) {
 		printf("Failed to load window: %s\n", SDL_GetError());
+		success = false;
 	}
+	return success;
 }
 
 Window::~Window()
 {
-	SDL_DestroyWindow(sdlWindow);
-	sdlWindow = nullptr;
+	if (sdlWindow) {
+		SDL_DestroyWindow(sdlWindow);
+		sdlWindow = nullptr;
+	}
 }

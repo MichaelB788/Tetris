@@ -14,7 +14,7 @@ public:
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
 	inline TetrominoType getType() const { return type; } 
-	inline Compass::Direction rotationState() const { return rotationCompass.value(); } 
+	inline Compass::Pole rotationState() const { return rotationCompass.value(); } 
 	inline Vector2 center() const { return blocks[0]; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
@@ -22,7 +22,7 @@ public:
 	inline void shift(int dx, int dy) { shift({dx, dy}); }
 
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
-	void rotate(Vector2::Rotation rotation);
+	void rotate(Direction::Rotation rotation);
 
 	// === Iterator ===
 	using iterator = std::array<Vector2, 4>::iterator;

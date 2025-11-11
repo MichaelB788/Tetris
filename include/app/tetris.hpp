@@ -3,10 +3,14 @@
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_render.h>
+
 #include "util/window.hpp"
 #include "util/renderer.hpp"
+
 #include "render/matrix-renderer.hpp"
+
 #include "core/game-state.hpp"
+#include "core/tetromino-controller.hpp"
 #include "core/event-handler.hpp"
 
 class Tetris {
@@ -24,6 +28,7 @@ private:
 	Renderer renderer;
 	MatrixRenderer matrixRenderer;
 
+	TetrominoController tetrominoController;
 	EventHandler eventHandler;
 };
 

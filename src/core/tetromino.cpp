@@ -86,7 +86,7 @@ void Tetromino::shift(Vector2 translation) {
 	}
 }
 
-void Tetromino::rotate(Vector2::Rotation rotation) {
+void Tetromino::rotate(Direction::Rotation rotation) {
 	for (int i = 1; i < 4; i++) {
 		blocks[i].rotate90Degrees(rotation, blocks[0]);
 	}

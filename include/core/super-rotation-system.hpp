@@ -7,8 +7,8 @@
 
 namespace SRS {
 	const std::array<Vector2, 5> offset_data(const Tetromino& tetromino);
-	const std::array<Vector2, 5> standard_offset_data(Compass::Direction direction);
-	const std::array<Vector2, 5> I_offset_data(Compass::Direction direction);
+	const std::array<Vector2, 5> standard_offset_data(Compass::Pole direction);
+	const std::array<Vector2, 5> I_offset_data(Compass::Pole direction);
 };
 
 #endif

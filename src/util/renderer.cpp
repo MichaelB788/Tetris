@@ -2,11 +2,14 @@
 #include <SDL2/SDL_render.h>
 
 Renderer::~Renderer() {
-	SDL_DestroyRenderer(sdlRenderer);
-	sdlRenderer = nullptr;
+	if (sdlRenderer) {
+		SDL_DestroyRenderer(sdlRenderer);
+		sdlRenderer = nullptr;
+	}
 }
 
-void Renderer::initializeSDLRenderer(SDL_Window* window) {
+bool Renderer::initializeSDLRenderer(SDL_Window* window) {
+	bool success = true;
 	sdlWindow = window;
 	sdlRenderer = SDL_CreateRenderer(
 			sdlWindow,
@@ -16,7 +19,9 @@ void Renderer::initializeSDLRenderer(SDL_Window* window) {
 
 	if ( !sdlRenderer ) {
 		printf("Failed to load renderer: %s\n", SDL_GetError());
+		success = false;
 	}
+	return success;
 }
 
 

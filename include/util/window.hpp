@@ -6,7 +6,7 @@ struct Window {
   static constexpr unsigned int WIDTH = 600, HEIGHT = 600;
 	SDL_Window* sdlWindow = nullptr;
 
-	Window(const char* title);
+	bool initializeSDLWindow(const char* title);
 	~Window();
 };
 

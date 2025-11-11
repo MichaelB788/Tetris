@@ -11,10 +11,9 @@ struct Renderer {
 	SDL_Renderer* sdlRenderer = nullptr;
 	SDL_Window* sdlWindow = nullptr;
 
-	Renderer() {};
 	~Renderer();
 
-	void initializeSDLRenderer(SDL_Window* window);
+	bool initializeSDLRenderer(SDL_Window* window);
 	void clearFrame() const;
 	void updateFrame() const;
 	void drawRectangle(Color color, bool filled, int x, int y, int w, int h) const;

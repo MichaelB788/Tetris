@@ -87,10 +87,8 @@ void Tetromino::shift(Vector2 translation) {
 }
 
 void Tetromino::rotate(Vector2::Rotation rotation) {
-	if (m_type != TetrominoType::O) {
-		for (int i = 1; i < 4; i++) {
-			m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
-		}
+	for (int i = 1; i < 4; i++) {
+		m_coordinates[i].rotate90Degrees(rotation, m_coordinates[0]);
 	}
 	m_rotationCompass.rotate(rotation);
 }

@@ -2,7 +2,6 @@
 #define MATRIX_H
 #include <array>
 #include <stdexcept>
-#include <stdint.h>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 
@@ -11,7 +10,7 @@ class Matrix {
 public:
 	static constexpr unsigned int WIDTH = 12;
 	static constexpr unsigned int HEIGHT = 24;
-	static constexpr Vector2 INITIAL_POS = {5, 2};
+	static constexpr Vector2 TETROMINO_INITIAL_POS = {5, 2};
 
 	Matrix();
 
@@ -81,6 +80,7 @@ private:
 
 	// Row Operations
 	void clearRow(unsigned int row);
+	void copyRow(unsigned int targetRow, unsigned int copiedRow);
 	void dropRowsAbove(unsigned int startingRow);
 
 private:

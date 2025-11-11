@@ -3,15 +3,16 @@
 void GameState::update() {
 	m_matrix.placeActor(m_currentTetromino);
 	m_matrix.clearAndDropLines();
-	m_matrixRenderer.renderMatrix();
+	m_matrixRenderer.renderMatrixUsingSDL();
 }
 
 void GameState::gameOver() {
 	m_matrix.clearMatrix();
+	resetTetromino();
 }
 
 void GameState::switchToNextTetromino() {
-	m_isSwapped = false;
+	m_currentHasBeenSwapped = false;
 	m_currentTetromino = m_nextTetromino;
 	m_nextTetromino = generateRandomTetromino();
 
@@ -25,9 +26,9 @@ void GameState::switchToNextTetromino() {
 }
 
 void GameState::swapActorWithStored() {
-	if (!m_isSwapped) {
+	if (!m_currentHasBeenSwapped) {
 		m_matrix.removeActor(m_currentTetromino);
-		m_isSwapped = true;
+		m_currentHasBeenSwapped = true;
 
 		if (m_storedTetromino.type() == TetrominoType::NONE) {
 			m_storedTetromino = m_currentTetromino;
@@ -87,6 +88,12 @@ Vector2 GameState::wallKickTranslation() const {
 	return m_currentTetromino.center().x > Matrix::WIDTH / 2
 		? Vector2::left()
 		: Vector2::right();
+}
+
+void GameState::resetTetromino() {
+	m_currentTetromino = generateRandomTetromino();
+	m_nextTetromino = generateRandomTetromino();
+	m_storedTetromino = generateNullTetromino();
 }
 
 void GameState::performSRSTests() {

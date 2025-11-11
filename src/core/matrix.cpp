@@ -17,60 +17,53 @@ void Matrix::clearMatrix() {
 
 unsigned int Matrix::clearAndDropLines() {
 	unsigned int clearedLines = 0;
-	unsigned int firstClearedRow = 0;
+	unsigned int lowestClearedRow = 0;
 
 	for (unsigned int row = 0; row < HEIGHT; row++) {
 		if (doesRowOnlyContain(row, MatrixTile::State::GROUND)) {
 			clearRow(row);
 			clearedLines++;
-			firstClearedRow = row; // Since we're searching from top to bottom, this will naturally end up being the lowest row.
+			lowestClearedRow = row; // Since we're searching from top to bottom, this will naturally end up being the lowest row.
 		}
 	}
 
 	if (clearedLines > 0) {
-		dropRowsAbove(firstClearedRow);
+		dropRowsAbove(lowestClearedRow);
 	}
 
 	return clearedLines;
 };
 
 void Matrix::placeActor(const Tetromino& actor) {
-	if (!isActorOutOfBounds(actor)) {
-		for (const auto& block : actor) {
-			m_data[mapIndex(block)].setActive(actor.type());
-		}
+	for (const auto& block : actor) {
+		m_data[mapIndex(block)].setActive(actor.type());
 	}
 }
 
 void Matrix::lockDownActor(const Tetromino& actor) {
-	if (!isActorOutOfBounds(actor)) {
-		for (const auto& block : actor) {
-			m_data[mapIndex(block)].setGround(actor.type());
-		}
+	for (const auto& block : actor) {
+		m_data[mapIndex(block)].setGround(actor.type());
 	}
 }
 
 void Matrix::removeActor(const Tetromino& actor) {
-	if (!isActorOutOfBounds(actor)) {
-		for (const auto& block : actor) {
-			m_data[mapIndex(block)].clear();
-		}
+	for (const auto& block : actor) {
+		m_data[mapIndex(block)].clear();
 	}
 }
 
 Tetromino Matrix::calculateDropPosition(const Tetromino& actor) const {
-	Tetromino droppedTetromino = actor;
+	Tetromino actorSimulation = actor;
 	bool tetrominoHasShifted = false;
 
-	while (!doesActorCollideGround(droppedTetromino)) {
-		droppedTetromino.shift(Vector2::down());
+	while (!doesActorCollideGround(actorSimulation)) {
+		actorSimulation.shift(Vector2::down());
 		tetrominoHasShifted = true;
 	}
 
-	if (tetrominoHasShifted)
-		droppedTetromino.shift(Vector2::up());
+	if (tetrominoHasShifted) actorSimulation.shift(Vector2::up());
 
-	return droppedTetromino;
+	return actorSimulation;
 }
 
 bool Matrix::doesActorCollideGround(const Tetromino& actor) const {
@@ -99,6 +92,8 @@ bool Matrix::isActorOutOfBounds(const Tetromino& actor) const {
 }
 
 bool Matrix::doesRowContain(unsigned int row, MatrixTile::State state) const {
+	if (row >= HEIGHT) return false;
+
 	for (unsigned int col = 1; col < WIDTH - 1; col++) {
 		if (m_data[mapIndex(col, row)].state == state) return true;
 	}
@@ -106,6 +101,8 @@ bool Matrix::doesRowContain(unsigned int row, MatrixTile::State state) const {
 }
 
 bool Matrix::doesRowOnlyContain(unsigned int row, MatrixTile::State state) const {
+	if (row >= HEIGHT) return false;
+
 	bool success = true;
 	for (unsigned int col = 1; col < WIDTH - 1; col++) {
 		if (m_data[mapIndex(col, row)].state != state) success = false;
@@ -118,17 +115,21 @@ void Matrix::clearRow(unsigned int row) {
 		m_data[mapIndex(col, row)].clear();
 }
 
+void Matrix::copyRow(unsigned int targetRow, unsigned int copiedRow) {
+	for (unsigned int col = 1; col < WIDTH - 1; col++)
+		m_data[mapIndex(col, targetRow)] = m_data[mapIndex(col, copiedRow)];
+}
+
 void Matrix::dropRowsAbove(unsigned int startingRow) {
-	for (int emptyRow = startingRow; emptyRow > 0; emptyRow--) {
-		if (doesRowOnlyContain(startingRow, MatrixTile::State::EMPTY)) {
-			for (int nonEmptyRow = emptyRow - 1; nonEmptyRow >= 0; nonEmptyRow--) {
-				if (doesRowContain(nonEmptyRow, MatrixTile::State::GROUND)) {
-					for (unsigned int col = 1; col < WIDTH - 1; col++) {
-						m_data[mapIndex(col, emptyRow)] = m_data[mapIndex(col, nonEmptyRow)];
-						m_data[mapIndex(col, nonEmptyRow)].clear();
-					}
-				}
-			}
+	int writeRow = startingRow;
+	int readRow = writeRow - 1;
+
+	while (writeRow > 0 && readRow >= 0) {
+		if (doesRowContain(readRow, MatrixTile::State::GROUND)) {
+			copyRow(writeRow, readRow);
+			clearRow(readRow);
+			writeRow--;
 		}
+		readRow--;
 	}
 }

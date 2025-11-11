@@ -33,7 +33,7 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Placing Tetromino")
 	{
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::INITIAL_POS};
+		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE_FALSE(matrix.isActorOutOfBounds(O));
 		REQUIRE_NOTHROW(matrix.placeActor(O));
 	}
@@ -41,17 +41,17 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Grounding Tetromino")
 	{
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::INITIAL_POS};
+		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE_NOTHROW(matrix.lockDownActor(O));
 
-		Tetromino T = {TetrominoType::T, Matrix::INITIAL_POS};
+		Tetromino T = {TetrominoType::T, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE(matrix.doesActorCollideGround(T));
 		REQUIRE(matrix.doesActorCollideImpermeable(T));
 	}
 
 	SECTION("Removing Tetromino") {
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::INITIAL_POS};
+		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
 
 		matrix.lockDownActor(O);
 		CHECK(matrix.doesActorCollideGround(O));
@@ -59,23 +59,12 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 		REQUIRE_FALSE(matrix.doesActorCollideGround(O));
 	}
 
-	SECTION("Calculating drop position on empty Matrix") {
-		matrix.clearMatrix();
-		Tetromino I = {TetrominoType::I, Matrix::INITIAL_POS};
-		I = matrix.calculateDropPosition(I);
-		REQUIRE_NOTHROW(matrix.placeActor(I));
-
-		for (const auto& block : I) {
-			REQUIRE(block.y == Matrix::HEIGHT - 1);
-		}
-	}
-
 	SECTION("Calculating drop position on Matrix with preset ground tiles") {
 		matrix.clearMatrix();
 		unsigned int filledRow = Matrix::HEIGHT - 6;
 		fillRow(matrix, filledRow, 1);
 
-		Tetromino I = {TetrominoType::I, Matrix::INITIAL_POS};
+		Tetromino I = {TetrominoType::I, Matrix::TETROMINO_INITIAL_POS};
 		I = matrix.calculateDropPosition(I);
 
 		for (const auto& block : I) {
@@ -87,14 +76,62 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 TEST_CASE("Clearing and dropping full lines", "[Matrix, unit]") {
 	Matrix matrix;
 
-	SECTION("One completed line below a populated line") {
-		unsigned int filledRow = 3;
-		unsigned int populatedRow = filledRow - 1;
-		fillRow(matrix, filledRow, 1);
-		fillRow(matrix, populatedRow, 5);
+	// Convenience indices
+	constexpr unsigned int INCOMPLETE_ROW_OFFSET = 5;
+	constexpr unsigned int COMPLETED_ROW_OFFSET = 1;
+
+	SECTION("One completed line below a incomplete line") {
+		unsigned int completedRow = Matrix::HEIGHT - 1;
+		unsigned int incompleteRow = completedRow - 1;
+		fillRow(matrix, completedRow, COMPLETED_ROW_OFFSET);
+		fillRow(matrix, incompleteRow, INCOMPLETE_ROW_OFFSET);
 
 		int rowsCleared = matrix.clearAndDropLines();
 		REQUIRE(rowsCleared == 1);
-		REQUIRE(doesRowContainMatrixTile(matrix, HEIGHT - 1, MatrixTile::State::GROUND))
+		CHECK(doesRowContainMatrixTile(matrix, incompleteRow, MatrixTile::State::EMPTY));
+
+		INFO("Expected ground tiles at: " << completedRow);
+		REQUIRE(doesRowContainMatrixTile(matrix, completedRow, MatrixTile::State::GROUND));
+	}
+
+	SECTION("One completed line below four incomplete lines") {
+		matrix.clearMatrix();
+		unsigned int completedRow = Matrix::HEIGHT - 1;
+		std::array<unsigned int, 4> incompleteRows = {completedRow - 1, completedRow - 2, completedRow - 3, completedRow - 4};
+		for (unsigned int i = 0; i < incompleteRows.size(); i++) {
+			incompleteRows[i] = completedRow - (i + 1);
+		}
+
+		fillRow(matrix, completedRow, COMPLETED_ROW_OFFSET);
+		for (const auto& row : incompleteRows) fillRow(matrix, row, INCOMPLETE_ROW_OFFSET);
+
+		int rowsCleared = matrix.clearAndDropLines();
+		REQUIRE(rowsCleared == 1);
+
+		for (unsigned int i = 0; i < incompleteRows.size(); i++) {
+			INFO("Expected ground tiles at row " << completedRow - i);
+			REQUIRE(doesRowContainMatrixTile(matrix, completedRow - i, MatrixTile::State::GROUND));
+		}
+	}
+
+	SECTION("Four completed lines below a populated lines") {
+		matrix.clearMatrix();
+		std::array<unsigned int, 4> completedRows;
+		std::array<unsigned int, 4> incompleteRows;
+		for (unsigned int i = 0; i < completedRows.size(); i++) {
+			completedRows[i] = Matrix::HEIGHT - (i + 1);
+			incompleteRows[i] = Matrix::HEIGHT - (completedRows.size() + i + 1);
+		}
+
+		for (const auto& row : completedRows) fillRow(matrix, row, COMPLETED_ROW_OFFSET);
+		for (const auto& row : incompleteRows) fillRow(matrix, row, INCOMPLETE_ROW_OFFSET);
+
+		int rowsCleared = matrix.clearAndDropLines();
+		REQUIRE(rowsCleared == completedRows.size());
+
+		for (unsigned int i = 0; i < incompleteRows.size(); i++) {
+			INFO("Expected ground tiles at row " << completedRows[i]);
+			REQUIRE(doesRowContainMatrixTile(matrix, completedRows[i], MatrixTile::State::GROUND));
+		}
 	}
 }

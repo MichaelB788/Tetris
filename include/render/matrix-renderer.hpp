@@ -10,7 +10,9 @@ public:
 		r_matrix(matrix),
 		r_renderer(renderer)
 	{};
-	void renderMatrix() const;
+
+	/// @brief Draws the Matrix using an SDL_Renderer provided by `Renderer`.
+	void renderMatrixUsingSDL() const;
 
 private:
 	static constexpr unsigned int TILE_SIZE = 40;

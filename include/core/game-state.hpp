@@ -11,7 +11,7 @@ public:
 	GameState(const Renderer& renderer)
 		: m_currentTetromino(generateRandomTetromino()),
 			m_nextTetromino(generateRandomTetromino()),
-			m_storedTetromino(TetrominoType::NONE, {INIT_X, INIT_Y}),
+			m_storedTetromino(generateNullTetromino()),
 			m_matrixRenderer(m_matrix, renderer)
 	{}
 
@@ -32,16 +32,17 @@ private:
 	Vector2 wallKickTranslation() const;
 	void resetTetromino();
 	inline const Tetromino generateRandomTetromino() {
-		return Tetromino({INIT_X, INIT_Y});
+		return Tetromino({Matrix::TETROMINO_INITIAL_POS});
+	};
+	inline const Tetromino generateNullTetromino() {
+		return Tetromino(TetrominoType::NONE, {Matrix::TETROMINO_INITIAL_POS});
 	};
 
 private:
-	static constexpr unsigned int INIT_X = 5, INIT_Y = 2;
-
 	Matrix m_matrix;
 	MatrixRenderer m_matrixRenderer;
 	
-	bool m_isSwapped = false;
+	bool m_currentHasBeenSwapped = false;
 	Tetromino m_currentTetromino;
 	Tetromino m_nextTetromino;
 	Tetromino m_storedTetromino;

@@ -28,8 +28,8 @@ private:
 	Renderer renderer;
 	MatrixRenderer matrixRenderer;
 
-	TetrominoController tetrominoController;
 	EventHandler eventHandler;
+	TetrominoController tetrominoController;
 };
 
 #endif

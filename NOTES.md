@@ -38,3 +38,16 @@ L = state resulting from a counterclockwise rotation
 | 2 | (-1, -1) |
 | L | (-1,  0) |
 
+
+## An example of deriving kick translations from the offsets:
+
+The offsets for J, rotation state 0 are: ( 0, 0), ( 0, 0), ( 0, 0), ( 0, 0), ( 0, 0).
+The offsets for J, rotation state R are: ( 0, 0), (+1, 0), (+1,-1), ( 0,+2), (+1,+2).
+
+( 0, 0) - ( 0, 0) = ( 0, 0),
+( 0, 0) - (+1, 0) = (-1, 0),
+( 0, 0) - (+1,-1) = (-1,+1),
+( 0, 0) - ( 0,+2) = ( 0,-2),
+( 0, 0) - (+1,+2) = (-1,-2).
+
+Therefore, the kick translations for the J rotation 0->R, relative to "true rotation" (which is conveniently the same as "basic rotation" for the J tetromino), are: ( 0, 0), (-1, 0), (-1,+1), ( 0,-2), (-1,-2). 

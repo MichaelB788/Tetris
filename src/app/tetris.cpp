@@ -1,7 +1,7 @@
 #include "app/tetris.hpp"
 #include <cstdio>
 
-Tetris::Tetris() : tetrominoController(gameState.currentTetromino) {
+Tetris::Tetris() : tetrominoController(gameState) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	} else {
@@ -20,6 +20,7 @@ void Tetris::runGameLoop() {
 		return;
 	}
 
+	TetrominoController controller = {gameState};
 	SDL_Event event;
 	bool quit = false;
 	int timer = 0; // For testing, may need a more sophisticated method than this
@@ -31,12 +32,12 @@ void Tetris::runGameLoop() {
 			if (event.type == SDL_QUIT) {
 				quit = true;
 			} else if (event.type == SDL_KEYDOWN) {
-				eventHandler.handleInput(event, tetrominoController);
+				eventHandler.handleInput(event, controller);
 			}
 		}
 
 		// Temporary solution, change later
-		if (timer % 50 == 0) tetrominoController.moveActorDown(gameState.matrix);
+		if (timer % 50 == 0) controller.moveActorDown();
 
 		gameState.update();
 

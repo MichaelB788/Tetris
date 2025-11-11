@@ -22,8 +22,8 @@ TEST_CASE("Tetromino Rotation", "[Tetromino, unit]") {
 		Tetromino firstTetromino = {TetrominoType::S, {40, 79}};
 		Tetromino secondTetromino = firstTetromino;
 
-		firstTetromino.rotate(Vector2::Rotation::CLOCKWISE);
-		secondTetromino.rotate(Vector2::Rotation::COUNTERCLOCKWISE);
+		firstTetromino.rotate(Direction::Rotation::CLOCKWISE);
+		secondTetromino.rotate(Direction::Rotation::COUNTERCLOCKWISE);
 
 		bool clockwiseEqualsCounterclockwise = true;
 		auto secondTetrominoIt = secondTetromino.begin();

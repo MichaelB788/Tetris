@@ -94,8 +94,7 @@ void Tetromino::shift(int dx, int dy) {
 }
 
 void Tetromino::rotate(Direction::Rotation rotation) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 1; i < 4; i++) {
 		blocks[i].rotate90Degrees(rotation, blocks[0]);
 	}
-	rotationCompass.rotate(rotation);
 }

@@ -3,7 +3,6 @@
 #include <array>
 #include <random>
 #include "util/vector2.hpp"
-#include "util/compass.hpp"
 #include "core/tetromino-type.hpp"
 
 class Tetromino {
@@ -14,8 +13,6 @@ public:
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
 	inline TetrominoType type() const { return tetrominoType; } 
-	inline TetrominoRotation::State rotationState() const { return rotationCompass.value(); } 
-	inline Vector2 center() const { return blocks[0]; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
 	void shift(Vector2 translation);
@@ -40,7 +37,6 @@ public:
 private:
 	std::array<Vector2, 4> blocks;
 	TetrominoType tetrominoType;
-	TetrominoRotation rotationCompass;
 };
 
 #endif

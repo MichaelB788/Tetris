@@ -1,18 +1,32 @@
 #include "core/super-rotation-system.hpp"
 
-const std::array<Vector2, 5>& SuperRotationSystem::getOffSetData(TetrominoType type, TetrominoRotation::State state) {
-	if (type == TetrominoType::I) {
-		return offsetDataI[state];
+void SuperRotationSystem::rotateActor(Tetromino& actor, Matrix& scene, Direction::Rotation direction) {
+	scene.removeActor(actor);
+	actor.rotate(direction);
+	bool success;
+
+	if (actor.type() == TetrominoType::I) {
+		success = performOffsets(offsetDataI, actor, scene, rotationState.value(), rotationState.getStateAfterRotation(direction));
 	} else {
-		return offsetDataStandard[state];
-	} 
+		success = performOffsets(offsetDataStandard, actor, scene, rotationState.value(), rotationState.getStateAfterRotation(direction));
+	}
+
+	if (success) {
+		rotationState.rotate(direction);
+	} else {
+		actor.rotate(Direction::getCounterRotation(direction));
+	}
+	scene.placeActor(actor);
 }
 
-//bool SuperRotationSystem::performTests(Compass::Axis before, Compass::Axis after) const {
-//	for (int i = 0; i < rotatedOffsets.size(); i++) {
-//		Vector2 translation = currentOffsets[i] - rotatedOffsets[i];
-//		actor.shift(translation);
-//		if (!scene.doesActorCollideImpermeable(actor)) break;
-//		else actor.shift(-translation);
-//	}
-//}
+bool SuperRotationSystem::performOffsets(const std::array<std::array<Vector2, 5>, 4>& offsets, Tetromino& actor, Matrix& scene, TetrominoRotation::State before, TetrominoRotation::State after) {
+	for (int i = 0; i < offsets.size(); i++) {
+		Vector2 translation = offsets[before][i] - offsets[after][i];
+		actor.shift(translation);
+
+		if (!scene.doesActorCollideImpermeable(actor)) return true;
+
+		actor.shift(-translation);
+	}
+	return false;
+}

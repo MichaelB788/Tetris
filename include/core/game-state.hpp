@@ -11,7 +11,7 @@ struct GameState {
 	Tetromino storedTetromino;
 
 	GameState()
-		: currentTetromino({TetrominoType::I, Matrix::TETROMINO_INITIAL_POS}),
+		: currentTetromino(generateRandomTetromino()),
 			nextTetromino(generateRandomTetromino()),
 			storedTetromino(generateNullTetromino())
 	{}

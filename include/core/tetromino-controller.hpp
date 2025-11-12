@@ -1,6 +1,5 @@
 #ifndef TETROMINO_CONTROLLER_H
 #define TETROMINO_CONTROLLER_H
-#include "util/vector2.hpp"
 #include "core/game-state.hpp"
 #include "core/super-rotation-system.hpp"
 
@@ -15,7 +14,10 @@ public:
 	void moveActor(Direction::Horizontal direction);
 	void moveActorDown();
 	void dropActor();
-	void rotateActor(Direction::Rotation rotationDirection);
+
+	inline void rotateActor(Direction::Rotation direction) {
+		SRS.rotateActor(actor, scene, direction);
+	}
 
 private:
 	Tetromino& actor;

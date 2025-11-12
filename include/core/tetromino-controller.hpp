@@ -20,6 +20,7 @@ public:
 private:
 	Tetromino& actor;
 	Matrix& scene;
+	SuperRotationSystem SRS;
 };
 
 #endif

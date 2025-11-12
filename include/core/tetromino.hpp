@@ -13,13 +13,13 @@ public:
 	/// @brief Generates a Tetromino of `Tetromino::Type type` centered at `initialPos`
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
-	inline TetrominoType getType() const { return type; } 
-	inline Compass::Pole rotationState() const { return rotationCompass.value(); } 
+	inline TetrominoType type() const { return tetrominoType; } 
+	inline TetrominoRotation::State rotationState() const { return rotationCompass.value(); } 
 	inline Vector2 center() const { return blocks[0]; } 
 
 	/// @brief Adds `translation` to each point in this Tetromino's coordinates
 	void shift(Vector2 translation);
-	inline void shift(int dx, int dy) { shift({dx, dy}); }
+	void shift(int dx, int dy);
 
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
 	void rotate(Direction::Rotation rotation);
@@ -39,8 +39,8 @@ public:
 
 private:
 	std::array<Vector2, 4> blocks;
-	TetrominoType type;
-	Compass rotationCompass;
+	TetrominoType tetrominoType;
+	TetrominoRotation rotationCompass;
 };
 
 #endif

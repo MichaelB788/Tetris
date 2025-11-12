@@ -36,13 +36,13 @@ unsigned int Matrix::clearAndDropLines() {
 
 void Matrix::placeActor(const Tetromino& actor) {
 	for (const auto& block : actor) {
-		matrix[mapIndex(block)].setActive(actor.getType());
+		matrix[mapIndex(block)].setActive(actor.type());
 	}
 }
 
 void Matrix::lockDownActor(const Tetromino& actor) {
 	for (const auto& block : actor) {
-		matrix[mapIndex(block)].setGround(actor.getType());
+		matrix[mapIndex(block)].setGround(actor.type());
 	}
 }
 

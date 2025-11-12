@@ -4,11 +4,11 @@
 #include <stdint.h>
 #include <array>
 
-/// @brief Tracks which direction the object is facing following a rotation
-class Compass {
+/// @brief Tracks the rotational state a Tetromino is in.
+class TetrominoRotation {
 public:
-	enum class Pole : uint8_t {
-		NORTH, EAST, SOUTH, WEST
+	enum State : uint8_t {
+		ZERO = 0, CLOCKWISE = 1, TWO = 2, COUNTERCLOCKWISE = 3
 	};
 
 	inline void rotate(Direction::Rotation direction) {
@@ -19,10 +19,10 @@ public:
 		}
 	}
 
-	inline Pole value() const { return states[index]; }
+	inline State value() const { return states[index]; }
 
 private:
-	std::array<Pole, 4> states = { Pole::NORTH, Pole::EAST, Pole::SOUTH, Pole::WEST };
+	std::array<State, 4> states = { State::ZERO, State::CLOCKWISE, State::TWO, State::COUNTERCLOCKWISE };
 	int index = 0;
 };
 

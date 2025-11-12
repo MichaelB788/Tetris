@@ -17,9 +17,9 @@ namespace {
 			case TetrominoType::I:
 				return {
 					pivot,
-					pivot + Vector2::left() + Vector2::left(),
 					pivot + Vector2::left(),
-					pivot + Vector2::right()
+					pivot + Vector2::right(),
+					pivot + Vector2::right() + Vector2::right()
 				};
 			case TetrominoType::O:
 				return {
@@ -72,12 +72,12 @@ namespace {
 }
 
 Tetromino::Tetromino(Vector2 initialPos) {
-	type = getRandomType(); 
-	blocks = generateShape(type, initialPos);
+	tetrominoType = getRandomType(); 
+	blocks = generateShape(tetrominoType, initialPos);
 };
 
-Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) : type(type) {
-	blocks = generateShape(this->type, initialPos);
+Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) : tetrominoType(type) {
+	blocks = generateShape(tetrominoType, initialPos);
 };
 
 void Tetromino::shift(Vector2 translation) {
@@ -86,8 +86,15 @@ void Tetromino::shift(Vector2 translation) {
 	}
 }
 
+void Tetromino::shift(int dx, int dy) {
+	for (auto& vec : blocks) {
+		vec.x += dx;
+		vec.y += dy;
+	}
+}
+
 void Tetromino::rotate(Direction::Rotation rotation) {
-	for (int i = 1; i < 4; i++) {
+	for (int i = 0; i < 4; i++) {
 		blocks[i].rotate90Degrees(rotation, blocks[0]);
 	}
 	rotationCompass.rotate(rotation);

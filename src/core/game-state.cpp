@@ -29,7 +29,7 @@ void GameState::swapActorWithStored() {
 		matrix.removeActor(currentTetromino);
 		currentHasBeenSwapped = true;
 
-		if (storedTetromino.getType() == TetrominoType::NONE) {
+		if (storedTetromino.type() == TetrominoType::NONE) {
 			storedTetromino = currentTetromino;
 			currentTetromino = nextTetromino;
 			nextTetromino = generateRandomTetromino();

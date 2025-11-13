@@ -10,7 +10,6 @@
 #include "render/matrix-renderer.hpp"
 
 #include "core/game-state.hpp"
-#include "core/tetromino-controller.hpp"
 #include "core/event-handler.hpp"
 
 class Tetris {
@@ -29,7 +28,6 @@ private:
 	MatrixRenderer matrixRenderer;
 
 	EventHandler eventHandler;
-	TetrominoController tetrominoController;
 };
 
 #endif

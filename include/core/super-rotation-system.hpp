@@ -2,19 +2,14 @@
 #define SUPER_ROTATION_SYSTEM_H
 #include "core/matrix.hpp"
 #include "core/tetromino.hpp"
-#include "core/tetromino-rotation.hpp"
 #include <array>
 
 class SuperRotationSystem {
 public:
 	/// @brief Performs an SRS rotation on the actor
-	void rotateActor(Tetromino& actor, Matrix& scene, Direction::Rotation direction);
+	static void rotateTetromino(Tetromino& actor, Matrix& scene, Direction::Rotation direction);
 
 private:
-	bool performOffsets(const std::array<std::array<Vector2, 5>, 4>& offsets, Tetromino& actor, Matrix& scene, TetrominoRotation::State before, TetrominoRotation::State after);
-
-	TetrominoRotation rotationState;
-	
 	using v2 = Vector2;
 
 	static constexpr std::array<std::array<Vector2, 5>, 4> offsetDataStandard {{

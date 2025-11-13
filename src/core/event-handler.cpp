@@ -1,30 +1,30 @@
 #include "core/event-handler.hpp"
 
-void EventHandler::handleInput(SDL_Event& event, TetrominoController& controller)
+void EventHandler::handleInput(SDL_Event& event, GameState& state)
 {
 	switch (event.key.keysym.sym)
 	{
 		// handle input
 		case SDLK_h:
-			controller.moveActor(Direction::Horizontal::LEFT);
+			state.moveLeft();
 			break;
 		case SDLK_l:
-			controller.moveActor(Direction::Horizontal::RIGHT);
+			state.moveRight();
 			break;
 		case SDLK_j:
-			controller.moveActorDown();
+			state.moveDown();
 			break;
 		case SDLK_r:
-			controller.rotateActor(Direction::Rotation::CLOCKWISE);
+			state.rotateClockwise();
 			break;
 		case SDLK_t:
-			controller.rotateActor(Direction::Rotation::COUNTERCLOCKWISE);
+			state.rotateCounterclockwise();
 			break;
 		case SDLK_s:
-			//controller.swapActorWithStored();
+			state.swap();
 			break;
 		case SDLK_SPACE:
-			controller.dropActor();
+			state.drop();
 			break;
 		default:
 			break;

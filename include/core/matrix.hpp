@@ -2,6 +2,7 @@
 #define MATRIX_H
 #include <array>
 #include <stdexcept>
+#include <optional>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 
@@ -40,29 +41,22 @@ public:
 	unsigned int clearAndDropLines();
 
 	/// @brief Marks the actors tiles as active in the Matrix
-	void placeActor(const Tetromino& actor);
+	void placeTetromino(const Tetromino& actor);
 
 	/// @brief Marks the actors tiles as empty in the Matrix
-	void removeActor(const Tetromino& actor);
+	void removeTetromino(const Tetromino& actor);
 
 	/// @brief Marks the actors tiles as grounded in the Matrix
-	void lockDownActor(const Tetromino& actor);
+	void lockDownTetromino(const Tetromino& actor);
 
 	/// @brief Determines if the actor is overlapping any grounded tiles
-	bool doesActorCollideGround(const Tetromino& actor) const;
+	bool doesTetrominoCollideGround(const Tetromino& actor) const;
 
 	/// @brief Determines if the actor is overlapping any wall or grounded tiles
-	bool doesActorCollideImpermeable(const Tetromino& actor) const;
+	bool doesTetrominoCollideImpermeable(const Tetromino& actor) const;
 
 	/// @brief Determines if the actor is out of bounds of the Matrix
-	bool isActorOutOfBounds(const Tetromino& actor) const;
-
-	/* *
-	 * @brief Creates a copy of the actor and simulates a drop command, bringing the Tetromino
-	 * down to the lowest empty position on the Matrix.
-	 * @return The Tetromino copy used in the simulation.
-	 * */
-	Tetromino calculateDropPosition(const Tetromino& actor) const;
+	bool isTetrominoOutOfBounds(const Tetromino& actor) const;
 
 private:
 	const size_t mapIndex(unsigned int x, unsigned int y) const {
@@ -73,6 +67,10 @@ private:
 	const size_t mapIndex(Vector2 vec) const {
 		return mapIndex(vec.x, vec.y);
 	}
+
+	// Ghost Operations
+	void placeGhost();
+	void removeGhost();
 
 	// Row Queries
 	bool doesRowContain(unsigned int row, MatrixTile::State state) const;
@@ -85,6 +83,7 @@ private:
 
 private:
 	std::array<MatrixTile, WIDTH * HEIGHT> matrix;
+	Tetromino ghostTetromino = {TetrominoType::NONE, TETROMINO_INITIAL_POS};
 };
 
 #endif

@@ -11,6 +11,8 @@ A simple game of Tetris implemented using C++ and SDL2. It is designed to be a f
 more about game development, C++, and high-level graphics rendering. The game is compatible with both Linux and Windows operating systems, using
 CMake for building the project and vcpkg for managing dependencies.
 
+![Tetris Preview](assets/img/tetris-preview.png)
+
 # Building on Windows
 
 ## Step 1: Install Dependencies
@@ -31,7 +33,7 @@ git clone https://github.com/MichaelB788/Tetris.git
 ## Step 2: Set up vcpkg
 
 **In order for vcpkg to install the rest of the projects dependencies, you need to set an absolute path for vcpkg specific to your machine**.
-See (vcpkg in CMake projects)[https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration] for more information.
+See [vcpkg in CMake projects](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration) for more information.
 
 ## Step 3a: Build the Project with Visual Studio
 

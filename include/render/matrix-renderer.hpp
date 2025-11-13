@@ -4,9 +4,13 @@
 #include "core/matrix.hpp"
 #include "util/renderer.hpp"
 
-struct MatrixRenderer {
+class MatrixRenderer {
+public:
+	MatrixRenderer(const Matrix& matrix) : matrix(matrix) {} 
+	void renderMatrixUsingSDL(const Renderer& renderer);
+private:
+	const Matrix& matrix;
 	static constexpr unsigned int TILE_SIZE = 40;
-	void renderMatrixUsingSDL(const Matrix& matrix, const Renderer& renderer) const;
 };
 
 #endif

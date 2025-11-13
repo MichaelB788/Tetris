@@ -26,50 +26,37 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	{
 		matrix.clearMatrix();
 		Tetromino T = {TetrominoType::T, {-999, -999}};
-		REQUIRE(matrix.isActorOutOfBounds(T));
-		REQUIRE_THROWS(matrix.placeActor(T));
+		REQUIRE(matrix.isTetrominoOutOfBounds(T));
+		REQUIRE_THROWS(matrix.placeTetromino(T));
 	}
 
 	SECTION("Placing Tetromino")
 	{
 		matrix.clearMatrix();
 		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
-		REQUIRE_FALSE(matrix.isActorOutOfBounds(O));
-		REQUIRE_NOTHROW(matrix.placeActor(O));
+		REQUIRE_FALSE(matrix.isTetrominoOutOfBounds(O));
+		REQUIRE_NOTHROW(matrix.placeTetromino(O));
 	}
 
 	SECTION("Grounding Tetromino")
 	{
 		matrix.clearMatrix();
 		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
-		REQUIRE_NOTHROW(matrix.lockDownActor(O));
+		REQUIRE_NOTHROW(matrix.lockDownTetromino(O));
 
 		Tetromino T = {TetrominoType::T, Matrix::TETROMINO_INITIAL_POS};
-		REQUIRE(matrix.doesActorCollideGround(T));
-		REQUIRE(matrix.doesActorCollideImpermeable(T));
+		REQUIRE(matrix.doesTetrominoCollideGround(T));
+		REQUIRE(matrix.doesTetrominoCollideImpermeable(T));
 	}
 
 	SECTION("Removing Tetromino") {
 		matrix.clearMatrix();
 		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
 
-		matrix.lockDownActor(O);
-		CHECK(matrix.doesActorCollideGround(O));
-		matrix.removeActor(O);
-		REQUIRE_FALSE(matrix.doesActorCollideGround(O));
-	}
-
-	SECTION("Calculating drop position on Matrix with preset ground tiles") {
-		matrix.clearMatrix();
-		unsigned int filledRow = Matrix::HEIGHT - 6;
-		fillRow(matrix, filledRow, 1);
-
-		Tetromino I = {TetrominoType::I, Matrix::TETROMINO_INITIAL_POS};
-		I = matrix.calculateDropPosition(I);
-
-		for (const auto& block : I) {
-			REQUIRE(block.y == filledRow - 1);
-		}
+		matrix.lockDownTetromino(O);
+		CHECK(matrix.doesTetrominoCollideGround(O));
+		matrix.removeTetromino(O);
+		REQUIRE_FALSE(matrix.doesTetrominoCollideGround(O));
 	}
 }
 

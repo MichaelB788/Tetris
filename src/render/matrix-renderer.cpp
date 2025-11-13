@@ -1,6 +1,6 @@
 #include "render/matrix-renderer.hpp"
 
-void MatrixRenderer::renderMatrixUsingSDL(const Matrix& matrix, const Renderer& renderer) const {
+void MatrixRenderer::renderMatrixUsingSDL(const Renderer& renderer) {
 	for (unsigned int y = 0; y < Matrix::HEIGHT; y++)
 	{
 		for (unsigned int x = 0; x < Matrix::WIDTH; x++)

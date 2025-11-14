@@ -15,9 +15,9 @@ private:
 		return (index + offset) * MatrixRenderer::TILE_SIZE;
 	}
 
-	static constexpr unsigned int TILE_SIZE = 40;
-	static constexpr unsigned int MATRIX_PIXEL_HEIGHT = Matrix::HEIGHT * TILE_SIZE;
-	static constexpr unsigned int MATRIX_PIXEL_WIDTH = Matrix::WIDTH * TILE_SIZE;
+	static constexpr int TILE_SIZE = 40u;
+	static constexpr int MATRIX_PIXEL_HEIGHT = Matrix::HEIGHT * TILE_SIZE;
+	static constexpr int MATRIX_PIXEL_WIDTH = Matrix::WIDTH * TILE_SIZE;
 };
 
 #endif

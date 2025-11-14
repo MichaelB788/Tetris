@@ -2,7 +2,6 @@
 #define MATRIX_H
 #include <array>
 #include <stdexcept>
-#include <optional>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 

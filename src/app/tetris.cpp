@@ -37,7 +37,7 @@ void Tetris::runGameLoop() {
 		}
 
 		// Temporary solution, change later
-		if (timer % 50 == 0) gameState.moveDown();
+		if (timer % 20 == 0) gameState.moveDown();
 
 		MatrixRenderer::renderMatrixUsingSDL(gameState.getReferenceToMatrix(), renderer, window);
 		renderer.updateFrame();

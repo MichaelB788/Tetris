@@ -4,7 +4,6 @@
 #include <random>
 #include "util/vector2.hpp"
 #include "core/tetromino-type.hpp"
-#include "core/tetromino-generator.hpp"
 
 class Tetromino {
 public:
@@ -15,19 +14,37 @@ public:
 	Tetromino(TetrominoType type, Vector2 initialPos);
 
 	/// @return The type assosciated with this Tetromino
-	TetrominoType getType() const { return type; } 
+	TetrominoType getType() const {
+		return type;
+	} 
 
 	/// @return The type assosciated with this Tetromino
-	uint8_t getCurrentRotationState() const { return rotationState; } 
+	uint8_t getCurrentRotationState() const {
+		return rotationState;
+	} 
 
 	/// @brief Applies the translation vector to each coordinate of Tetromino's blocks
-	void shift(Vector2 translation);
+	void shift(Vector2 translation) {
+		for (auto& vec : blocks) vec += translation;
+	};
 
 	/// @brief Shifts every block of this Tetromino by (dx, dy) 
 	void shift(int dx, int dy);
 
+	/// @brief Moves this Tetromino to the given (x, y) position
+	void move(int x, int y);
+
+	/// @brief Moves this Tetromino to the given vector position
+	void move(Vector2 position) {
+		move(position.x, position.y);
+	};
+
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
 	void rotate(Direction::Rotation direction);
+
+	bool isNull() const {
+		return type == TetrominoType::NONE;
+	}
 
 	// Iterator
 	using const_iterator = std::array<Vector2, 4>::const_iterator;

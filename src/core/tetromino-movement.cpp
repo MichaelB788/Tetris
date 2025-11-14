@@ -1,40 +1,37 @@
 #include "core/tetromino-movement.hpp"
 
-bool TetrominoMovement::moveTetromino(Tetromino& actor, Matrix& scene, Direction::Horizontal direction) {
-	bool hasMoved = true;
-	scene.removeTetromino(actor);
-	actor.shift(Vector2::getHorizontal(direction));
+void TetrominoMovement::moveTetromino(Tetromino& current, Matrix& matrix, Direction::Horizontal direction) {
+	matrix.removeTetromino(current);
+	current.shift(Vector2::getHorizontal(direction));
 
-	if (scene.doesTetrominoCollideImpermeable(actor)) {
-		actor.shift(-Vector2::getHorizontal(direction));
-		hasMoved = false;
+	if (matrix.doesTetrominoCollideImpermeable(current)) {
+		current.shift(-Vector2::getHorizontal(direction));
 	}
 
-	scene.placeTetromino(actor);
-	return hasMoved;
+	matrix.placeTetromino(current);
 }
 
-bool TetrominoMovement::moveTetrominoDown(Tetromino& actor, Matrix& scene) {
-	scene.removeTetromino(actor);
-	actor.shift(Vector2::down());
+bool TetrominoMovement::moveTetrominoDown(Tetromino& current, Matrix& matrix) {
+	matrix.removeTetromino(current);
+	current.shift(Vector2::down());
 
-	if (scene.doesTetrominoCollideGround(actor)) {
-		actor.shift(Vector2::up());
-		scene.lockDownTetromino(actor);
+	if (matrix.doesTetrominoCollideGround(current)) {
+		current.shift(Vector2::up());
+		matrix.lockDownTetromino(current);
 		return false;
 	}
 	else {
-		scene.placeTetromino(actor);
+		matrix.placeTetromino(current);
 	}
 
 	return true;
 }
 
-void TetrominoMovement::dropTetromino(Tetromino& actor, Matrix& scene) {
-	scene.removeTetromino(actor);
-	while (!scene.doesTetrominoCollideGround(actor)) {
-		actor.shift(Vector2::down());
+void TetrominoMovement::dropTetromino(Tetromino& current, Matrix& matrix) {
+	matrix.removeTetromino(current);
+	while (!matrix.doesTetrominoCollideGround(current)) {
+		current.shift(Vector2::down());
 	}
-	actor.shift(Vector2::up());
-	scene.lockDownTetromino(actor);
+	current.shift(Vector2::up());
+	matrix.lockDownTetromino(current);
 }

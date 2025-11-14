@@ -1,34 +1,37 @@
 #include "core/tetromino-management.hpp"
 
-bool TetrominoManagement::switchToNext(Tetromino& currentTetromino, Tetromino& nextTetromino, Matrix& matrix) {
-	currentTetromino = nextTetromino;
-	nextTetromino = generateRandomTetromino();
+bool TetrominoManagement::switchToNext(Tetromino& current, Tetromino& next, Matrix& matrix) {
+	current = next;
+	next = generateRandomTetromino();
 
-	while (matrix.doesTetrominoCollideGround(currentTetromino)) {
-		currentTetromino.shift(Vector2::up());
-		if (matrix.isTetrominoOutOfBounds(currentTetromino)) {
-			return false;
-		}
+	while (matrix.doesTetrominoCollideGround(current)) {
+		current.shift(Vector2::up());
+		if (matrix.isTetrominoOutOfBounds(current)) return false;
 	}
 
-	matrix.placeTetromino(currentTetromino);
+	matrix.placeTetromino(current);
 	return true;
 }
 
-void TetrominoManagement::swapWithHold(Tetromino& currentTetromino, Tetromino& storedTetromino, Matrix& matrix) {
-	matrix.removeTetromino(currentTetromino);
+bool TetrominoManagement::swapWithHold(Tetromino& current, Tetromino& stored, Matrix& matrix) {
+	matrix.removeTetromino(current);
 
-	const Tetromino temp = storedTetromino;
-	storedTetromino = currentTetromino;
-	currentTetromino = temp;
+	current.move(Matrix::TETROMINO_INITIAL_POS);
+	std::swap(current, stored);
 
-	matrix.placeTetromino(currentTetromino);
+	while (matrix.doesTetrominoCollideGround(current)) {
+		current.shift(Vector2::up());
+		if (matrix.isTetrominoOutOfBounds(current)) return false;
+	}
+
+	matrix.placeTetromino(current);
+	return true;
 }
 
 Tetromino TetrominoManagement::generateRandomTetromino() {
-	return Tetromino({Matrix::TETROMINO_INITIAL_POS});
+	return Tetromino({ Matrix::TETROMINO_INITIAL_POS });
 }
 
 Tetromino TetrominoManagement::generateNullTetromino() {
-	return Tetromino(TetrominoType::NONE, {Matrix::TETROMINO_INITIAL_POS});
-};
+	return Tetromino(TetrominoType::NONE, { Matrix::TETROMINO_INITIAL_POS });
+}

@@ -10,7 +10,6 @@ class GameState {
 public:
 	GameState()
 		: currentTetromino(TetrominoManagement::generateRandomTetromino()),
-			ghostTetromino(currentTetromino),
 			nextTetromino(TetrominoManagement::generateRandomTetromino()),
 			storedTetromino(TetrominoManagement::generateNullTetromino())
 	{}
@@ -47,14 +46,13 @@ public:
 
 private:
 	void gameOver();
-	void spawnNextTetromino();
+	void spawnNext();
 
 	unsigned int linesCleared = 0;
-	bool currentHasBeenSwapped = false;
+	bool swapUsedThisTurn = false;
 
 	Matrix matrix;
 	Tetromino currentTetromino;
-	Tetromino ghostTetromino;
 	Tetromino nextTetromino;
 	Tetromino storedTetromino;
 };

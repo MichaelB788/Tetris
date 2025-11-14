@@ -1,5 +1,4 @@
 add_library(tetris_core
-	tetromino-generator.cpp
   tetromino.cpp
 	tetromino-movement.cpp
 	tetromino-management.cpp

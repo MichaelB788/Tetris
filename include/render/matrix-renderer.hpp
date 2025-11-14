@@ -1,19 +1,22 @@
 #ifndef MATRIX_RENDERER_H
 #define MATRIX_RENDERER_H
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 #include "core/matrix.hpp"
 #include "util/renderer.hpp"
+#include "util/window.hpp"
 
-class MatrixRenderer {
+struct MatrixRenderer {
 public:
-	MatrixRenderer(const Matrix& matrix) : matrix(matrix) {} 
-	void renderMatrixUsingSDL(const Renderer& renderer);
+	static void renderMatrixUsingSDL(const Matrix& matrix, const Renderer& renderer, const Window& window);
+
 private:
-	int renderPos(int index, int offset) {
-		return (index + offset) * TILE_SIZE;
-	};
-	const Matrix& matrix;
-	static constexpr unsigned int TILE_SIZE = 45;
+	static int pos(int index, int offset) {
+		return (index + offset) * MatrixRenderer::TILE_SIZE;
+	}
+	static constexpr unsigned int TILE_SIZE = 40;
+	static constexpr int matrixPixelHeight = Matrix::HEIGHT * TILE_SIZE;
+	static constexpr int matrixPixelWidth = Matrix::WIDTH * TILE_SIZE;
 };
 
 #endif

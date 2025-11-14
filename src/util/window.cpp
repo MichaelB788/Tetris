@@ -5,8 +5,8 @@ bool Window::initializeSDLWindow(const char* title) {
 	sdlWindow = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
-			WIDTH,
-			HEIGHT,
+			600,
+			600,
 			SDL_WINDOW_RESIZABLE
 			);
 
@@ -17,8 +17,7 @@ bool Window::initializeSDLWindow(const char* title) {
 	return success;
 }
 
-Window::~Window()
-{
+Window::~Window() {
 	if (sdlWindow) {
 		SDL_DestroyWindow(sdlWindow);
 		sdlWindow = nullptr;

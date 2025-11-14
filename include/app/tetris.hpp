@@ -25,7 +25,6 @@ private:
 
 	Window window;
 	Renderer renderer;
-	MatrixRenderer matrixRenderer;
 
 	EventHandler eventHandler;
 };

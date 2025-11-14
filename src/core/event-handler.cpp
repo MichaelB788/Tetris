@@ -1,6 +1,6 @@
 #include "core/event-handler.hpp"
 
-void EventHandler::handleInput(SDL_Event& event, GameState& state)
+void EventHandler::handleInput(const SDL_Event& event, GameState& state)
 {
 	switch (event.key.keysym.sym)
 	{

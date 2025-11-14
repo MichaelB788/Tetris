@@ -4,7 +4,7 @@
 #include "core/game-state.hpp"
 
 struct EventHandler {
-	void handleInput(SDL_Event& event, GameState& state);
+	static void handleInput(const SDL_Event& event, GameState& state);
 };
 
 #endif

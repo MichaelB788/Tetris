@@ -1,7 +1,8 @@
 #include "app/tetris.hpp"
+#include <SDL_video.h>
 #include <cstdio>
 
-Tetris::Tetris() : matrixRenderer(gameState.getReferenceToMatrix()) {
+Tetris::Tetris() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	} else {
@@ -15,7 +16,7 @@ Tetris::~Tetris() {
 
 void Tetris::runGameLoop() {
 	if (window.initializeSDLWindow("Tetris")) {
-		renderer.initializeSDLRenderer(window.sdlWindow);
+		renderer.initializeSDLRenderer(window.getWindow());
 	} else {
 		return;
 	}
@@ -23,6 +24,7 @@ void Tetris::runGameLoop() {
 	SDL_Event event;
 	bool quit = false;
 	int timer = 0; // For testing, may need a more sophisticated method than this
+	int winWidth, winHeight;
 
 	while ( !quit ) {
 		renderer.clearFrame();
@@ -32,13 +34,15 @@ void Tetris::runGameLoop() {
 				quit = true;
 			} else if (event.type == SDL_KEYDOWN) {
 				eventHandler.handleInput(event, gameState);
+			} else if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+				window.updateWindowDimensions();
 			}
 		}
 
 		// Temporary solution, change later
 		if (timer % 50 == 0) gameState.moveDown();
 
-		matrixRenderer.renderMatrixUsingSDL(renderer);
+		MatrixRenderer::renderMatrixUsingSDL(gameState.getReferenceToMatrix(), renderer, window);
 		renderer.updateFrame();
 
 		timer++;

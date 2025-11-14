@@ -25,8 +25,6 @@ private:
 
 	Window window;
 	Renderer renderer;
-
-	EventHandler eventHandler;
 };
 
 #endif

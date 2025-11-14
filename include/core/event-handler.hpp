@@ -3,8 +3,8 @@
 #include <SDL2/SDL_events.h>
 #include "core/game-state.hpp"
 
-struct EventHandler {
-	static void handleInput(const SDL_Event& event, GameState& state);
+namespace EventHandler {
+	void handleInput(const SDL_Event& event, GameState& state);
 };
 
 #endif

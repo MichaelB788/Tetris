@@ -1,6 +1,4 @@
 #include "app/tetris.hpp"
-#include <SDL_video.h>
-#include <cstdio>
 
 Tetris::Tetris() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -24,7 +22,6 @@ void Tetris::runGameLoop() {
 	SDL_Event event;
 	bool quit = false;
 	int timer = 0; // For testing, may need a more sophisticated method than this
-	int winWidth, winHeight;
 
 	while ( !quit ) {
 		renderer.clearFrame();
@@ -33,7 +30,7 @@ void Tetris::runGameLoop() {
 			if (event.type == SDL_QUIT) {
 				quit = true;
 			} else if (event.type == SDL_KEYDOWN) {
-				eventHandler.handleInput(event, gameState);
+				EventHandler::handleInput(event, gameState);
 			} else if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 				window.updateWindowDimensions();
 			}

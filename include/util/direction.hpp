@@ -3,16 +3,16 @@
 #include <stdint.h>
 
 /// @brief enum values corresponding to horizontal, vertical, and rotational directions.
-struct Direction {
+namespace Direction {
 	enum class Rotation : uint8_t { CLOCKWISE, COUNTERCLOCKWISE };
 	enum class Horizontal : uint8_t { LEFT, RIGHT };
 	enum class Vertical : uint8_t { UP, DOWN };
 
-	static constexpr Rotation getCounterRotation(Rotation rotation) {
+	constexpr Rotation getCounterRotation(Rotation rotation) {
 		return rotation == Rotation::CLOCKWISE ? Rotation::COUNTERCLOCKWISE : Rotation::CLOCKWISE;
 	}
 
-	static constexpr Horizontal getOppositeHorizontal(Horizontal direction) {
+	constexpr Horizontal getOppositeHorizontal(Horizontal direction) {
 		return direction == Horizontal::LEFT ? Horizontal::RIGHT : Horizontal::LEFT;
 	}
 };

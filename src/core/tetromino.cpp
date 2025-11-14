@@ -97,10 +97,12 @@ void Tetromino::move(int x, int y) {
 }
 
 void Tetromino::rotate(Direction::Rotation direction) {
-	for (int i = 1; i < 4; i++) {
-		blocks[i].rotate90Degrees(direction, blocks[0]);
+	if (type != TetrominoType::O) {
+		for (int i = 1; i < 4; i++) {
+			blocks[i].rotate90Degrees(direction, blocks[0]);
+		}
+		updateRotationState(direction);
 	}
-	updateRotationState(direction);
 }
 
 void Tetromino::updateRotationState(Direction::Rotation direction) {

@@ -11,7 +11,7 @@ class Matrix {
 public:
 	static constexpr unsigned int WIDTH = 12;
 	static constexpr unsigned int HEIGHT = 24;
-	static constexpr Vector2 TETROMINO_INITIAL_POS = {5, 2};
+	static constexpr Vector2 TETROMINO_INITIAL_POS = {5, 5};
 
 	Matrix();
 

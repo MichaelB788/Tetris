@@ -1,5 +1,5 @@
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#ifndef GEOMETRY_H
+#define GEOMETRY_H
 #include <ostream>
 #include <stdint.h>
 #include "direction.hpp"
@@ -75,6 +75,10 @@ struct Vector2 {
 
 	/// @brief Shorthand for Vector2(1, 1)
 	static constexpr Vector2 one() { return {1, 1}; }
+};
+
+struct Dimensions {
+	int w, h;
 };
 
 #endif

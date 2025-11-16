@@ -1,12 +1,13 @@
 #include "render/ui-renderer.hpp"
 
-void UIRenderer::renderText(Window& window) {
-	int winWidth, winHeight;
-	window.getWindowDimensions(winWidth, winHeight);
+UIRenderer::UIRenderer(const Renderer& renderer) : storedText("Stored:"), nextText("Next:") {
+	storedText.createTextTexture(renderer);
+	nextText.createTextTexture(renderer);
+}
 
-	int offsetX = 500;
-	int offsetY = 500;
+void UIRenderer::renderText(const Renderer& renderer, const Window& window) {
+	auto [offsetX, offsetY] = window.getWindowSize();
 
-	storedText.createTextTexture(offsetX, offsetY);
-	nextText.createTextTexture(0, 0);
+	storedText.render(offsetX, offsetY, renderer);
+	nextText.render(offsetX, offsetY, renderer);
 }

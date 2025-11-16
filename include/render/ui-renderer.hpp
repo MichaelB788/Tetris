@@ -1,16 +1,14 @@
 #ifndef RENDER_UI
 #define RENDER_UI
+#include "util/renderer.hpp"
 #include "util/text.hpp"
 #include "util/window.hpp"
 
 class UIRenderer {
 public:
-	UIRenderer(SDL_Renderer* renderer)
-		: storedText("Stored", renderer),
-			nextText("Next", renderer) 
-	{}
+	UIRenderer(const Renderer& renderer);
 
-	void renderText(Window& window);
+	void renderText(const Renderer& renderer, const Window& window);
 
 private:
 	Text storedText;

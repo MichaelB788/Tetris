@@ -1,6 +1,6 @@
 #include "util/text.hpp"
 
-Text::Text(const char* textString, SDL_Renderer* renderer) : renderer(renderer) {
+Text::Text(const char* textString) {
 	if ( TTF_Init() < 0 ) {
 		printf("Could not initialize SDL_TTF: %s\n", TTF_GetError());
 	}
@@ -10,19 +10,22 @@ Text::Text(const char* textString, SDL_Renderer* renderer) : renderer(renderer) 
 		printf("Could not load font: %s\n", TTF_GetError());
 	}
 
-	SDL_Color white = { 255, 255, 255 };
+	SDL_Color white = { 100, 255, 100 };
 	text = TTF_RenderText_Solid(font, textString, white);
 }
 
 Text::~Text() {
-	SDL_DestroyTexture(textTexture);
-	SDL_FreeSurface(text);
+	if ( text && textTexture ) {
+		SDL_DestroyTexture(textTexture);
+		SDL_FreeSurface(text);
+	}
 }
 
-void Text::createTextTexture(int x, int y) {
+bool Text::createTextTexture(const Renderer& renderer) {
 	if ( text ) {
-		textTexture = SDL_CreateTextureFromSurface(renderer, text);
-		SDL_Rect dest = { x, y, text->w, text->h };
-		SDL_RenderCopy(renderer, textTexture, &dest, nullptr);
+		textTexture = SDL_CreateTextureFromSurface(renderer.getRenderer(), text);
+		if ( textTexture != nullptr ) return true;
 	}
+	printf("Could not create text texture: %s\n", SDL_GetError());
+	return false;
 }

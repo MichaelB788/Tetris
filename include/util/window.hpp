@@ -2,9 +2,13 @@
 #define WINDOW_H
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_events.h>
+#include "geometry.hpp"
 
 class Window {
 public:
+	Window() = default;
+	~Window();
+
 	/* *
 	 * @brief Initializes the internal SDL_Window with the given name
 	 * @return true if the operation was successful, false otherwise
@@ -13,20 +17,16 @@ public:
 
 	SDL_Window* getWindow() const { return sdlWindow; }
 
-	void getWindowDimensions(int& w, int& h) const {
-		w = cachedWidth;
-		h = cachedHeight;
+	Dimensions getWindowSize() const {
+		return windowSize;
 	}
 
-	void updateWindowDimensions() {
-		SDL_GetWindowSize(sdlWindow, &cachedWidth, &cachedHeight);
+	void updateWindowSize() {
+		SDL_GetWindowSize(sdlWindow, &windowSize.w, &windowSize.h);
 	}
-
-	~Window();
 
 private:
-	int cachedWidth;
-	int cachedHeight;
+	Dimensions windowSize;
 	SDL_Window* sdlWindow = nullptr;
 };
 

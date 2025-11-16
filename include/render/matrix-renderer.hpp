@@ -6,19 +6,31 @@
 #include "util/renderer.hpp"
 #include "util/window.hpp"
 
-struct MatrixRenderer {
+class MatrixRenderer {
 public:
-	static void renderMatrixUsingSDL(const Matrix& matrix, const Renderer& renderer, const Window& window);
+	static constexpr int TILE_SIZE = 40;
+
+	MatrixRenderer(int tileSize = TILE_SIZE) : tileSize(tileSize) {}
+
+	int getPixelWidth() const { return pixelWidth; }
+	int getPixelHeight() const { return pixelHeight; }
+
+	void render(const Matrix& matrix, const Renderer& renderer, const Window& window);
 
 private:
-	static int pos(int index, int offset) {
-		return (index + offset) * MatrixRenderer::TILE_SIZE;
+	int gridPixel(int index, int offset) const {
+		return (index + offset) * tileSize;
 	}
-	static Renderer::Color getTetrominoColor(MatrixTile tile);
+	Renderer::Color getTileColor(MatrixTile tile) const;
 
-	static constexpr int TILE_SIZE = 40u;
-	static constexpr int MATRIX_PIXEL_HEIGHT = Matrix::HEIGHT * TILE_SIZE;
-	static constexpr int MATRIX_PIXEL_WIDTH = Matrix::WIDTH * TILE_SIZE;
+	void renderTileAt(const MatrixTile& tile, const Renderer& renderer, int x, int y, int offX, int offY) const;
+
+	void drawTile(const Renderer& renderer, Renderer::Color color, int x, int y, bool filled = false) const;
+
+private:
+	int tileSize;
+	int pixelWidth = tileSize * Matrix::WIDTH;
+	int pixelHeight = tileSize * Matrix::HEIGHT;
 };
 
 #endif

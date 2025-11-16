@@ -2,7 +2,7 @@
 #define TETROMINO_H
 #include <array>
 #include <random>
-#include "util/vector2.hpp"
+#include "util/geometry.hpp"
 #include "core/tetromino-type.hpp"
 
 class Tetromino {

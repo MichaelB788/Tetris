@@ -14,6 +14,7 @@ private:
 	static int pos(int index, int offset) {
 		return (index + offset) * MatrixRenderer::TILE_SIZE;
 	}
+	static Renderer::Color getTetrominoColor(MatrixTile tile);
 
 	static constexpr int TILE_SIZE = 40u;
 	static constexpr int MATRIX_PIXEL_HEIGHT = Matrix::HEIGHT * TILE_SIZE;

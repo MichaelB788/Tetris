@@ -35,6 +35,18 @@ void Renderer::updateFrame() const {
 }
 
 void Renderer::drawRectangle(Color color, bool filled, int x, int y, int w, int h) const {
+	setSDLRendererColor(color);
+
+	SDL_Rect rect = { x, y, w, h };
+
+	if (filled) {
+		SDL_RenderFillRect(sdlRenderer, &rect);
+	} else {
+		SDL_RenderDrawRect(sdlRenderer, &rect);
+	}
+}
+
+void Renderer::setSDLRendererColor(Color color) const {
 	switch (color) {
 		case Color::WHITE:
 			SDL_SetRenderDrawColor(sdlRenderer, 255, 255, 255, 0);
@@ -45,17 +57,28 @@ void Renderer::drawRectangle(Color color, bool filled, int x, int y, int w, int 
 		case Color::BLACK: default:
 			SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 0);
 			break;
-	}
-
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = w;
-	rect.h = h;
-
-	if (filled) {
-		SDL_RenderFillRect(sdlRenderer, &rect);
-	} else {
-		SDL_RenderDrawRect(sdlRenderer, &rect);
+		
+		// Tetromino colors
+		case Color::CYAN:    // I piece
+			SDL_SetRenderDrawColor(sdlRenderer, 0, 255, 255, 0);
+			break;
+		case Color::YELLOW:  // O piece
+			SDL_SetRenderDrawColor(sdlRenderer, 255, 255, 0, 0);
+			break;
+		case Color::PURPLE:  // T piece
+			SDL_SetRenderDrawColor(sdlRenderer, 128, 0, 128, 0);
+			break;
+		case Color::GREEN:   // S piece
+			SDL_SetRenderDrawColor(sdlRenderer, 0, 255, 0, 0);
+			break;
+		case Color::RED:     // Z piece
+			SDL_SetRenderDrawColor(sdlRenderer, 255, 0, 0, 0);
+			break;
+		case Color::BLUE:    // J piece
+			SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 255, 0);
+			break;
+		case Color::ORANGE:  // L piece
+			SDL_SetRenderDrawColor(sdlRenderer, 255, 165, 0, 0);
+			break;
 	}
 }

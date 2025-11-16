@@ -6,12 +6,12 @@
 class Renderer {
 public:
 	enum class Color {
-		WHITE, GRAY, BLACK
+		WHITE, GRAY, BLACK, BLUE, RED, GREEN, CYAN, ORANGE, PURPLE, YELLOW
 	};
 
 	~Renderer();
 
-	const SDL_Renderer* getRenderer() const { return sdlRenderer; }
+	SDL_Renderer* getRenderer() const { return sdlRenderer; }
 
 	/* *
 	 * @brief Initializes the internal SDL_Renderer given an SDL_Window
@@ -26,6 +26,8 @@ public:
 	void drawRectangle(Color color, bool filled, int x, int y, int w, int h) const;
 
 private:
+	void setSDLRendererColor(Color color) const;
+
 	SDL_Renderer* sdlRenderer = nullptr;
 
 	SDL_Window* sdlWindow = nullptr;

@@ -1,5 +1,6 @@
 add_library(tetris-render 
 	matrix-renderer.cpp
+	ui-renderer.cpp
 )
 add_library(Tetris::Renderer ALIAS tetris-render)
 

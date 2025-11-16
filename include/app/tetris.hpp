@@ -4,6 +4,7 @@
 #include <SDL_events.h>
 #include <SDL_render.h>
 
+#include "render/ui-renderer.hpp"
 #include "util/window.hpp"
 #include "util/renderer.hpp"
 
@@ -25,6 +26,7 @@ private:
 
 	Window window;
 	Renderer renderer;
+	UIRenderer uiRenderer;
 };
 
 #endif

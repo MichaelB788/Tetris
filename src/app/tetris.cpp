@@ -1,6 +1,6 @@
 #include "app/tetris.hpp"
 
-Tetris::Tetris() {
+Tetris::Tetris() : uiRenderer(renderer.getRenderer()) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	} else {
@@ -40,6 +40,7 @@ void Tetris::runGameLoop() {
 		if (timer % 20 == 0) gameState.moveDown();
 
 		MatrixRenderer::renderMatrixUsingSDL(gameState.getReferenceToMatrix(), renderer, window);
+		uiRenderer.renderText(window);
 		renderer.updateFrame();
 
 		timer++;

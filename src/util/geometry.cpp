@@ -1,4 +1,4 @@
-#include "util/vector2.hpp"
+#include "util/geometry.hpp"
 
 void Vector2::rotate90Degrees(Direction::Rotation rotation, const Vector2& pivot) {
 	int dx = x - pivot.x;

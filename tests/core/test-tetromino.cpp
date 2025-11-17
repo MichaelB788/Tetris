@@ -1,5 +1,4 @@
 #include <catch2/catch_test_macros.hpp>
-#include "util/vector2.hpp"
 #include "core/tetromino.hpp"
 
 TEST_CASE("Moving Tetromino", "[Tetromino, unit]") {

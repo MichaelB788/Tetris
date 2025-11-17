@@ -77,7 +77,7 @@ struct Vector2 {
 	static constexpr Vector2 one() { return {1, 1}; }
 };
 
-struct Dimensions {
+struct Dimension2D {
 	int w, h;
 };
 

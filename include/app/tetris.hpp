@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL_events.h>
 #include <SDL_render.h>
+#include <SDL_ttf.h>
 
 #include "render/ui-renderer.hpp"
 #include "util/window.hpp"
@@ -23,10 +24,12 @@ private:
 
 private:
 	GameState gameState; 
+	EventHandler eventHandler;
 
 	Window window;
 	Renderer renderer;
 	UIRenderer uiRenderer;
+	MatrixRenderer matrixRenderer;
 };
 
 #endif

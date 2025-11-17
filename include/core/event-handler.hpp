@@ -3,7 +3,11 @@
 #include <SDL2/SDL_events.h>
 #include "core/game-state.hpp"
 
-namespace EventHandler {
+class EventHandler {
+public:
+	void handleEvent(const SDL_Event& event, bool& quit, GameState& state);
+
+private:
 	void handleInput(const SDL_Event& event, GameState& state);
 };
 

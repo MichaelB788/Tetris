@@ -1,5 +1,17 @@
 #include "core/event-handler.hpp"
 
+void EventHandler::handleEvent(const SDL_Event& event, bool& quit, GameState& state) {
+	switch (event.type) {
+		case SDL_QUIT:
+			quit = true;
+			break;
+		case SDL_KEYDOWN:
+			handleInput(event, state);
+			break;
+		default: break;
+	}
+}
+
 void EventHandler::handleInput(const SDL_Event& event, GameState& state)
 {
 	switch (event.key.keysym.sym)

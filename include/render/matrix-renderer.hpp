@@ -3,8 +3,8 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include "core/matrix.hpp"
+#include "util/geometry.hpp"
 #include "util/renderer.hpp"
-#include "util/window.hpp"
 
 class MatrixRenderer {
 public:
@@ -15,12 +15,13 @@ public:
 	int getPixelWidth() const { return pixelWidth; }
 	int getPixelHeight() const { return pixelHeight; }
 
-	void render(const Matrix& matrix, const Renderer& renderer, const Window& window);
+	void render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension);
 
 private:
 	int gridPixel(int index, int offset) const {
 		return (index + offset) * tileSize;
 	}
+
 	Renderer::Color getTileColor(MatrixTile tile) const;
 
 	void renderTileAt(const MatrixTile& tile, const Renderer& renderer, int x, int y, int offX, int offY) const;
@@ -29,8 +30,8 @@ private:
 
 private:
 	int tileSize;
-	int pixelWidth = tileSize * Matrix::WIDTH;
-	int pixelHeight = tileSize * Matrix::HEIGHT;
+	int pixelWidth = Matrix::WIDTH * tileSize;
+	int pixelHeight = Matrix::HEIGHT * tileSize;
 };
 
 #endif

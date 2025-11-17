@@ -18,11 +18,9 @@ public:
 
 	SDL_Renderer* getRenderer() const { return sdlRenderer; }
 
-	/**
-	 * @brief Initializes the internal SDL_Renderer given an SDL_Window
-	 * @return true if the operation was successful, false otherwise
-	 */
-	bool initializeSDLRenderer(SDL_Window* window);
+	void initializeSDLRenderer(SDL_Window* window);
+
+	bool isInitialized() const { return sdlRenderer != nullptr; }
 
 	void clear() const;
 

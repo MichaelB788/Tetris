@@ -1,24 +1,18 @@
 #include "util/window.hpp"
 
-bool Window::initializeSDLWindow(const char* title) {
-	bool success = true;
+void Window::initializeSDLWindow(const char* title) {
 	sdlWindow = SDL_CreateWindow(title,
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
-			600,
-			600,
-			SDL_WINDOW_RESIZABLE
-			);
-
-	if (!sdlWindow) {
-		printf("Failed to load window: %s\n", SDL_GetError());
-		success = false;
-	}
-	return success;
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		windowSize.w,
+		windowSize.h,
+		SDL_WINDOW_RESIZABLE
+	);
+	if ( !sdlWindow ) printf("Failed to load window: %s\n", SDL_GetError());
 }
 
 Window::~Window() {
-	if (sdlWindow) {
+	if ( sdlWindow ) {
 		SDL_DestroyWindow(sdlWindow);
 		sdlWindow = nullptr;
 	}

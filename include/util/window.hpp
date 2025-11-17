@@ -6,27 +6,24 @@
 
 class Window {
 public:
-	Window() = default;
+	Window() : windowSize{600, 600} {};
 	~Window();
 
-	/* *
-	 * @brief Initializes the internal SDL_Window with the given name
-	 * @return true if the operation was successful, false otherwise
-	 * */
-	bool initializeSDLWindow(const char* title);
+	void initializeSDLWindow(const char* title);
+
+	bool isInitialized() const { return sdlWindow != nullptr; }
 
 	SDL_Window* getWindow() const { return sdlWindow; }
 
-	Dimensions getWindowSize() const {
-		return windowSize;
-	}
+	Dimension2D getWindowSize() const { return windowSize; }
 
-	void updateWindowSize() {
-		SDL_GetWindowSize(sdlWindow, &windowSize.w, &windowSize.h);
+	void handleWindowEvent(const SDL_Event& event) {
+		if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+			SDL_GetWindowSize(sdlWindow, &windowSize.w, &windowSize.h);
 	}
 
 private:
-	Dimensions windowSize;
+	Dimension2D windowSize;
 	SDL_Window* sdlWindow = nullptr;
 };
 

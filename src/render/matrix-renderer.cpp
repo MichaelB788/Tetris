@@ -1,11 +1,12 @@
 #include "render/matrix-renderer.hpp"
 
-void MatrixRenderer::render(const Matrix& matrix, const Renderer& renderer, const Window& window) {
-	auto [offsetX, offsetY] = window.getWindowSize();
+void MatrixRenderer::render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension) {
+	int offsetX = (windowDimension.w - pixelWidth) / (2 * tileSize);
+	int offsetY = (windowDimension.h - pixelHeight) / (2 * tileSize);
 
 	for (unsigned y = 2; y < Matrix::HEIGHT; y++) {
 		for (unsigned x = 0; x < Matrix::WIDTH; x++) {
-			renderTileAt(matrix(x, y), renderer, x, y, offsetX, offsetY);
+				renderTileAt(matrix(x, y), renderer, x, y, offsetX, offsetY);
 		}
 	}
 }

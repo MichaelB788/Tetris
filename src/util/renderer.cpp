@@ -1,26 +1,13 @@
 #include "util/renderer.hpp"
 #include <SDL2/SDL_render.h>
 
-Renderer::~Renderer() {
-	if (sdlRenderer) {
-		SDL_DestroyRenderer(sdlRenderer);
-		sdlRenderer = nullptr;
-	}
+void Renderer::initializeSDLRenderer(SDL_Window* window) {
+	sdlRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED); 
+	if ( !sdlRenderer ) printf("Failed to load renderer: %s\n", SDL_GetError());
 }
 
-bool Renderer::initializeSDLRenderer(SDL_Window* window) {
-	bool success = true;
-	sdlRenderer = SDL_CreateRenderer(
-			window,
-			-1,
-			SDL_RENDERER_ACCELERATED
-			); 
-
-	if ( !sdlRenderer ) {
-		printf("Failed to load renderer: %s\n", SDL_GetError());
-		success = false;
-	}
-	return success;
+Renderer::~Renderer() {
+	if ( sdlRenderer ) SDL_DestroyRenderer(sdlRenderer);
 }
 
 

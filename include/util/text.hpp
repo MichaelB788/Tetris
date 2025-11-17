@@ -9,16 +9,20 @@ public:
 
 	~Text();
 
-	bool createTextTexture(const Renderer& renderer);
+	void createTextTexture(SDL_Renderer* renderer);
+	
+	bool isInitialized() const {
+		return font != nullptr || text != nullptr || textTexture != nullptr;  
+	}
 
 	void render(int x, int y, const Renderer& renderer) const {
 		if ( textTexture ) renderer.renderTexture(textTexture, { x, y, text->w, text->h });
 	};
 
 private:
-	TTF_Font* font;
-	SDL_Surface* text;
-	SDL_Texture* textTexture;
+	TTF_Font* font = nullptr;
+	SDL_Surface* text = nullptr;
+	SDL_Texture* textTexture = nullptr;
 };
 
 #endif

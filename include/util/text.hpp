@@ -1,18 +1,19 @@
 #ifndef TEXT_H
 #define TEXT_H
 #include <SDL2/SDL_ttf.h>
+#include "util/geometry.hpp"
 #include "util/renderer.hpp"
 
 class Text {
 public:
-	Text(const char* textString);
+	Text(const char* textString, SDL_Renderer* renderer);
 
 	~Text();
 
-	void createTextTexture(SDL_Renderer* renderer);
+	Dimension2D getDimensions() const { return {text->w, text->h}; }
 	
 	bool isInitialized() const {
-		return font != nullptr || text != nullptr || textTexture != nullptr;  
+		return font != nullptr || text != nullptr || textTexture != nullptr;
 	}
 
 	void render(int x, int y, const Renderer& renderer) const {

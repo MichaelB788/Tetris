@@ -1,7 +1,7 @@
 #include "util/renderer.hpp"
 #include <SDL2/SDL_render.h>
 
-void Renderer::initializeSDLRenderer(SDL_Window* window) {
+Renderer::Renderer(SDL_Window* window) {
 	sdlRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED); 
 	if ( !sdlRenderer ) printf("Failed to load renderer: %s\n", SDL_GetError());
 }
@@ -9,7 +9,6 @@ void Renderer::initializeSDLRenderer(SDL_Window* window) {
 Renderer::~Renderer() {
 	if ( sdlRenderer ) SDL_DestroyRenderer(sdlRenderer);
 }
-
 
 void Renderer::clear() const {
 	if ( sdlRenderer ) {

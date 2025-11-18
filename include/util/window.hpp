@@ -6,10 +6,13 @@
 
 class Window {
 public:
-	Window() : windowSize{600, 600} {};
+	Window(const char* title);
+
 	~Window();
 
-	void initializeSDLWindow(const char* title);
+	Window(const Window& other) = delete;
+
+	void operator=(const Window& other) = delete;
 
 	bool isInitialized() const { return sdlWindow != nullptr; }
 

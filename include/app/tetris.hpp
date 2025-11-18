@@ -1,9 +1,8 @@
 #ifndef TETRIS_H
 #define TETRIS_H
-#include <SDL2/SDL.h>
-#include <SDL_events.h>
-#include <SDL_render.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_render.h>
+#include <cmath>
 
 #include "render/ui-renderer.hpp"
 #include "util/window.hpp"
@@ -17,7 +16,6 @@
 class Tetris {
 public:
   Tetris();
-	~Tetris();
 
 private:
 	void runGameLoop();

@@ -1,7 +1,8 @@
 #include "util/window.hpp"
 
-void Window::initializeSDLWindow(const char* title) {
-	sdlWindow = SDL_CreateWindow(title,
+Window::Window(const char* title) : windowSize({ 600, 600 }) {
+	sdlWindow = SDL_CreateWindow(
+		title,
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		windowSize.w,
@@ -12,8 +13,5 @@ void Window::initializeSDLWindow(const char* title) {
 }
 
 Window::~Window() {
-	if ( sdlWindow ) {
-		SDL_DestroyWindow(sdlWindow);
-		sdlWindow = nullptr;
-	}
+	if ( sdlWindow ) SDL_DestroyWindow(sdlWindow);
 }

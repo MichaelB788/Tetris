@@ -1,7 +1,5 @@
 #ifndef MATRIX_RENDERER_H
 #define MATRIX_RENDERER_H
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_video.h>
 #include "core/matrix.hpp"
 #include "util/geometry.hpp"
 #include "util/renderer.hpp"
@@ -10,28 +8,34 @@ class MatrixRenderer {
 public:
 	static constexpr int TILE_SIZE = 40;
 
-	MatrixRenderer(int tileSize = TILE_SIZE) : tileSize(tileSize) {}
+	MatrixRenderer(int tileSize = TILE_SIZE)
+		: tileSize(tileSize),
+			pixelDimensions(Matrix::WIDTH * tileSize, Matrix::HEIGHT * tileSize),
+			offset(0, 0)
+	{}
 
-	int getPixelWidth() const { return pixelWidth; }
-	int getPixelHeight() const { return pixelHeight; }
+	Dimension2D getPixelDimensions() const { return pixelDimensions; }
+	int getMatrixEnd() const { return pixelDimensions.w + (Matrix::WIDTH * tileSize * 2); }
+	Vector2 getOffset() const { return offset; }
+	int getTileSize() const { return tileSize; }
 
 	void render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension);
 
 private:
-	int gridPixel(int index, int offset) const {
-		return (index + offset) * tileSize;
+	Vector2 getPixelPosition(Vector2 pos, Vector2 offset) const {
+		return (pos + offset) * tileSize;
 	}
 
 	Renderer::Color getTileColor(MatrixTile tile) const;
 
-	void renderTileAt(const MatrixTile& tile, const Renderer& renderer, int x, int y, int offX, int offY) const;
+	void renderTileAt(Vector2 pos, Vector2 offset, const MatrixTile& tile, const Renderer& renderer) const;
 
-	void drawTile(const Renderer& renderer, Renderer::Color color, int x, int y, bool filled = false) const;
+	void drawTile(const Renderer& renderer, Renderer::Color color, Vector2 pos, bool filled = false) const;
 
 private:
 	int tileSize;
-	int pixelWidth = Matrix::WIDTH * tileSize;
-	int pixelHeight = Matrix::HEIGHT * tileSize;
+	Dimension2D pixelDimensions;
+	Vector2 offset;
 };
 
 #endif

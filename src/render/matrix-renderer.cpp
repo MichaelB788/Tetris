@@ -1,33 +1,32 @@
 #include "render/matrix-renderer.hpp"
 
 void MatrixRenderer::render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension) {
-	int offsetX = (windowDimension.w - pixelWidth) / (2 * tileSize);
-	int offsetY = (windowDimension.h - pixelHeight) / (2 * tileSize);
+	offset.x = (windowDimension.w - pixelDimensions.w) / (2 * tileSize);
+	offset.y = (windowDimension.h - pixelDimensions.h) / (2 * tileSize);
 
-	for (unsigned y = 2; y < Matrix::HEIGHT; y++) {
-		for (unsigned x = 0; x < Matrix::WIDTH; x++) {
-				renderTileAt(matrix(x, y), renderer, x, y, offsetX, offsetY);
+	for (int y = 2; y < Matrix::HEIGHT; y++) {
+		for (int x = 0; x < Matrix::WIDTH; x++) {
+			renderTileAt({x, y}, offset, matrix(x, y), renderer);
 		}
 	}
 }
 
-void MatrixRenderer::renderTileAt(const MatrixTile& tile, const Renderer& renderer, int x, int y, int offX, int offY) const {
-	int px = gridPixel(x, offX);
-	int py = gridPixel(y, offY);
+void MatrixRenderer::renderTileAt(Vector2 pos, Vector2 offset, const MatrixTile& tile, const Renderer& renderer) const {
+	Vector2 pixelPos = getPixelPosition(pos, offset);
 
 	if (tile.state == MatrixTile::State::EMPTY) {
-		drawTile(renderer, Renderer::Color::GRAY, px, py);
+		drawTile(renderer, Renderer::Color::GRAY, pixelPos);
 	} else if (tile.state == MatrixTile::State::ACTIVE || tile.state == MatrixTile::State::GROUND) {
-		drawTile(renderer, getTileColor(tile), px, py, true);
-		drawTile(renderer, Renderer::Color::BLACK, px, py);
+		drawTile(renderer, getTileColor(tile), pixelPos, true);
+		drawTile(renderer, Renderer::Color::BLACK, pixelPos);
 	} else {
-		drawTile(renderer, Renderer::Color::WHITE, px, py);
+		drawTile(renderer, Renderer::Color::WHITE, pixelPos);
 	}
 }
 
-void MatrixRenderer::drawTile(const Renderer& renderer, Renderer::Color color, int x, int y, bool filled) const {
+void MatrixRenderer::drawTile(const Renderer& renderer, Renderer::Color color, Vector2 pos, bool filled) const {
 	renderer.setSDLRendererColor(color);
-	renderer.drawRectangle({x, y, TILE_SIZE, TILE_SIZE}, filled);
+	renderer.drawRectangle({pos.x, pos.y, TILE_SIZE, TILE_SIZE}, filled);
 }
 
 Renderer::Color MatrixRenderer::getTileColor(MatrixTile tile) const {

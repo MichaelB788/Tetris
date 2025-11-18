@@ -6,14 +6,13 @@
 
 /// @brief A Vector2 consisting of integer values.
 struct Vector2 {
-	int x;
-	int y;
-
-	/// @brief Instantiates this Vector2 as (0, 0)
-	constexpr Vector2() : x(0), y(0) {}
+	int x, y;
 
 	/// @brief Instantiates this Vector2 as (x, y)
 	constexpr Vector2(int x, int y) : x(x), y(y) {}
+
+	/// @brief Instantiates this Vector2 as (0, 0)
+	constexpr Vector2() : x(0), y(0) {}
 
 	Vector2 operator+(const Vector2& other) const {
 		return {x + other.x, y + other.y};
@@ -23,13 +22,46 @@ struct Vector2 {
 		return {x - other.x, y - other.y};
 	}
 
+	Vector2 operator*(const Vector2& other) const {
+		return {x * other.x, y * other.y};
+	}
+
+	Vector2 operator/(const Vector2& other) const {
+		return {x / other.x, y / other.y};
+	}
+
+	Vector2 operator+(const int other) const {
+		return {x + other, y + other};
+	}
+
+	Vector2 operator-(const int other) const {
+		return {x - other, y - other};
+	}
+
+	Vector2 operator*(const int other) const {
+		return {x * other, y * other};
+	}
+
+	Vector2 operator/(const int other) const {
+		return {x / other, y / other};
+	}
+
 	void operator+=(const Vector2& other) {
 		x += other.x;
 		y += other.y;
 	}
 
+	void operator-=(const Vector2& other) {
+		x -= other.x;
+		y -= other.y;
+	}
+
 	bool operator==(const Vector2& other) const {
 		return x == other.x && y == other.y;
+	}
+
+	bool operator!=(const Vector2& other) const {
+		return x != other.x && y != other.y;
 	}
 
 	/// @return Negation of this Vector2
@@ -79,6 +111,8 @@ struct Vector2 {
 
 struct Dimension2D {
 	int w, h;
+
+	constexpr Dimension2D(int w, int h) : w(w), h(h) {}
 };
 
 #endif

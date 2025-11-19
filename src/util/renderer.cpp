@@ -1,5 +1,4 @@
 #include "util/renderer.hpp"
-#include <SDL2/SDL_render.h>
 
 Renderer::Renderer(SDL_Window* window) {
 	sdlRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED); 
@@ -17,44 +16,7 @@ void Renderer::clear() const {
 	}
 }
 
-void Renderer::setSDLRendererColor(Color color) const {
-	if ( sdlRenderer ) {
-		switch (color) {
-			case Color::CYAN:    // I piece
-				SDL_SetRenderDrawColor(sdlRenderer, 0, 255, 255, 0);
-				break;
-			case Color::YELLOW:  // O piece
-				SDL_SetRenderDrawColor(sdlRenderer, 255, 255, 0, 0);
-				break;
-			case Color::PURPLE:  // T piece
-				SDL_SetRenderDrawColor(sdlRenderer, 128, 0, 128, 0);
-				break;
-			case Color::GREEN:   // S piece
-				SDL_SetRenderDrawColor(sdlRenderer, 0, 255, 0, 0);
-				break;
-			case Color::RED:     // Z piece
-				SDL_SetRenderDrawColor(sdlRenderer, 255, 0, 0, 0);
-				break;
-			case Color::BLUE:    // J piece
-				SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 255, 0);
-				break;
-			case Color::ORANGE:  // L piece
-				SDL_SetRenderDrawColor(sdlRenderer, 255, 165, 0, 0);
-				break;
-			case Color::WHITE:
-				SDL_SetRenderDrawColor(sdlRenderer, 255, 255, 255, 0);
-				break;
-			case Color::GRAY:
-				SDL_SetRenderDrawColor(sdlRenderer, 100, 100, 100, 0);
-				break;
-			case Color::BLACK: default:
-				SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 0);
-				break;
-		}
-	}
-}
-
-void Renderer::drawRectangle(const SDL_Rect& rect, bool filled) const {
+void Renderer::drawRectangle(const SDL_Rect rect, bool filled) const {
 	if ( sdlRenderer ) {
 		if ( filled ) {
 			SDL_RenderFillRect(sdlRenderer, &rect);

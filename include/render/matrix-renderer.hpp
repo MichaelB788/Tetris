@@ -3,6 +3,7 @@
 #include "core/matrix.hpp"
 #include "util/geometry.hpp"
 #include "util/renderer.hpp"
+#include "util/color.hpp"
 
 class MatrixRenderer {
 public:
@@ -15,21 +16,19 @@ public:
 	{}
 
 	Dimension2D getPixelDimensions() const { return pixelDimensions; }
+
 	Vector2 getOffset() const { return offset * tileSize; }
+
 	int getTileSize() const { return tileSize; }
 
 	void render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension);
 
 private:
-	Vector2 getPixelPosition(Vector2 pos, Vector2 offset) const {
+	Vector2 getPixelPosition(Vector2 pos) const {
 		return (pos + offset) * tileSize;
 	}
 
-	Renderer::Color getTileColor(MatrixTile tile) const;
-
-	void renderTileAt(Vector2 pos, Vector2 offset, const MatrixTile& tile, const Renderer& renderer) const;
-
-	void drawTile(const Renderer& renderer, Renderer::Color color, Vector2 pos, bool filled = false) const;
+	void renderTileAt(Vector2 pos, const MatrixTile& tile, const Renderer& renderer) const;
 
 private:
 	int tileSize;

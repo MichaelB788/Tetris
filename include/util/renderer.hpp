@@ -3,13 +3,10 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_pixels.h>
 
 class Renderer {
 public:
-	enum class Color {
-		WHITE, GRAY, BLACK, BLUE, RED, GREEN, CYAN, ORANGE, PURPLE, YELLOW
-	};
-
 	explicit Renderer(SDL_Window* window);
 
 	~Renderer();
@@ -31,10 +28,12 @@ public:
 	}
 
 	/// @brief Renders a rectangle to the screen, filled or unfilled
-	void drawRectangle(const SDL_Rect& rect, bool filled) const;
+	void drawRectangle(const SDL_Rect rect, bool filled = false) const;
 
 	/// @brief Sets the color for future rendering calls
-	void setSDLRendererColor(Color color) const;
+	void setSDLRendererColor(const SDL_Color color) const {
+		SDL_SetRenderDrawColor(sdlRenderer, color.r, color.g, color.b, color.a);
+	};
 
 	/// @brief Copies the texture and renders it to the screen
 	void renderTexture(SDL_Texture* texture, const SDL_Rect& dest) const {

@@ -17,9 +17,11 @@ public:
 
 	Dimension2D getPixelDimensions() const { return pixelDimensions; }
 
-	Vector2 getOffset() const { return offset * tileSize; }
+	Vector2 getOffset() const { return offset; }
 
-	int getTileSize() const { return tileSize; }
+	const int getTileSize() const { return tileSize; }
+
+	const int getMatrixEnd() const { return offset.x + pixelDimensions.w * tileSize; }
 
 	void render(const Matrix& matrix, const Renderer& renderer, const Dimension2D windowDimension);
 

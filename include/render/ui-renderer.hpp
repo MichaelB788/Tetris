@@ -1,25 +1,22 @@
-#ifndef RENDER_UI
-#define RENDER_UI
-#include "util/renderer.hpp"
-#include "util/text.hpp"
-#include "util/geometry.hpp"
+#ifndef UI_RENDERER_H
+#define UI_RENDERER_H
+#include "core/game-state.hpp"
 #include "render/matrix-renderer.hpp"
+#include "render/text-renderer.hpp"
+#include "render/tetromino-renderer.hpp"
 
 class UIRenderer {
 public:
-	UIRenderer(SDL_Renderer* renderer)
-		: storedText("Stored", renderer),
-			nextText("Next", renderer),
-			offset(0, 40)
-	{};
+	explicit UIRenderer(SDL_Renderer* renderer, const GameState& gameState)
+		: textRenderer(renderer),
+			tetrominoRenderer(gameState.getNext(), gameState.getStored())
+	{}
 
-	void renderText(const Renderer& renderer, const MatrixRenderer& matrixRenderer);
-	void renderStoredAndNext(const Tetromino& stored, const Tetromino& next);
+	void render(const Renderer& renderer, const MatrixRenderer& matrixRenderer);
 
 private:
-	Text storedText;
-	Text nextText;
-	Vector2 offset;
+	TextRenderer textRenderer;
+	TetrominoRenderer tetrominoRenderer;
 };
 
 #endif

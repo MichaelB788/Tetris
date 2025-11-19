@@ -9,12 +9,18 @@ class Renderer {
 public:
 	explicit Renderer(SDL_Window* window);
 
-	~Renderer();
+	~Renderer() {
+		if ( sdlRenderer ) SDL_DestroyRenderer(sdlRenderer);
+	};
 
 	Renderer(const Renderer& other) = delete;
 
 	void operator=(const Renderer& other) = delete;
 
+	/**
+	 * @brief Checks if the internal SDL_Renderer is null.
+	 * @note CALL THIS FUNCTION BEFORE DOING ANYTHING WITH THE RENDERER!
+	 */
 	bool isInitialized() const { return sdlRenderer != nullptr; }
 
 	SDL_Renderer* getRenderer() const { return sdlRenderer; }
@@ -24,7 +30,7 @@ public:
 
 	/// @brief Presents any rendering calls done before this function 
 	void present() const {
-		if ( sdlRenderer ) SDL_RenderPresent(sdlRenderer);
+		SDL_RenderPresent(sdlRenderer);
 	}
 
 	/// @brief Renders a rectangle to the screen, filled or unfilled
@@ -37,7 +43,7 @@ public:
 
 	/// @brief Copies the texture and renders it to the screen
 	void renderTexture(SDL_Texture* texture, const SDL_Rect& dest) const {
-		if ( sdlRenderer ) SDL_RenderCopy(sdlRenderer, texture, nullptr, &dest);
+		SDL_RenderCopy(sdlRenderer, texture, nullptr, &dest);
 	}
 
 private:

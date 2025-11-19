@@ -8,12 +8,18 @@ class Window {
 public:
 	Window(const char* title);
 
-	~Window();
+	~Window() {
+		if ( sdlWindow ) SDL_DestroyWindow(sdlWindow);
+	}
 
 	Window(const Window& other) = delete;
 
 	void operator=(const Window& other) = delete;
 
+	/**
+	 * @brief Checks if the internal SDL_Window is null.
+	 * @note CALL THIS FUNCTION BEFORE DOING ANYTHING WITH THE WINDOW!
+	 */
 	bool isInitialized() const { return sdlWindow != nullptr; }
 
 	SDL_Window* getWindow() const { return sdlWindow; }

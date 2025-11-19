@@ -11,7 +11,3 @@ Window::Window(const char* title) : windowSize({ 600, 600 }) {
 	);
 	if ( !sdlWindow ) printf("Failed to load window: %s\n", SDL_GetError());
 }
-
-Window::~Window() {
-	if ( sdlWindow ) SDL_DestroyWindow(sdlWindow);
-}

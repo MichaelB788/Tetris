@@ -12,12 +12,16 @@ public:
 
 	Dimension2D getDimensions() const { return {text->w, text->h}; }
 	
+	/**
+	 * @brief Checks if the internal pointers are null.
+	 * @note CALL THIS FUNCTION BEFORE DOING ANYTHING WITH TEXT!
+	 */
 	bool isInitialized() const {
 		return font != nullptr || text != nullptr || textTexture != nullptr;
 	}
 
 	void render(int x, int y, const Renderer& renderer) const {
-		if ( textTexture ) renderer.renderTexture(textTexture, { x, y, text->w, text->h });
+		renderer.renderTexture(textTexture, { x, y, text->w, text->h });
 	};
 
 private:

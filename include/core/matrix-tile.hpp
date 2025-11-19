@@ -18,30 +18,30 @@ struct MatrixTile {
 	constexpr MatrixTile(State ts) : state(ts) {};
 	constexpr MatrixTile(State ts, TetrominoType tt) : state(ts), type(tt) {};
 
-	inline constexpr bool isEmpty() const {
-		return state == State::EMPTY
-			|| state == State::ACTIVE
-			|| state == State::GHOST;
+	bool isEmpty() const {
+		return state == State::EMPTY || state == State::ACTIVE || state == State::GHOST;
 	}
-	inline constexpr bool isImpermiable() const {
-		return state == State::WALL
-			|| state == State::GROUND;
-	}
-	inline constexpr bool isGround() const { return state == State::GROUND; }
 
-	inline void setActive(TetrominoType t) {
+	bool isImpermiable() const {
+		return state == State::WALL || state == State::GROUND;
+	}
+
+	void setActive(TetrominoType t) {
 		state = State::ACTIVE;
 		type = t;
 	}
-	inline void setGround(TetrominoType t) {
+
+	void setGround(TetrominoType t) {
 		state = State::GROUND;
 		type = t;
 	}
-	inline void setGhost(TetrominoType t) {
+
+	void setGhost(TetrominoType t) {
 		state = State::GHOST;
 		type = t;
 	}
-	inline void clear() {
+
+	void clear() {
 		state = State::EMPTY;
 		type = TetrominoType::NONE;
 	}

@@ -60,7 +60,7 @@ bool Matrix::doesTetrominoCollideGround(const Tetromino& actor) const {
 	if (isTetrominoOutOfBounds(actor)) return true;
 
 	for (const auto& block : actor) {
-		if (matrix[mapIndex(block)].isGround()) return true;
+		if (matrix[mapIndex(block)].state == MatrixTile::State::GROUND) return true;
 	}
 	return false;
 }

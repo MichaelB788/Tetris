@@ -3,7 +3,7 @@
 Tetris::Tetris()
 	: window("Tetris"),
 		renderer(window.getWindow()),
-		uiRenderer(renderer.getRenderer())
+		uiRenderer(renderer.getRenderer(), gameState)
 {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
@@ -25,8 +25,8 @@ void Tetris::runGameLoop() {
 
 		if (fmod(timer, difficulty) == 0) gameState.moveDown();
 
-		matrixRenderer.render(gameState.getReferenceToMatrix(), renderer, window.getWindowSize());
-		uiRenderer.renderText(renderer, matrixRenderer);
+		matrixRenderer.render(gameState.getMatrix(), renderer, window.getWindowSize());
+		uiRenderer.render(renderer, matrixRenderer);
 		renderer.present();
 
 		timer++;

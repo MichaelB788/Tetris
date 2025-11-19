@@ -36,13 +36,13 @@ public:
 
 	void swap();
 
-	constexpr Matrix& getReferenceToMatrix() {
-		return matrix;
-	}
+	const Matrix& getMatrix() const { return matrix; }
 
-	int getScore() {
-		return linesCleared;
-	}
+	const Tetromino& getStored() const { return storedTetromino; }
+
+	const Tetromino& getNext() const { return nextTetromino; }
+
+	const int getScore() const { return linesCleared; }
 
 private:
 	void gameOver();

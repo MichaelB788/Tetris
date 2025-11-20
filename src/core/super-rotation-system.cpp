@@ -16,14 +16,14 @@ namespace {
 
 void SuperRotationSystem::rotateTetromino(Tetromino& actor, Matrix& scene, Direction::Rotation direction) {
 	scene.removeTetromino(actor);
-	uint8_t originalRotationState = actor.getCurrentRotationState();
+	uint8_t originalRotationState = actor.getRotationState();
 	actor.rotate(direction);
 
 	bool success;
-	if (actor.getType() == TetrominoType::I) {
-		success = performOffsetTests(offsetDataI, actor, scene, originalRotationState, actor.getCurrentRotationState());
+	if (actor.getType() == Tetromino::Type::I) {
+		success = performOffsetTests(offsetDataI, actor, scene, originalRotationState, actor.getRotationState());
 	} else {
-		success = performOffsetTests(offsetDataStandard, actor, scene, originalRotationState, actor.getCurrentRotationState());
+		success = performOffsetTests(offsetDataStandard, actor, scene, originalRotationState, actor.getRotationState());
 	}
 
 	if (!success) {

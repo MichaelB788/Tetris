@@ -11,7 +11,10 @@ public:
 	};
 
 	/// @brief Generates a Tetromino of a certain type centered at `initialPos`
-	explicit Tetromino(Type type, Vector2 initialPos = {0, 0});
+	explicit Tetromino(Type type = Type::NONE, Vector2 initialPos = {0, 0})
+		: type(type),
+			blocks(generateShape(type))
+		{}
 
 	void operator=(const Tetromino& other);
 
@@ -20,7 +23,7 @@ public:
 	/// @brief Generates a random type using the Mersene Twister pseudorandom algorithm
 	static Type getRandomType(std::mt19937& gen); 
 
-	uint8_t getCurrentRotationState() const { return rotationState; } 
+	uint8_t getRotationState() const { return state; } 
 
 	bool isNull() const { return type == Type::NONE; }
 
@@ -49,25 +52,15 @@ public:
 	const_iterator cend() const { return blocks.cend(); }
 
 private:
-	void generateShape(Type type, Vector2 pivot);
+	using Blocks = std::array<Vector2, 4>;
+	static Blocks generateShape(Type type);
+
 	void updateRotationState(Direction::Rotation direction);
 
 private:
-	std::array<Vector2, 4> blocks;
+	Blocks blocks;
 	Type type;
-	uint8_t rotationState = 0;
-
-	using v2 = Vector2;
-	static constexpr std::array<std::array<v2, 4>, 8> TETROMINO_SHAPES = {{
-		{ v2( 0,  0), v2(-1,  0), v2( 1,  0), v2( 2,  0) }, // I
-		{ v2( 0,  0), v2( 1,  0), v2( 0,  1), v2( 1,  1) }, // O
-		{ v2( 0,  0), v2(-1,  0), v2( 1,  0), v2( 0, -1) }, // T
-		{ v2( 0,  0), v2(-1, -1), v2( 0, -1), v2( 1,  0) }, // Z
-		{ v2( 0,  0), v2(-1,  0), v2( 0, -1), v2( 1, -1) }, // S
-		{ v2( 0,  0), v2(-1, -1), v2(-1,  0), v2( 1,  0) }, // J
-		{ v2( 0,  0), v2( 1, -1), v2( 1,  0), v2(-1,  0) }, // L
-		{ v2( 0,  0), v2( 0,  0), v2( 0,  0), v2( 0,  0) }, // NONE
-	}};
+	uint8_t state;
 };
 
 #endif

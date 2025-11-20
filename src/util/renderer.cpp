@@ -2,7 +2,7 @@
 
 Renderer::Renderer(SDL_Window* window) {
 	sdlRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED); 
-	printf("Failed to load renderer: %s\n", SDL_GetError());
+	if ( !sdlRenderer ) printf("Failed to load renderer: %s\n", SDL_GetError());
 }
 
 void Renderer::clear() const {

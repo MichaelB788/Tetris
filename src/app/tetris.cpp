@@ -1,20 +1,16 @@
 #include "app/tetris.hpp"
 
 Tetris::Tetris()
-	: window("Tetris"),
+	: gameState(gen),
+		window("Tetris"),
 		renderer(window.getWindow()),
-		uiRenderer(renderer.getRenderer(), gameState)
+		ui(renderer)
 {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
 }
 
 void Tetris::runGameLoop() {
-	SDL_Event event;
-	bool quit = false;
-	float timer = 0;
-	int difficulty = 20;
-
 	while ( !quit ) {
 		renderer.clear();
 
@@ -25,8 +21,7 @@ void Tetris::runGameLoop() {
 
 		if (fmod(timer, difficulty) == 0) gameState.moveDown();
 
-		matrixRenderer.render(gameState.getMatrix(), renderer, window.getWindowSize());
-		uiRenderer.render(renderer, matrixRenderer);
+		TetrisRenderer::renderMatrixAt({0, 0}, gameState.getMatrix(), renderer);
 		renderer.present();
 
 		timer++;

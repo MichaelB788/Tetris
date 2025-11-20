@@ -3,10 +3,11 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <cmath>
-#include "render/ui-renderer.hpp"
+#include <random>
+
+#include "render/ui.hpp"
 #include "util/window.hpp"
 #include "util/renderer.hpp"
-#include "render/matrix-renderer.hpp"
 #include "core/game-state.hpp"
 #include "core/event-handler.hpp"
 
@@ -23,8 +24,15 @@ private:
 
 	Window window;
 	Renderer renderer;
-	UIRenderer uiRenderer;
-	MatrixRenderer matrixRenderer;
+	UI ui;
+
+	float timer = 0;
+	int difficulty = 20;
+	SDL_Event event;
+	bool quit = false;
+
+	std::random_device rd;
+	std::mt19937_64 gen{rd()};
 };
 
 #endif

@@ -1,17 +1,15 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 #include "core/matrix.hpp"
-#include "core/tetromino-management.hpp"
 #include "core/tetromino.hpp"
 #include "core/tetromino-movement.hpp"
 #include "core/super-rotation-system.hpp"
+#include <random>
 
 class GameState {
 public:
-	GameState()
-		: currentTetromino(TetrominoManagement::generateRandomTetromino()),
-			nextTetromino(TetrominoManagement::generateRandomTetromino()),
-			storedTetromino(TetrominoManagement::generateNullTetromino())
+	GameState(std::mt19937& gen)
+		: gen(gen)
 	{}
 
 	void moveLeft() {
@@ -50,6 +48,7 @@ private:
 
 	unsigned int linesCleared = 0;
 	bool swapUsedThisTurn = false;
+	std::mt19937& gen;
 
 	Matrix matrix;
 	Tetromino currentTetromino;

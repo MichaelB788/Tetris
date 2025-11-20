@@ -14,19 +14,19 @@ public:
 
 	Matrix();
 
-	const MatrixTile& operator()(unsigned int x, unsigned int y) const {
+	const Tile& operator()(unsigned int x, unsigned int y) const {
 		return matrix[mapIndex(x, y)];
 	};
 
-	const MatrixTile& operator()(Vector2 vec) const {
+	const Tile& operator()(Vector2 vec) const {
 		return matrix[mapIndex(vec)];
 	};
 
-	MatrixTile& operator()(unsigned int x, unsigned int y) {
+	Tile& operator()(unsigned int x, unsigned int y) {
 		return matrix[mapIndex(x, y)];
 	};
 
-	MatrixTile& operator()(Vector2 vec) {
+	Tile& operator()(Vector2 vec) {
 		return matrix[mapIndex(vec)];
 	};
 
@@ -72,8 +72,8 @@ private:
 	void removeGhost();
 
 	// Row Queries
-	bool doesRowContain(unsigned int row, MatrixTile::State state) const;
-	bool doesRowOnlyContain(unsigned int row, MatrixTile::State state) const;
+	bool doesRowContain(unsigned int row, Tile::State state) const;
+	bool doesRowOnlyContain(unsigned int row, Tile::State state) const;
 
 	// Row Operations
 	void clearRow(unsigned int row);
@@ -81,8 +81,8 @@ private:
 	void dropRowsAbove(unsigned int startingRow);
 
 private:
-	std::array<MatrixTile, WIDTH * HEIGHT> matrix;
-	Tetromino ghostTetromino = {TetrominoType::NONE, TETROMINO_INITIAL_POS};
+	std::array<Tile, WIDTH * HEIGHT> matrix;
+	Tetromino ghostTetromino;
 };
 
 #endif

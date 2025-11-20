@@ -1,83 +1,18 @@
 #include "core/tetromino.hpp"
+#include <random>
 
-namespace TetrominoInitializer {
-	TetrominoType getRandomType() {
-		using Type = TetrominoType;
-		std::array<TetrominoType, 7> types { Type::I, Type::O, Type::J, Type::L, Type::S, Type::Z, Type::T };
-
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> distrib(0, types.size() - 1);
-
-		return types[distrib(gen)];
-	}
-
-	const std::array<Vector2, 4> generateShape(TetrominoType type, Vector2 pivot) {
-		switch(type) {
-			case TetrominoType::I:
-				return {
-					pivot,
-					pivot + Vector2::left(),
-					pivot + Vector2::right(),
-					pivot + Vector2::right() + Vector2::right()
-				};
-			case TetrominoType::O:
-				return {
-					pivot,
-					pivot + Vector2::right(),
-					pivot + Vector2::down(),
-					pivot + Vector2::down() + Vector2::right()
-				};
-			case TetrominoType::T:
-				return {
-					pivot,
-					pivot + Vector2::left(),
-					pivot + Vector2::right(),
-					pivot + Vector2::up()
-				};
-			case TetrominoType::Z:
-				return {
-					pivot,
-					pivot + Vector2::up() + Vector2::left(),
-					pivot + Vector2::up(),
-					pivot + Vector2::right(),
-				};
-			case TetrominoType::S:
-				return {
-					pivot,
-					pivot + Vector2::left(),
-					pivot + Vector2::up(),
-					pivot + Vector2::up() + Vector2::right()
-				};
-			case TetrominoType::J:
-				return {
-					pivot,
-					pivot + Vector2::up() + Vector2::left(),
-					pivot + Vector2::left(),
-					pivot + Vector2::right(),
-				};
-			case TetrominoType::L:
-				return {
-					pivot,
-					pivot + Vector2::up() + Vector2::right(),
-					pivot + Vector2::right(),
-					pivot + Vector2::left()
-				};
-			case TetrominoType::NONE: default:
-				return {
-					pivot, pivot, pivot, pivot
-				};
-		}
-	}
+void Tetromino::operator=(const Tetromino& other) {
+	type = other.type;
+	blocks = other.blocks;
+	rotationState = other.rotationState;
 }
 
-Tetromino::Tetromino(Vector2 initialPos) : type(TetrominoInitializer::getRandomType()) { 
-	blocks = TetrominoInitializer::generateShape(type, initialPos);
-};
+Tetromino::Type Tetromino::getRandomType(std::mt19937& gen) {
+	static constexpr std::array<Tetromino::Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
 
-Tetromino::Tetromino(TetrominoType type, Vector2 initialPos) : type(type) {
-	blocks = TetrominoInitializer::generateShape(type, initialPos);
-};
+	static std::uniform_int_distribution<> distrib(0, types.size() - 1);
+	return types[distrib(gen)];
+}
 
 void Tetromino::shift(int dx, int dy) {
 	for (auto& block : blocks) {
@@ -97,7 +32,7 @@ void Tetromino::move(int x, int y) {
 }
 
 void Tetromino::rotate(Direction::Rotation direction) {
-	if (type != TetrominoType::O) {
+	if (type != Tetromino::Type::O) {
 		for (int i = 1; i < 4; i++) {
 			blocks[i].rotate90Degrees(direction, blocks[0]);
 		}

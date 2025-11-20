@@ -1,10 +1,10 @@
 #include "core/matrix.hpp"
 
-Matrix::Matrix() {
+Matrix::Matrix() : ghostTetromino(Tetromino::Type::NONE, TETROMINO_INITIAL_POS) {
 	for (int i = 0; i < matrix.size(); i++) {
 		matrix[i] = ( i % WIDTH == 0 || i % WIDTH == WIDTH - 1 )
-			? MatrixTile(MatrixTile::State::WALL)
-			: MatrixTile(MatrixTile::State::EMPTY);
+			? Tile(Tile::State::WALL)
+			: Tile(Tile::State::EMPTY);
 	}
 }
 
@@ -20,7 +20,7 @@ unsigned int Matrix::clearAndDropLines() {
 	unsigned int lowestClearedRow = 0;
 
 	for (unsigned int row = 0; row < HEIGHT; row++) {
-		if (doesRowOnlyContain(row, MatrixTile::State::GROUND)) {
+		if (doesRowOnlyContain(row, Tile::State::GROUND)) {
 			clearRow(row);
 			clearedLines++;
 			lowestClearedRow = row; // Since we're searching from top to bottom, this will naturally end up being the lowest row.
@@ -60,7 +60,7 @@ bool Matrix::doesTetrominoCollideGround(const Tetromino& actor) const {
 	if (isTetrominoOutOfBounds(actor)) return true;
 
 	for (const auto& block : actor) {
-		if (matrix[mapIndex(block)].state == MatrixTile::State::GROUND) return true;
+		if (matrix[mapIndex(block)].state == Tile::State::GROUND) return true;
 	}
 	return false;
 }
@@ -97,7 +97,7 @@ void Matrix::removeGhost() {
 	}
 }
 
-bool Matrix::doesRowContain(unsigned int row, MatrixTile::State state) const {
+bool Matrix::doesRowContain(unsigned int row, Tile::State state) const {
 	if (row >= HEIGHT) return false;
 
 	for (unsigned int col = 1; col < WIDTH - 1; col++) {
@@ -106,7 +106,7 @@ bool Matrix::doesRowContain(unsigned int row, MatrixTile::State state) const {
 	return false;
 }
 
-bool Matrix::doesRowOnlyContain(unsigned int row, MatrixTile::State state) const {
+bool Matrix::doesRowOnlyContain(unsigned int row, Tile::State state) const {
 	if (row >= HEIGHT) return false;
 
 	bool success = true;
@@ -131,7 +131,7 @@ void Matrix::dropRowsAbove(unsigned int startingRow) {
 	int readRow = writeRow - 1;
 
 	while (writeRow > 0 && readRow >= 0) {
-		if (doesRowContain(readRow, MatrixTile::State::GROUND)) {
+		if (doesRowContain(readRow, Tile::State::GROUND)) {
 			copyRow(writeRow, readRow);
 			clearRow(readRow);
 			writeRow--;

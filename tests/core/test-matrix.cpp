@@ -6,11 +6,11 @@
 /// @note `colStart` should ideally be within 1 < `colStart` < WIDTH - 1
 void fillRow(Matrix& matrix, unsigned int row, unsigned int colStart) {
 	for (unsigned int col = colStart; col < Matrix::WIDTH - 1; col++) {
-		matrix(col, row).setGround(TetrominoType::O);
+		matrix(col, row).setGround(Tetromino::Type::O);
 	}
 }
 
-bool doesRowContainMatrixTile(Matrix& matrix, unsigned int row, MatrixTile::State state) {
+bool doesRowContainMatrixTile(Matrix& matrix, unsigned int row, Tile::State state) {
 	for (unsigned int col = 1; col < Matrix::WIDTH - 1; col++) {
 		if (matrix(col, row).state == state) return true;
 	}
@@ -24,7 +24,7 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Placing a Tetromino in a invalid position")
 	{
 		matrix.clearMatrix();
-		Tetromino T = {TetrominoType::T, {-999, -999}};
+		Tetromino T {Tetromino::Type::T, {-999, -999}};
 		REQUIRE(matrix.isTetrominoOutOfBounds(T));
 		REQUIRE_THROWS(matrix.placeTetromino(T));
 	}
@@ -32,7 +32,7 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Placing Tetromino")
 	{
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
+		Tetromino O {Tetromino::Type::O, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE_FALSE(matrix.isTetrominoOutOfBounds(O));
 		REQUIRE_NOTHROW(matrix.placeTetromino(O));
 	}
@@ -40,17 +40,17 @@ TEST_CASE("Tetromino Operations", "[Matrix, Tetromino, unit]")
 	SECTION("Grounding Tetromino")
 	{
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
+		Tetromino O {Tetromino::Type::O, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE_NOTHROW(matrix.lockDownTetromino(O));
 
-		Tetromino T = {TetrominoType::T, Matrix::TETROMINO_INITIAL_POS};
+		Tetromino T {Tetromino::Type::T, Matrix::TETROMINO_INITIAL_POS};
 		REQUIRE(matrix.doesTetrominoCollideGround(T));
 		REQUIRE(matrix.doesTetrominoCollideImpermeable(T));
 	}
 
 	SECTION("Removing Tetromino") {
 		matrix.clearMatrix();
-		Tetromino O = {TetrominoType::O, Matrix::TETROMINO_INITIAL_POS};
+		Tetromino O {Tetromino::Type::O, Matrix::TETROMINO_INITIAL_POS};
 
 		matrix.lockDownTetromino(O);
 		CHECK(matrix.doesTetrominoCollideGround(O));
@@ -74,10 +74,10 @@ TEST_CASE("Clearing and dropping full lines", "[Matrix, unit]") {
 
 		int rowsCleared = matrix.clearAndDropLines();
 		REQUIRE(rowsCleared == 1);
-		CHECK(doesRowContainMatrixTile(matrix, incompleteRow, MatrixTile::State::EMPTY));
+		CHECK(doesRowContainMatrixTile(matrix, incompleteRow, Tile::State::EMPTY));
 
 		INFO("Expected ground tiles at: " << completedRow);
-		REQUIRE(doesRowContainMatrixTile(matrix, completedRow, MatrixTile::State::GROUND));
+		REQUIRE(doesRowContainMatrixTile(matrix, completedRow, Tile::State::GROUND));
 	}
 
 	SECTION("One completed line below four incomplete lines") {
@@ -96,7 +96,7 @@ TEST_CASE("Clearing and dropping full lines", "[Matrix, unit]") {
 
 		for (unsigned int i = 0; i < incompleteRows.size(); i++) {
 			INFO("Expected ground tiles at row " << completedRow - i);
-			REQUIRE(doesRowContainMatrixTile(matrix, completedRow - i, MatrixTile::State::GROUND));
+			REQUIRE(doesRowContainMatrixTile(matrix, completedRow - i, Tile::State::GROUND));
 		}
 	}
 
@@ -117,7 +117,7 @@ TEST_CASE("Clearing and dropping full lines", "[Matrix, unit]") {
 
 		for (unsigned int i = 0; i < incompleteRows.size(); i++) {
 			INFO("Expected ground tiles at row " << completedRows[i]);
-			REQUIRE(doesRowContainMatrixTile(matrix, completedRows[i], MatrixTile::State::GROUND));
+			REQUIRE(doesRowContainMatrixTile(matrix, completedRows[i], Tile::State::GROUND));
 		}
 	}
 }

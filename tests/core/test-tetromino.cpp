@@ -2,7 +2,7 @@
 #include "core/tetromino.hpp"
 
 TEST_CASE("Moving Tetromino", "[Tetromino, unit]") {
-	Tetromino tet = Tetromino({0, 0});
+	Tetromino tet {Tetromino::Type::O, {0, 0}};
 	Tetromino before = tet;
 
 	Vector2 translation = {10, 10};
@@ -18,7 +18,7 @@ TEST_CASE("Moving Tetromino", "[Tetromino, unit]") {
 
 TEST_CASE("Tetromino Rotation", "[Tetromino, unit]") {
 	SECTION("Counterclockwise rotations not the same as clockwise") {
-		Tetromino firstTetromino = {TetrominoType::S, {40, 79}};
+		Tetromino firstTetromino {Tetromino::Type::S, {40, 79}};
 		Tetromino secondTetromino = firstTetromino;
 
 		firstTetromino.rotate(Direction::Rotation::CLOCKWISE);

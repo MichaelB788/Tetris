@@ -1,8 +1,8 @@
 #ifndef MATRIX_TILE_H
 #define MATRIX_TILE_H
-#include "core/tetromino-type.hpp"
+#include "core/tetromino.hpp"
 
-struct MatrixTile {
+struct Tile {
 	enum class State : uint8_t {
 		EMPTY,
 		ACTIVE,
@@ -11,12 +11,13 @@ struct MatrixTile {
 		WALL,
 	};
 
-	State state = State::EMPTY;
-	TetrominoType type = TetrominoType::NONE;
+	State state;
+	Tetromino::Type type;
 
-	constexpr MatrixTile() = default;
-	constexpr MatrixTile(State ts) : state(ts) {};
-	constexpr MatrixTile(State ts, TetrominoType tt) : state(ts), type(tt) {};
+	constexpr Tile(State state = Tile::State::EMPTY, Tetromino::Type type = Tetromino::Type::NONE)
+		: state(state),
+			type(type)
+	{};
 
 	bool isEmpty() const {
 		return state == State::EMPTY || state == State::ACTIVE || state == State::GHOST;
@@ -26,24 +27,24 @@ struct MatrixTile {
 		return state == State::WALL || state == State::GROUND;
 	}
 
-	void setActive(TetrominoType t) {
+	void setActive(Tetromino::Type t) {
 		state = State::ACTIVE;
 		type = t;
 	}
 
-	void setGround(TetrominoType t) {
+	void setGround(Tetromino::Type t) {
 		state = State::GROUND;
 		type = t;
 	}
 
-	void setGhost(TetrominoType t) {
+	void setGhost(Tetromino::Type t) {
 		state = State::GHOST;
 		type = t;
 	}
 
 	void clear() {
 		state = State::EMPTY;
-		type = TetrominoType::NONE;
+		type = Tetromino::Type::NONE;
 	}
 };
 

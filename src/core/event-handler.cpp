@@ -33,7 +33,7 @@ void EventHandler::handleInput(const SDL_Event& event, GameState& state)
 			state.rotateCounterclockwise();
 			break;
 		case SDLK_s:
-			state.swap();
+			state.hold();
 			break;
 		case SDLK_SPACE:
 			state.drop();

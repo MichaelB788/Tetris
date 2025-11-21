@@ -13,8 +13,9 @@ public:
 	/// @brief Generates a Tetromino of a certain type centered at `initialPos`
 	explicit Tetromino(Type type = Type::NONE, Vector2 initialPos = {0, 0})
 		: type(type),
-			blocks(generateShape(type))
-		{}
+			blocks(generateShape(type)) {
+			this->move(initialPos);
+		}
 
 	void operator=(const Tetromino& other);
 
@@ -22,6 +23,11 @@ public:
 
 	/// @brief Generates a random type using the Mersene Twister pseudorandom algorithm
 	static Type getRandomType(std::mt19937& gen); 
+
+	/// @brief Static factory method to generate a random Tetromino in a given position
+	static Tetromino getRandomTetromino(std::mt19937& gen, Vector2 initialPos = {0, 0}) {
+		return Tetromino(getRandomType(gen), initialPos);
+	}
 
 	uint8_t getRotationState() const { return state; } 
 

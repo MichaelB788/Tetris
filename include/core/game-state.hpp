@@ -4,20 +4,22 @@
 #include "core/tetromino.hpp"
 #include "core/tetromino-movement.hpp"
 #include "core/super-rotation-system.hpp"
+#include "core/tetromino-queue.hpp"
 #include <random>
 
 class GameState {
 public:
 	GameState(std::mt19937& gen)
-		: gen(gen)
+		: gen(gen),
+			current(Tetromino(Tetromino::getRandomType(gen)))
 	{}
 
 	void moveLeft() {
-		TetrominoMovement::moveTetromino(currentTetromino, matrix, Direction::Horizontal::LEFT);
+		TetrominoMovement::moveTetromino(current, matrix, Direction::Horizontal::LEFT);
 	}
 
 	void moveRight() {
-		TetrominoMovement::moveTetromino(currentTetromino, matrix, Direction::Horizontal::RIGHT);
+		TetrominoMovement::moveTetromino(current, matrix, Direction::Horizontal::RIGHT);
 	}
 
 	void moveDown();
@@ -25,35 +27,32 @@ public:
 	void drop();
 
 	void rotateClockwise() {
-		SuperRotationSystem::rotateTetromino(currentTetromino, matrix, Direction::Rotation::CLOCKWISE);
+		SuperRotationSystem::rotateTetromino(current, matrix, Direction::Rotation::CLOCKWISE);
 	}
 
 	void rotateCounterclockwise() {
-		SuperRotationSystem::rotateTetromino(currentTetromino, matrix, Direction::Rotation::COUNTERCLOCKWISE);
+		SuperRotationSystem::rotateTetromino(current, matrix, Direction::Rotation::COUNTERCLOCKWISE);
 	}
 
-	void swap();
+	void hold();
 
 	const Matrix& getMatrix() const { return matrix; }
 
-	const Tetromino& getStored() const { return storedTetromino; }
-
-	const Tetromino& getNext() const { return nextTetromino; }
+	const TetrominoQueue& getQueue() const { return tetrominoQueue; }
 
 	const int getScore() const { return linesCleared; }
 
 private:
 	void gameOver();
+
 	void spawnNext();
 
 	unsigned int linesCleared = 0;
-	bool swapUsedThisTurn = false;
 	std::mt19937& gen;
 
 	Matrix matrix;
-	Tetromino currentTetromino;
-	Tetromino nextTetromino;
-	Tetromino storedTetromino;
+	Tetromino current;
+	TetrominoQueue tetrominoQueue;
 };
 
 #endif

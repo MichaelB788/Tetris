@@ -1,21 +1,21 @@
 #include "core/tetromino-queue.hpp"
 
 void TetrominoQueue::switchToNext(Tetromino& current) {
+	current = nextQueue.peek();
+	nextQueue.pop();
+	nextQueue.push(Tetromino::getRandomTetromino(gen));
 	currentIsHeld = false;
-	current = nextQueue[index];
-	nextQueue[index] = Tetromino::getRandomTetromino(gen);
-	index = index + 1 % nextQueue.size();
 }
 
 void TetrominoQueue::holdCurrent(Tetromino& current) {
 	if ( !currentIsHeld ) {
-		currentIsHeld = true;
 		std::swap(current, hold);
 		if ( current.isNull() ) switchToNext(current);
+		currentIsHeld = true;
 	}
 }
 
 void TetrominoQueue::reset() {
-	fillNextQueue(gen);
+	fillNextQueue();
 	hold = Tetromino(Tetromino::Type::NONE);
 }

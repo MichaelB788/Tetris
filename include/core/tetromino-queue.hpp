@@ -1,13 +1,13 @@
 #ifndef TETROMINO_QUEUE_H
 #define TETROMINO_QUEUE_H
 #include "core/tetromino.hpp"
-#include "util/circular-array.hpp"
+#include "util/ring-buffer.hpp"
 #include <random>
 
 class TetrominoQueue {
 public:
 	explicit TetrominoQueue(std::mt19937& gen) : gen(gen) {
-		fillNextQueue(gen);
+		fillNextQueue();
 	}
 
 	void switchToNext(Tetromino& current);
@@ -17,11 +17,11 @@ public:
 	void reset();
 
 private:
-	void fillNextQueue(std::mt19937& gen) {
-		for (auto& tetromino : nextQueue) tetromino = Tetromino(Tetromino::getRandomType(gen));
+	void fillNextQueue() {
+		for (auto& tetromino : nextQueue) tetromino = Tetromino::getRandomTetromino(gen);
 	};
 
-	CircularArray<Tetromino, 4> nextQueue;
+	RingBuffer<Tetromino, 4> nextQueue;
 
 	std::mt19937& gen;
 	bool currentIsHeld = false;

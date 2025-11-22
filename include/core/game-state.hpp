@@ -11,7 +11,8 @@ class GameState {
 public:
 	GameState(std::mt19937& gen)
 		: gen(gen),
-			current(Tetromino(Tetromino::getRandomType(gen)))
+			current(Tetromino(Tetromino::getRandomType(gen))),
+			tetrominoQueue(gen)
 	{}
 
 	void moveLeft() {
@@ -24,7 +25,9 @@ public:
 
 	void moveDown();
 
-	void drop();
+	void drop() {
+		TetrominoMovement::dropTetromino(current, matrix); spawnNext();
+	}
 
 	void rotateClockwise() {
 		SuperRotationSystem::rotateTetromino(current, matrix, Direction::Rotation::CLOCKWISE);
@@ -34,7 +37,9 @@ public:
 		SuperRotationSystem::rotateTetromino(current, matrix, Direction::Rotation::COUNTERCLOCKWISE);
 	}
 
-	void hold();
+	void hold() {
+		tetrominoQueue.holdCurrent(current); spawnNext();
+	}
 
 	const Matrix& getMatrix() const { return matrix; }
 

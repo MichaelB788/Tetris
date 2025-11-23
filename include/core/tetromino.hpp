@@ -17,7 +17,17 @@ public:
 			this->move(initialPos);
 		}
 
-	void operator=(const Tetromino& other);
+	void operator=(const Tetromino& other) {
+		type = other.type; blocks = other.blocks; state = other.state;
+	};
+
+	bool operator==(const Tetromino& other) const {
+		return type == other.type && blocks == other.blocks && state == other.state;
+	};
+
+	bool operator!=(const Tetromino& other) const {
+		return type != other.type && blocks != other.blocks && state != other.state;
+	};
 
 	Type getType() const { return type; } 
 

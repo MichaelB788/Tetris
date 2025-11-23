@@ -1,12 +1,6 @@
 #include "core/tetromino.hpp"
 #include <random>
 
-void Tetromino::operator=(const Tetromino& other) {
-	type = other.type;
-	blocks = other.blocks;
-	state = other.state;
-}
-
 Tetromino::Type Tetromino::getRandomType(std::mt19937& gen) {
 	static constexpr std::array<Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
 

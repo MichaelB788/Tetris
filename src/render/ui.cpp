@@ -2,9 +2,11 @@
 #include "render/tetris-renderer.hpp"
 
 void UI::render(const GameState& gameState, Dimension2D windowSize) {
-	offset.x = (windowSize.w - TetrisRenderer::MATRIX_PIXEL_SIZE.w) / (2 * TetrisRenderer::TILE_SIZE);
-	offset.y = (windowSize.h - TetrisRenderer::MATRIX_PIXEL_SIZE.h) / (2 * TetrisRenderer::TILE_SIZE);
-	renderText(offset);
+	uiBox.pos.x = (windowSize.w - TetrisRenderer::MATRIX_PIXEL_SIZE.w) / (2 * TetrisRenderer::TILE_SIZE);
+	uiBox.pos.y = (windowSize.h - TetrisRenderer::MATRIX_PIXEL_SIZE.h) / (2 * TetrisRenderer::TILE_SIZE);
+
+	// renderText(uiBox.pos);
+	renderMatrix(uiBox.pos, gameState.getMatrix());
 }
 
 void UI::renderText(const Vector2 position) const {

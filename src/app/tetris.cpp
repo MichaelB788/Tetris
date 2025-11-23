@@ -21,7 +21,6 @@ void Tetris::runGameLoop() {
 
 		if (fmod(timer, difficulty) == 0) gameState.moveDown();
 
-		TetrisRenderer::renderMatrixAt({0, 0}, gameState.getMatrix(), renderer);
 		renderer.present();
 
 		timer++;

@@ -112,7 +112,15 @@ struct Vector2 {
 struct Dimension2D {
 	int w, h;
 
-	constexpr Dimension2D(int w, int h) : w(w), h(h) {}
+	constexpr Dimension2D(int w = 0, int h = 0) : w(w), h(h) {}
+};
+
+struct Rectangle {
+	Vector2 pos;
+	Dimension2D dim;
+
+	constexpr Rectangle(Dimension2D dim = {0, 0}, Vector2 pos = {0, 0})
+		: pos(pos), dim(dim) {};
 };
 
 #endif

@@ -19,3 +19,9 @@ void TetrominoQueue::reset() {
 	fillNextQueue();
 	hold = Tetromino(Tetromino::Type::NONE);
 }
+
+void TetrominoQueue::fillNextQueue() {
+	for (auto& tetromino : nextQueue) {
+		tetromino = Tetromino::getRandomTetromino(gen);
+	}
+}

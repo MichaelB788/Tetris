@@ -9,11 +9,9 @@
 
 class GameState {
 public:
-	GameState(std::mt19937& gen)
-		: gen(gen),
-			current(Tetromino(Tetromino::getRandomType(gen))),
-			tetrominoQueue(gen)
-	{}
+	explicit GameState(std::mt19937& _gen) : gen(_gen) {
+		current = Tetromino::getRandomTetromino(gen); tetrominoQueue.(gen);
+	}
 
 	void moveLeft() {
 		TetrominoMovement::moveTetromino(current, matrix, Direction::Horizontal::LEFT);
@@ -53,11 +51,12 @@ private:
 	void spawnNext();
 
 	unsigned int linesCleared = 0;
-	std::mt19937& gen;
 
 	Matrix matrix;
 	Tetromino current;
 	TetrominoQueue tetrominoQueue;
+
+	std::mt19937& gen;
 };
 
 #endif

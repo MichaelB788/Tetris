@@ -12,8 +12,8 @@ void GameState::moveDown() {
 }
 
 void GameState::spawnNext() {
+	tetrominoQueue.switchToNext(current);
 	current.move(Matrix::TETROMINO_INITIAL_POS);
-
 	while ( matrix.doesTetrominoCollideGround(current) ) {
 		current.shift(Vector2::up());
 		if ( matrix.isTetrominoOutOfBounds(current) ) {
@@ -21,6 +21,5 @@ void GameState::spawnNext() {
 			return;
 		}
 	}
-
 	linesCleared += matrix.clearAndDropLines();
 }

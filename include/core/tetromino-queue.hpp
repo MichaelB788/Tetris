@@ -9,6 +9,12 @@ public:
 	explicit TetrominoQueue(std::mt19937& gen) : gen(gen) {
 		fillNextQueue();
 	}
+	
+	const Tetromino& getHold() const { return hold; }
+
+	bool isHoldEmpty() const { return hold.isNull(); }
+
+	const RingBuffer<Tetromino, 5> getNextQueue() const { return nextQueue; }
 
 	void switchToNext(Tetromino& current);
 
@@ -17,15 +23,14 @@ public:
 	void reset();
 
 private:
-	void fillNextQueue() {
-		for (auto& tetromino : nextQueue) tetromino = Tetromino::getRandomTetromino(gen);
-	};
+	void fillNextQueue();
 
-	RingBuffer<Tetromino, 4> nextQueue;
+	RingBuffer<Tetromino, 5> nextQueue;
 
-	std::mt19937& gen;
 	bool currentIsHeld = false;
 	Tetromino hold;
+
+	std::mt19937& gen;
 };
 
 #endif

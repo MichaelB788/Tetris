@@ -12,11 +12,11 @@ namespace TetrisRenderer {
 
 	constexpr Dimension2D MATRIX_PIXEL_SIZE = { Matrix::WIDTH * TetrisRenderer::TILE_SIZE, Matrix::HEIGHT * TetrisRenderer::TILE_SIZE };
 
-	void renderMatrixTileAt(Vector2 pos, Vector2 offset, const Tile& tile, const Renderer& renderer);
+	void renderMatrixTile(const Tile& tile, const Renderer& renderer, Vector2 pos = {0, 0}, Vector2 offset = {0, 0});
 
-	void renderMatrixAt(Vector2 pos, const Matrix& matrix, const Renderer& renderer);
+	void renderMatrix(const Matrix& matrix, const Renderer& renderer, Vector2 offset = {0, 0});
 
-	void renderTetrominoAt(Vector2 pos, const Tetromino& tetromino, const Renderer& renderer);
+	void renderTetromino(const Tetromino& tetromino, const Renderer& renderer, Vector2 offset = {0, 0});
 }
 
 #endif

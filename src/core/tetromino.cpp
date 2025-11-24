@@ -2,9 +2,10 @@
 #include <random>
 
 Tetromino::Type Tetromino::getRandomType(std::mt19937& gen) {
-	static constexpr std::array<Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
+	std::array<Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
 
-	static std::uniform_int_distribution<> distrib(0, types.size() - 1);
+	std::uniform_int_distribution<> distrib(0, 6);
+	
 	return types[distrib(gen)];
 }
 
@@ -52,6 +53,6 @@ Tetromino::Blocks Tetromino::generateShape(Type type) {
 		case Type::S: return { v2( 0,  0), v2(-1,  0), v2( 0, -1), v2( 1, -1) };
 		case Type::J: return { v2( 0,  0), v2(-1, -1), v2(-1,  0), v2( 1,  0) };
 		case Type::L: return { v2( 0,  0), v2( 1, -1), v2( 1,  0), v2(-1,  0) };
-		case Type::NONE: default: return { v2( 0,  0), v2( 0,  0), v2( 0,  0), v2( 0,  0) };
+		case Type::NONE: return { v2( 0,  0), v2( 0,  0), v2( 0,  0), v2( 0,  0) };
 	};
 }

@@ -28,7 +28,7 @@
  *   RingBuffer<int, 5> rb;  // Stores up to 4 integers
  *   rb.push(10);
  *   rb.push(20);
- *   int val = rb.peek();  // Retrieves 10
+ *   int val = *rb.peek();  // Retrieves 10
  * @endcode
  */
 template<typename T, std::size_t N>
@@ -40,10 +40,10 @@ public:
 	using const_reference = const T&;
 	using const_pointer = const T*;
 
-	RingBuffer<T, N>() = default;
+	RingBuffer() = default;
 
-	RingBuffer<T, N>(std::initializer_list<T> init) {
-		if (init.size() <= size()) { 
+	RingBuffer(std::initializer_list<T> init) {
+		if (init.size() <= max_size()) { 
 			std::copy(init.begin(), init.end(), data);
 			write = init.size();
 		}
@@ -52,8 +52,8 @@ public:
 
 	// Element access
 
-	reference peek() { return data[read]; };
-	const_reference peek() const { return data[read]; };
+	pointer peek() { if (empty()) return nullptr; else return &data[read]; };
+	const_pointer peek() const { if (empty()) return nullptr; else return &data[read]; };
 
 	// Capacity
 
@@ -66,7 +66,7 @@ public:
 	void push(const value_type& value) {
 		if ((write + 1) % N == read) return; data[write] = value; write = (write + 1) % N;
 	}
-	value_type pop() { if (read != write) { value_type ret = data[read]; read = (read + 1) % N; return ret; } }
+	void pop() { if (read != write) read = (read + 1) % N; }
 
 	// Iterators
 
@@ -102,7 +102,7 @@ public:
 		using reference = value_type&;
 		using const_reference = const value_type&;
 
-		const_iterator(pointer base, size_t indx) : base(base), indx(indx) {}
+		const_iterator(const_pointer base, size_t indx) : base(base), indx(indx) {}
 
 		const_reference operator*() const { return base[indx]; }
 		const_pointer operator->() const { return base[indx]; }
@@ -120,6 +120,9 @@ public:
 
 	iterator begin() { return iterator(data, read); }
 	iterator end() { return iterator(data, write); }
+
+	const_iterator begin() const { return const_iterator(data, read); }
+	const_iterator end() const { return const_iterator(data, write); }
 
 	const_iterator cbegin() const { return const_iterator(data, read); }
 	const_iterator cend() const { return const_iterator(data, write); }

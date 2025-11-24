@@ -1,5 +1,4 @@
 add_library(utility_objects
-	ring-buffer.cpp
 	geometry.cpp
 	window.cpp
 	renderer.cpp

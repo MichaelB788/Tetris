@@ -1,7 +1,7 @@
 #include "core/tetromino-queue.hpp"
 
 void TetrominoQueue::switchToNext(Tetromino& current) {
-	current = nextQueue.peek();
+	current = *nextQueue.peek();
 	nextQueue.pop();
 	nextQueue.push(Tetromino::getRandomTetromino(gen));
 	currentIsHeld = false;

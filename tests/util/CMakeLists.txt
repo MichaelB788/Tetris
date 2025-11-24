@@ -3,11 +3,12 @@ set(UTIL_TEST_SOURCES
 )
 
 set(EXECUTABLE_NAME "util-tests")
-add_executable(${EXECUTABLE_NAME} ${CORE_TEST_SOURCES})
+add_executable(${EXECUTABLE_NAME} ${UTIL_TEST_SOURCES})
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE 
 	Catch2::Catch2WithMain
-	Tetris::Util
+	Tetris::Utilities
+	Tetris::Core
 ) 
 
 include(CTest)

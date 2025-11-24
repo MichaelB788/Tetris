@@ -1,11 +1,8 @@
 #include "app/tetris.hpp"
+#include <random>
 
 Tetris::Tetris()
-	: gameState(gen),
-		window("Tetris"),
-		renderer(window.getWindow()),
-		ui(renderer)
-{
+	: gameState(&gen), window("Tetris"), renderer(window.getWindow()), ui(renderer) {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
 }
@@ -21,6 +18,7 @@ void Tetris::runGameLoop() {
 
 		if (fmod(timer, difficulty) == 0) gameState.moveDown();
 
+		ui.render(gameState, window.getWindowSize());
 		renderer.present();
 
 		timer++;

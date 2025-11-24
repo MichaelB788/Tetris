@@ -59,9 +59,7 @@ public:
 
 private:
 	const size_t mapIndex(unsigned int x, unsigned int y) const {
-		return ( x >= WIDTH || y >= HEIGHT )
-			? throw std::out_of_range("Attempting to access element outside of Matrix")
-			: y * WIDTH + x;
+		return y * WIDTH + x;
 	}
 	const size_t mapIndex(Vector2 vec) const {
 		return mapIndex(vec.x, vec.y);

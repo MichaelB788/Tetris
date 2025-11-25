@@ -53,6 +53,6 @@ Tetromino::Blocks Tetromino::generateShape(Type type) {
 		case Type::S: return { v2( 0,  0), v2(-1,  0), v2( 0, -1), v2( 1, -1) };
 		case Type::J: return { v2( 0,  0), v2(-1, -1), v2(-1,  0), v2( 1,  0) };
 		case Type::L: return { v2( 0,  0), v2( 1, -1), v2( 1,  0), v2(-1,  0) };
-		case Type::NONE: return { v2( 0,  0), v2( 0,  0), v2( 0,  0), v2( 0,  0) };
+		case Type::NONE: default: return { v2( 0,  0), v2( 0,  0), v2( 0,  0), v2( 0,  0) };
 	};
 }

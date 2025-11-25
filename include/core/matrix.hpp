@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include <array>
-#include <stdexcept>
+#include <cassert>
 #include "core/tetromino.hpp"
 #include "core/matrix-tile.hpp"
 
@@ -59,7 +59,7 @@ public:
 
 private:
 	const size_t mapIndex(unsigned int x, unsigned int y) const {
-		return y * WIDTH + x;
+		assert(x < WIDTH || y < HEIGHT); return y * WIDTH + x;
 	}
 	const size_t mapIndex(Vector2 vec) const {
 		return mapIndex(vec.x, vec.y);

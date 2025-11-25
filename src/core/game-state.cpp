@@ -8,18 +8,28 @@ void GameState::gameOver() {
 
 void GameState::moveDown() {
 	bool hasMoved = TetrominoMovement::moveTetrominoDown(current, matrix);
-	if ( !hasMoved ) spawnNext();
+	if ( !hasMoved ) {
+		tetrominoQueue.switchToNext(current);
+		spawnNext();
+	}
+}
+
+void GameState::drop() {
+	TetrominoMovement::dropTetromino(current, matrix);
+	tetrominoQueue.switchToNext(current);
+	spawnNext();
+}
+
+void GameState::hold() {
+	if ( !tetrominoQueue.isCurrentHeld() ) {
+		matrix.removeTetromino(current);
+		tetrominoQueue.holdCurrent(current);
+		spawnNext();
+	}
 }
 
 void GameState::spawnNext() {
-	tetrominoQueue.switchToNext(current);
 	current.move(Matrix::TETROMINO_INITIAL_POS);
-	while ( matrix.doesTetrominoCollideGround(current) ) {
-		current.shift(Vector2::up());
-		if ( matrix.isTetrominoOutOfBounds(current) ) {
-			gameOver();
-			return;
-		}
-	}
+	matrix.placeTetromino(current);
 	linesCleared += matrix.clearAndDropLines();
 }

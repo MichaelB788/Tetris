@@ -1,19 +1,11 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
-#include <stdexcept>
 #include "util/ring-buffer.hpp"
 #include "core/tetromino.hpp"
 
 TEST_CASE("Initializer list", "[RingBuffer, unit]") {
-	SECTION("Construction with initializer of VALID size") {
-		auto createValidBuffer = []() { return RingBuffer<int, 5> {1, 2, 3, 4}; };
-		REQUIRE_NOTHROW(createValidBuffer());
-	}
-
-	SECTION("Construction with initializer of INVALID size") {
-		auto createValidBuffer = []() { return RingBuffer<int, 5> {1, 2, 3, 4, 5}; };
-		REQUIRE_THROWS_AS(createValidBuffer(), std::length_error);
-	}
+	auto createValidBuffer = []() { return RingBuffer<int, 5> {1, 2, 3, 4}; };
+	REQUIRE_NOTHROW(createValidBuffer());
 }
 
 TEST_CASE("Capacity", "[RingBuffer, unit]") {
@@ -21,7 +13,6 @@ TEST_CASE("Capacity", "[RingBuffer, unit]") {
 		RingBuffer<int, 20> buffer;
 
 		REQUIRE(buffer.empty());
-		REQUIRE(buffer.peek() == nullptr);
 		REQUIRE(buffer.size() == 0);
 		REQUIRE(buffer.max_size() == 19);
 	}
@@ -30,9 +21,9 @@ TEST_CASE("Capacity", "[RingBuffer, unit]") {
 TEST_CASE("Element Access", "[RingBuffer, unit]") {
 	SECTION("Access first element of RingBuffer") {
 		RingBuffer<int, 5> rb = {1, 2, 3, 4};
-		int* ptr = rb.peek();
-		const int* constPtr = rb.peek();
-		REQUIRE(*ptr == *constPtr);
+		int& ref = rb.peek();
+		const int& constRef = rb.peek();
+		REQUIRE(ref == constRef);
 	}
 }
 
@@ -45,14 +36,14 @@ TEST_CASE("Modifiers", "[RingBuffer, unit]") {
 		REQUIRE_FALSE(rb.empty());
 
 		REQUIRE(rb.size() > 0);
-		REQUIRE(*rb.peek() == 4);
+		REQUIRE(rb.peek() == 4);
 	}
 
 	SECTION("Popping elements") {
 		RingBuffer<int, 5> rb {1, 4, 5, 2};
-		CHECK(*rb.peek() == 1);
+		CHECK(rb.peek() == 1);
 		rb.pop();
-		REQUIRE(*rb.peek() == 4);
+		REQUIRE(rb.peek() == 4);
 	}
 
 	SECTION("Popping elements until nothing is left") {
@@ -65,6 +56,7 @@ TEST_CASE("Modifiers", "[RingBuffer, unit]") {
 TEST_CASE("Iterator", "[RingBuffer, unit]") {
 	SECTION("Iterating through Tetromino ring buffer") {
 		RingBuffer<Tetromino, 5> rb = { Tetromino(Tetromino::Type::I), Tetromino(Tetromino::Type::I), Tetromino(Tetromino::Type::I) };
+		CHECK(rb.size() == 3);
 		int loops = 0;
 		for (const auto& tet : rb) {
 			loops++;

@@ -13,6 +13,8 @@ public:
 	const Tetromino& getHold() const { return hold; }
 
 	bool isHoldEmpty() const { return hold.isNull(); }
+	
+	bool isCurrentHeld() const { return currentIsHeld; }
 
 	const RingBuffer<Tetromino, 5> getNextQueue() const { return nextQueue; }
 

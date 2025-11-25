@@ -20,18 +20,17 @@ bool TetrominoMovement::moveTetrominoDown(Tetromino& current, Matrix& matrix) {
 		matrix.lockDownTetromino(current);
 		return false;
 	}
-	else {
-		matrix.placeTetromino(current);
-	}
 
+	matrix.placeTetromino(current);
 	return true;
 }
 
 void TetrominoMovement::dropTetromino(Tetromino& current, Matrix& matrix) {
 	matrix.removeTetromino(current);
-	while (!matrix.doesTetrominoCollideGround(current)) {
+
+	while (!matrix.doesTetrominoCollideGround(current))
 		current.shift(Vector2::down());
-	}
 	current.shift(Vector2::up());
+	
 	matrix.lockDownTetromino(current);
 }

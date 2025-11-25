@@ -62,7 +62,7 @@ public:
 	void push(const_reference value) {
 		if ((write + 1) % N == read) return; data[write] = value; write = (write + 1) % N;
 	}
-	value_type pop() { assert(read != write); value_type temp = data[read]; read = (read + 1) % N; return temp; }
+	void pop() { if(read == write) return; read = (read + 1) % N; }
 	void clear() { read = write = 0; }
 
 	// Iterators

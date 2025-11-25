@@ -16,7 +16,7 @@ public:
 	
 	bool isCurrentHeld() const { return currentIsHeld; }
 
-	const RingBuffer<Tetromino, 5> getNextQueue() const { return nextQueue; }
+	const RingBuffer<Tetromino, 5>& getNextQueue() const { return nextQueue; }
 
 	void switchToNext(Tetromino& current);
 

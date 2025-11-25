@@ -3,7 +3,7 @@
 void GameState::gameOver() {
 	matrix.clearMatrix();
 	tetrominoQueue.reset();
-	current = Tetromino(Tetromino::getRandomType(gen), Matrix::TETROMINO_INITIAL_POS);
+	current = Tetromino::getRandomTetromino(gen, Matrix::TETROMINO_INITIAL_POS);
 }
 
 void GameState::moveDown() {

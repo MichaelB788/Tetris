@@ -20,11 +20,7 @@ public:
 private:
 	void renderText() const;
 
-	void renderTetromino(const TetrominoQueue& queue) const;
-
-	void renderMatrix(const Matrix& matrix) const {
-		TetrisRenderer::renderMatrix(matrix, renderer, uiBox.pos);
-	}
+	void renderTetrominoQueue(const TetrominoQueue& queue) const;
 
 private:
 	const Renderer& renderer;

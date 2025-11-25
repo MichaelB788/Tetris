@@ -25,11 +25,9 @@ public:
 		return type == other.type && blocks == other.blocks && state == other.state;
 	};
 
-	bool operator!=(const Tetromino& other) const {
-		return type != other.type && blocks != other.blocks && state != other.state;
-	};
+	bool operator!=(const Tetromino& other) const { return !(*this == other); };
 
-	Type getType() const { return type; } 
+	Type getType() const { return type; }
 
 	/// @brief Generates a random type using the Mersene Twister pseudorandom algorithm
 	static Type getRandomType(std::mt19937& gen); 
@@ -76,7 +74,7 @@ private:
 private:
 	Blocks blocks;
 	Type type;
-	uint8_t state;
+	uint8_t state = 0; // Rotational state, 0 = zero, 1 = clockwise, 2 = two, 3 = counterclockwise
 };
 
 #endif

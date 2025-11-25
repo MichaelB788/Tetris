@@ -1,8 +1,8 @@
 #include "app/tetris.hpp"
 #include <random>
 
-Tetris::Tetris()
-	: gameState(&gen), window("Tetris"), renderer(window.getWindow()), ui(renderer) {
+Tetris::Tetris(std::mt19937& gen)
+	: gameState(gen), window("Tetris"), renderer(window.getWindow()), ui(renderer) {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
 }

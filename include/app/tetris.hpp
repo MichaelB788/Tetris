@@ -2,7 +2,9 @@
 #define TETRIS_H
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
+#include <chrono>
 #include <cmath>
+#include <memory>
 #include <random>
 
 #include "render/ui.hpp"
@@ -13,7 +15,7 @@
 
 class Tetris {
 public:
-  Tetris();
+  Tetris(std::mt19937& gen);
 
 private:
 	void runGameLoop();
@@ -30,9 +32,6 @@ private:
 	int difficulty = 20;
 	SDL_Event event;
 	bool quit = false;
-
-	std::random_device rd;
-	std::mt19937 gen{rd()};
 };
 
 #endif

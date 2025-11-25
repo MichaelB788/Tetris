@@ -11,7 +11,10 @@ int main (int argc, char **argv)
 	if ( !ttfHasInit ) printf("Could not initialize SDL_TTF: %s\n", TTF_GetError());
 
 	// Run the game
-	if ( sdlHasInit && ttfHasInit ) Tetris app;
+	if ( sdlHasInit && ttfHasInit ) {
+		static std::mt19937 gen{std::random_device{}()};
+		Tetris app(gen);
+	} 
 
 	TTF_Quit();
 	SDL_Quit();

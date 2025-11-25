@@ -1,10 +1,9 @@
 #ifndef RING_BUFFER_H
 #define RING_BUFFER_H
-#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <initializer_list>
 #include <iterator>
-#include <stdexcept>
 
 /** @brief A fixed-size circular buffer template that stores up to N - 1 elements.
  *
@@ -28,7 +27,7 @@
  *   RingBuffer<int, 5> rb;  // Stores up to 4 integers
  *   rb.push(10);
  *   rb.push(20);
- *   int val = *rb.peek();  // Retrieves 10
+ *   int val = rb.peek();  // Retrieves 10
  * @endcode
  */
 template<typename T, std::size_t N>
@@ -43,17 +42,14 @@ public:
 	RingBuffer() = default;
 
 	RingBuffer(std::initializer_list<T> init) {
-		if (init.size() <= max_size()) { 
-			std::copy(init.begin(), init.end(), data);
-			write = init.size();
-		}
-		else throw std::length_error("Attempting to allocate more elements than is possible in RingBuffer");
+		assert(init.size() <= max_size() && "Initializer list size is bigger than RingBuffer's max size");
+		std::copy(init.begin(), init.end(), data); write = init.size();
 	}
 
 	// Element access
 
-	pointer peek() { if (empty()) return nullptr; else return &data[read]; };
-	const_pointer peek() const { if (empty()) return nullptr; else return &data[read]; };
+	reference peek() { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
+	const_reference peek() const { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
 
 	// Capacity
 
@@ -63,10 +59,11 @@ public:
 
 	// Modifiers
 
-	void push(const value_type& value) {
+	void push(const_reference value) {
 		if ((write + 1) % N == read) return; data[write] = value; write = (write + 1) % N;
 	}
-	void pop() { if (read != write) read = (read + 1) % N; }
+	value_type pop() { assert(read != write); value_type temp = data[read]; read = (read + 1) % N; return temp; }
+	void clear() { read = write = 0; }
 
 	// Iterators
 
@@ -75,7 +72,9 @@ public:
 		using difference_type = std::ptrdiff_t;
 		using value_type = T;
 		using pointer = value_type*;
+		using const_pointer = const value_type*;
 		using reference = value_type&;
+		using const_reference = const value_type&;
 
 		iterator(pointer base, size_t indx) : base(base), indx(indx) {}
 
@@ -85,10 +84,10 @@ public:
 		iterator& operator++() { indx = (indx + 1) % N; return *this; }
 		iterator operator++(int) { iterator tmp = *this; operator++(); return tmp; }
 
-		friend bool operator==(const iterator& a, const iterator& b) { return a.base[a.indx] == b.base[b.indx]; }
-		friend bool operator!=(const iterator& a, const iterator& b) { return a.base[a.indx] != b.base[b.indx]; }
+		friend bool operator==(const iterator& a, const iterator& b) { return a.base == b.base && a.indx == b.indx; }
+		friend bool operator!=(const iterator& a, const iterator& b) { return !(a == b); }
 
-		private:
+	private:
 		pointer base;
 		size_t indx;
 	};
@@ -110,8 +109,8 @@ public:
 		const_iterator& operator++() { indx = (indx + 1) % N; return *this; }
 		const_iterator operator++(int) { const_iterator tmp = *this; operator++(); return tmp; }
 
-		friend bool operator==(const const_iterator& a, const const_iterator& b) { return a.base[a.indx] == b.base[b.indx]; }
-		friend bool operator!=(const const_iterator& a, const const_iterator& b) { return a.base[a.indx] != b.base[b.indx]; }
+		friend bool operator==(const_iterator& a, const_iterator& b) { return a.base == b.base && a.indx == b.indx; }
+		friend bool operator!=(const_iterator& a, const_iterator& b) { return !(a == b); }
 
 		private:
 		const_pointer base;

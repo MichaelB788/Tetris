@@ -29,7 +29,15 @@ void GameState::hold() {
 }
 
 void GameState::spawnNext() {
-	current.move(Matrix::TETROMINO_INITIAL_POS);
-	matrix.placeTetromino(current);
 	linesCleared += matrix.clearAndDropLines();
+	current.move(Matrix::TETROMINO_INITIAL_POS);
+
+	while (matrix.doesTetrominoCollideImpermeable(current)) {
+		current.shift(Vector2::up());
+		if (matrix.isTetrominoOutOfBounds(current)) {
+			gameOver(); return;
+		}
+	}
+
+	matrix.placeTetromino(current);
 }

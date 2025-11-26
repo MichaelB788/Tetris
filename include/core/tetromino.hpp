@@ -56,6 +56,9 @@ public:
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
 	void rotate(Direction::Rotation direction);
 
+	/// @brief Rotates this Tetromino back to the Zero rotation state
+	void rotateToOriginalState() { while (state != 0) rotate(Direction::Rotation::CLOCKWISE); };
+
 	// Iterator
 	using const_iterator = std::array<Vector2, 4>::const_iterator;
 

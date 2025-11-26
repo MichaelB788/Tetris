@@ -8,6 +8,7 @@ void TetrominoQueue::switchToNext(Tetromino& current) {
 }
 
 void TetrominoQueue::holdCurrent(Tetromino& current) {
+	current.rotateToOriginalState();
 	std::swap(current, hold);
 	hold.move({0, 0});
 	if ( current.isNull() ) switchToNext(current);

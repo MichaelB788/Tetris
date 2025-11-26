@@ -2,6 +2,7 @@
 #define TETRIS_H
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_timer.h>
 #include <chrono>
 #include <random>
 

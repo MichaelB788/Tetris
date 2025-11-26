@@ -2,7 +2,7 @@
 #include <random>
 
 Tetromino::Type Tetromino::getRandomType(std::mt19937& gen) {
-	std::array<Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
+	static constexpr std::array<Type, 7> types { Type::I, Type::O, Type::T, Type::Z, Type::S, Type::J, Type::L };
 
 	std::uniform_int_distribution<> distrib(0, 6);
 	

@@ -1,5 +1,4 @@
 #include "render/ui.hpp"
-#include "render/tetris-renderer.hpp"
 
 void UI::render(const GameState& gameState, Dimension2D windowSize) {
 	uiBox.pos.x = (windowSize.w - uiBox.dim.w) / 2;
@@ -9,21 +8,19 @@ void UI::render(const GameState& gameState, Dimension2D windowSize) {
 	renderTetrominoQueue(gameState.getQueue());
 }
 
-void UI::renderText() const {
-//if ( storedText.isInitialized() && nextText.isInitialized() ) {
-//	nextText.render(position.x, position.y, renderer);
-//	storedText.render(position.x, position.y + 600, renderer);
-//}
-}
-
 void UI::renderTetrominoQueue(const TetrominoQueue& queue) const {
 	// Render stored
-	Vector2 offset = {uiBox.pos.x + TetrisRenderer::MATRIX_PIXEL_SIZE.w + 100, uiBox.pos.y * TetrisRenderer::TILE_SIZE};
+	Vector2 offset = {uiBox.pos.x + TetrisRenderer::MATRIX_PIXEL_SIZE.w + 100, uiBox.pos.y + 150};
+	renderer.setSDLRendererColor(Color::getColor(Color::ID::WHITE));
+	renderer.drawRectangle({offset.x - 80, offset.y - 100, TetrisRenderer::TILE_SIZE * 5, TetrisRenderer::TILE_SIZE * 5});
 	if ( !queue.isHoldEmpty() ) TetrisRenderer::renderTetromino(queue.getHold(), renderer, offset);
 
 	// Render next queue
+	offset.y += 100;
+	renderer.setSDLRendererColor(Color::getColor(Color::ID::WHITE));
+	renderer.drawRectangle({offset.x - 80, offset.y + 100, TetrisRenderer::TILE_SIZE * 5, TetrisRenderer::TILE_SIZE * 5});
 	for (const auto& tet : queue.getNextQueue()) {
-		offset.y += 100;
+		offset.y += 180;
 		TetrisRenderer::renderTetromino(tet, renderer, offset);
 	}
 }

@@ -10,7 +10,7 @@
 namespace TetrisRenderer {
 	constexpr int TILE_SIZE = 40;
 
-	constexpr Dimension2D MATRIX_PIXEL_SIZE = { Matrix::WIDTH * TetrisRenderer::TILE_SIZE, Matrix::HEIGHT * TetrisRenderer::TILE_SIZE };
+	constexpr Dimension2D MATRIX_PIXEL_SIZE = { Matrix::WIDTH * TetrisRenderer::TILE_SIZE, (Matrix::HEIGHT + 2) * TetrisRenderer::TILE_SIZE };
 
 	void renderMatrixTile(const Tile& tile, const Renderer& renderer, Vector2 pos = {0, 0}, Vector2 offset = {0, 0});
 

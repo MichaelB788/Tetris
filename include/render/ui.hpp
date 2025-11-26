@@ -10,22 +10,16 @@ class UI {
 public:
 	UI(const Renderer& renderer)
 		: renderer(renderer),
-			nextText("Next", renderer.getRenderer()),
-			storedText("Stored", renderer.getRenderer()),
 			uiBox(TetrisRenderer::MATRIX_PIXEL_SIZE)
 	{}
 
 	void render(const GameState& gameState, Dimension2D windowSize);
 
 private:
-	void renderText() const;
-
 	void renderTetrominoQueue(const TetrominoQueue& queue) const;
 
 private:
 	const Renderer& renderer;
-	Text nextText;
-	Text storedText;
 	Rectangle uiBox;
 };
 

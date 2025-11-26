@@ -7,15 +7,15 @@ set_os_specific_variables() {
 		OS_FAMILY="${ID_LIKE:-$ID}"
 		case "$OS_FAMILY" in
 			*debian*) 
-				SDL_DEP=(libsdl2-dev libsdl2-2.0-0 libsdl2-ttf-dev libsdl2-ttf-2.0-0)
+				SDL_DEP=(libsdl2-dev libsdl2-2.0-0)
 				CATCH_2=catch2
 				;;
 			*arch*)
-				SDL_DEP=(sdl2 sdl2_ttf)
+				SDL_DEP=(sdl2)
 				CATCH_2=catch2
 				;;
 			*fedora*)
-				SDL_DEP=(SDL2-devel SDL2_ttf-devel)
+				SDL_DEP=(SDL2-devel)
 				CATCH_2=catch2-devel
 				;;
 			*)

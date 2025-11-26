@@ -3,7 +3,6 @@
 #include "core/game-state.hpp"
 #include "core/tetromino-queue.hpp"
 #include "util/geometry.hpp"
-#include "util/text.hpp"
 #include "render/tetris-renderer.hpp"
 
 class UI {

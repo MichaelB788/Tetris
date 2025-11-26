@@ -3,8 +3,6 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <chrono>
-#include <cmath>
-#include <memory>
 #include <random>
 
 #include "render/ui.hpp"
@@ -28,7 +26,7 @@ private:
 	Renderer renderer;
 	UI ui;
 
-	float timer = 0;
+	int ticks = 0;
 	int difficulty = 20;
 	SDL_Event event;
 	bool quit = false;

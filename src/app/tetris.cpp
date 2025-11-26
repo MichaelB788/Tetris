@@ -16,12 +16,12 @@ void Tetris::runGameLoop() {
 			eventHandler.handleEvent(event, quit, gameState);
 		}
 
-		if (fmod(timer, difficulty) == 0) gameState.moveDown();
+		if (ticks % difficulty == 0) gameState.moveDown();
 
 		ui.render(gameState, window.getWindowSize());
 		renderer.present();
 
-		timer++;
+		ticks++;
 		SDL_Delay(30);
 	}
 

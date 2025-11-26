@@ -2,10 +2,10 @@
 #include "render/tetris-renderer.hpp"
 
 void UI::render(const GameState& gameState, Dimension2D windowSize) {
-	uiBox.pos.x = (windowSize.w - uiBox.dim.w) / (2 * TetrisRenderer::TILE_SIZE);
-	uiBox.pos.y = (windowSize.h - uiBox.dim.h) / (2 * TetrisRenderer::TILE_SIZE);
+	uiBox.pos.x = (windowSize.w - uiBox.dim.w) / 2;
+	uiBox.pos.y = (windowSize.h - uiBox.dim.h) / 2;
 
-	TetrisRenderer::renderMatrix(gameState.getMatrix(), renderer, uiBox.pos * TetrisRenderer::TILE_SIZE);
+	TetrisRenderer::renderMatrix(gameState.getMatrix(), renderer, uiBox.pos);
 	renderTetrominoQueue(gameState.getQueue());
 }
 
@@ -18,7 +18,7 @@ void UI::renderText() const {
 
 void UI::renderTetrominoQueue(const TetrominoQueue& queue) const {
 	// Render stored
-	Vector2 offset = {uiBox.pos.x + TetrisRenderer::MATRIX_PIXEL_SIZE.w, uiBox.pos.y};
+	Vector2 offset = {uiBox.pos.x + TetrisRenderer::MATRIX_PIXEL_SIZE.w + 100, uiBox.pos.y * TetrisRenderer::TILE_SIZE};
 	if ( !queue.isHoldEmpty() ) TetrisRenderer::renderTetromino(queue.getHold(), renderer, offset);
 
 	// Render next queue

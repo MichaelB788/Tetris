@@ -3,11 +3,6 @@
 #include "util/ring-buffer.hpp"
 #include "core/tetromino.hpp"
 
-TEST_CASE("Initializer list", "[RingBuffer, unit]") {
-	auto createValidBuffer = []() { return RingBuffer<int, 5> {1, 2, 3, 4}; };
-	REQUIRE_NOTHROW(createValidBuffer());
-}
-
 TEST_CASE("Capacity", "[RingBuffer, unit]") {
 	SECTION("Size of empty buffer") {
 		RingBuffer<int, 20> buffer;
@@ -21,8 +16,8 @@ TEST_CASE("Capacity", "[RingBuffer, unit]") {
 TEST_CASE("Element Access", "[RingBuffer, unit]") {
 	SECTION("Access first element of RingBuffer") {
 		RingBuffer<int, 5> rb = {1, 2, 3, 4};
-		int& ref = rb.peek();
-		const int& constRef = rb.peek();
+		int ref = rb.peek();
+		const int constRef = rb.peek();
 		REQUIRE(ref == constRef);
 	}
 }

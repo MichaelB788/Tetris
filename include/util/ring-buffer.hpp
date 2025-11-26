@@ -34,10 +34,10 @@ template<typename T, std::size_t N>
 class RingBuffer {
 public:
 	using value_type = T;
-	using pointer = T*;
-	using reference = T&;
-	using const_reference = const T&;
-	using const_pointer = const T*;
+	using pointer = value_type*;
+	using reference = value_type&;
+	using const_reference = const value_type&;
+	using const_pointer = const value_type*;
 
 	RingBuffer() = default;
 
@@ -70,11 +70,6 @@ public:
 	struct iterator {
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;
-		using value_type = T;
-		using pointer = value_type*;
-		using const_pointer = const value_type*;
-		using reference = value_type&;
-		using const_reference = const value_type&;
 
 		iterator(pointer base, size_t indx) : base(base), indx(indx) {}
 
@@ -95,11 +90,6 @@ public:
 	struct const_iterator {
 		using iterator_category = std::forward_iterator_tag;
 		using difference_type = std::ptrdiff_t;
-		using value_type = T;
-		using pointer = value_type*;
-		using const_pointer = const value_type*;
-		using reference = value_type&;
-		using const_reference = const value_type&;
 
 		const_iterator(const_pointer base, size_t indx) : base(base), indx(indx) {}
 

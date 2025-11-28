@@ -12,7 +12,6 @@
 class EventHandler {
 public:
 	enum class Command : uint8_t {
-		NONE = 0,
 		MOVE_LEFT,
 		MOVE_RIGHT,
 		MOVE_DOWN,

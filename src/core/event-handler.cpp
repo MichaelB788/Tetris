@@ -16,7 +16,9 @@ void EventHandler::handle(const SDL_Event& event, GameState& gameState, bool& qu
 		case SDL_QUIT:
 			quit = true; break;
 		case SDL_KEYDOWN:
-			executeCommand(inputToCommand[event.key.keysym.sym], gameState); break;
+			if (inputToCommand.find(event.key.keysym.sym) != inputToCommand.end())
+				executeCommand(inputToCommand[event.key.keysym.sym], gameState);
+			break;
 		default: break;
 	}
 }
@@ -38,7 +40,7 @@ void EventHandler::executeCommand(Command command, GameState& gameState) const {
 			gameState.hold(); break;
 		case DROP:
 			gameState.drop(); break;
-		case NONE: default: break;
+		default: break;
 	}
 }
 

@@ -14,16 +14,30 @@ CMake for building the project and vcpkg for managing dependencies.
 
 ![Tetris Preview](assets/img/tetris_preview.png)
 
+## Controls
+
+**Controls may be configured by editing the `controls.ini` file in the project's root directory.**
+
+The default controls are the following:
+
+* Left Arrow Key -> Move left
+* Right Arrow Key -> Move right
+* Down Arrow Key -> Move down (soft drop)
+* R Key -> Rotate clockwise
+* T Key -> Rotate counterclockwise
+* S Key -> Hold current Tetromino
+* Space Key -> Drop Tetromino
+
 # Building on Windows
 
 ## Step 1: Install Dependencies
 
 Before building the project, ensure you have the following dependencies:
 
-- git
-- Visual Studio 2019 or later 
-    - Even if you don't use the IDE, Visual Studio comes with its own [Developer Terminal](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022) that make the build process a lot easier.
-- vcpkg
+* git
+* Visual Studio 2019 or later 
+    * Even if you don't use the IDE, Visual Studio comes with its own [Developer Terminal](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022) that make the build process a lot easier.
+* vcpkg
 
 After the above dependencies are installed, open up a terminal (Powershell or Command Prompt) and **clone the repository in the current directory**.
 
@@ -61,12 +75,12 @@ cmake -DCMAKE_BUILD_TYPE="Release" -S . -B build
 
 Ensure you have the following dependencies installed:
 
-- git
-- GCC or Clang
-- CMake
-- SDL2
-- SDL2_ttf
-- Catch2 (for debugging)
+* git
+* GCC or Clang
+* CMake
+* SDL2
+* SDL2_ttf
+* Catch2 (for debugging)
 
 All of these packages can be installed using your distro's package manager.
 

@@ -2,7 +2,7 @@
 #include <random>
 
 Tetris::Tetris(std::mt19937& gen)
-	: gameState(gen), window("Tetris"), renderer(window.getWindow()), ui(renderer) {
+	: window("Tetris"), renderer(window.getWindow()), ui(renderer), gameState(gen), eventHandler("../controls.ini") {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
 }
@@ -13,12 +13,12 @@ void Tetris::runGameLoop() {
 
 		while (SDL_PollEvent(&event)) {
 			window.handleWindowEvent(event);
-			eventHandler.handleEvent(event, quit, gameState);
+			eventHandler.handle(event, gameState, quit);
 		}
 
 		if (ticks % difficulty == 0) gameState.moveDown();
 
-		ui.render(gameState, window.getWindowSize());
+		ui.render(gameState.getMatrix(), gameState.getQueue(), window.getWindowSize());
 		renderer.present();
 
 		ticks++;

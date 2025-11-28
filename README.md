@@ -12,7 +12,7 @@ A simple game of Tetris implemented using C++ and SDL2. It is designed to be a f
 more about game development, C++, and high-level graphics rendering. The game is compatible with both Linux and Windows operating systems, using
 CMake for building the project and vcpkg for managing dependencies.
 
-![Tetris Preview](assets/img/tetris_preview.png)
+![Tetris Preview](assets/img/TetrisPreview.png)
 
 ## Controls
 

@@ -1,6 +1,6 @@
 #ifndef UI_H
 #define UI_H
-#include "core/game-state.hpp"
+#include "core/matrix.hpp"
 #include "core/tetromino-queue.hpp"
 #include "util/geometry.hpp"
 #include "render/tetris-renderer.hpp"
@@ -12,10 +12,14 @@ public:
 			uiBox(TetrisRenderer::MATRIX_PIXEL_SIZE)
 	{}
 
-	void render(const GameState& gameState, Dimension2D windowSize);
+	void render(const Matrix& matrix, const TetrominoQueue& queue, Dimension2D windowSize);
 
 private:
 	void renderTetrominoQueue(const TetrominoQueue& queue) const;
+
+	void renderHeldTetromino(const Tetromino& held) const {
+		TetrisRenderer::renderTetromino(held, renderer, {uiBox.pos.x - 200, uiBox.pos.y + 200});
+	};
 
 private:
 	const Renderer& renderer;

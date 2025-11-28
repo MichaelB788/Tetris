@@ -9,23 +9,6 @@ Tetromino::Type Tetromino::getRandomType(std::mt19937& gen) {
 	return types[distrib(gen)];
 }
 
-void Tetromino::shift(int dx, int dy) {
-	for (auto& block : blocks) {
-		block.x += dx;
-		block.y += dy;
-	}
-}
-
-void Tetromino::move(int x, int y) {
-	int dx = x - blocks[0].x;
-	int dy = y - blocks[0].y;
-
-	for (auto& block : blocks) {
-		block.x += dx;
-		block.y += dy;
-	}
-}
-
 void Tetromino::rotate(Direction::Rotation direction) {
 	if (type != Tetromino::Type::O) {
 		for (int i = 1; i < 4; i++) {

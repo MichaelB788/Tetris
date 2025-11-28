@@ -41,17 +41,10 @@ public:
 
 	bool isNull() const { return type == Type::NONE; }
 
-	void shift(Vector2 translation) {
-		for (auto& vec : blocks) vec += translation;
-	};
-
-	void shift(int dx, int dy);
-
-	void move(int x, int y);
-
-	void move(Vector2 position) {
-		move(position.x, position.y);
-	};
+	void shift(int dx, int dy) { for (auto& block : blocks) { block.x += dx; block.y += dy; } }
+	void shift(Vector2 translation) { shift(translation.x, translation.y); };
+	void move(int x, int y) { shift(x - blocks[0].x, y - blocks[0].y); }
+	void move(Vector2 position) { move(position.x, position.y); };
 
 	/// @brief Rotates this Tetromino 90 degrees clockwise or counterclockwise
 	void rotate(Direction::Rotation direction);

@@ -79,8 +79,7 @@ Ensure you have the following dependencies installed:
 * GCC or Clang
 * CMake
 * SDL2
-* SDL2_ttf
-* Catch2 (for debugging)
+* Catch2 (*optional* - for debugging)
 
 All of these packages can be installed using your distro's package manager.
 

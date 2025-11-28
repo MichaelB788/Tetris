@@ -51,6 +51,9 @@ public:
 	reference peek() { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
 	const_reference peek() const { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
 
+	reference peek_last() { assert(!empty() && "RingBuffer is empty!"); return data[(write - 1 + N) % N]; };
+	const_reference peek_last() const { assert(!empty() && "RingBuffer is empty!"); return data[(write - 1 + N) % N]; };
+
 	// Capacity
 
 	std::size_t size() const { return (write - read + N) % N; }

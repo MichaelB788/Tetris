@@ -3,7 +3,11 @@
 void TetrominoQueue::switchToNext(Tetromino& current) {
 	current = nextQueue.peek();
 	nextQueue.pop();
-	nextQueue.push(Tetromino::getRandomTetromino(gen));
+
+	Tetromino next = Tetromino::getRandomTetromino(gen);
+	while (nextQueue.peek_last() == next) next = Tetromino::getRandomTetromino(gen);
+
+	nextQueue.push(next);
 	currentIsHeld = false;
 }
 
@@ -23,6 +27,10 @@ void TetrominoQueue::reset() {
 void TetrominoQueue::fillNextQueue() {
 	nextQueue.clear();
 	for (int i = 0; i < nextQueue.max_size(); i++) {
-		nextQueue.push(Tetromino::getRandomTetromino(gen));
+		Tetromino next = Tetromino::getRandomTetromino(gen);
+		if (!nextQueue.empty()) {
+			while (nextQueue.peek_last() == next) next = Tetromino::getRandomTetromino(gen);
+		}
+		nextQueue.push(next);
 	}
 }

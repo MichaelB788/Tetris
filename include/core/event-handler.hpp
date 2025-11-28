@@ -22,18 +22,18 @@ public:
 	};
 	
 	EventHandler(const std::string& controlsConfigPath) {
-		parseControlsConfig(controlsConfigPath);
+		initializeInputToCommandMap(); parseControlsConfig(controlsConfigPath);
 	};
 
 	void handle(const SDL_Event& event, GameState& gameState, bool& quit);
 
 private:
 	void executeCommand(Command command, GameState& gameState) const;
-
 	bool parseControlsConfig(const std::string& filename);
+	static void initializeInputToCommandMap();
 
 private:
-	static const std::unordered_map<std::string, Command> commandFromString;
+	static std::unordered_map<std::string, Command> commandFromString;
 	std::unordered_map<SDL_Keycode, Command> inputToCommand;
 };
 

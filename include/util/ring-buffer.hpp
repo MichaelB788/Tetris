@@ -25,9 +25,9 @@
  * @example
  * @code
  *   RingBuffer<int, 5> rb;  // Stores up to 4 integers
- *   rb.push(10);
- *   rb.push(20);
- *   int val = rb.peek();  // Retrieves 10
+ *   rb.push_back(10);
+ *   rb.push_back(20);
+ *   int val = rb.front();  // Retrieves 10
  * @endcode
  */
 template<typename T, std::size_t N>
@@ -41,32 +41,38 @@ public:
 
 	RingBuffer() = default;
 
-	RingBuffer(std::initializer_list<T> init) {
-		assert(init.size() <= max_size() && "Initializer list size is bigger than RingBuffer's max size");
-		std::copy(init.begin(), init.end(), data); write = init.size();
+	RingBuffer(std::initializer_list<T> init) : tail(init.size()) {
+		assert(tail <= max_size() && "Initializer list size is bigger than RingBuffer's max size");
+		std::copy(init.begin(), init.end(), data);
 	}
 
 	// Element access
 
-	reference peek() { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
-	const_reference peek() const { assert(!empty() && "RingBuffer is empty!"); return data[read]; };
+	reference front() { assert(!empty() && "RingBuffer is empty!"); return data[head]; }
+	const_reference front() const { return front(); }
 
-	reference peek_last() { assert(!empty() && "RingBuffer is empty!"); return data[(write - 1 + N) % N]; };
-	const_reference peek_last() const { assert(!empty() && "RingBuffer is empty!"); return data[(write - 1 + N) % N]; };
+	reference back() { assert(!empty() && "RingBuffer is empty!"); return data[(tail - 1 + N) % N]; };
+	const_reference back() const { back(); }
 
 	// Capacity
 
-	std::size_t size() const { return (write - read + N) % N; }
+	std::size_t size() const { return (tail - head + N) % N; }
 	std::size_t max_size() const { return N - 1; }
-	bool empty() const { return read == write; }
+	bool empty() const { return head == tail; }
 
 	// Modifiers
 
-	void push(const_reference value) {
-		if ((write + 1) % N == read) return; data[write] = value; write = (write + 1) % N;
+	void push_back(const_reference value) {
+		if ((tail + 1) % N == head) return; data[tail] = value; tail = (tail + 1) % N;
 	}
-	void pop() { if(read == write) return; read = (read + 1) % N; }
-	void clear() { read = write = 0; }
+	void push_front(const_reference value) {
+		if ((head + N - 1) % N == head) return; head = (head + N - 1) % N; data[head] = value;
+	}
+
+	void pop_front() { if(head == tail) return; head = (head + 1) % N; }
+	void pop_back() { if(head == tail) return; tail = (tail + N - 1) % N; }
+
+	void clear() { head = tail = 0; }
 
 	// Iterators
 
@@ -110,18 +116,18 @@ public:
 		size_t indx;
 	};
 
-	iterator begin() { return iterator(data, read); }
-	iterator end() { return iterator(data, write); }
+	iterator begin() { return iterator(data, head); }
+	iterator end() { return iterator(data, tail); }
 
-	const_iterator begin() const { return const_iterator(data, read); }
-	const_iterator end() const { return const_iterator(data, write); }
+	const_iterator begin() const { return const_iterator(data, head); }
+	const_iterator end() const { return const_iterator(data, tail); }
 
-	const_iterator cbegin() const { return const_iterator(data, read); }
-	const_iterator cend() const { return const_iterator(data, write); }
+	const_iterator cbegin() const { return const_iterator(data, head); }
+	const_iterator cend() const { return const_iterator(data, tail); }
 
 private:
-	int read = 0;
-	int write = 0;
+	int head = 0;
+	int tail = 0;
 	T data[N];
 };
 

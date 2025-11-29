@@ -1,13 +1,13 @@
 #include "core/tetromino-queue.hpp"
 
 void TetrominoQueue::switchToNext(Tetromino& current) {
-	current = nextQueue.peek();
-	nextQueue.pop();
+	current = nextQueue.front();
+	nextQueue.pop_front();
 
 	Tetromino next = Tetromino::getRandomTetromino(gen);
-	while (nextQueue.peek_last() == next) next = Tetromino::getRandomTetromino(gen);
+	while (nextQueue.back() == next) next = Tetromino::getRandomTetromino(gen);
 
-	nextQueue.push(next);
+	nextQueue.push_back(next);
 	currentIsHeld = false;
 }
 
@@ -29,8 +29,8 @@ void TetrominoQueue::fillNextQueue() {
 	for (int i = 0; i < nextQueue.max_size(); i++) {
 		Tetromino next = Tetromino::getRandomTetromino(gen);
 		if (!nextQueue.empty()) {
-			while (nextQueue.peek_last() == next) next = Tetromino::getRandomTetromino(gen);
+			while (nextQueue.back() == next) next = Tetromino::getRandomTetromino(gen);
 		}
-		nextQueue.push(next);
+		nextQueue.push_back(next);
 	}
 }

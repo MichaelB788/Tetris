@@ -16,8 +16,8 @@ TEST_CASE("Capacity", "[RingBuffer, unit]") {
 TEST_CASE("Element Access", "[RingBuffer, unit]") {
 	SECTION("Access first element of RingBuffer") {
 		RingBuffer<int, 5> rb = {1, 2, 3, 4};
-		int ref = rb.peek();
-		const int constRef = rb.peek();
+		int ref = rb.front();
+		const int constRef = rb.front();
 		REQUIRE(ref == constRef);
 	}
 }
@@ -26,24 +26,24 @@ TEST_CASE("Modifiers", "[RingBuffer, unit]") {
 	SECTION("Pushing elements") {
 		RingBuffer<int, 5> rb;
 		CHECK(rb.empty());
-		rb.push(4);
-		rb.push(235);
+		rb.push_back(4);
+		rb.push_back(235);
 		REQUIRE_FALSE(rb.empty());
 
 		REQUIRE(rb.size() > 0);
-		REQUIRE(rb.peek() == 4);
+		REQUIRE(rb.front() == 4);
 	}
 
 	SECTION("Popping elements") {
 		RingBuffer<int, 5> rb {1, 4, 5, 2};
-		CHECK(rb.peek() == 1);
-		rb.pop();
-		REQUIRE(rb.peek() == 4);
+		CHECK(rb.front() == 1);
+		rb.pop_front();
+		REQUIRE(rb.front() == 4);
 	}
 
 	SECTION("Popping elements until nothing is left") {
 		RingBuffer<int, 5> rb {1, 4, 5, 2};
-		while (!rb.empty()) rb.pop();
+		while (!rb.empty()) rb.pop_front();
 		REQUIRE(rb.empty());
 	}
 }

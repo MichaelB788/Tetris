@@ -1,5 +1,6 @@
 set(UTIL_TEST_SOURCES
 	test-ring-buffer.cpp
+	test-flat-array-map.cpp
 )
 
 set(EXECUTABLE_NAME "util-tests")

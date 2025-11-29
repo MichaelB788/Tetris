@@ -18,71 +18,80 @@ public:
 
 	FlatArrayMap() = default;
 
-	FlatArrayMap(std::initializer_list<value_type> init) : mapSize(init.size()) {
-		assert(mapSize <= N && "Attempting to assign initializer list that is bigger than FlatArrayMap");
+	FlatArrayMap(std::initializer_list<value_type> init) : currentSize(init.size()) {
+		assert(currentSize <= N && "Attempting to assign initializer list that is bigger than FlatArrayMap");
 		std::copy(init.begin(), init.end(), map.begin());
-		std::sort(map.begin(), map.end());
+		std::sort(map.begin(), map.begin() + currentSize);
 	}
 
 	// Lookup
 
 	T& at(const Key& key) {
-		size_t index = binary_search(key);
+		int index = binary_search(key);
 		assert(index != -1 && "Key was not found in map");
 		return map[index].second;
 	}
-	const T& at(const Key& key) const { return at(key); }
+	const T& at(const Key& key) const {
+		int index = binary_search(key);
+		assert(index != -1 && "Key was not found in map");
+		return map[index].second;
+	}
 
 	T& operator[](const Key& key) {
-		size_t index = binary_search(key);
-		if(index != -1) {
-			return map[index].second;
+		int index = binary_search(key);
+
+		if(index == -1) {
+			assert(currentSize < N && "Map at max capacity, could not store key");
+			insert({key, T()});
+			return at(key);
 		}
 		else {
-			insert({key, T()});
-			return operator[](key);
+			return map[index].second;
 		}
 	}
 	const T& operator[](const Key& key) const { return at(key); }
 
 	T* find(const Key& key) {
-		size_t index = binary_search(key);
-		if (index != -1) return &map[index].second;
-		else return nullptr;
+		int index = binary_search(key);
+		if (index == -1) return nullptr;
+		return &map[index].second;
 	}
-	const T* find(const Key& key) const { return find(key); }
+	const T* find(const Key& key) const {
+		int index = binary_search(key);
+		if (index == -1) return nullptr;
+		return &map[index].second;
+	}
 	
 	bool contains(const Key& key) const { return binary_search(key) != -1; }
 
 	// Capacity
 	
-	size_t size() const { return mapSize; }
+	size_t size() const { return currentSize; }
 	size_t max_size() const { return N; }
-	bool empty() const { return mapSize == 0; }
+	bool empty() const { return currentSize == 0; }
 
 	// Modifiers
 
 	void insert(const_reference pair) {
-		if (mapSize == N) return;
+		if (currentSize == N) return;
+		int insertionIndex = binary_search_leftmost(pair.first);
 
-		size_t insertionIndex = binary_search_leftmost(pair.first);
-
-		for (size_t end = mapSize - 1; end >= insertionIndex; end--)
+		for (int end = currentSize; end > insertionIndex; end--)
 			map[end] = map[end - 1];
 
 		map[insertionIndex] = pair;
-		++mapSize;
+		++currentSize;
 	}
 
-	void clear() { mapSize = 0; }
+	void clear() { currentSize = 0; }
 
 private:
-	std::size_t binary_search(const Key& key) const {
-		size_t L = 0;
-		size_t R = mapSize;
+	int binary_search(const Key& key) const {
+		int L = 0;
+		int R = currentSize - 1;
 
 		while ( L <= R ) {
-			size_t mid = (L + R) / 2;
+			int mid = (L + R) / 2;
 
 			if (map[mid].first == key) return mid;
 			if (map[mid].first < key) L = mid + 1;
@@ -92,12 +101,12 @@ private:
 		return -1;
 	};
 
-	std::size_t binary_search_leftmost(const Key& key) const {
-		size_t L = 0;
-		size_t R = mapSize;
+	int binary_search_leftmost(const Key& key) const {
+		int L = 0;
+		int R = currentSize;
 
 		while ( L < R ) {
-			size_t mid = (L + R) / 2;
+			int mid = (L + R) / 2;
 
 			if (map[mid].first < key) L = mid + 1;
 			else R = mid; 
@@ -107,7 +116,7 @@ private:
 	};
 
 private:
-	size_t mapSize = 0;
+	size_t currentSize = 0;
 	std::array<value_type, N> map;
 };
 

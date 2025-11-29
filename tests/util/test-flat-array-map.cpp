@@ -3,18 +3,21 @@
 #include "util/flat-array-map.hpp"
 
 TEST_CASE("Lookup", "[FlatArrayMap, unit]") {
-	SECTION("Contains and find lookups on const map") {
+	SECTION("Lookup on const map") {
 		const FlatArrayMap<std::string, int, 3> fam = { {"apple", 1}, {"cherry", 2}, {"banana", 3} };
 		REQUIRE(fam.contains("apple"));
-		const int* apple = fam.find("apple");
-		const int* grape = fam.find("grape");
-		REQUIRE(apple);
-		REQUIRE_FALSE(grape);
+
+		REQUIRE(fam.at("apple") == 1);
+		REQUIRE(fam["cherry"] == fam.at("cherry"));
+
+		REQUIRE(fam.find("cherry"));
+		REQUIRE_FALSE(fam.find("grape"));
 	}
 
-	SECTION("operator[] and other lookup functions on non-const map") {
-		FlatArrayMap<std::string, int, 3> fam = { {"apple", 1}, {"cherry", 2}, {"banana", 3} };
+	SECTION("Lookup on non-const map") {
+		FlatArrayMap<std::string, int, 4> fam = { {"apple", 1}, {"cherry", 2}, {"banana", 3} };
 		REQUIRE(fam["banana"] == 3);
+
 		REQUIRE(fam["apple"] == fam.at("apple"));
 		REQUIRE(fam["cherry"] == *fam.find("cherry"));
 	}
@@ -46,5 +49,8 @@ TEST_CASE("Modifiers") {
 		fam["grape"] = 3;
 		REQUIRE(fam["grape"] == 3);
 		CHECK(fam.size() == 2);
+		fam["cherry"] = 99;
+		REQUIRE(fam["cherry"] == 99);
+		REQUIRE(fam.size() == fam.max_size());
 	}
 }

@@ -49,10 +49,10 @@ public:
 	// Element access
 
 	reference front() { assert(!empty() && "RingBuffer is empty!"); return data[head]; }
-	const_reference front() const { return front(); }
+	const_reference front() const { assert(!empty() && "RingBuffer is empty!"); return data[head]; }
 
 	reference back() { assert(!empty() && "RingBuffer is empty!"); return data[(tail - 1 + N) % N]; };
-	const_reference back() const { back(); }
+	const_reference back() const { assert(!empty() && "RingBuffer is empty!"); return data[head]; }
 
 	// Capacity
 

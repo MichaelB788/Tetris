@@ -1,27 +1,11 @@
 #include "core/event-handler.hpp"
 
-std::unordered_map<std::string, EventHandler::Command> EventHandler::commandFromString;
-
-void EventHandler::initializeInputToCommandMap() {
-	commandFromString.reserve(7);
-	using enum EventHandler::Command;
-	commandFromString = {
-		{ "move_left", MOVE_LEFT },
-		{ "move_down", MOVE_DOWN },
-		{ "move_right", MOVE_RIGHT },
-		{ "rotate_clockwise", ROTATE_CLOCKWISE },
-		{ "rotate_counterclockwise", ROTATE_COUNTERCLOCKWISE },
-		{ "hold", HOLD },
-		{ "drop", DROP },
-	};
-}
-
 void EventHandler::handle(const SDL_Event& event, GameState& gameState, bool& quit) {
 	switch (event.type) {
 		case SDL_QUIT:
 			quit = true; break;
 		case SDL_KEYDOWN:
-			if (inputToCommand.find(event.key.keysym.sym) != inputToCommand.end())
+			if (inputToCommand.find(event.key.keysym.sym))
 				executeCommand(inputToCommand[event.key.keysym.sym], gameState);
 			break;
 		default: break;
@@ -49,8 +33,8 @@ void EventHandler::executeCommand(Command command, GameState& gameState) const {
 	}
 }
 
-bool EventHandler::parseControlsConfig(const std::string& filename) {
-	std::ifstream file(filename);
+bool EventHandler::parseControlsConfig(const std::string_view filename) {
+	std::ifstream file(filename.begin());
 
 	if (!file.is_open()) {
 		std::cerr << "Could not open controls.ini, controls may not work!" << std::endl;
@@ -59,7 +43,6 @@ bool EventHandler::parseControlsConfig(const std::string& filename) {
 
 	std::string line;
 	std::string currentSection;
-	inputToCommand.reserve(7);
 
 	while (std::getline(file, line)) {
 		size_t first = line.find_first_not_of(" \t");

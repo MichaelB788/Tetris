@@ -5,8 +5,8 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <unordered_map>
+#include <string_view>
+#include "util/flat-array-map.hpp"
 #include "core/game-state.hpp"
 
 class EventHandler {
@@ -21,20 +21,29 @@ public:
 		DROP
 	};
 	
-	EventHandler(const std::string& controlsConfigPath) {
-		initializeInputToCommandMap(); parseControlsConfig(controlsConfigPath);
+	EventHandler(const std::string_view controlsConfigPath) {
+		parseControlsConfig(controlsConfigPath);
 	};
 
 	void handle(const SDL_Event& event, GameState& gameState, bool& quit);
 
 private:
 	void executeCommand(Command command, GameState& gameState) const;
-	bool parseControlsConfig(const std::string& filename);
+	bool parseControlsConfig(const std::string_view filename);
 	static void initializeInputToCommandMap();
 
 private:
-	static std::unordered_map<std::string, Command> commandFromString;
-	std::unordered_map<SDL_Keycode, Command> inputToCommand;
+	using enum EventHandler::Command;
+	static constexpr FlatArrayMap<std::string_view, EventHandler::Command, 7> commandFromString {
+		{ "move_left", MOVE_LEFT },
+		{ "move_down", MOVE_DOWN },
+		{ "move_right", MOVE_RIGHT },
+		{ "rotate_clockwise", ROTATE_CLOCKWISE },
+		{ "rotate_counterclockwise", ROTATE_COUNTERCLOCKWISE },
+		{ "hold", HOLD },
+		{ "drop", DROP }
+	};
+	FlatArrayMap<SDL_Keycode, Command, 7> inputToCommand;
 };
 
 #endif

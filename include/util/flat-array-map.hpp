@@ -7,6 +7,34 @@
 #include <initializer_list>
 #include <utility>
 
+/**
+ * @brief A fixed-capacity associative container storing key-value pairs in sorted order
+ * 
+ * FlatArrayMap provides map-like semantics with a compile-time fixed capacity.
+ * Keys are maintained in sorted order using binary search for lookups.
+ * 
+ * Key characteristics:
+ * - Fixed maximum capacity N determined at compile time
+ * - No dynamic memory allocation
+ * - O(log n) lookup via binary search
+ * - O(n) insertion due to array shifting
+ * - Excellent cache locality
+ * 
+ * @tparam Key The key type (must be comparable with operator<)
+ * @tparam T The mapped value type
+ * @tparam N The maximum number of elements the map can hold
+ * 
+ * @note Attempting to insert beyond capacity N will cause assertion failure
+ * @note Keys are maintained in sorted order automatically
+ * 
+ * Example usage:
+ * @code
+ * FlatArrayMap<int, std::string, 10> map;
+ * map.insert(5, "five");
+ * map.insert(3, "three");
+ * auto* val = map.find(5); // Returns pointer to "five"
+ * @endcode
+ */
 template<typename Key, typename T, std::size_t N>
 class FlatArrayMap {
 public:
@@ -18,7 +46,7 @@ public:
 
 	FlatArrayMap() = default;
 
-	FlatArrayMap(std::initializer_list<value_type> init) : currentSize(init.size()) {
+	constexpr FlatArrayMap(std::initializer_list<value_type> init) : currentSize(init.size()) {
 		assert(currentSize <= N && "Attempting to assign initializer list that is bigger than FlatArrayMap");
 		std::copy(init.begin(), init.end(), map.begin());
 		std::sort(map.begin(), map.begin() + currentSize);

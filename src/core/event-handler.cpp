@@ -5,7 +5,7 @@ void EventHandler::handle(const SDL_Event& event, GameState& gameState, bool& qu
 		case SDL_QUIT:
 			quit = true; break;
 		case SDL_KEYDOWN:
-			if (inputToCommand.find(event.key.keysym.sym))
+			if (inputToCommand.contains(event.key.keysym.sym))
 				executeCommand(inputToCommand[event.key.keysym.sym], gameState);
 			break;
 		default: break;
@@ -42,7 +42,6 @@ bool EventHandler::parseControlsConfig(const std::string_view filename) {
 	}
 
 	std::string line;
-	std::string currentSection;
 
 	while (std::getline(file, line)) {
 		size_t first = line.find_first_not_of(" \t");
@@ -57,7 +56,7 @@ bool EventHandler::parseControlsConfig(const std::string_view filename) {
 		if (equalsPos != std::string::npos) {
 			SDL_Keycode keycode = SDL_GetKeyFromName(line.substr(equalsPos + 1).c_str());
 			EventHandler::Command command = commandFromString.at(line.substr(0, equalsPos));
-			inputToCommand[keycode] = command;
+			inputToCommand.insert({keycode, command});
 		}
 	}
 

@@ -21,16 +21,14 @@ public:
 		DROP
 	};
 	
-	EventHandler(const std::string_view controlsConfigPath) {
-		parseControlsConfig(controlsConfigPath);
-	};
+	EventHandler(const std::string_view controlsConfigPath) { parseControlsConfig(controlsConfigPath); };
 
 	void handle(const SDL_Event& event, GameState& gameState, bool& quit);
 
 private:
 	void executeCommand(Command command, GameState& gameState) const;
+
 	bool parseControlsConfig(const std::string_view filename);
-	static void initializeInputToCommandMap();
 
 private:
 	using enum EventHandler::Command;

@@ -2,7 +2,7 @@
 #include <random>
 
 Tetris::Tetris(std::mt19937& gen)
-	: window("Tetris"), renderer(window.getWindow()), ui(renderer), gameState(gen), eventHandler("../controls.ini") {
+	: window("Tetris"), renderer(window.getWindow()), ui(renderer), gameState(gen), eventHandler("config/controls.ini") {
 	if (!window.isInitialized() || !renderer.isInitialized()) return;
 	else runGameLoop();
 }

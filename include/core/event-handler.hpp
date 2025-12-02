@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 #include <string_view>
 #include "util/flat-array-map.hpp"
 #include "core/game-state.hpp"
@@ -21,14 +22,16 @@ public:
 		DROP
 	};
 	
-	EventHandler(const std::string_view controlsConfigPath) { parseControlsConfig(controlsConfigPath); };
+	EventHandler(const std::string& controlsConfigPath) { parseControlsConfig(controlsConfigPath); };
 
 	void handle(const SDL_Event& event, GameState& gameState, bool& quit);
 
 private:
 	void executeCommand(Command command, GameState& gameState) const;
 
-	bool parseControlsConfig(const std::string_view filename);
+	const std::filesystem::path* findFilePath(const std::string& filename) const;
+
+	bool parseControlsConfig(const std::string& filename);
 
 private:
 	using enum EventHandler::Command;

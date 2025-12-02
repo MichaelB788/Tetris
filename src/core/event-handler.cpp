@@ -1,4 +1,5 @@
 #include "core/event-handler.hpp"
+#include <iostream>
 
 void EventHandler::handle(const SDL_Event& event, GameState& gameState, bool& quit) {
 	switch (event.type) {
@@ -33,8 +34,30 @@ void EventHandler::executeCommand(Command command, GameState& gameState) const {
 	}
 }
 
-bool EventHandler::parseControlsConfig(const std::string_view filename) {
-	std::ifstream file(filename.begin());
+const std::filesystem::path* EventHandler::findFilePath(const std::string& filename) const {
+	static const std::array<std::filesystem::path, 4> possiblePaths {
+		std::filesystem::current_path() / filename,
+		std::filesystem::current_path() / ".." / filename,
+		std::filesystem::current_path() / ".." / ".." / filename,
+		std::filesystem::current_path() / ".." / ".." / ".." / filename,
+	};
+
+	for (const auto& path : possiblePaths) {
+		if (std::filesystem::exists(path)) return &path;
+	}
+	return nullptr;
+}
+
+bool EventHandler::parseControlsConfig(const std::string& filename) {
+	const std::filesystem::path* path = findFilePath(filename);
+	std::ifstream file;
+
+	if ( path ) {
+		file.open(path->string());
+	} else {
+		std::cerr << "Could not find the config file in the current directory! Are you outside of the projects root folder?" << std::endl;
+		return false;
+	}
 
 	if (!file.is_open()) {
 		std::cerr << "Could not open controls.ini, controls may not work!" << std::endl;

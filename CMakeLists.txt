@@ -6,26 +6,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(
 	Tetris
-	VERSION 2.0
-	DESCRIPTION "Tetris remade with C++ and SDL2"
+	VERSION 3.0
+	DESCRIPTION "A Tetris clone made with SDL3"
 	LANGUAGES CXX
 )
 
-include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/include)
+include_directories(BEFORE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include {CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_BINARY_DIR}/include
+)
 
-add_subdirectory(src/util)
-add_subdirectory(src/core)
-add_subdirectory(src/render)
-add_subdirectory(src/app)
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	find_package(Catch2 3 REQUIRED)
-
-  if (NOT Catch2_FOUND AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    add_subdirectory(extern/)
-  endif()
-
-  enable_testing()
-  add_subdirectory(tests/core)
-  add_subdirectory(tests/util)
-endif()
+add_subdirectory(src)

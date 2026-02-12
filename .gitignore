@@ -1,8 +1,10 @@
 build/
+cmake*/
 CMakeUserPresets.json
 out/
+.idea/
 .vscode/
 .vs/
-vcpkg_installed/
+cmake-build-debug/vcpkg_installed/
 .cache/
 *.vim

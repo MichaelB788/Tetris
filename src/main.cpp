@@ -1,22 +1,25 @@
-#include "SDLPlatform.hpp"
+#include "PlatformSDL.hpp"
 #include "TetrisApp.hpp"
-#include <memory>
+#include <SDL3/SDL_init.h>
+#include <filesystem>
+#include <iostream>
+#include <optional>
 
 int main(const int argc, const char **argv) {
   std::optional<std::filesystem::path> controls =
       (argc > 1) ? std::make_optional(argv[1]) : std::nullopt;
 
-  auto platform = std::make_unique<SDLPlatform>();
+  try {
+    PlatformSDL platform{};
 
-  Backends backends = platform->create_backends();
-  if (backends.window == nullptr || backends.renderer == nullptr)
-    return 1;
+    TetrisApp tetris({.platform = platform,
+                      .controls = std::move(controls),
+                      .gravity_rate = std::chrono::milliseconds(1000)});
 
-  TetrisApp tetris({.window = std::move(backends.window),
-                    .renderer = std::move(backends.renderer),
-                    .controls = std::move(controls),
-                    .gravity_rate = std::chrono::milliseconds(1000)});
-  tetris.run();
+    tetris.run();
+  } catch (const ExceptionSDL exception) {
+    std::cerr << exception.what() << std::endl;
+  }
 
   return 0;
 }

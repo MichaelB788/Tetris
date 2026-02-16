@@ -4,7 +4,7 @@
 
 enum class TetrominoType : uint8_t { I, O, T, S, Z, J, L };
 
-enum class MatrixCell : uint8_t { I, O, T, S, Z, J, L, Empty };
+enum class MatrixCell : uint8_t { I, O, T, S, Z, J, L, Garbage, Empty };
 
 struct Point {
   int x, y;

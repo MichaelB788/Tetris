@@ -1,20 +1,20 @@
 #ifndef TETRIS_APP_HPP
 #define TETRIS_APP_HPP
+#include "BoardRenderer.hpp"
 #include "Clock.hpp"
 #include "EventHandler.hpp"
-#include "IRenderer.hpp"
-#include "IWindow.hpp"
+#include "HUDRenderer.hpp"
+#include "PlatformSDL.hpp"
 #include "Tetris.hpp"
-#include "TetrisRenderer.hpp"
 #include <filesystem>
+#include <optional>
 #include <thread>
 
 class TetrisApp {
 public:
   struct Specification {
-    std::unique_ptr<IWindow> window;
-    std::unique_ptr<IRenderer> renderer;
-    std::optional<std::filesystem::path> controls;
+    const PlatformSDL &platform;
+    const std::optional<std::filesystem::path> &controls;
     std::chrono::milliseconds gravity_rate;
   };
 
@@ -23,8 +23,6 @@ public:
   void run();
 
 private:
-  void process_input() { event_handler_.handle_event(tetris_, *window_); }
-
   void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
 
   void render_frame();
@@ -39,15 +37,22 @@ private:
 
   void reset();
 
-  std::unique_ptr<IWindow> window_;
+private:
+  PlatformSDL::Window window_;
 
-  std::unique_ptr<IRenderer> renderer_;
+  PlatformSDL::Renderer renderer_;
 
-  TetrisRenderer tetris_renderer_;
+  PlatformSDL::Texture norm_atlas_;
+
+  PlatformSDL::Texture ghost_atlas_;
 
   EventHandler event_handler_;
 
   Tetris tetris_;
+
+  BoardRenderer br_{nullptr, nullptr, nullptr};
+
+  HUDRenderer hr_{nullptr, nullptr};
 
   Clock gravity_clock_;
 };

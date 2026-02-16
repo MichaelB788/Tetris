@@ -1,13 +1,29 @@
 #include "TetrisApp.hpp"
+#include "SDL3/SDL_render.h"
+#include "SDL3/SDL_surface.h"
 
 TetrisApp::TetrisApp(Specification spec)
-    : window_(std::move(spec.window)), renderer_(std::move(spec.renderer)),
-      tetris_renderer_(*renderer_), event_handler_(std::move(spec.controls)),
-      gravity_clock_(spec.gravity_rate) {}
+    : window_{spec.platform.create_window("Tetris", 600, 600,
+                                          SDL_WINDOW_RESIZABLE)},
+      renderer_{spec.platform.create_renderer(window_)},
+      norm_atlas_{nullptr, &SDL_DestroyTexture},
+      ghost_atlas_{nullptr, &SDL_DestroyTexture}, event_handler_(spec.controls),
+      gravity_clock_(spec.gravity_rate) {
+  PlatformSDL::Surface surf =
+      spec.platform.create_surface_from_img("assets/sprites/tetromino.png");
+  norm_atlas_ = spec.platform.create_texture_from_surface(renderer_, surf);
+
+  SDL_SetSurfaceAlphaMod(surf.get(), 100);
+
+  ghost_atlas_ = spec.platform.create_texture_from_surface(renderer_, surf);
+
+  br_ = {renderer_.get(), norm_atlas_.get(), ghost_atlas_.get()};
+  hr_ = {renderer_.get(), norm_atlas_.get()};
+}
 
 void TetrisApp::run() {
   while (!event_handler_.should_quit()) {
-    process_input();
+    event_handler_.handle_event(tetris_);
     update_state();
     update_layout();
     render_frame();
@@ -16,12 +32,16 @@ void TetrisApp::run() {
 }
 
 void TetrisApp::render_frame() {
-  renderer_->set_color({.r = 39, .g = 44, .b = 52, .a = 255});
-  renderer_->clear();
+  static constexpr SDL_Color dark{.r = 0x27, .g = 0x2C, .b = 0x34, .a = 0xFF};
 
-  tetris_renderer_.draw_frame(tetris_);
+  SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
+  SDL_RenderClear(renderer_.get());
 
-  renderer_->present();
+  br_.draw_current(tetris_.current());
+  br_.draw_ghost(tetris_.ghost());
+  br_.draw_matrix(tetris_.matrix());
+
+  SDL_RenderPresent(renderer_.get());
 }
 
 void TetrisApp::update_state() {
@@ -50,10 +70,7 @@ void TetrisApp::handle_tetris_state() {
   }
 }
 
-void TetrisApp::update_layout() {
-  auto [w, h] = window_->get_window_size();
-  tetris_renderer_.adjust_offset(w, h);
-}
+void TetrisApp::update_layout() {}
 
 void TetrisApp::reset() {
   tetris_.reset();

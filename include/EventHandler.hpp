@@ -1,10 +1,12 @@
 #ifndef TETRIS_EVENT_HANDLER_HPP
 #define TETRIS_EVENT_HANDLER_HPP
-#include "IWindow.hpp"
-#include "Tetris.hpp"
 #include <SDL3/SDL_events.h>
 #include <array>
 #include <filesystem>
+#include <optional>
+
+class Tetris;
+class Rect;
 
 class EventHandler {
 public:
@@ -12,7 +14,7 @@ public:
 
   explicit EventHandler(std::optional<std::filesystem::path> config);
 
-  void handle_event(Tetris &tetris, IWindow &window);
+  void handle_event(Tetris &tetris);
 
   [[nodiscard]] bool should_quit() const { return should_quit_; }
 

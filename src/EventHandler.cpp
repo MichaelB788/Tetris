@@ -1,4 +1,6 @@
 #include "EventHandler.hpp"
+#include "Common.hpp"
+#include "Tetris.hpp"
 #include <array>
 #include <fstream>
 #include <iostream>
@@ -41,14 +43,14 @@ EventHandler::EventHandler(std::optional<std::filesystem::path> config)
     parse_controls_config(config.value());
 }
 
-void EventHandler::handle_event(Tetris &tetris, IWindow &window) {
+void EventHandler::handle_event(Tetris &tetris) {
   while (SDL_PollEvent(&sdl_event_)) {
     switch (sdl_event_.type) {
     case SDL_EVENT_QUIT:
       should_quit_ = true;
       break;
     case SDL_EVENT_WINDOW_RESIZED:
-      window.cache_window_size();
+      // SDL_GetWindowSizeInPixels(window, &window_size.w, &window_size.h);
       break;
     case SDL_EVENT_KEY_DOWN:
       if (const int i = find_key_index(sdl_event_.key.key, controls_); i != -1)

@@ -14,7 +14,7 @@ public:
 
   explicit EventHandler(std::optional<std::filesystem::path> config);
 
-  void handle_event(Tetris &tetris);
+  void handle_event(Tetris &tetris, SDL_Window *window, int &w, int &h);
 
   [[nodiscard]] bool should_quit() const { return should_quit_; }
 

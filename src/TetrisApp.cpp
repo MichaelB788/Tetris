@@ -3,29 +3,30 @@
 #include "SDL3/SDL_surface.h"
 
 TetrisApp::TetrisApp(Specification spec)
-    : window_{spec.platform.create_window("Tetris", 600, 600,
+    : window_{spec.platform.create_window("Tetris", win_w, win_h,
                                           SDL_WINDOW_RESIZABLE)},
       renderer_{spec.platform.create_renderer(window_)},
-      norm_atlas_{nullptr, &SDL_DestroyTexture},
-      ghost_atlas_{nullptr, &SDL_DestroyTexture}, event_handler_(spec.controls),
-      gravity_clock_(spec.gravity_rate) {
+      event_handler_(spec.controls), gravity_clock_(spec.gravity_rate) {
   PlatformSDL::Surface surf =
       spec.platform.create_surface_from_img("assets/sprites/tetromino.png");
-  norm_atlas_ = spec.platform.create_texture_from_surface(renderer_, surf);
+  textures_[NORM_ATLAS] =
+      spec.platform.create_texture_from_surface(renderer_, surf);
 
   SDL_SetSurfaceAlphaMod(surf.get(), 100);
 
-  ghost_atlas_ = spec.platform.create_texture_from_surface(renderer_, surf);
+  textures_[GHOST_ATLAS] =
+      spec.platform.create_texture_from_surface(renderer_, surf);
 
-  br_ = {renderer_.get(), norm_atlas_.get(), ghost_atlas_.get()};
-  hr_ = {renderer_.get(), norm_atlas_.get()};
+  board_renderer_ = {renderer_.get(), textures_[NORM_ATLAS].get(),
+                     textures_[GHOST_ATLAS].get()};
+  hud_renderer_ = {renderer_.get(), textures_[NORM_ATLAS].get()};
 }
 
 void TetrisApp::run() {
   while (!event_handler_.should_quit()) {
-    event_handler_.handle_event(tetris_);
+    process_input();
     update_state();
-    update_layout();
+    center_layout();
     render_frame();
     sleep(std::chrono::milliseconds(12));
   }
@@ -37,9 +38,11 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
   SDL_RenderClear(renderer_.get());
 
-  br_.draw_ghost(tetris_.ghost());
-  br_.draw_current(tetris_.current());
-  br_.draw_matrix(tetris_.matrix());
+  board_renderer_.draw_ghost(tetris_.ghost());
+  hud_renderer_.draw_held(tetris_.optional_hold());
+  hud_renderer_.draw_next_queue(tetris_.next_queue());
+  board_renderer_.draw_current(tetris_.current());
+  board_renderer_.draw_matrix(tetris_.matrix());
 
   SDL_RenderPresent(renderer_.get());
 }
@@ -70,7 +73,9 @@ void TetrisApp::handle_tetris_state() {
   }
 }
 
-void TetrisApp::update_layout() {}
+void TetrisApp::center_layout() {
+  board_renderer_.center_within_window(win_w, win_h);
+}
 
 void TetrisApp::reset() {
   tetris_.reset();

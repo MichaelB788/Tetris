@@ -22,7 +22,9 @@ private:
 
   SDL_Texture *norm_atlas_ = nullptr;
 
-  Point offset;
+  Point queue_offset_{0, 0};
+
+  Point hold_offset_{0, 0};
 };
 
 #endif

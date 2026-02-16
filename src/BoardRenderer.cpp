@@ -34,12 +34,19 @@ void BoardRenderer::draw_matrix(const Matrix &matrix) {
 }
 
 void BoardRenderer::draw_matrix_outline() {
-  const SDL_FRect outline = {.x = static_cast<float>(offset_.x * pixel::SIZE),
-                             .y = static_cast<float>(offset_.y * pixel::SIZE),
+  const SDL_FRect outline = {.x = static_cast<float>(offset_.x),
+                             .y = static_cast<float>(offset_.y),
                              .w = Matrix::COLS * pixel::SIZE,
                              .h = Matrix::ROWS * pixel::SIZE};
   static constexpr SDL_Color purple = {
       .r = 0x54, .g = 0x58, .b = 0xCC, .a = 0xFF};
+
   SDL_SetRenderDrawColor(renderer_, purple.r, purple.g, purple.b, purple.a);
   SDL_RenderRect(renderer_, &outline);
+}
+
+void BoardRenderer::center_within_window(int win_w, int win_y) {
+  offset_.x = win_w - (Matrix::COLS * pixel::SIZE);
+  offset_.y = win_y - (Matrix::ROWS * pixel::SIZE);
+  offset_ /= 2;
 }

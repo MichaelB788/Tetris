@@ -25,9 +25,13 @@ public:
 private:
   void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
 
+  void process_input() {
+    event_handler_.handle_event(tetris_, window_.get(), win_w, win_h);
+  }
+
   void render_frame();
 
-  void update_layout();
+  void center_layout();
 
   void update_state();
 
@@ -38,21 +42,22 @@ private:
   void reset();
 
 private:
+  int win_w = 600, win_h = 600;
+
   PlatformSDL::Window window_;
 
   PlatformSDL::Renderer renderer_;
 
-  PlatformSDL::Texture norm_atlas_;
-
-  PlatformSDL::Texture ghost_atlas_;
+  enum Textures { NORM_ATLAS, GHOST_ATLAS, COUNT };
+  std::array<PlatformSDL::Texture, COUNT> textures_{};
 
   EventHandler event_handler_;
 
   Tetris tetris_;
 
-  BoardRenderer br_{nullptr, nullptr, nullptr};
+  BoardRenderer board_renderer_{nullptr, nullptr, nullptr};
 
-  HUDRenderer hr_{nullptr, nullptr};
+  HUDRenderer hud_renderer_{nullptr, nullptr};
 
   Clock gravity_clock_;
 };

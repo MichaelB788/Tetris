@@ -37,7 +37,7 @@ public:
   Tetromino::Projection current() const { return current_.projection(); }
   Tetromino::Projection ghost() const { return ghost_.projection(); }
   const Matrix &matrix() const { return matrix_; }
-  const std::optional<Tetromino> &hold() const { return hold_; }
+  const std::optional<Tetromino> &optional_hold() const { return hold_; }
   const NextQueue &next_queue() const { return next_queue_; }
 
   unsigned points() const { return points_; }
@@ -47,6 +47,11 @@ private:
   void update_ghost() {
     ghost_ = current_;
     mechanics::drop(ghost_, matrix_);
+  }
+
+  void set_current(const Tetromino &other) {
+    current_ = other;
+    update_ghost();
   }
 
   void shift(Point delta) {

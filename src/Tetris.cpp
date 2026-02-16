@@ -2,8 +2,7 @@
 
 Tetris::Tetris(mechanics::RotationSystem rs)
     : rs_(rs), hold_command_triggered_(false), state_(State::Running) {
-  current_ = next_queue_.pop_next();
-  update_ghost();
+  set_current(next_queue_.pop_next());
 }
 
 void Tetris::hold() {
@@ -14,20 +13,19 @@ void Tetris::hold() {
   if (hold_.has_value()) {
     const Tetromino temp = hold_.value();
     hold_ = current_;
-    current_ = temp;
+    set_current(temp);
   } else {
     hold_ = current_;
-    current_ = next_queue_.pop_next();
+    set_current(next_queue_.pop_next());
   }
 
-  update_ghost();
   hold_command_triggered_ = true;
 }
 
 void Tetris::reset() {
   state_ = State::Running;
   matrix_.clear();
-  current_ = next_queue_.pop_next();
+  set_current(next_queue_.pop_next());
   hold_ = std::nullopt;
   hold_command_triggered_ = false;
 }

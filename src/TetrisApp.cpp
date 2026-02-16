@@ -37,8 +37,8 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
   SDL_RenderClear(renderer_.get());
 
-  br_.draw_current(tetris_.current());
   br_.draw_ghost(tetris_.ghost());
+  br_.draw_current(tetris_.current());
   br_.draw_matrix(tetris_.matrix());
 
   SDL_RenderPresent(renderer_.get());

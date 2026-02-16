@@ -1,29 +1,28 @@
 #include "mechanics.hpp"
+#include "Matrix.hpp"
 #include <algorithm>
 
-void mechanics::place(const Tetromino &tet, Matrix &matrix) {
-  for (const auto &pos : tet.view())
-    matrix.place(tet.type(), pos.x, pos.y);
+void mechanics::place(Tetromino::Projection tet, Matrix &matrix) {
+  for (const auto &pos : tet.blocks)
+    matrix.place(tet.type, pos.x, pos.y);
 }
 
-bool mechanics::can_place(const Tetromino &tet, const Matrix &matrix) {
-  auto view = tet.view();
-  return std::ranges::all_of(view.begin(), view.end(), [&](const auto pos) {
-    return matrix.pos_is_valid(pos.x, pos.y);
-  });
+bool mechanics::can_place(Tetromino::Projection tet, const Matrix &matrix) {
+  return std::ranges::all_of(
+      tet.blocks.begin(), tet.blocks.end(),
+      [&](const auto pos) { return matrix.pos_is_valid(pos.x, pos.y); });
 }
 
-bool mechanics::is_within_bounds(const Tetromino &tet) {
-  auto view = tet.view();
-  return std::ranges::all_of(view.begin(), view.end(), [&](const auto pos) {
-    return Matrix::is_within_bounds(pos.x, pos.y);
-  });
+bool mechanics::is_within_bounds(Tetromino::Projection tet) {
+  return std::ranges::all_of(
+      tet.blocks.begin(), tet.blocks.end(),
+      [&](const auto pos) { return Matrix::is_within_bounds(pos.x, pos.y); });
 }
 
 bool mechanics::try_shift(Tetromino &tet, const Matrix &matrix, Point delta) {
   tet.shift(delta);
 
-  if (mechanics::can_place(tet, matrix))
+  if (mechanics::can_place(tet.projection(), matrix))
     return true;
 
   delta *= -1;
@@ -35,9 +34,9 @@ bool mechanics::try_spawn(Tetromino &tet, const Tetromino &new_tet,
                           const Matrix &matrix) {
   tet = new_tet;
 
-  while (!mechanics::can_place(tet, matrix)) {
+  while (!mechanics::can_place(tet.projection(), matrix)) {
     tet.shift(Point{0, -1});
-    if (!mechanics::is_within_bounds(tet))
+    if (!mechanics::is_within_bounds(tet.projection()))
       return false; // Fail
   }
 
@@ -45,7 +44,7 @@ bool mechanics::try_spawn(Tetromino &tet, const Tetromino &new_tet,
 }
 
 void mechanics::drop(Tetromino &tet, const Matrix &matrix) {
-  while (mechanics::can_place(tet, matrix))
+  while (mechanics::can_place(tet.projection(), matrix))
     tet.shift(Point(0, 1));
   tet.shift(Point(0, -1));
 }
@@ -75,7 +74,7 @@ bool srs_rotation(Tetromino &tet, void (Tetromino::*rotation_func)(),
     Point kick_translation =
         offsets[tet.prev_rotation()][t] - offsets[tet.curr_rotation()][t];
     tet.shift(kick_translation);
-    if (mechanics::can_place(tet, matrix))
+    if (mechanics::can_place(tet.projection(), matrix))
       return true; // Success
   }
 

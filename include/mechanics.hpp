@@ -1,15 +1,15 @@
 #ifndef TETRIS_MECHANICS_HPP
 #define TETRIS_MECHANICS_HPP
-#include "Common.hpp"
-#include "Matrix.hpp"
 #include "Tetromino.hpp"
 
+class Matrix;
+
 namespace mechanics {
-void place(const Tetromino &tet, Matrix &matrix);
+void place(Tetromino::Projection tet, Matrix &matrix);
 
-[[nodiscard]] bool can_place(const Tetromino &tet, const Matrix &matrix);
+[[nodiscard]] bool can_place(Tetromino::Projection tet, const Matrix &matrix);
 
-[[nodiscard]] bool is_within_bounds(const Tetromino &tet);
+[[nodiscard]] bool is_within_bounds(Tetromino::Projection tet);
 
 bool try_shift(Tetromino &tet, const Matrix &matrix, Point delta);
 

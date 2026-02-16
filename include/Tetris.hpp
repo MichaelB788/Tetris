@@ -34,9 +34,9 @@ public:
 
   void reset();
 
+  Tetromino::Projection current() const { return current_.projection(); }
+  Tetromino::Projection ghost() const { return ghost_.projection(); }
   const Matrix &matrix() const { return matrix_; }
-  const Tetromino &current() const { return current_; }
-  const Tetromino &ghost() const { return ghost_; }
   const std::optional<Tetromino> &hold() const { return hold_; }
   const NextQueue &next_queue() const { return next_queue_; }
 

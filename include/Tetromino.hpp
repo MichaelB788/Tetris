@@ -24,8 +24,13 @@ public:
 
   [[nodiscard]] TetrominoType type() const { return type_; }
 
-  [[nodiscard]] std::span<const Point> view() const {
-    return std::span(blocks_);
+  struct Projection {
+    TetrominoType type;
+    std::span<const Point> blocks;
+  };
+
+  [[nodiscard]] Projection projection() const {
+    return {.type = type_, .blocks = std::span(blocks_)};
   }
 
   [[nodiscard]] std::size_t type_index() const {

@@ -51,6 +51,7 @@ private:
 
   void set_current(const Tetromino &other) {
     current_ = other;
+    current_.set_position(Tetromino::INIT_POS);
     update_ghost();
   }
 

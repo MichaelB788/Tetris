@@ -45,8 +45,8 @@ void BoardRenderer::draw_matrix_outline() {
   SDL_RenderRect(renderer_, &outline);
 }
 
-void BoardRenderer::center_within_window(int win_w, int win_y) {
+void BoardRenderer::center_within_window(int win_w, int win_h) {
   offset_.x = win_w - (Matrix::COLS * pixel::SIZE);
-  offset_.y = win_y - (Matrix::ROWS * pixel::SIZE);
+  offset_.y = win_h - (Matrix::ROWS * pixel::SIZE);
   offset_ /= 2;
 }

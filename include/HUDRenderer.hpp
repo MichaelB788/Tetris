@@ -1,6 +1,5 @@
 #ifndef TETRIS_HUD_RENDERER_HPP
 #define TETRIS_HUD_RENDERER_HPP
-
 #include "Tetromino.hpp"
 #include <optional>
 
@@ -16,6 +15,8 @@ public:
   void draw_next_queue(const NextQueue &queue);
 
   void draw_held(const std::optional<Tetromino> &held);
+
+  void wrap_around_board(Point board_pos);
 
 private:
   SDL_Renderer *renderer_ = nullptr;

@@ -26,6 +26,6 @@ void NextQueue::push_non_repeating() {
     } while (random == queue_[prev].type());
   }
 
-  queue_[write] = Tetromino(random);
+  queue_[write] = Tetromino(random, {.x = 0, .y = 0});
   write = (write + 1) % queue_.size();
 }

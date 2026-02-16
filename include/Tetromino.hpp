@@ -6,9 +6,9 @@
 
 class Tetromino {
 public:
-  static constexpr Point INITIAL_POSITION = {.x = 4, .y = 2};
+  static constexpr Point INIT_POS = {.x = 4, .y = 2};
 
-  explicit Tetromino(TetrominoType type, Point pos = INITIAL_POSITION);
+  explicit Tetromino(TetrominoType type, Point pos);
 
   Tetromino();
 

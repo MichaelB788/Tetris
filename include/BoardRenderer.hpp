@@ -19,9 +19,9 @@ public:
 
   void draw_matrix(const Matrix &matrix);
 
-  void center_within_window(int win_w, int win_y);
+  void center_within_window(int win_w, int win_h);
 
-  [[nodiscard]] Point get_offset() const { return offset_; }
+  [[nodiscard]] Point pos() const { return offset_; }
 
 private:
   void draw_matrix_outline();

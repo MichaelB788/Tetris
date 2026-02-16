@@ -75,6 +75,7 @@ void TetrisApp::handle_tetris_state() {
 
 void TetrisApp::center_layout() {
   board_renderer_.center_within_window(win_w, win_h);
+  hud_renderer_.wrap_around_board(board_renderer_.pos());
 }
 
 void TetrisApp::reset() {

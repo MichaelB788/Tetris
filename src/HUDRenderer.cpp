@@ -1,4 +1,5 @@
 #include "HUDRenderer.hpp"
+#include "Matrix.hpp"
 #include "NextQueue.hpp"
 #include "pixel.hpp"
 
@@ -19,6 +20,12 @@ void HUDRenderer::draw_held(const std::optional<Tetromino> &hold) {
     for (const auto &block : tet.blocks)
       pixel::draw_tetromino_tile(renderer_, norm_atlas_,
                                  pixel::texture_src(tet.type), block,
-                                 queue_offset_);
+                                 hold_offset_);
   }
+}
+
+void HUDRenderer::wrap_around_board(Point board_pos) {
+  queue_offset_.x = board_pos.x - (4 * pixel::SIZE);
+  hold_offset_.x = board_pos.x + ((Matrix::COLS + 3) * pixel::SIZE);
+  queue_offset_.y = hold_offset_.y = board_pos.y + pixel::SIZE;
 }

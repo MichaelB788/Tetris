@@ -7,7 +7,7 @@ void HUDRenderer::draw_next_queue(const NextQueue &queue) {
     Tetromino::Projection tet = tetromino.projection();
     for (const auto &block : tet.blocks)
       pixel::draw_tetromino_tile(renderer_, norm_atlas_,
-                                 pixel::get_texture(tet.type), block, offset);
+                                 pixel::texture_src(tet.type), block, offset);
   }
 }
 
@@ -16,6 +16,6 @@ void HUDRenderer::draw_held(const std::optional<Tetromino> &hold) {
     Tetromino::Projection tet = hold.value().projection();
     for (const auto &block : tet.blocks)
       pixel::draw_tetromino_tile(renderer_, norm_atlas_,
-                                 pixel::get_texture(tet.type), block, offset);
+                                 pixel::texture_src(tet.type), block, offset);
   }
 }

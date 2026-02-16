@@ -8,14 +8,14 @@
 void BoardRenderer::draw_current(Tetromino::Projection current) {
   for (const auto &block : current.blocks)
     pixel::draw_tetromino_tile(renderer_, norm_atlas_,
-                               pixel::get_texture(current.type), block,
+                               pixel::texture_src(current.type), block,
                                offset_);
 }
 
 void BoardRenderer::draw_ghost(Tetromino::Projection ghost) {
   for (const auto &block : ghost.blocks)
     pixel::draw_tetromino_tile(renderer_, ghost_atlas_,
-                               pixel::get_texture(ghost.type), block, offset_);
+                               pixel::texture_src(ghost.type), block, offset_);
 }
 
 void BoardRenderer::draw_matrix(const Matrix &matrix) {
@@ -26,7 +26,7 @@ void BoardRenderer::draw_matrix(const Matrix &matrix) {
       MatrixCell cell = matrix.at(x, y);
       if (cell != MatrixCell::Empty)
         pixel::draw_tetromino_tile(renderer_, norm_atlas_,
-                                   pixel::get_texture(cell), {x, y}, offset_);
+                                   pixel::texture_src(cell), {x, y}, offset_);
     }
   }
 
@@ -34,18 +34,12 @@ void BoardRenderer::draw_matrix(const Matrix &matrix) {
 }
 
 void BoardRenderer::draw_matrix_outline() {
-  std::array<SDL_FRect, Matrix::ROWS * Matrix::COLS> matrix_cells{};
-  static constexpr SDL_Color black{.r = 0x00, .g = 0x00, .b = 0x00, .a = 0xFF};
-
-  for (std::size_t y = 0; y < Matrix::ROWS; ++y) {
-    for (std::size_t x = 0; x < Matrix::COLS; ++x) {
-      matrix_cells[x + y * Matrix::COLS] = {
-          static_cast<float>(x * pixel::SIZE + offset_.x),
-          static_cast<float>(y * pixel::SIZE + offset_.y), pixel::SIZE,
-          pixel::SIZE};
-    }
-  }
-
-  SDL_SetRenderDrawColor(renderer_, black.r, black.g, black.b, black.a);
-  SDL_RenderRects(renderer_, matrix_cells.data(), matrix_cells.size());
+  const SDL_FRect outline = {.x = static_cast<float>(offset_.x * pixel::SIZE),
+                             .y = static_cast<float>(offset_.y * pixel::SIZE),
+                             .w = Matrix::COLS * pixel::SIZE,
+                             .h = Matrix::ROWS * pixel::SIZE};
+  static constexpr SDL_Color purple = {
+      .r = 0x54, .g = 0x58, .b = 0xCC, .a = 0xFF};
+  SDL_SetRenderDrawColor(renderer_, purple.r, purple.g, purple.b, purple.a);
+  SDL_RenderRect(renderer_, &outline);
 }

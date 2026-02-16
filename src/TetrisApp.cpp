@@ -32,7 +32,7 @@ void TetrisApp::run() {
 }
 
 void TetrisApp::render_frame() {
-  static constexpr SDL_Color dark{.r = 0x27, .g = 0x2C, .b = 0x34, .a = 0xFF};
+  static constexpr SDL_Color dark{.r = 0x17, .g = 0x18, .b = 0x2B, .a = 0xFF};
 
   SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
   SDL_RenderClear(renderer_.get());

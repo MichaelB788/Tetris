@@ -8,7 +8,7 @@
     - [x] Next Queue and Stored pieces should not be rendered if the screen
           width is too small.
 
-- [ ] Implement a scoring system from within the game
+- [x] Implement a scoring system from within the game
 
 - [ ] Game over screen; should ask the player if they want to play again, and
       if not, quit the game

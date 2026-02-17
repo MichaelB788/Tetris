@@ -17,7 +17,6 @@ public:
     std::filesystem::path tetromino_atlas;
     std::filesystem::path font_path;
     float font_size;
-    std::chrono::milliseconds gravity_rate;
   };
 
   explicit TetrisApp(Specification spec);
@@ -36,6 +35,8 @@ private:
   void center_layout();
 
   void update_state();
+
+  void update_level();
 
   void handle_tetris_state();
 

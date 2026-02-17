@@ -22,8 +22,7 @@ int main() {
         {.controls = project_root / "controls.ini",
          .tetromino_atlas = project_root / "assets/sprites/tetromino.png",
          .font_path = project_root / "assets/font/Arcade-Classic.ttf",
-         .font_size = 36,
-         .gravity_rate = 1000ms});
+         .font_size = 36});
 
     tetris.run();
   } catch (const ExceptionSDL &exception) {

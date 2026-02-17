@@ -18,6 +18,9 @@ public:
   void adjust_rhs(Point hold_pos);
 
 private:
+  PlatformSDL::Text create_text(const char *str) const;
+
+private:
   struct TextTexture {
     PlatformSDL::Text text{};
     float x{}, y{};

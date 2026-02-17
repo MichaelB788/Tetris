@@ -7,14 +7,10 @@ TextRenderer::TextRenderer(const std::filesystem::path &font_path,
     : renderer_(renderer),
       text_engine_(PlatformSDL::create_renderer_text_engine(renderer_)),
       font_(PlatformSDL::open_font(font_path, font_size)) {
-  textures_[SCORE] = {PlatformSDL::create_text(*text_engine_, *font_, "Score")};
-
-  textures_[MAX_SCORE] = {
-      PlatformSDL::create_text(*text_engine_, *font_, "Best")};
-
-  textures_[NEXT] = {PlatformSDL::create_text(*text_engine_, *font_, "Next")};
-
-  textures_[HOLD] = {PlatformSDL::create_text(*text_engine_, *font_, "Hold")};
+  textures_[SCORE] = {.text = create_text("Score")};
+  textures_[MAX_SCORE] = {.text = create_text("Best")};
+  textures_[NEXT] = {.text = create_text("Next")};
+  textures_[HOLD] = {.text = create_text("Hold")};
 
   for (unsigned i = 0; i < nums_.size(); ++i)
     nums_[i] = PlatformSDL::create_text(*text_engine_, *font_,
@@ -69,4 +65,8 @@ void TextRenderer::adjust_rhs(Point hold) {
   textures_[HOLD].y = hold.y - pixel::SIZE * 3;
   textures_[SCORE].y = hold.y + pixel::SIZE * 4;
   textures_[MAX_SCORE].y = hold.y + pixel::SIZE * 11;
+}
+
+PlatformSDL::Text TextRenderer::create_text(const char *str) const {
+  return PlatformSDL::create_text(*text_engine_, *font_, str);
 }

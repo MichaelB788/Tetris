@@ -11,7 +11,7 @@ public:
 
   void render_text();
 
-  void render_score(unsigned score);
+  void render_scores(unsigned score, unsigned high_score);
 
   void adjust_lhs(Point queue_pos);
 
@@ -31,7 +31,7 @@ private:
 
   enum TextIndex { SCORE, MAX_SCORE, NEXT, HOLD, COUNT };
 
-  std::array<TextTexture, COUNT> text_{};
+  std::array<TextTexture, COUNT> textures_{};
 
   std::array<PlatformSDL::Text, 10> nums_{};
 };

@@ -23,6 +23,7 @@ void Tetris::hold() {
 }
 
 void Tetris::reset() {
+  score_ = 0;
   state_ = State::Running;
   matrix_.clear();
   set_current(next_queue_.pop_next());
@@ -39,6 +40,7 @@ void Tetris::reset_current() {
 void Tetris::spawn_next() {
   mechanics::place(current_.projection(), matrix_);
   score_ += matrix_.clear_lines();
+  high_score_ = std::max(score_, high_score_);
 
   if (mechanics::try_spawn(current_, next_queue_.pop_next(), matrix_)) {
     hold_command_triggered_ = false;

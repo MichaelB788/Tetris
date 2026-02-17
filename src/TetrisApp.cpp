@@ -34,7 +34,7 @@ void TetrisApp::render_frame() {
   board_renderer_.draw_matrix(tetris_.matrix());
 
   text_renderer_.render_text();
-  text_renderer_.render_score(tetris_.score());
+  text_renderer_.render_scores(tetris_.score(), tetris_.high_score());
 
   SDL_RenderPresent(renderer_.get());
 }

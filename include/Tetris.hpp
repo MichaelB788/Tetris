@@ -34,13 +34,21 @@ public:
 
   void reset();
 
+public:
   Tetromino::Projection current() const { return current_.projection(); }
+
   Tetromino::Projection ghost() const { return ghost_.projection(); }
+
   const Matrix &matrix() const { return matrix_; }
+
   const std::optional<Tetromino> &optional_hold() const { return hold_; }
+
   const NextQueue &next_queue() const { return next_queue_; }
 
   unsigned score() const { return score_; }
+
+  unsigned high_score() const { return high_score_; }
+
   State state() const { return state_; }
 
 private:
@@ -84,6 +92,8 @@ private:
   bool hold_command_triggered_{false};
 
   unsigned score_{};
+
+  unsigned high_score_{};
 };
 
 #endif

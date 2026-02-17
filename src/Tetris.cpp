@@ -38,7 +38,7 @@ void Tetris::reset_current() {
 
 void Tetris::spawn_next() {
   mechanics::place(current_.projection(), matrix_);
-  points_ = matrix_.clear_lines();
+  score_ += matrix_.clear_lines();
 
   if (mechanics::try_spawn(current_, next_queue_.pop_next(), matrix_)) {
     hold_command_triggered_ = false;

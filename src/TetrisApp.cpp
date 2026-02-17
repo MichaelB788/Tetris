@@ -1,26 +1,14 @@
 #include "TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
-#include "SDL3/SDL_surface.h"
 
 TetrisApp::TetrisApp(Specification spec)
-    : window_{spec.platform.create_window("Tetris", win_w, win_h,
-                                          SDL_WINDOW_RESIZABLE)},
-      renderer_{spec.platform.create_renderer(window_)},
-      event_handler_(spec.controls), gravity_clock_(spec.gravity_rate) {
-  PlatformSDL::Surface surf =
-      spec.platform.create_surface_from_img("assets/sprites/tetromino.png");
-  textures_[NORM_ATLAS] =
-      spec.platform.create_texture_from_surface(renderer_, surf);
-
-  SDL_SetSurfaceAlphaMod(surf.get(), 100);
-
-  textures_[GHOST_ATLAS] =
-      spec.platform.create_texture_from_surface(renderer_, surf);
-
-  board_renderer_ = {renderer_.get(), textures_[NORM_ATLAS].get(),
-                     textures_[GHOST_ATLAS].get()};
-  hud_renderer_ = {renderer_.get(), textures_[NORM_ATLAS].get()};
-}
+    : window_(PlatformSDL::create_window("Tetris", win_w, win_h,
+                                         SDL_WINDOW_RESIZABLE)),
+      renderer_(PlatformSDL::create_renderer(window_.get())),
+      text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
+      board_renderer_(spec.tetromino_atlas, renderer_.get()),
+      hud_renderer_(spec.tetromino_atlas, renderer_.get()),
+      event_handler_(spec.controls), gravity_clock_(spec.gravity_rate) {}
 
 void TetrisApp::run() {
   while (!event_handler_.should_quit()) {
@@ -41,8 +29,12 @@ void TetrisApp::render_frame() {
   board_renderer_.draw_ghost(tetris_.ghost());
   hud_renderer_.draw_held(tetris_.optional_hold());
   hud_renderer_.draw_next_queue(tetris_.next_queue());
+
   board_renderer_.draw_current(tetris_.current());
   board_renderer_.draw_matrix(tetris_.matrix());
+
+  text_renderer_.render_text();
+  text_renderer_.render_score(tetris_.score());
 
   SDL_RenderPresent(renderer_.get());
 }
@@ -76,6 +68,8 @@ void TetrisApp::handle_tetris_state() {
 void TetrisApp::center_layout() {
   board_renderer_.center_within_window(win_w, win_h);
   hud_renderer_.wrap_around_board(board_renderer_.pos());
+  text_renderer_.adjust_lhs(hud_renderer_.queue_offset());
+  text_renderer_.adjust_rhs(hud_renderer_.hold_offset());
 }
 
 void TetrisApp::reset() {

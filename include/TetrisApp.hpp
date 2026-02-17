@@ -6,15 +6,17 @@
 #include "HUDRenderer.hpp"
 #include "PlatformSDL.hpp"
 #include "Tetris.hpp"
+#include "TextRenderer.hpp"
 #include <filesystem>
-#include <optional>
 #include <thread>
 
 class TetrisApp {
 public:
   struct Specification {
-    const PlatformSDL &platform;
-    const std::optional<std::filesystem::path> &controls;
+    std::filesystem::path controls;
+    std::filesystem::path tetromino_atlas;
+    std::filesystem::path font_path;
+    float font_size;
     std::chrono::milliseconds gravity_rate;
   };
 
@@ -48,16 +50,15 @@ private:
 
   PlatformSDL::Renderer renderer_;
 
-  enum Textures { NORM_ATLAS, GHOST_ATLAS, COUNT };
-  std::array<PlatformSDL::Texture, COUNT> textures_{};
+  TextRenderer text_renderer_;
 
-  EventHandler event_handler_;
+  BoardRenderer board_renderer_;
+
+  HUDRenderer hud_renderer_;
 
   Tetris tetris_;
 
-  BoardRenderer board_renderer_{nullptr, nullptr, nullptr};
-
-  HUDRenderer hud_renderer_{nullptr, nullptr};
+  EventHandler event_handler_;
 
   Clock gravity_clock_;
 };

@@ -40,7 +40,7 @@ public:
   const std::optional<Tetromino> &optional_hold() const { return hold_; }
   const NextQueue &next_queue() const { return next_queue_; }
 
-  unsigned points() const { return points_; }
+  unsigned score() const { return score_; }
   State state() const { return state_; }
 
 private:
@@ -81,9 +81,9 @@ private:
 
   State state_;
 
-  bool hold_command_triggered_;
+  bool hold_command_triggered_{false};
 
-  unsigned points_;
+  unsigned score_{};
 };
 
 #endif

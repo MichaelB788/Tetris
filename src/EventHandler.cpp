@@ -36,10 +36,28 @@ constexpr std::array<std::pair<SDL_Keycode, EventHandler::Command>, 7>
                       {SDLK_SPACE, &Tetris::drop}}};
 } // namespace
 
-EventHandler::EventHandler(std::optional<std::filesystem::path> config)
+EventHandler::EventHandler(const std::filesystem::path &config_path)
     : controls_{default_controls} {
-  if (config.has_value())
-    parse_controls_config(config.value());
+  if (!std::filesystem::exists(config_path)) {
+    std::cerr << "Warn: Could not find file: " << config_path.filename()
+              << std::endl;
+    return;
+  }
+
+  if (config_path.filename() != "controls.ini") {
+    std::cerr << "Warn: expected file \"controls.ini\", instead got "
+              << config_path.filename() << std::endl;
+    return;
+  }
+
+  std::ifstream config_file(config_path);
+
+  if (!config_file.is_open()) {
+    std::cerr << "Warn: Unable to open the config file." << std::endl;
+    return;
+  }
+
+  parse_controls(config_file);
 }
 
 void EventHandler::handle_event(Tetris &tetris, SDL_Window *window, int &w,
@@ -62,24 +80,11 @@ void EventHandler::handle_event(Tetris &tetris, SDL_Window *window, int &w,
   }
 }
 
-void EventHandler::parse_controls_config(
-    const std::filesystem::path &path_to_conf) {
-  if (path_to_conf.filename() != "controls.ini") {
-    std::cerr << "Warning: expected file \"controls.ini\", instead got "
-              << path_to_conf.filename() << " Using default controls. \n";
-    return;
-  }
-
-  std::ifstream config_file(path_to_conf);
-  if (!config_file.is_open()) {
-    std::cerr
-        << "Warning: Unable to open the config file. Using default controls.\n";
-    return;
-  }
-
+void EventHandler::parse_controls(std::istream &input) {
   std::size_t i = 0;
   std::string current_line;
-  while (std::getline(config_file, current_line)) {
+
+  while (std::getline(input, current_line)) {
     const std::size_t first = current_line.find_first_not_of(" \t");
     if (std::string::npos == first)
       continue;

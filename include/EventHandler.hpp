@@ -3,7 +3,6 @@
 #include <SDL3/SDL_events.h>
 #include <array>
 #include <filesystem>
-#include <optional>
 
 class Tetris;
 class Rect;
@@ -12,14 +11,14 @@ class EventHandler {
 public:
   using Command = void (Tetris::*)();
 
-  explicit EventHandler(std::optional<std::filesystem::path> config);
+  explicit EventHandler(const std::filesystem::path &config_path);
 
   void handle_event(Tetris &tetris, SDL_Window *window, int &w, int &h);
 
   [[nodiscard]] bool should_quit() const { return should_quit_; }
 
 private:
-  void parse_controls_config(const std::filesystem::path &path_to_conf);
+  void parse_controls(std::istream &input);
 
   SDL_Event sdl_event_;
 

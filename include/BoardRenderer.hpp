@@ -1,17 +1,14 @@
 #ifndef TETRIS_BOARD_RENDERER_HPP
 #define TETRIS_BOARD_RENDERER_HPP
+#include "PlatformSDL.hpp"
 #include "Tetromino.hpp"
 
-class SDL_Renderer;
-class SDL_Texture;
 class Matrix;
 
 class BoardRenderer {
 public:
-  BoardRenderer(SDL_Renderer *renderer, SDL_Texture *norm_atlas,
-                SDL_Texture *ghost_atlas)
-      : renderer_(renderer), norm_atlas_(norm_atlas),
-        ghost_atlas_(ghost_atlas) {}
+  BoardRenderer(const std::filesystem::path &path_to_atlas,
+                SDL_Renderer *renderer);
 
   void draw_current(Tetromino::Projection current);
 
@@ -27,11 +24,11 @@ private:
   void draw_matrix_outline();
 
 private:
-  SDL_Renderer *renderer_ = nullptr;
+  SDL_Renderer *renderer_;
 
-  SDL_Texture *norm_atlas_ = nullptr;
+  PlatformSDL::Texture atlas_{};
 
-  SDL_Texture *ghost_atlas_ = nullptr;
+  PlatformSDL::Texture ghost_atlas_{};
 
   Point offset_{0, 0};
 };

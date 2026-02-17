@@ -1,16 +1,17 @@
 #ifndef TETRIS_HUD_RENDERER_HPP
 #define TETRIS_HUD_RENDERER_HPP
+#include "PlatformSDL.hpp"
 #include "Tetromino.hpp"
 #include <optional>
 
-class SDL_Renderer;
-class SDL_Texture;
 class NextQueue;
 
 class HUDRenderer {
 public:
-  HUDRenderer(SDL_Renderer *renderer, SDL_Texture *norm_atlas)
-      : renderer_(renderer), norm_atlas_(norm_atlas) {}
+  HUDRenderer(const std::filesystem::path &path_to_atlas,
+              SDL_Renderer *renderer)
+      : renderer_(renderer),
+        atlas_(PlatformSDL::create_texture_from_img(renderer, path_to_atlas)) {}
 
   void draw_next_queue(const NextQueue &queue);
 
@@ -18,10 +19,14 @@ public:
 
   void wrap_around_board(Point board_pos);
 
-private:
-  SDL_Renderer *renderer_ = nullptr;
+  [[nodiscard]] Point queue_offset() const { return queue_offset_; }
 
-  SDL_Texture *norm_atlas_ = nullptr;
+  [[nodiscard]] Point hold_offset() const { return hold_offset_; }
+
+private:
+  SDL_Renderer *renderer_;
+
+  PlatformSDL::Texture atlas_;
 
   Point queue_offset_{0, 0};
 

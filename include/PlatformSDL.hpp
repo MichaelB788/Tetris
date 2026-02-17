@@ -8,6 +8,10 @@ class SDL_Window;
 class SDL_Renderer;
 class SDL_Texture;
 class SDL_Surface;
+class TTF_TextEngine;
+class TTF_Font;
+class TTF_Text;
+
 using SDL_WindowFlags = unsigned long;
 
 class ExceptionSDL : std::exception {
@@ -35,30 +39,53 @@ struct SurfaceDestroyer {
   void operator()(SDL_Surface *surface) const;
 };
 
+struct FontDestroyer {
+  void operator()(TTF_Font *font) const;
+};
+
+struct TextDestroyer {
+  void operator()(TTF_Text *text) const;
+};
+
+struct TextEngineDestroyer {
+  void operator()(TTF_TextEngine *engine) const;
+};
+
 struct PlatformSDL {
   using Window = std::unique_ptr<SDL_Window, WindowDestroyer>;
   using Renderer = std::unique_ptr<SDL_Renderer, RendererDestroyer>;
+  using TextEngine = std::unique_ptr<TTF_TextEngine, TextEngineDestroyer>;
   using Texture = std::unique_ptr<SDL_Texture, TextureDestroyer>;
   using Surface = std::unique_ptr<SDL_Surface, SurfaceDestroyer>;
+  using Font = std::unique_ptr<TTF_Font, FontDestroyer>;
+  using Text = std::unique_ptr<TTF_Text, TextDestroyer>;
 
   PlatformSDL();
 
   ~PlatformSDL();
 
-  Window create_window(const char *title, int w, int h,
-                       SDL_WindowFlags flags) const;
+  static Window create_window(const char *title, int w, int h,
+                              SDL_WindowFlags flags);
 
-  Renderer create_renderer(Window &window) const;
+  static Renderer create_renderer(SDL_Window *window);
 
-  Surface
-  create_surface_from_img(const std::filesystem::path &path_to_img) const;
+  static TextEngine create_renderer_text_engine(SDL_Renderer *renderer);
 
-  Texture create_texture_from_surface(Renderer &renderer,
-                                      Surface &surface) const;
+  static Font open_font(const std::filesystem::path &path_to_font,
+                        float font_size);
 
-  Texture
-  create_texture_from_img(Renderer &renderer,
-                          const std::filesystem::path &path_to_img) const;
+  static Surface
+  create_surface_from_img(const std::filesystem::path &path_to_img);
+
+  static Texture create_texture_from_surface(SDL_Renderer *renderer,
+                                             SDL_Surface *surface);
+
+  static Texture
+  create_texture_from_img(SDL_Renderer *renderer,
+                          const std::filesystem::path &path_to_img);
+
+  static Text create_text(TTF_TextEngine *engine, TTF_Font *font,
+                          const char *str);
 };
 
 #endif

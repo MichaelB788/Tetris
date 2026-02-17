@@ -3,24 +3,20 @@
 #include "pixel.hpp"
 
 TextRenderer::TextRenderer(const std::filesystem::path &font_path,
-                           int font_size, SDL_Renderer *renderer)
+                           int font_size, SDL_Renderer &renderer)
     : renderer_(renderer),
       text_engine_(PlatformSDL::create_renderer_text_engine(renderer_)),
       font_(PlatformSDL::open_font(font_path, font_size)) {
-  text_[SCORE] = {
-      PlatformSDL::create_text(text_engine_.get(), font_.get(), "Score")};
+  text_[SCORE] = {PlatformSDL::create_text(*text_engine_, *font_, "Score")};
 
-  text_[MAX_SCORE] = {
-      PlatformSDL::create_text(text_engine_.get(), font_.get(), "High")};
+  text_[MAX_SCORE] = {PlatformSDL::create_text(*text_engine_, *font_, "High")};
 
-  text_[NEXT] = {
-      PlatformSDL::create_text(text_engine_.get(), font_.get(), "Next")};
+  text_[NEXT] = {PlatformSDL::create_text(*text_engine_, *font_, "Next")};
 
-  text_[HOLD] = {
-      PlatformSDL::create_text(text_engine_.get(), font_.get(), "Hold")};
+  text_[HOLD] = {PlatformSDL::create_text(*text_engine_, *font_, "Hold")};
 
   for (unsigned i = 0; i < nums_.size(); ++i)
-    nums_[i] = PlatformSDL::create_text(text_engine_.get(), font_.get(),
+    nums_[i] = PlatformSDL::create_text(*text_engine_, *font_,
                                         std::to_string(i).c_str());
 }
 

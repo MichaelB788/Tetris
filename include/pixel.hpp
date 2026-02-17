@@ -29,7 +29,7 @@ template <typename T> constexpr SDL_FRect texture_src(T type) {
   return textures_src[static_cast<std::size_t>(type)];
 }
 
-void draw_tetromino_tile(SDL_Renderer *renderer, SDL_Texture *atlas,
+void draw_tetromino_tile(SDL_Renderer &renderer, SDL_Texture &atlas,
                          SDL_FRect atlas_src, Point dest, Point offset);
 } // namespace pixel
 

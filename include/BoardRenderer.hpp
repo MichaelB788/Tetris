@@ -8,7 +8,7 @@ class Matrix;
 class BoardRenderer {
 public:
   BoardRenderer(const std::filesystem::path &path_to_atlas,
-                SDL_Renderer *renderer);
+                SDL_Renderer &renderer);
 
   void draw_current(Tetromino::Projection current);
 
@@ -24,7 +24,7 @@ private:
   void draw_matrix_outline();
 
 private:
-  SDL_Renderer *renderer_;
+  SDL_Renderer &renderer_;
 
   PlatformSDL::Texture atlas_{};
 

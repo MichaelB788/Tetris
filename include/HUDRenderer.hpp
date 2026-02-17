@@ -9,7 +9,7 @@ class NextQueue;
 class HUDRenderer {
 public:
   HUDRenderer(const std::filesystem::path &path_to_atlas,
-              SDL_Renderer *renderer)
+              SDL_Renderer &renderer)
       : renderer_(renderer),
         atlas_(PlatformSDL::create_texture_from_img(renderer, path_to_atlas)) {}
 
@@ -24,7 +24,7 @@ public:
   [[nodiscard]] Point hold_offset() const { return hold_offset_; }
 
 private:
-  SDL_Renderer *renderer_;
+  SDL_Renderer &renderer_;
 
   PlatformSDL::Texture atlas_;
 

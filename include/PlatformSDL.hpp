@@ -64,12 +64,12 @@ struct PlatformSDL {
 
   ~PlatformSDL();
 
-  static Window create_window(const char *title, int w, int h,
+  static Window create_window(const std::string &title, int w, int h,
                               SDL_WindowFlags flags);
 
-  static Renderer create_renderer(SDL_Window *window);
+  static Renderer create_renderer(SDL_Window &window);
 
-  static TextEngine create_renderer_text_engine(SDL_Renderer *renderer);
+  static TextEngine create_renderer_text_engine(SDL_Renderer &renderer);
 
   static Font open_font(const std::filesystem::path &path_to_font,
                         float font_size);
@@ -77,15 +77,15 @@ struct PlatformSDL {
   static Surface
   create_surface_from_img(const std::filesystem::path &path_to_img);
 
-  static Texture create_texture_from_surface(SDL_Renderer *renderer,
-                                             SDL_Surface *surface);
+  static Texture create_texture_from_surface(SDL_Renderer &renderer,
+                                             SDL_Surface &surface);
 
   static Texture
-  create_texture_from_img(SDL_Renderer *renderer,
+  create_texture_from_img(SDL_Renderer &renderer,
                           const std::filesystem::path &path_to_img);
 
-  static Text create_text(TTF_TextEngine *engine, TTF_Font *font,
-                          const char *str);
+  static Text create_text(TTF_TextEngine &engine, TTF_Font &font,
+                          const std::string &str);
 };
 
 #endif

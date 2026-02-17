@@ -4,10 +4,10 @@
 TetrisApp::TetrisApp(Specification spec)
     : window_(PlatformSDL::create_window("Tetris", win_w, win_h,
                                          SDL_WINDOW_RESIZABLE)),
-      renderer_(PlatformSDL::create_renderer(window_.get())),
-      text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
-      board_renderer_(spec.tetromino_atlas, renderer_.get()),
-      hud_renderer_(spec.tetromino_atlas, renderer_.get()),
+      renderer_(PlatformSDL::create_renderer(*window_)),
+      text_renderer_(spec.font_path, spec.font_size, *renderer_),
+      board_renderer_(spec.tetromino_atlas, *renderer_),
+      hud_renderer_(spec.tetromino_atlas, *renderer_),
       event_handler_(spec.controls), gravity_clock_(spec.gravity_rate) {}
 
 void TetrisApp::run() {

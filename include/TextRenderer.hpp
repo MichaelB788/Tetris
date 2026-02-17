@@ -7,7 +7,7 @@
 class TextRenderer {
 public:
   TextRenderer(const std::filesystem::path &font_path, int font_size,
-               SDL_Renderer *renderer);
+               SDL_Renderer &renderer);
 
   void render_text();
 
@@ -23,7 +23,7 @@ private:
     float x{}, y{};
   };
 
-  SDL_Renderer *renderer_ = nullptr;
+  SDL_Renderer &renderer_;
 
   PlatformSDL::TextEngine text_engine_{};
 

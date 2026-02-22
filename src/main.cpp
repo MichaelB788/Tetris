@@ -1,19 +1,37 @@
 #include "PlatformSDL.hpp"
 #include "TetrisApp.hpp"
-#include <boost/dll/runtime_symbol_info.hpp>
+#include <filesystem>
 #include <iostream>
 
-std::string path_n_levels_up(unsigned n, boost::filesystem::path path) {
-  for (unsigned i = 0; i < n; ++i)
-    path = path.parent_path();
-  return path.string();
+#ifdef _WIN32
+#include <windows.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#elif defined(__linux__)
+#include <unistd.h>
+#endif
+
+std::filesystem::path get_exe_path() {
+#ifdef _WIN64
+  wchar_t path[MAX_PATH];
+  GetModuleFileNameW(nullptr, path, MAX_PATH);
+  return std::filesystem::path(path);
+#elif defined(__APPLE__)
+  char path[1024];
+  uint32_t size = sizeof(path);
+  _NSGetExecutablePath(path, &size);
+  return std::filesystem::canonical(path);
+#elif defined(__linux__)
+  return std::filesystem::canonical("/proc/self/exe");
+#endif
 }
 
 int main() {
   using namespace std::literals::chrono_literals;
 
-  std::filesystem::path project_root =
-      path_n_levels_up(3, boost::dll::program_location());
+  std::filesystem::path project_root = get_exe_path();
+  for (unsigned i = 0; i < 3; ++i)
+    project_root = project_root.parent_path();
 
   try {
     PlatformSDL platform{};

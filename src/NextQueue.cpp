@@ -9,7 +9,7 @@ NextQueue::NextQueue() {
 
 Tetromino NextQueue::pop_next() {
   Tetromino next = queue_[read];
-  next.set_position(Point(4, 2));
+  next.set_pos(Point(4, 2));
   read = (read + 1) % queue_.size();
   push_non_repeating();
   return next;
@@ -23,7 +23,7 @@ void NextQueue::push_non_repeating() {
 
     do {
       random = Tetromino::get_random_type();
-    } while (random == queue_[prev].type());
+    } while (random == queue_[prev].type_());
   }
 
   queue_[write] = Tetromino(random, {.x = 0, .y = 0});

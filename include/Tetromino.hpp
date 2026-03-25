@@ -1,64 +1,41 @@
-#ifndef TETRIS_TETROMINO_H
-#define TETRIS_TETROMINO_H
-#include "Common.hpp"
+#pragma once
+#include <Point.hpp>
+#include <array>
 #include <cstdint>
 #include <span>
 
 class Tetromino {
 public:
-  static constexpr Point INIT_POS = {.x = 4, .y = 2};
+  enum class Type : uint8_t { I = 0, O, T, S, Z, J, L };
 
-  explicit Tetromino(TetrominoType type, Point pos);
+public:
+  Tetromino(Type t = Type::I);
 
-  Tetromino();
+  static Tetromino rand();
 
-  static TetrominoType get_random_type();
+public:
+  void shift(Point delta) {
+    for (auto &tile : blocks_)
+      tile += delta;
+  }
 
-  void shift(Point delta);
-
-  void set_position(Point pos);
+  void set_pos(Point pos) { shift(pos - blocks_.front()); }
 
   void rotate_clockwise();
 
   void rotate_counterclockwise();
 
-  [[nodiscard]] TetrominoType type() const { return type_; }
+public:
+  [[nodiscard]] Type type() const { return type_; }
 
-  struct Projection {
-    TetrominoType type;
-    std::span<const Point> blocks;
-  };
+  [[nodiscard]] auto shape() const { return std::span(blocks_); }
 
-  [[nodiscard]] Projection projection() const {
-    return {.type = type_, .blocks = std::span(blocks_)};
-  }
-
-  [[nodiscard]] std::size_t type_index() const {
-    return static_cast<std::size_t>(type_);
-  }
-
-  [[nodiscard]] std::size_t prev_rotation() const {
-    return static_cast<std::size_t>(rotation_state_.prev);
-  }
-
-  [[nodiscard]] std::size_t curr_rotation() const {
-    return static_cast<std::size_t>(rotation_state_.curr);
-  }
+  [[nodiscard]] uint8_t rotation() const { return rotation_; }
 
 private:
-  struct RotationState {
-    uint8_t prev, curr;
-
-    void clockwise();
-
-    void counterclockwise();
-  };
-
-  TetrominoType type_;
+  Type type_;
 
   std::array<Point, 4> blocks_;
 
-  RotationState rotation_state_;
+  uint8_t rotation_;
 };
-
-#endif

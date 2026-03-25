@@ -32,7 +32,7 @@ void Tetris::reset() {
 }
 
 void Tetris::reset_current() {
-  current_.set_position({.x = 0, .y = 0});
+  current_.set_pos({.x = 0, .y = 0});
   while (current_.curr_rotation() != 0)
     current_.rotate_clockwise();
 }

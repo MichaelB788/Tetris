@@ -1,17 +1,11 @@
 #ifndef TETRIS_HPP
 #define TETRIS_HPP
-#include "Matrix.hpp"
-#include "NextQueue.hpp"
 #include "Tetromino.hpp"
-#include "mechanics.hpp"
-#include <optional>
+#include <array>
+#include <vector>
 
 class Tetris {
 public:
-  enum class State { Running, Paused, GameOver };
-
-  Tetris(mechanics::RotationSystem rs = mechanics::srs::srs);
-
   void move_left() { shift({.x = -1, .y = 0}); }
 
   void move_right() { shift({.x = 1, .y = 0}); }
@@ -49,9 +43,9 @@ public:
 
   unsigned high_score() const { return high_score_; }
 
-  State state() const { return state_; }
-
 private:
+  using Matrix = std::array<std::array<Tetromino::Type, 10>, 20>;
+
   void update_ghost() {
     ghost_ = current_;
     mechanics::drop(ghost_, matrix_);
@@ -59,7 +53,7 @@ private:
 
   void set_current(const Tetromino &other) {
     current_ = other;
-    current_.set_position(Tetromino::INIT_POS);
+    current_.set_pos(Tetromino::INIT_POS);
     update_ghost();
   }
 
@@ -77,23 +71,15 @@ private:
 
   void spawn_next();
 
-  mechanics::RotationSystem rs_;
+  Matrix mat{};
 
-  Matrix matrix_;
+  Tetromino current_{}, ghost_{}, hold_{};
 
-  Tetromino current_{}, ghost_{};
+  std::vector<Tetromino> next_queue_(5);
 
-  std::optional<Tetromino> hold_{std::nullopt};
+  bool hold_triggered = false, has_hold = false;
 
-  NextQueue next_queue_{};
-
-  State state_;
-
-  bool hold_command_triggered_{false};
-
-  unsigned score_{};
-
-  unsigned high_score_{};
+  unsigned lines_cleared{};
 };
 
 #endif

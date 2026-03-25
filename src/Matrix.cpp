@@ -1,12 +1,6 @@
 #include "Matrix.hpp"
 #include <algorithm>
 
-void Matrix::clear() {
-  for (auto &row : matrix_)
-    for (auto &col : row)
-      col = MatrixCell::Empty;
-}
-
 unsigned Matrix::clear_lines() {
   const unsigned lines_cleared = clear_full_rows();
 

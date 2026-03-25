@@ -1,13 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-main() {
-  if [[ ("${1}" == "--build") || !( -d ./build/ ) ]]; then
-    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -S . -B build -G Ninja
-  fi
+set -euo pipefail
 
-  (cd build/ && ninja)
+run() {
+  local project_root
+  project_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+  local build_dir="${project_root}/build"
 
-  ./build/bin/Tetris
+  local cmake_opts=(
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+    "-DCMAKE_BUILD_TYPE=Debug"
+  )
+
+  cmake -S "${project_root}" -B "${build_dir}" "${cmake_opts[@]}" -G Ninja
+  ninja -C "${build_dir}"
+
+  local exe="${build_dir}/bin/Tetris"
+
+  "$exe"
 }
 
-main "${1}"
+run

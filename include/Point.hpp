@@ -41,4 +41,7 @@ public:
     x /= other.x;
     y /= other.y;
   }
+
+public:
+  Point operator-() { return {x * -1, y * -1}; }
 };

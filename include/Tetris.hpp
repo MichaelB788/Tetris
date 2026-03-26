@@ -1,17 +1,18 @@
-#ifndef TETRIS_HPP
-#define TETRIS_HPP
+#pragma once
+#include "Matrix.hpp"
 #include "Tetromino.hpp"
-#include <array>
-#include <vector>
+#include <deque>
 
 class Tetris {
 public:
-  void move_left() { shift({.x = -1, .y = 0}); }
+  Tetris();
 
-  void move_right() { shift({.x = 1, .y = 0}); }
+  void move_left() { shift_current({-1, 0}); }
+
+  void move_right() { shift_current({1, 0}); }
 
   void move_down() {
-    if (!mechanics::try_shift(current_, matrix_, {.x = 0, .y = 1}))
+    if (!shift_current({0, 1}))
       spawn_next();
   }
 
@@ -29,57 +30,33 @@ public:
   void reset();
 
 public:
-  Tetromino::Projection current() const { return current_.projection(); }
+  [[nodiscard]] const Tetromino &current() const { return current_; }
 
-  Tetromino::Projection ghost() const { return ghost_.projection(); }
+  [[nodiscard]] const Matrix &matrix() const { return matrix_; }
 
-  const Matrix &matrix() const { return matrix_; }
+  [[nodiscard]] const Tetromino &optional_hold() const { return hold_; }
 
-  const std::optional<Tetromino> &optional_hold() const { return hold_; }
+  [[nodiscard]] const std::deque<Tetromino> &next_queue() const {
+    return next_queue_;
+  }
 
-  const NextQueue &next_queue() const { return next_queue_; }
-
-  unsigned score() const { return score_; }
-
-  unsigned high_score() const { return high_score_; }
+  [[nodiscard]] int score() const { return cleared_; }
 
 private:
-  using Matrix = std::array<std::array<Tetromino::Type, 10>, 20>;
-
-  void update_ghost() {
-    ghost_ = current_;
-    mechanics::drop(ghost_, matrix_);
-  }
-
-  void set_current(const Tetromino &other) {
-    current_ = other;
-    current_.set_pos(Tetromino::INIT_POS);
-    update_ghost();
-  }
-
-  void shift(Point delta) {
-    mechanics::try_shift(current_, matrix_, delta);
-    update_ghost();
-  }
-
-  void rotate(mechanics::RotationFunc rotation_func) {
-    rotation_func(current_, matrix_);
-    update_ghost();
-  }
+  bool shift_current(Point delta);
 
   void reset_current();
 
   void spawn_next();
 
-  Matrix mat{};
+private:
+  Matrix matrix_{};
 
-  Tetromino current_{}, ghost_{}, hold_{};
+  Tetromino current_{}, hold_{};
 
-  std::vector<Tetromino> next_queue_(5);
+  std::deque<Tetromino> next_queue_{};
 
-  bool hold_triggered = false, has_hold = false;
+  bool hold_triggered_ = false, has_hold_ = false, game_over = false;
 
-  unsigned lines_cleared{};
+  unsigned cleared_ = 0;
 };
-
-#endif

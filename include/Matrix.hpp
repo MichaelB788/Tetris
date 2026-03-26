@@ -8,7 +8,7 @@ class Matrix {
 public:
   static constexpr size_t ROWS = 20, COLS = 10;
 
-  enum Cell : uint8_t { I = 0, O, T, S, Z, J, L, EMPTY = UINT8_MAX };
+  enum Cell : uint8_t { I = 0, O, T, S, Z, J, L, EMPTY };
 
   Matrix() { clear(); }
 
@@ -20,11 +20,12 @@ public:
 
   [[nodiscard]] int clear_lines();
 
+public:
   [[nodiscard]] static bool out_of_bounds(int x, int y) {
     return 0 <= x && x < Matrix::COLS && 0 <= y && y < Matrix::ROWS;
   }
 
-  [[nodiscard]] static bool is_filled(Matrix::Cell cell) {
+  [[nodiscard]] static bool is_ground(Matrix::Cell cell) {
     return cell != Matrix::Cell::EMPTY;
   }
 

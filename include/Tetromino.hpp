@@ -8,9 +8,12 @@ class Tetromino {
 public:
   enum Type : uint8_t { I = 0, O, T, S, Z, J, L };
 
-  Tetromino(Type t = Type::I) : type_(t), rotation_(0), shape_(shapes[type_]) {}
+  enum Rotation : uint8_t { R0 = 0, R90, R180, R270 };
 
-  static Tetromino rand();
+  constexpr Tetromino(Type t = I)
+      : type_(t), rotation_(R0), shape_(shapes[type_]) {}
+
+  static Tetromino random_piece();
 
 public:
   void shift(Point delta) {
@@ -29,14 +32,14 @@ public:
 
   [[nodiscard]] auto shape() const { return std::span(shape_); }
 
-  [[nodiscard]] uint8_t rotation() const { return rotation_; }
+  [[nodiscard]] Rotation rotation() const { return rotation_; }
 
 private:
   Type type_;
 
-  std::array<Point, 4> shape_;
+  Rotation rotation_;
 
-  uint8_t rotation_;
+  std::array<Point, 4> shape_;
 
 private:
   static constexpr std::array<std::array<Point, 4>, 7> shapes{{

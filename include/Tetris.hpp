@@ -45,7 +45,8 @@ public:
 private:
   bool shift_current(Point delta);
 
-  void reset_current();
+private:
+  void lock_piece();
 
   void spawn_next();
 
@@ -56,7 +57,7 @@ private:
 
   std::deque<Tetromino> next_queue_{};
 
-  bool hold_triggered_ = false, has_hold_ = false, game_over = false;
+  bool hold_triggered_ = false, hold_present_ = false, game_over_ = false;
 
   unsigned cleared_ = 0;
 };

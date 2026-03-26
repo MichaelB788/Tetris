@@ -1,8 +1,6 @@
 #include "Matrix.hpp"
 #include <algorithm>
 
-namespace {} // namespace
-
 int Matrix::clear_lines() {
   int cleared = clear_filled();
   if (cleared > 0) {
@@ -14,7 +12,7 @@ int Matrix::clear_lines() {
 int Matrix::clear_filled() {
   unsigned cleared = 0;
   for (auto &row : data_) {
-    if (std::ranges::all_of(row, is_filled)) {
+    if (std::ranges::all_of(row, is_ground)) {
       row.fill(Cell::EMPTY);
       ++cleared;
     }
@@ -25,7 +23,7 @@ int Matrix::clear_filled() {
 void Matrix::drop_rows() {
   int write = ROWS - 1;
   for (int read = ROWS - 1; read >= 0; --read) {
-    if (std::ranges::any_of(data_[read], is_filled)) {
+    if (std::ranges::any_of(data_[read], is_ground)) {
       if (write != read) {
         data_[write] = data_[read];
         data_[read].fill(Cell::EMPTY);

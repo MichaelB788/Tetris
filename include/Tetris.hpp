@@ -1,6 +1,7 @@
 #pragma once
 #include "Matrix.hpp"
 #include "Tetromino.hpp"
+#include "srs.hpp"
 #include <deque>
 
 class Tetris {
@@ -16,16 +17,15 @@ public:
       spawn_next();
   }
 
-  void drop() {
-    mechanics::drop(current_, matrix_);
-    spawn_next();
-  }
+  void drop();
 
   void hold();
 
-  void rotate_clockwise() { rotate(rs_.clockwise); }
+  void rotate_clockwise() { srs::clockwise_rotation(current_, matrix_); }
 
-  void rotate_counterclockwise() { rotate(rs_.counterclockwise); }
+  void rotate_counterclockwise() {
+    srs::counterclockwise_rotation(current_, matrix_);
+  }
 
   void reset();
 

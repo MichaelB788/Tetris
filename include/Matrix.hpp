@@ -8,7 +8,7 @@ class Matrix {
 public:
   static constexpr size_t ROWS = 20, COLS = 10;
 
-  enum Cell : uint8_t { I = 0, O, T, S, Z, J, L, EMPTY };
+  enum Cell : uint8_t { I = 0, O, T, S, Z, J, L, EMPTY = UINT8_MAX };
 
   Matrix() { clear(); }
 
@@ -21,23 +21,27 @@ public:
   [[nodiscard]] int clear_lines();
 
 public:
-  [[nodiscard]] static bool out_of_bounds(int x, int y) {
-    return 0 <= x && x < Matrix::COLS && 0 <= y && y < Matrix::ROWS;
+  [[nodiscard]] Cell &operator()(int x, int y) {
+    assert(within_bounds(x, y));
+    return data_[y][x];
   }
 
-  [[nodiscard]] static bool is_ground(Matrix::Cell cell) {
-    return cell != Matrix::Cell::EMPTY;
+  [[nodiscard]] Cell operator()(int x, int y) const {
+    assert(within_bounds(x, y));
+    return data_[y][x];
   }
 
 public:
-  [[nodiscard]] Cell &operator()(size_t x, size_t y) {
-    assert(!out_of_bounds(x, y));
-    return data_[y][x];
+  [[nodiscard]] static bool within_bounds(int x, int y) {
+    return 0 <= x && x < COLS && 0 <= y && y < ROWS;
   }
 
-  [[nodiscard]] Cell operator()(size_t x, size_t y) const {
-    assert(!out_of_bounds(x, y));
-    return data_[y][x];
+  [[nodiscard]] static bool is_ground(Matrix::Cell cell) {
+    return cell != EMPTY;
+  }
+
+  [[nodiscard]] bool is_valid(int x, int y) const {
+    return within_bounds(x, y) && !is_ground(data_[y][x]);
   }
 
 private:

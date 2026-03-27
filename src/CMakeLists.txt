@@ -4,9 +4,8 @@ add_library(tetris_src
         EventHandler.cpp
         HUDRenderer.cpp
         main.cpp
-        mechanics.cpp
+        srs.cpp
         Matrix.cpp
-        NextQueue.cpp
         pixel.cpp
         TetrisApp.cpp
         Tetris.cpp

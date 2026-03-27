@@ -1,5 +1,4 @@
-#ifndef TETRIS_BOARD_RENDERER_HPP
-#define TETRIS_BOARD_RENDERER_HPP
+#pragma once
 #include "PlatformSDL.hpp"
 #include "Tetromino.hpp"
 
@@ -10,9 +9,9 @@ public:
   BoardRenderer(const std::filesystem::path &path_to_atlas,
                 SDL_Renderer &renderer);
 
-  void draw_current(Tetromino::Projection current);
+  void draw_current(const Tetromino &current);
 
-  void draw_ghost(Tetromino::Projection ghost);
+  void draw_ghost(const Tetromino &ghost);
 
   void draw_matrix(const Matrix &matrix);
 
@@ -28,8 +27,5 @@ private:
 
   PlatformSDL::Texture atlas_{};
 
-  PlatformSDL::Texture ghost_atlas_{};
-
   Point offset_{0, 0};
 };
-#endif

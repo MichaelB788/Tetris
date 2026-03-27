@@ -1,5 +1,4 @@
-#ifndef TETRIS_PIXEL_HPP
-#define TETRIS_PIXEL_HPP
+#pragma once
 #include <SDL3/SDL_rect.h>
 #include <array>
 
@@ -32,5 +31,3 @@ template <typename T> constexpr SDL_FRect texture_src(T type) {
 void draw_tetromino_tile(SDL_Renderer &renderer, SDL_Texture &atlas,
                          SDL_FRect atlas_src, Point dest, Point offset);
 } // namespace pixel
-
-#endif

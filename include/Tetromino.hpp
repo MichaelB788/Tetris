@@ -2,7 +2,6 @@
 #include <Point.hpp>
 #include <array>
 #include <cstdint>
-#include <span>
 
 class Tetromino {
 public:
@@ -30,9 +29,11 @@ public:
 public:
   [[nodiscard]] Type type() const { return type_; }
 
-  [[nodiscard]] auto shape() const { return std::span(shape_); }
-
   [[nodiscard]] Rotation rotation() const { return rotation_; }
+
+  [[nodiscard]] auto begin() const { return shape_.begin(); }
+
+  [[nodiscard]] auto end() const { return shape_.end(); }
 
 private:
   Type type_;

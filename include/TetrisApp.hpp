@@ -1,5 +1,4 @@
-#ifndef TETRIS_APP_HPP
-#define TETRIS_APP_HPP
+#pragma once
 #include "BoardRenderer.hpp"
 #include "Clock.hpp"
 #include "EventHandler.hpp"
@@ -63,5 +62,3 @@ private:
 
   Clock gravity_clock_;
 };
-
-#endif

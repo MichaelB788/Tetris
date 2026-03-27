@@ -13,7 +13,7 @@ int Matrix::clear_filled() {
   unsigned cleared = 0;
   for (auto &row : data_) {
     if (std::ranges::all_of(row, is_ground)) {
-      row.fill(Cell::EMPTY);
+      row.fill(EMPTY);
       ++cleared;
     }
   }
@@ -26,7 +26,7 @@ void Matrix::drop_rows() {
     if (std::ranges::any_of(data_[read], is_ground)) {
       if (write != read) {
         data_[write] = data_[read];
-        data_[read].fill(Cell::EMPTY);
+        data_[read].fill(EMPTY);
       }
       --write;
     }

@@ -1,5 +1,5 @@
 #include "NextQueue.hpp"
-#include "Common.hpp"
+#include "Point.hpp"
 #include "Tetromino.hpp"
 
 NextQueue::NextQueue() {

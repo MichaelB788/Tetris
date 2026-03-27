@@ -4,7 +4,7 @@
 
 namespace {
 [[nodiscard]] bool point_out_of_bounds(Point p) {
-  return Matrix::out_of_bounds(p.x, p.y);
+  return Matrix::within_bounds(p.x, p.y);
 };
 
 Tetromino pop_next(std::deque<Tetromino> &queue) {
@@ -19,6 +19,15 @@ Tetris::Tetris() {
   next_queue_.resize(4);
   for (int i = 0; i < 4; ++i)
     next_queue_.push_back(Tetromino::random_piece());
+}
+
+void Tetris::drop() {
+  bool can_shift;
+  do {
+    can_shift = shift_current({0, 1});
+  } while (can_shift);
+  shift_current({0, -1});
+  spawn_next();
 }
 
 void Tetris::hold() {
@@ -45,7 +54,7 @@ void Tetris::reset() {
 }
 
 void Tetris::lock_piece() {
-  for (auto &pos : current_.shape()) {
+  for (auto &pos : current_) {
     matrix_(pos.x, pos.y) = static_cast<Matrix::Cell>(current_.type());
   }
   cleared_ += matrix_.clear_lines();
@@ -56,12 +65,13 @@ void Tetris::spawn_next() {
     return Matrix::is_ground(matrix_(p.x, p.y));
   };
 
+  lock_piece();
   current_ = pop_next(next_queue_);
 
-  while (std::ranges::any_of(current_.shape(), hits_ground)) {
+  while (std::ranges::any_of(current_, hits_ground)) {
     current_.shift({0, -1});
 
-    if (std::ranges::any_of(current_.shape(), point_out_of_bounds)) {
+    if (std::ranges::any_of(current_, point_out_of_bounds)) {
       game_over_ = true;
       return;
     }
@@ -69,15 +79,12 @@ void Tetris::spawn_next() {
 }
 
 bool Tetris::shift_current(Point delta) {
-  const auto is_invalid = [this](Point p) {
-    return Matrix::out_of_bounds(p.x, p.y) &&
-           Matrix::is_ground(matrix_(p.x, p.y));
-  };
+  const auto is_valid = [&](Point p) { return matrix_.is_valid(p.x, p.y); };
 
-  auto shifted = current_.shape() |
-                 std::views::transform([&](Point p) { return p + delta; });
+  auto shifted =
+      current_ | std::views::transform([&](Point p) { return p + delta; });
 
-  if (std::ranges::none_of(shifted, is_invalid)) {
+  if (std::ranges::all_of(shifted, is_valid)) {
     current_.shift(delta);
     return true;
   }

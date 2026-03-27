@@ -1,5 +1,4 @@
-#ifndef TETRIS_NEXT_QUEUE
-#define TETRIS_NEXT_QUEUE
+#pragma once
 #include "Tetromino.hpp"
 #include <array>
 
@@ -57,5 +56,3 @@ private:
 
   std::size_t read = 0, write = queue_.size() - 1;
 };
-
-#endif

@@ -10,7 +10,10 @@ public:
   enum Rotation : uint8_t { R0 = 0, R90, R180, R270 };
 
   constexpr Tetromino(Type t = I)
-      : type_(t), rotation_(R0), shape_(shapes[type_]) {}
+      : type_(t), rotation_(R0), shape_(SHAPES[t]) {}
+
+public:
+  static Type random_type();
 
   static Tetromino random_piece();
 
@@ -43,7 +46,7 @@ private:
   std::array<Point, 4> shape_;
 
 private:
-  static constexpr std::array<std::array<Point, 4>, 7> shapes{{
+  static constexpr std::array<std::array<Point, 4>, 7> SHAPES{{
       {{{0, 0}, {-1, 0}, {1, 0}, {2, 0}}},   // I
       {{{0, 0}, {1, 0}, {0, -1}, {1, -1}}},  // O
       {{{0, 0}, {-1, 0}, {1, 0}, {0, -1}}},  // T

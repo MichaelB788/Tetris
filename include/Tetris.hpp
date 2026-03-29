@@ -1,44 +1,52 @@
 #pragma once
-#include "Matrix.hpp"
-#include "Tetromino.hpp"
-#include "srs.hpp"
-#include <deque>
+#include "NextQueue.hpp"
+#include "Playfield.hpp"
+#include "Point.hpp"
+#include <cstdint>
+#include <optional>
+
+enum class Status : uint8_t { Running, Paused, GameOver };
+
+struct HeldTetromino {
+  std::optional<Tetromino::Type> held;
+  bool held_for_round = false;
+};
 
 class Tetris {
 public:
-  Tetris();
+  Tetris() : playfield_(queue_.pop()) {}
 
-  void move_left() { shift_current({-1, 0}); }
+  void move_left() { playfield_.shift_player({-1, 0}); }
 
-  void move_right() { shift_current({1, 0}); }
+  void move_right() { playfield_.shift_player({1, 0}); }
 
   void move_down() {
-    if (!shift_current({0, 1}))
-      spawn_next();
+    if (playfield_.can_shift_player({0, 1})) {
+      playfield_.shift_player({0, 1});
+    } else {
+      playfield_.lock_piece();
+      // switch to next
+    }
   }
 
-  void drop();
+  void drop() { playfield_.set_player_piece(playfield_.compute_drop()); }
 
   void hold();
 
-  void rotate_clockwise() { srs::clockwise_rotation(current_, matrix_); }
+  void rotate_clockwise() { playfield_.rotate_piece_cw(); }
 
-  void rotate_counterclockwise() {
-    srs::counterclockwise_rotation(current_, matrix_);
-  }
+  void rotate_counterclockwise() { playfield_.rotate_piece_ccw(); }
 
   void reset();
 
 public:
-  [[nodiscard]] const Tetromino &current() const { return current_; }
+  [[nodiscard]] const Tetromino &current() const { return player_; }
 
   [[nodiscard]] const Matrix &matrix() const { return matrix_; }
 
   [[nodiscard]] const Tetromino &optional_hold() const { return hold_; }
 
-  [[nodiscard]] const std::deque<Tetromino> &next_queue() const {
-    return next_queue_;
-  }
+  [[nodiscard]] const NextQueue &next_queue() const { return queue_; }
 
   [[nodiscard]] int score() const { return cleared_; }
 
@@ -51,13 +59,13 @@ private:
   void spawn_next();
 
 private:
-  Matrix matrix_{};
+  HeldTetromino held_{};
 
-  Tetromino current_{}, hold_{};
+  NextQueue queue_{};
 
-  std::deque<Tetromino> next_queue_{};
+  Playfield playfield_;
 
-  bool hold_triggered_ = false, hold_present_ = false, game_over_ = false;
+  Status status_{};
 
   unsigned cleared_ = 0;
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "Point.hpp"
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -12,7 +13,6 @@ public:
 
   Matrix() { clear(); }
 
-public:
   void clear() {
     for (auto &row : data_)
       row.fill(EMPTY);
@@ -20,35 +20,37 @@ public:
 
   [[nodiscard]] int clear_lines();
 
-public:
-  [[nodiscard]] Cell &operator()(int x, int y) {
-    assert(within_bounds(x, y));
-    return data_[y][x];
+  [[nodiscard]] Cell &at(Point point) {
+    assert(within_bounds(point));
+    return data_[point.y][point.x];
   }
 
-  [[nodiscard]] Cell operator()(int x, int y) const {
-    assert(within_bounds(x, y));
-    return data_[y][x];
+  [[nodiscard]] Cell at(Point point) const {
+    assert(within_bounds(point));
+    return data_[point.y][point.x];
   }
 
-public:
-  [[nodiscard]] static bool within_bounds(int x, int y) {
-    return 0 <= x && x < COLS && 0 <= y && y < ROWS;
+  [[nodiscard]] static bool within_bounds(Point point) {
+    return 0 <= point.x && point.x < COLS && 0 <= point.y && point.y < ROWS;
   }
 
   [[nodiscard]] static bool is_ground(Matrix::Cell cell) {
     return cell != EMPTY;
   }
 
-  [[nodiscard]] bool is_valid(int x, int y) const {
-    return within_bounds(x, y) && !is_ground(data_[y][x]);
+  [[nodiscard]] bool is_valid(Point point) const {
+    return within_bounds(point) && !is_ground(data_[point.y][point.x]);
   }
+
+  struct IsPosValid {
+    const Matrix &self;
+    bool operator()(Point point) const { return self.is_valid(point); }
+  };
 
 private:
   int clear_filled();
 
   void drop_rows();
 
-private:
   std::array<std::array<Cell, COLS>, ROWS> data_{};
 };

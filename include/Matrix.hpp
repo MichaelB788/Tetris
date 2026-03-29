@@ -1,56 +1,45 @@
 #pragma once
-#include "Point.hpp"
+#include "Tetromino.hpp"
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <cstdint>
+#include <optional>
 
 class Matrix {
 public:
   static constexpr size_t ROWS = 20, COLS = 10;
 
-  enum Cell : uint8_t { I = 0, O, T, S, Z, J, L, EMPTY = UINT8_MAX };
-
-  Matrix() { clear(); }
+  using Cell = std::optional<Tetromino::Type>;
 
   void clear() {
     for (auto &row : data_)
-      row.fill(EMPTY);
+      row.fill(std::nullopt);
   }
 
-  [[nodiscard]] int clear_lines();
-
-  [[nodiscard]] Cell &at(Point point) {
-    assert(within_bounds(point));
-    return data_[point.y][point.x];
+  void place(const Tetromino &piece) {
+    if (is_move_valid(piece))
+      for (const auto &pos : piece.shape())
+        data_[pos.y][pos.x] = piece.type();
   }
 
-  [[nodiscard]] Cell at(Point point) const {
-    assert(within_bounds(point));
-    return data_[point.y][point.x];
-  }
+  int clear_lines();
 
   [[nodiscard]] static bool within_bounds(Point point) {
     return 0 <= point.x && point.x < COLS && 0 <= point.y && point.y < ROWS;
   }
 
-  [[nodiscard]] static bool is_ground(Matrix::Cell cell) {
-    return cell != EMPTY;
+  [[nodiscard]] bool is_move_valid(const Tetromino &piece) const {
+    return std::ranges::all_of(piece.shape(), [this](Point p) {
+      return within_bounds(p) && !data_[p.y][p.x].has_value();
+    });
   }
 
-  [[nodiscard]] bool is_valid(Point point) const {
-    return within_bounds(point) && !is_ground(data_[point.y][point.x]);
+  [[nodiscard]] Cell at(Point p) const {
+    assert(within_bounds(p));
+    return data_[p.y][p.x];
   }
-
-  struct IsPosValid {
-    const Matrix &self;
-    bool operator()(Point point) const { return self.is_valid(point); }
-  };
 
 private:
-  int clear_filled();
-
-  void drop_rows();
-
   std::array<std::array<Cell, COLS>, ROWS> data_{};
 };

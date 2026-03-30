@@ -5,30 +5,35 @@
 
 class Playfield {
 public:
-  Playfield(Tetromino::Type init_type) : player_(init_type, INIT_POS) {}
+  bool shift_player(Point delta);
 
-  void shift_player(Point delta) {
-    if (can_shift_player(delta))
-      player_.shift(delta);
+  void rotate_player_cw() { srs::rotate_cw(player_, matrix_); }
+
+  void rotate_player_ccw() { srs::rotate_ccw(player_, matrix_); }
+
+  void reset(Tetromino::Type new_type) {
+    matrix_.clear();
+    player_ = Tetromino(new_type, INIT_POS);
   }
 
-  void shift_player_unchecked(Point delta) { player_.shift(delta); }
+  int lock_and_get_points() {
+    matrix_.place(player_);
+    return matrix_.clear_lines();
+  };
 
-  void rotate_piece_cw() { srs::rotate_cw(player_, matrix_); }
-
-  void rotate_piece_ccw() { srs::rotate_ccw(player_, matrix_); }
-
-  void lock_piece();
-
-  void set_player_piece(const Tetromino &new_piece) { player_ = new_piece; }
-
-  void set_player_type(Tetromino::Type new_type) {
-    player_ = {new_type, INIT_POS};
+  void set_player_unchecked(Tetromino::Type new_type) {
+    player_ = Tetromino{new_type, INIT_POS};
   }
 
-  [[nodiscard]] Tetromino compute_drop() const;
+  [[nodiscard]] bool set_player(Tetromino::Type new_type);
 
-  [[nodiscard]] bool can_shift_player(Point delta) const;
+  [[nodiscard]] Point compute_drop_distance() const;
+
+  [[nodiscard]] Tetromino ghost() const {
+    Tetromino ghost = player_;
+    ghost.shift(compute_drop_distance());
+    return ghost;
+  }
 
   [[nodiscard]] const Matrix &matrix() const { return matrix_; }
 

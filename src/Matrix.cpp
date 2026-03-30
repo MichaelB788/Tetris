@@ -1,6 +1,15 @@
 #include "Matrix.hpp"
 #include <algorithm>
 
+void Matrix::place(const Tetromino &piece) {
+  auto shape = piece.shape();
+  if (is_move_valid(shape)) {
+    for (const auto &pos : shape) {
+      data_[pos.y][pos.x] = piece.type();
+    }
+  }
+}
+
 int Matrix::clear_lines() {
   const auto is_ground = [](Cell c) { return c.has_value(); };
   int cleared = 0;

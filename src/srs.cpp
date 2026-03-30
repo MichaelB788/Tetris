@@ -2,54 +2,55 @@
 #include "Matrix.hpp"
 #include "Point.hpp"
 #include "Tetromino.hpp"
-#include <algorithm>
-#include <cstdint>
+#include <cstddef>
 
 namespace {
-constexpr uint8_t NUM_TRIALS = 5;
+constexpr size_t NUM_TRIALS = 5;
 
-constexpr Point srs_offsets[NUM_ROTATIONS][NUM_TRIALS]{
+constexpr Point srs_offsets[Tetromino::NUM_ROTATION][NUM_TRIALS]{
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
     {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
     {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
 
-constexpr Point srs_i_offsets[NUM_ROTATIONS][NUM_TRIALS]{
+constexpr Point srs_i_offsets[Tetromino::NUM_ROTATION][NUM_TRIALS]{
     {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
     {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {1, 2}},     // R90
     {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
     {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
 
-void srs_rotation(Tetromino &tet, void (Tetromino::*rotation_func)(),
-                  const Matrix &matrix) {
+using RotationFunc = void (Tetromino::*)();
+
+void srs_rotation(Tetromino &target, const Matrix &matrix,
+                  RotationFunc rotate) {
   const auto &offsets =
-      tet.type() == Tetromino::I ? srs_i_offsets : srs_offsets;
-  Tetromino::Rotation curr, prev = tet.rotation();
-  Point orignal_pos = tet.pos();
+      target.type() == Tetromino::I ? srs_i_offsets : srs_offsets;
+  Tetromino::Rotation prev = target.rotation();
+  Tetromino::Rotation curr;
 
-  (tet.*rotation_func)();
-  curr = tet.rotation();
+  (target.*rotate)();
+  curr = target.rotation();
 
-  for (std::size_t t = 0; t < NUM_TRIALS; ++t) {
-    Point kick = offsets[prev][t] - offsets[curr][t];
-    tet.shift(kick);
-
-    if (std::ranges::all_of(tet.shape(), Matrix::IsPosValid(matrix)))
-      return;
+  for (size_t trial = 0; trial < NUM_TRIALS; ++trial) {
+    Point kick = offsets[prev][trial] - offsets[curr][trial];
+    if (matrix.is_move_valid(target.test_shift(kick))) {
+      target.shift(kick);
+      return; // Success
+    }
   }
 
-  tet.set_pos(orignal_pos);
+  target.set_rotation(prev); // Fail
 }
 } // namespace
 
 void srs::rotate_cw(Tetromino &tet, const Matrix &matrix) {
   if (tet.type() != Tetromino::O) {
-    srs_rotation(tet, &Tetromino::rotate_cw, matrix);
+    srs_rotation(tet, matrix, &Tetromino::rotate_cw);
   }
 }
 
 void srs::rotate_ccw(Tetromino &tet, const Matrix &matrix) {
   if (tet.type() != Tetromino::O) {
-    srs_rotation(tet, &Tetromino::rotate_ccw, matrix);
+    srs_rotation(tet, matrix, &Tetromino::rotate_ccw);
   }
 }

@@ -6,13 +6,14 @@ class NextQueue {
 public:
   NextQueue() { shuffle(); }
 
+  void shuffle();
+
   [[nodiscard]] Tetromino::Type pop();
 
-  void shuffle();
+  [[nodiscard]] const auto &buffer() const { return buffer_; }
 
 private:
   void push_random();
 
-private:
-  CircularBuffer<Tetromino::Type, 4> queue_{};
+  CircularBuffer<Tetromino::Type, 5> buffer_{};
 };

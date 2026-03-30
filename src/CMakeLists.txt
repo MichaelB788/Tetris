@@ -6,12 +6,14 @@ add_library(tetris_src
         main.cpp
         srs.cpp
         Matrix.cpp
+        NextQueue.cpp
         pixel.cpp
+        PlatformSDL.cpp
+        Playfield.cpp
         TetrisApp.cpp
         Tetris.cpp
         Tetromino.cpp
         TextRenderer.cpp
-        PlatformSDL.cpp
 )
 
 set(EXECUTABLE_NAME ${CMAKE_PROJECT_NAME})

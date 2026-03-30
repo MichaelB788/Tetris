@@ -27,10 +27,12 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
   SDL_RenderClear(renderer_.get());
 
-  hud_renderer_.draw_held(tetris_.optional_hold());
+  hud_renderer_.draw_held(tetris_.held());
+  hud_renderer_.draw_next_queue(tetris_.next_queue());
 
-  board_renderer_.draw_current(tetris_.current());
-  board_renderer_.draw_matrix(tetris_.matrix());
+  board_renderer_.draw_current(tetris_.playfield().player());
+  board_renderer_.draw_ghost(tetris_.playfield().ghost());
+  board_renderer_.draw_matrix(tetris_.playfield().matrix());
 
   text_renderer_.render_text();
 
@@ -82,7 +84,7 @@ void TetrisApp::update_level() {
 }
 
 void TetrisApp::handle_tetris_state() {
-  if (tetris_.state() == Tetris::State::GameOver)
+  if (tetris_.status() == Status::GameOver)
     tetris_.reset();
 }
 

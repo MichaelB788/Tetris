@@ -1,8 +1,9 @@
 #pragma once
 #include "PlatformSDL.hpp"
-#include "Tetromino.hpp"
+#include "Point.hpp"
 
 class Matrix;
+class Tetromino;
 
 class BoardRenderer {
 public:
@@ -26,6 +27,8 @@ private:
   SDL_Renderer &renderer_;
 
   PlatformSDL::Texture atlas_{};
+
+  PlatformSDL::Texture ghost_atlas_{};
 
   Point offset_{0, 0};
 };

@@ -1,8 +1,6 @@
-#ifndef TETRIS_HUD_RENDERER_HPP
-#define TETRIS_HUD_RENDERER_HPP
+#pragma once
 #include "PlatformSDL.hpp"
-#include "Tetromino.hpp"
-#include <optional>
+#include "Tetris.hpp"
 
 class NextQueue;
 
@@ -15,7 +13,7 @@ public:
 
   void draw_next_queue(const NextQueue &queue);
 
-  void draw_held(const std::optional<Tetromino> &held);
+  void draw_held(const HeldTetromino &held);
 
   void wrap_around_board(Point board_pos);
 
@@ -32,5 +30,3 @@ private:
 
   Point hold_offset_{0, 0};
 };
-
-#endif

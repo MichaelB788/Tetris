@@ -8,12 +8,27 @@
 BoardRenderer::BoardRenderer(const std::filesystem::path &path_to_atlas,
                              SDL_Renderer &renderer)
     : renderer_(renderer),
-      atlas_(PlatformSDL::create_texture_from_img(renderer_, path_to_atlas)) {}
+      atlas_(PlatformSDL::create_texture_from_img(renderer_, path_to_atlas)) {
+  PlatformSDL::Surface ghost_surf =
+      PlatformSDL::create_surface_from_img(path_to_atlas.c_str());
+
+  SDL_SetSurfaceAlphaMod(ghost_surf.get(), 100);
+
+  ghost_atlas_ =
+      PlatformSDL::create_texture_from_surface(renderer_, *ghost_surf);
+}
 
 void BoardRenderer::draw_current(const Tetromino &current) {
-  for (const auto &block : current)
+  for (const auto &block : current.shape())
     pixel::draw_tetromino_tile(renderer_, *atlas_,
                                pixel::textures_src[current.type()], block,
+                               offset_);
+}
+
+void BoardRenderer::draw_ghost(const Tetromino &ghost) {
+  for (const auto &block : ghost.shape())
+    pixel::draw_tetromino_tile(renderer_, *ghost_atlas_,
+                               pixel::textures_src[ghost.type()], block,
                                offset_);
 }
 
@@ -22,10 +37,11 @@ void BoardRenderer::draw_matrix(const Matrix &matrix) {
 
   for (int y = 0; y < Matrix::ROWS; ++y) {
     for (int x = 0; x < Matrix::COLS; ++x) {
-      if (matrix(x, y) != Matrix::EMPTY)
+      Point curr = {x, y};
+      if (matrix.at(curr).has_value())
         pixel::draw_tetromino_tile(renderer_, *atlas_,
-                                   pixel::textures_src[matrix(x, y)], {x, y},
-                                   offset_);
+                                   pixel::textures_src[matrix.at(curr).value()],
+                                   curr, offset_);
     }
   }
 

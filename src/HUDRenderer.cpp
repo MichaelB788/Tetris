@@ -1,25 +1,27 @@
 #include "HUDRenderer.hpp"
 #include "Matrix.hpp"
 #include "NextQueue.hpp"
+#include "Tetris.hpp"
 #include "pixel.hpp"
 
-void HUDRenderer::draw_next_queue(const NextQueue &queue) {
-  Point origin = queue_offset_;
-  for (const auto &tetromino : queue) {
-    Tetromino::Projection tet = tetromino.projection();
-    for (const auto &block : tet.blocks)
+void HUDRenderer::draw_next_queue(const NextQueue &next_queue) {
+  Point offset = queue_offset_;
+  for (const auto &type : next_queue.buffer()) {
+    Tetromino tetromino = Tetromino(type);
+    for (const auto &block : tetromino.shape())
       pixel::draw_tetromino_tile(renderer_, *atlas_,
-                                 pixel::texture_src(tet.type), block, origin);
-    origin -= {.x = 0, .y = -100};
+                                 pixel::texture_src(tetromino.type()), block,
+                                 offset);
+    offset -= {.x = 0, .y = -100};
   }
 }
 
-void HUDRenderer::draw_held(const std::optional<Tetromino> &hold) {
-  if (hold.has_value()) {
-    Tetromino::Projection tet = hold.value().projection();
-    for (const auto &block : tet.blocks)
+void HUDRenderer::draw_held(const HeldTetromino &hold) {
+  if (hold.type.has_value()) {
+    Tetromino tetromino = Tetromino(hold.type.value());
+    for (const auto &block : tetromino.shape())
       pixel::draw_tetromino_tile(renderer_, *atlas_,
-                                 pixel::texture_src(tet.type), block,
+                                 pixel::texture_src(tetromino.type()), block,
                                  hold_offset_);
   }
 }

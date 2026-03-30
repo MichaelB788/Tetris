@@ -1,5 +1,5 @@
-#include "PlatformSDL.hpp"
-#include "TetrisApp.hpp"
+#include "core/TetrisApp.hpp"
+#include "platform/PlatformSDL.hpp"
 #include <filesystem>
 #include <iostream>
 

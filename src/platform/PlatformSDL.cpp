@@ -1,4 +1,4 @@
-#include "PlatformSDL.hpp"
+#include "platform/PlatformSDL.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>

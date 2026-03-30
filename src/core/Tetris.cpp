@@ -1,4 +1,4 @@
-#include "Tetris.hpp"
+#include "core/Tetris.hpp"
 
 void Tetris::hold() {
   if (held_.command_triggered)

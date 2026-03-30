@@ -1,5 +1,5 @@
-#include "Playfield.hpp"
-#include "Point.hpp"
+#include "core/Playfield.hpp"
+#include "util/Point.hpp"
 
 bool Playfield::shift_player(Point delta) {
   bool success = matrix_.is_move_valid(player_.test_shift(delta));

@@ -1,7 +1,7 @@
 #pragma once
-#include "Matrix.hpp"
-#include "Tetromino.hpp"
-#include "srs.hpp"
+#include "core/Matrix.hpp"
+#include "core/Tetromino.hpp"
+#include "core/srs.hpp"
 
 class Playfield {
 public:

@@ -1,33 +1,18 @@
-add_library(tetris_src
-        BoardRenderer.cpp
-        Clock.cpp
-        EventHandler.cpp
-        HUDRenderer.cpp
-        main.cpp
-        srs.cpp
-        Matrix.cpp
-        NextQueue.cpp
-        pixel.cpp
-        PlatformSDL.cpp
-        Playfield.cpp
-        TetrisApp.cpp
-        Tetris.cpp
-        Tetromino.cpp
-        TextRenderer.cpp
-)
+set(BINARY_NAME ${CMAKE_PROJECT_NAME})
 
-set(EXECUTABLE_NAME ${CMAKE_PROJECT_NAME})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-add_executable(${EXECUTABLE_NAME} main.cpp)
 
-find_package(SDL3 CONFIG REQUIRED)
-find_package(SDL3_image CONFIG REQUIRED)
-find_package(SDL3_ttf CONFIG REQUIRED)
+add_executable(${BINARY_NAME} main.cpp)
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE
-        SDL3::SDL3
-        SDL3_image::SDL3_image
-        SDL3_ttf::SDL3_ttf
-        tetris_src
+add_subdirectory(util)
+add_subdirectory(core)
+add_subdirectory(platform)
+add_subdirectory(render)
+
+target_link_libraries(${BINARY_NAME} PRIVATE
+  Tetris::Core
+  Tetris::Platform
+  Tetris::Render
 )

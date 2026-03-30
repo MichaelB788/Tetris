@@ -1,4 +1,4 @@
-#include "TetrisApp.hpp"
+#include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
 
 TetrisApp::TetrisApp(Specification spec)

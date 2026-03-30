@@ -1,11 +1,11 @@
 #pragma once
-#include "BoardRenderer.hpp"
-#include "Clock.hpp"
-#include "EventHandler.hpp"
-#include "HUDRenderer.hpp"
-#include "PlatformSDL.hpp"
-#include "Tetris.hpp"
-#include "TextRenderer.hpp"
+#include "core/Tetris.hpp"
+#include "platform/EventHandler.hpp"
+#include "platform/PlatformSDL.hpp"
+#include "render/BoardRenderer.hpp"
+#include "render/HUDRenderer.hpp"
+#include "render/TextRenderer.hpp"
+#include "util/Clock.hpp"
 #include <filesystem>
 #include <thread>
 

@@ -1,6 +1,6 @@
-#include "TextRenderer.hpp"
+#include "render/TextRenderer.hpp"
 #include "SDL3_ttf/SDL_ttf.h"
-#include "pixel.hpp"
+#include "render/pixel.hpp"
 
 TextRenderer::TextRenderer(const std::filesystem::path &font_path,
                            int font_size, SDL_Renderer &renderer)

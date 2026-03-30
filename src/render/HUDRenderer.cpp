@@ -1,8 +1,7 @@
-#include "HUDRenderer.hpp"
-#include "Matrix.hpp"
-#include "NextQueue.hpp"
-#include "Tetris.hpp"
-#include "pixel.hpp"
+#include "render/HUDRenderer.hpp"
+#include "core/NextQueue.hpp"
+#include "core/Tetris.hpp"
+#include "render/pixel.hpp"
 
 void HUDRenderer::draw_next_queue(const NextQueue &next_queue) {
   Point offset = queue_offset_;

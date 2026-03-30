@@ -1,6 +1,6 @@
 #pragma once
-#include "CircularBuffer.hpp"
-#include "Tetromino.hpp"
+#include "core/Tetromino.hpp"
+#include "util/CircularBuffer.hpp"
 
 class NextQueue {
 public:

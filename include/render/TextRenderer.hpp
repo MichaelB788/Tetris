@@ -1,6 +1,6 @@
 #pragma once
-#include "PlatformSDL.hpp"
-#include "Point.hpp"
+#include "platform/PlatformSDL.hpp"
+#include "util/Point.hpp"
 #include <array>
 
 class TextRenderer {

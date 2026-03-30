@@ -1,6 +1,6 @@
 #pragma once
-#include "PlatformSDL.hpp"
-#include "Tetris.hpp"
+#include "core/Tetris.hpp"
+#include "platform/PlatformSDL.hpp"
 
 class NextQueue;
 

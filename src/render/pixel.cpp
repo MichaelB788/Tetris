@@ -1,5 +1,5 @@
-#include "pixel.hpp"
-#include "Point.hpp"
+#include "render/pixel.hpp"
+#include "util/Point.hpp"
 #include <SDL3/SDL_render.h>
 
 void pixel::draw_tetromino_tile(SDL_Renderer &renderer, SDL_Texture &atlas,

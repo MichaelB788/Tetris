@@ -1,6 +1,6 @@
 #pragma once
-#include "NextQueue.hpp"
-#include "Playfield.hpp"
+#include "core/NextQueue.hpp"
+#include "core/Playfield.hpp"
 #include <cstdint>
 #include <optional>
 

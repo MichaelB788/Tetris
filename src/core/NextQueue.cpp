@@ -1,5 +1,5 @@
-#include "NextQueue.hpp"
-#include "Tetromino.hpp"
+#include "core/NextQueue.hpp"
+#include "core/Tetromino.hpp"
 
 void NextQueue::shuffle() {
   buffer_.clear();

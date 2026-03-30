@@ -1,5 +1,5 @@
-#include "EventHandler.hpp"
-#include "Tetris.hpp"
+#include "platform/EventHandler.hpp"
+#include "core/Tetris.hpp"
 #include <array>
 #include <fstream>
 #include <iostream>

@@ -1,4 +1,4 @@
-#include "Matrix.hpp"
+#include "core/Matrix.hpp"
 #include <algorithm>
 
 void Matrix::place(const Tetromino &piece) {

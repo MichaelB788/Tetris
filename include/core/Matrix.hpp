@@ -1,5 +1,5 @@
 #pragma once
-#include "Tetromino.hpp"
+#include "core/Tetromino.hpp"
 #include <algorithm>
 #include <array>
 #include <cassert>

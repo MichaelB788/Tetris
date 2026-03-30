@@ -1,7 +1,7 @@
-#include "srs.hpp"
-#include "Matrix.hpp"
-#include "Point.hpp"
-#include "Tetromino.hpp"
+#include "core/srs.hpp"
+#include "core/Matrix.hpp"
+#include "core/Tetromino.hpp"
+#include "util/Point.hpp"
 #include <cstddef>
 
 namespace {

@@ -1,7 +1,7 @@
-#include "BoardRenderer.hpp"
-#include "Matrix.hpp"
-#include "Point.hpp"
-#include "pixel.hpp"
+#include "render/BoardRenderer.hpp"
+#include "core/Matrix.hpp"
+#include "render/pixel.hpp"
+#include "util/Point.hpp"
 #include <SDL3/SDL_render.h>
 #include <vector>
 

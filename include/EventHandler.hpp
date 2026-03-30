@@ -1,5 +1,4 @@
-#ifndef TETRIS_EVENT_HANDLER_HPP
-#define TETRIS_EVENT_HANDLER_HPP
+#pragma once
 #include <SDL3/SDL_events.h>
 #include <array>
 #include <filesystem>
@@ -26,5 +25,3 @@ private:
 
   std::array<std::pair<SDL_Keycode, Command>, 7> controls_;
 };
-
-#endif

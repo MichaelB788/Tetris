@@ -1,5 +1,4 @@
-#ifndef CLOCK_HPP
-#define CLOCK_HPP
+#pragma once
 #include <chrono>
 
 class Clock {
@@ -28,5 +27,3 @@ private:
 
   std::chrono::milliseconds ms_to_activate_;
 };
-
-#endif

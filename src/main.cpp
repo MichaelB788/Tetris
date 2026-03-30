@@ -11,8 +11,8 @@
 #include <unistd.h>
 #endif
 
-std::filesystem::path get_exe_path() {
-#ifdef _WIN64
+std::filesystem::path get_binary_path() {
+#ifdef _WIN32
   wchar_t path[MAX_PATH];
   GetModuleFileNameW(nullptr, path, MAX_PATH);
   return std::filesystem::path(path);
@@ -29,8 +29,8 @@ std::filesystem::path get_exe_path() {
 int main() {
   using namespace std::literals::chrono_literals;
 
-  std::filesystem::path project_root = get_exe_path();
-  for (unsigned i = 0; i < 3; ++i)
+  std::filesystem::path project_root = get_binary_path();
+  for (int i = 0; i < 3; ++i)
     project_root = project_root.parent_path();
 
   try {
@@ -38,8 +38,9 @@ int main() {
 
     TetrisApp tetris(
         {.controls = project_root / "controls.ini",
-         .tetromino_atlas = project_root / "assets/sprites/tetromino.png",
-         .font_path = project_root / "assets/font/Arcade-Classic.ttf",
+         .tetromino_atlas =
+             project_root / "assets" / "sprites" / "tetromino.png",
+         .font_path = project_root / "assets" / "font" / "Arcade-Classic.ttf",
          .font_size = 36});
 
     tetris.run();

@@ -1,71 +1,65 @@
 #pragma once
 #include "NextQueue.hpp"
 #include "Playfield.hpp"
-#include "Point.hpp"
 #include <cstdint>
 #include <optional>
 
 enum class Status : uint8_t { Running, Paused, GameOver };
 
 struct HeldTetromino {
-  std::optional<Tetromino::Type> held;
-  bool held_for_round = false;
+  std::optional<Tetromino::Type> type;
+  bool command_triggered = false;
 };
 
 class Tetris {
 public:
-  Tetris() : playfield_(queue_.pop()) {}
+  Tetris() { playfield_.set_player_unchecked(next_queue_.pop()); }
 
   void move_left() { playfield_.shift_player({-1, 0}); }
 
   void move_right() { playfield_.shift_player({1, 0}); }
 
   void move_down() {
-    if (playfield_.can_shift_player({0, 1})) {
-      playfield_.shift_player({0, 1});
-    } else {
-      playfield_.lock_piece();
-      // switch to next
+    if (!playfield_.shift_player({0, 1})) {
+      complete_move();
     }
   }
 
-  void drop() { playfield_.set_player_piece(playfield_.compute_drop()); }
+  void drop() {
+    playfield_.shift_player(playfield_.compute_drop_distance());
+    complete_move();
+  }
 
   void hold();
 
-  void rotate_clockwise() { playfield_.rotate_piece_cw(); }
+  void rotate_clockwise() { playfield_.rotate_player_cw(); }
 
-  void rotate_counterclockwise() { playfield_.rotate_piece_ccw(); }
+  void rotate_counterclockwise() { playfield_.rotate_player_ccw(); }
 
   void reset();
 
 public:
-  [[nodiscard]] const Tetromino &current() const { return player_; }
+  [[nodiscard]] const Playfield &playfield() const { return playfield_; }
 
-  [[nodiscard]] const Matrix &matrix() const { return matrix_; }
+  [[nodiscard]] const HeldTetromino &held() const { return held_; }
 
-  [[nodiscard]] const Tetromino &optional_hold() const { return hold_; }
+  [[nodiscard]] const NextQueue &next_queue() const { return next_queue_; }
 
-  [[nodiscard]] const NextQueue &next_queue() const { return queue_; }
+  [[nodiscard]] Status status() const { return status_; }
 
-  [[nodiscard]] int score() const { return cleared_; }
-
-private:
-  bool shift_current(Point delta);
+  [[nodiscard]] int score() const { return score_; }
 
 private:
-  void lock_piece();
-
-  void spawn_next();
+  void complete_move();
 
 private:
   HeldTetromino held_{};
 
-  NextQueue queue_{};
+  NextQueue next_queue_{};
 
-  Playfield playfield_;
+  Playfield playfield_{};
 
   Status status_{};
 
-  unsigned cleared_ = 0;
+  int score_ = 0;
 };

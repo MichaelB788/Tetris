@@ -1,6 +1,6 @@
 #include "BoardRenderer.hpp"
-#include "Common.hpp"
 #include "Matrix.hpp"
+#include "Point.hpp"
 #include "pixel.hpp"
 #include <SDL3/SDL_render.h>
 #include <vector>
@@ -18,16 +18,18 @@ BoardRenderer::BoardRenderer(const std::filesystem::path &path_to_atlas,
       PlatformSDL::create_texture_from_surface(renderer_, *ghost_surf);
 }
 
-void BoardRenderer::draw_current(Tetromino::Projection current) {
-  for (const auto &block : current.blocks)
-    pixel::draw_tetromino_tile(
-        renderer_, *atlas_, pixel::texture_src(current.type), block, offset_);
+void BoardRenderer::draw_current(const Tetromino &current) {
+  for (const auto &block : current.shape())
+    pixel::draw_tetromino_tile(renderer_, *atlas_,
+                               pixel::textures_src[current.type()], block,
+                               offset_);
 }
 
-void BoardRenderer::draw_ghost(Tetromino::Projection ghost) {
-  for (const auto &block : ghost.blocks)
+void BoardRenderer::draw_ghost(const Tetromino &ghost) {
+  for (const auto &block : ghost.shape())
     pixel::draw_tetromino_tile(renderer_, *ghost_atlas_,
-                               pixel::texture_src(ghost.type), block, offset_);
+                               pixel::textures_src[ghost.type()], block,
+                               offset_);
 }
 
 void BoardRenderer::draw_matrix(const Matrix &matrix) {
@@ -35,10 +37,11 @@ void BoardRenderer::draw_matrix(const Matrix &matrix) {
 
   for (int y = 0; y < Matrix::ROWS; ++y) {
     for (int x = 0; x < Matrix::COLS; ++x) {
-      MatrixCell cell = matrix.at(x, y);
-      if (cell != MatrixCell::Empty)
-        pixel::draw_tetromino_tile(renderer_, *atlas_, pixel::texture_src(cell),
-                                   {x, y}, offset_);
+      Point curr = {x, y};
+      if (matrix.at(curr).has_value())
+        pixel::draw_tetromino_tile(renderer_, *atlas_,
+                                   pixel::textures_src[matrix.at(curr).value()],
+                                   curr, offset_);
     }
   }
 
@@ -58,7 +61,6 @@ void BoardRenderer::draw_matrix_outline() {
 }
 
 void BoardRenderer::center_within_window(int win_w, int win_h) {
-  offset_.x = win_w - (Matrix::COLS * pixel::SIZE);
-  offset_.y = win_h - (Matrix::ROWS * pixel::SIZE);
-  offset_ /= 2;
+  offset_.x = (win_w - (Matrix::COLS * pixel::SIZE)) / 2;
+  offset_.y = (win_h - (Matrix::ROWS * pixel::SIZE)) / 2;
 }

@@ -1,31 +1,23 @@
 #include "NextQueue.hpp"
-#include "Common.hpp"
 #include "Tetromino.hpp"
 
-NextQueue::NextQueue() {
-  for (std::size_t i = 0; i < queue_.size(); ++i)
-    push_non_repeating();
+void NextQueue::shuffle() {
+  buffer_.clear();
+  while (buffer_.size() < buffer_.max_size())
+    push_random();
 }
 
-Tetromino NextQueue::pop_next() {
-  Tetromino next = queue_[read];
-  next.set_position(Point(4, 2));
-  read = (read + 1) % queue_.size();
-  push_non_repeating();
-  return next;
+Tetromino::Type NextQueue::pop() {
+  Tetromino::Type ret = buffer_.pop();
+  push_random();
+  return ret;
 }
 
-void NextQueue::push_non_repeating() {
-  TetrominoType random = Tetromino::get_random_type();
-
-  if (read != write) {
-    const std::size_t prev = write == 0 ? queue_.size() - 1 : write - 1;
-
-    do {
-      random = Tetromino::get_random_type();
-    } while (random == queue_[prev].type());
+void NextQueue::push_random() {
+  Tetromino::Type random = Tetromino::random_type();
+  if (!buffer_.empty()) {
+    while (random == buffer_.back())
+      random = Tetromino::random_type();
   }
-
-  queue_[write] = Tetromino(random, {.x = 0, .y = 0});
-  write = (write + 1) % queue_.size();
+  buffer_.push(random);
 }

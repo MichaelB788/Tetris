@@ -1,61 +1,70 @@
 #include "Tetromino.hpp"
+#include <algorithm>
 #include <random>
 
 namespace {
-constexpr std::array<std::array<Point, 4>, 7> shapes{{
-    {{{0, 0}, {-1, 0}, {1, 0}, {2, 0}}},   // I
-    {{{0, 0}, {1, 0}, {0, -1}, {1, -1}}},  // O
-    {{{0, 0}, {-1, 0}, {1, 0}, {0, -1}}},  // T
-    {{{0, 0}, {-1, 0}, {0, -1}, {1, -1}}}, // S
-    {{{0, 0}, {-1, -1}, {0, -1}, {1, 0}}}, // Z
-    {{{0, 0}, {-1, -1}, {-1, 0}, {1, 0}}}, // J
-    {{{0, 0}, {1, -1}, {1, 0}, {-1, 0}}}   // L
-}};
-} // namespace
+constexpr Point SHAPES[Tetromino::NUM_TETROMINO][Tetromino::NUM_ROTATION][4]{
+    // I
+    {{{-1, 0}, {0, 0}, {1, 0}, {2, 0}},  // R0
+     {{0, -1}, {0, 0}, {0, 1}, {0, 2}},  // R90
+     {{-1, 0}, {0, 0}, {1, 0}, {2, 0}},  // R180
+     {{0, -1}, {0, 0}, {0, 1}, {0, 2}}}, // R90
 
-Tetromino::Tetromino()
-    : type_(TetrominoType::I), blocks_(shapes[type_index()]) {}
+    // O
+    {{{0, 0}, {1, 0}, {0, -1}, {1, -1}},  // R0
+     {{0, 0}, {1, 0}, {0, -1}, {1, -1}},  // R90
+     {{0, 0}, {1, 0}, {0, -1}, {1, -1}},  // R180
+     {{0, 0}, {1, 0}, {0, -1}, {1, -1}}}, // R270
 
-Tetromino::Tetromino(const TetrominoType type, Point pos)
-    : type_(type), blocks_(shapes[type_index()]), rotation_state_(0, 0) {
-  set_position(pos);
+    // T
+    {{{-1, 0}, {0, 0}, {1, 0}, {0, -1}},  // R0
+     {{0, 1}, {0, 0}, {0, -1}, {1, 0}},   // R90
+     {{-1, 0}, {0, 0}, {1, 0}, {0, 1}},   // R180
+     {{0, 1}, {0, 0}, {0, -1}, {-1, 0}}}, // R270
+
+    // S
+    {{{-1, 0}, {0, 0}, {0, -1}, {1, -1}},  // R0
+     {{0, -1}, {0, 0}, {1, 0}, {1, 1}},    // R90
+     {{-1, 1}, {0, 1}, {0, 0}, {1, 0}},    // R180
+     {{-1, -1}, {-1, 0}, {0, 0}, {0, 1}}}, // R270
+
+    // Z
+    {{{-1, -1}, {0, -1}, {0, 0}, {1, 0}},  // R0
+     {{0, 1}, {0, 0}, {1, 0}, {1, -1}},    // R90
+     {{-1, 0}, {0, 0}, {0, 1}, {1, 1}},    // R180
+     {{-1, 1}, {-1, 0}, {0, 0}, {0, -1}}}, // R270
+
+    // J
+    {{{-1, 0}, {0, 0}, {1, 0}, {-1, -1}}, // R0
+     {{0, 1}, {0, 0}, {0, -1}, {1, -1}},  // R90
+     {{-1, 0}, {0, 0}, {1, 0}, {1, 1}},   // R180
+     {{0, 1}, {0, 0}, {0, -1}, {-1, 1}}}, // R270
+
+    // L
+    {{{-1, 0}, {0, 0}, {1, 0}, {1, -1}},   // R0
+     {{0, -1}, {0, 0}, {0, 1}, {1, 1}},    // R90
+     {{-1, 0}, {0, 0}, {1, 0}, {-1, 1}},   // R180
+     {{0, -1}, {0, 0}, {0, 1}, {-1, -1}}}, // R270
+};
 }
 
-TetrominoType Tetromino::get_random_type() {
-  thread_local std::mt19937 rng(std::random_device{}());
-  thread_local std::uniform_int_distribution distribution(0, 6);
-  return static_cast<TetrominoType>(distribution(rng));
+Tetromino::Type Tetromino::random_type() {
+  static std::mt19937 rng(std::random_device{}());
+  static std::uniform_int_distribution distribution(0, 6);
+
+  return static_cast<Type>(distribution(rng));
 }
 
-void Tetromino::shift(const Point delta) {
-  for (auto &tile : blocks_)
-    tile += delta;
+Tetromino::Shape Tetromino::test_shift(Point delta) const {
+  Shape test{};
+  std::ranges::transform(SHAPES[type_][rotation_], test.begin(),
+                         [&](Point p) { return pos_ + p + delta; });
+  return test;
 }
 
-void Tetromino::set_position(const Point pos) {
-  const Point delta = pos - blocks_.front();
-  for (auto &tile : blocks_)
-    tile += delta;
-}
-
-void Tetromino::rotate_clockwise() {
-  for (auto &tile : blocks_)
-    tile = tile.rotate_clockwise(blocks_.front());
-  rotation_state_.clockwise();
-}
-
-void Tetromino::rotate_counterclockwise() {
-  for (auto &tile : blocks_)
-    tile = tile.rotate_counterclockwise(blocks_.front());
-  rotation_state_.counterclockwise();
-}
-
-void Tetromino::RotationState::clockwise() {
-  prev = curr;
-  curr = (curr + 1) % 4;
-}
-
-void Tetromino::RotationState::counterclockwise() {
-  prev = curr;
-  curr = curr == 0 ? 3 : curr - 1;
+Tetromino::Shape Tetromino::shape() const {
+  Shape shape{};
+  std::ranges::transform(SHAPES[type_][rotation_], shape.begin(),
+                         [this](Point p) { return pos_ + p; });
+  return shape;
 }

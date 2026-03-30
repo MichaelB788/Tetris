@@ -1,64 +1,55 @@
-#ifndef TETRIS_TETROMINO_H
-#define TETRIS_TETROMINO_H
-#include "Common.hpp"
+#pragma once
+#include "Point.hpp"
+#include <array>
+#include <cstddef>
 #include <cstdint>
-#include <span>
 
 class Tetromino {
 public:
-  static constexpr Point INIT_POS = {.x = 4, .y = 2};
+  static constexpr size_t NUM_TETROMINO = 7;
+  static constexpr size_t NUM_ROTATION = 4;
 
-  explicit Tetromino(TetrominoType type, Point pos);
+  enum Type : uint8_t { I = 0, O, T, S, Z, J, L };
+  enum Rotation : uint8_t { R0 = 0, R90, R180, R270 };
 
-  Tetromino();
+  using Shape = std::array<Point, 4>;
 
-  static TetrominoType get_random_type();
+  constexpr Tetromino(Type t = I, Point pos = {0, 0}, Rotation r = R0)
+      : type_(t), pos_(pos), rotation_(r) {}
 
-  void shift(Point delta);
+  static Type random_type();
 
-  void set_position(Point pos);
+  static Tetromino random_piece() { return Tetromino(random_type()); }
 
-  void rotate_clockwise();
+  void shift(Point delta) { pos_ += delta; }
 
-  void rotate_counterclockwise();
+  void set_pos(Point pos) { pos_ = pos; }
 
-  [[nodiscard]] TetrominoType type() const { return type_; }
-
-  struct Projection {
-    TetrominoType type;
-    std::span<const Point> blocks;
-  };
-
-  [[nodiscard]] Projection projection() const {
-    return {.type = type_, .blocks = std::span(blocks_)};
+  void rotate_cw() {
+    rotation_ = static_cast<Rotation>((rotation_ + 1) % NUM_ROTATION);
   }
 
-  [[nodiscard]] std::size_t type_index() const {
-    return static_cast<std::size_t>(type_);
+  void rotate_ccw() {
+    rotation_ =
+        static_cast<Rotation>((rotation_ + NUM_ROTATION - 1) % NUM_ROTATION);
   }
 
-  [[nodiscard]] std::size_t prev_rotation() const {
-    return static_cast<std::size_t>(rotation_state_.prev);
-  }
+  void set_rotation(Rotation r) { rotation_ = r; }
 
-  [[nodiscard]] std::size_t curr_rotation() const {
-    return static_cast<std::size_t>(rotation_state_.curr);
-  }
+  [[nodiscard]] Shape test_shift(Point delta) const;
+
+  [[nodiscard]] Shape shape() const;
+
+  [[nodiscard]] Type type() const { return type_; }
+
+  [[nodiscard]] Point pos() const { return pos_; }
+
+  [[nodiscard]] Rotation rotation() const { return rotation_; }
 
 private:
-  struct RotationState {
-    uint8_t prev, curr;
+  Type type_;
 
-    void clockwise();
+  Point pos_;
 
-    void counterclockwise();
-  };
-
-  TetrominoType type_;
-
-  std::array<Point, 4> blocks_;
-
-  RotationState rotation_state_;
+  Rotation rotation_;
 };
-
-#endif

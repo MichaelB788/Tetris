@@ -1,7 +1,6 @@
-#ifndef TETRIS_TEXT_RENDERER_HPP
-#define TETRIS_TEXT_RENDERER_HPP
-#include "Common.hpp"
+#pragma once
 #include "PlatformSDL.hpp"
+#include "Point.hpp"
 #include <array>
 
 class TextRenderer {
@@ -38,5 +37,3 @@ private:
 
   std::array<PlatformSDL::Text, 10> nums_{};
 };
-
-#endif

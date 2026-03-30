@@ -1,51 +1,32 @@
 #include "Tetris.hpp"
 
-Tetris::Tetris(mechanics::RotationSystem rs)
-    : rs_(rs), hold_command_triggered_(false), state_(State::Running) {
-  set_current(next_queue_.pop_next());
-}
-
 void Tetris::hold() {
-  if (hold_command_triggered_)
+  if (held_.command_triggered)
     return;
 
-  reset_current();
-  if (hold_.has_value()) {
-    const Tetromino temp = hold_.value();
-    hold_ = current_;
-    set_current(temp);
+  Tetromino::Type new_hold = playfield_.player().type();
+  if (held_.type.has_value()) {
+    playfield_.set_player_unchecked(held_.type.value());
+    held_.type = new_hold;
   } else {
-    hold_ = current_;
-    set_current(next_queue_.pop_next());
+    held_.type = new_hold;
+    playfield_.set_player_unchecked(next_queue_.pop());
   }
 
-  hold_command_triggered_ = true;
+  held_.command_triggered = true;
 }
 
 void Tetris::reset() {
   score_ = 0;
-  state_ = State::Running;
-  matrix_.clear();
-  set_current(next_queue_.pop_next());
-  hold_ = std::nullopt;
-  hold_command_triggered_ = false;
+  next_queue_.shuffle();
+  playfield_.reset(next_queue_.pop());
+  status_ = Status::Running;
 }
 
-void Tetris::reset_current() {
-  current_.set_position({.x = 0, .y = 0});
-  while (current_.curr_rotation() != 0)
-    current_.rotate_clockwise();
-}
-
-void Tetris::spawn_next() {
-  mechanics::place(current_.projection(), matrix_);
-  score_ += matrix_.clear_lines();
-  high_score_ = std::max(score_, high_score_);
-
-  if (mechanics::try_spawn(current_, next_queue_.pop_next(), matrix_)) {
-    hold_command_triggered_ = false;
-    update_ghost();
-  } else {
-    state_ = State::GameOver;
+void Tetris::complete_move() {
+  held_.command_triggered = false;
+  score_ += playfield_.lock_and_get_points();
+  if (!playfield_.set_player(next_queue_.pop())) {
+    status_ = Status::GameOver;
   }
 }

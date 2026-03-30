@@ -1,5 +1,4 @@
-#ifndef PLATFORM_SDL_HPP
-#define PLATFORM_SDL_HPP
+#pragma once
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -87,5 +86,3 @@ struct PlatformSDL {
   static Text create_text(TTF_TextEngine &engine, TTF_Font &font,
                           const std::string &str);
 };
-
-#endif

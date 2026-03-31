@@ -1,6 +1,5 @@
 #include "core/Tetromino.hpp"
 #include <algorithm>
-#include <random>
 
 namespace {
 constexpr Point SHAPES[Tetromino::NUM_TETROMINO][Tetromino::NUM_ROTATION][4]{
@@ -46,13 +45,6 @@ constexpr Point SHAPES[Tetromino::NUM_TETROMINO][Tetromino::NUM_ROTATION][4]{
      {{-1, 0}, {0, 0}, {1, 0}, {-1, 1}},   // R180
      {{0, -1}, {0, 0}, {0, 1}, {-1, -1}}}, // R270
 };
-}
-
-Tetromino::Type Tetromino::random_type() {
-  static std::mt19937 rng(std::random_device{}());
-  static std::uniform_int_distribution distribution(0, 6);
-
-  return static_cast<Type>(distribution(rng));
 }
 
 Tetromino::Shape Tetromino::test_shift(Point delta) const {

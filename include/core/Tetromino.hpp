@@ -17,10 +17,6 @@ public:
   constexpr Tetromino(Type t = I, Point pos = {0, 0}, Rotation r = R0)
       : type_(t), pos_(pos), rotation_(r) {}
 
-  static Type random_type();
-
-  static Tetromino random_piece() { return Tetromino(random_type()); }
-
   void shift(Point delta) { pos_ += delta; }
 
   void set_pos(Point pos) { pos_ = pos; }

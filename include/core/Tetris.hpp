@@ -3,17 +3,16 @@
 #include "core/Playfield.hpp"
 #include <cstdint>
 #include <optional>
+#include <random>
 
 enum class Status : uint8_t { Running, Paused, GameOver };
 
-struct HeldTetromino {
-  std::optional<Tetromino::Type> type;
-  bool command_triggered = false;
-};
-
 class Tetris {
 public:
-  Tetris() { playfield_.set_player_unchecked(next_queue_.pop()); }
+  Tetris() : rng_(std::random_device{}()) {
+    next_queue_.shuffle(rng_);
+    playfield_.set_player_unchecked(next_queue_.pop());
+  }
 
   void move_left() { playfield_.shift_player({-1, 0}); }
 
@@ -38,10 +37,11 @@ public:
 
   void reset();
 
-public:
   [[nodiscard]] const Playfield &playfield() const { return playfield_; }
 
-  [[nodiscard]] const HeldTetromino &held() const { return held_; }
+  [[nodiscard]] const std::optional<Tetromino::Type> &held() const {
+    return held_;
+  }
 
   [[nodiscard]] const NextQueue &next_queue() const { return next_queue_; }
 
@@ -52,8 +52,11 @@ public:
 private:
   void complete_move();
 
-private:
-  HeldTetromino held_{};
+  std::mt19937 rng_;
+
+  std::optional<Tetromino::Type> held_ = std::nullopt;
+
+  bool hold_command_triggered = false;
 
   NextQueue next_queue_{};
 

@@ -1,19 +1,33 @@
 #pragma once
 #include "core/Tetromino.hpp"
-#include "util/CircularBuffer.hpp"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <random>
 
 class NextQueue {
 public:
-  NextQueue() { shuffle(); }
+  void shuffle(std::mt19937 &rng) {
+    std::shuffle(buffer_.begin(), buffer_.end(), rng);
+    read_ = 0;
+  }
 
-  void shuffle();
+  [[nodiscard]] Tetromino::Type pop() {
+    assert(!empty() && "Cannot pop, queue is empty");
+    return buffer_[read_++];
+  }
 
-  [[nodiscard]] Tetromino::Type pop();
+  [[nodiscard]] bool empty() const { return read_ == buffer_.size(); }
 
-  [[nodiscard]] const auto &buffer() const { return buffer_; }
+  [[nodiscard]] Tetromino::Type peek() const {
+    assert(!empty() && "Cannot peek, queue is empty");
+    return buffer_[read_];
+  }
 
 private:
-  void push_random();
+  std::array<Tetromino::Type, Tetromino::NUM_TETROMINO> buffer_{
+      Tetromino::I, Tetromino::O, Tetromino::T, Tetromino::S,
+      Tetromino::Z, Tetromino::J, Tetromino::L};
 
-  CircularBuffer<Tetromino::Type, 5> buffer_{};
+  size_t read_ = 0;
 };

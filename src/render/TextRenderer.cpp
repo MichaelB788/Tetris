@@ -32,7 +32,7 @@ void TextRenderer::render_score(int score) {
 
   std::vector<int> score_digits{};
 
-  for (size_t i = 0; i < 10 && score > 0; ++i) {
+  while (score > 0) {
     score_digits.push_back(score % 10);
     score /= 10;
   }

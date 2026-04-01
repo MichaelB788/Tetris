@@ -1,10 +1,16 @@
 #pragma once
 
 struct Point {
-public:
   int x, y;
 
-public:
+  static constexpr Point up() { return {.x = 0, .y = -1}; }
+
+  static constexpr Point down() { return {.x = 0, .y = 1}; }
+
+  static constexpr Point left() { return {.x = -1, .y = 0}; }
+
+  static constexpr Point right() { return {.x = 1, .y = 0}; }
+
   Point operator+(const Point &other) const {
     return {x + other.x, y + other.y};
   }
@@ -21,7 +27,6 @@ public:
     return {x / other.x, y / other.y};
   }
 
-public:
   void operator+=(const Point &other) {
     x += other.x;
     y += other.y;
@@ -42,6 +47,5 @@ public:
     y /= other.y;
   }
 
-public:
   Point operator-() { return {x * -1, y * -1}; }
 };

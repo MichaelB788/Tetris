@@ -1,16 +1,12 @@
 #pragma once
 #include "core/Tetromino.hpp"
-#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <random>
 
 class NextQueue {
 public:
-  void shuffle(std::mt19937 &rng) {
-    std::shuffle(buffer_.begin(), buffer_.end(), rng);
-    read_ = 0;
-  }
+  void shuffle(std::mt19937 &rng);
 
   [[nodiscard]] Tetromino::Type pop() {
     assert(!empty() && "Cannot pop, queue is empty");

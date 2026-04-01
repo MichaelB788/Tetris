@@ -1,5 +1,6 @@
 add_library(TetrisCore
   Matrix.cpp
+  NextQueue.cpp
   Playfield.cpp
   Tetris.cpp
   TetrisApp.cpp

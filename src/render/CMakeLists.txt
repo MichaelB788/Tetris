@@ -2,7 +2,7 @@ add_library(TetrisRender
   BoardRenderer.cpp
   HUDRenderer.cpp
   TextRenderer.cpp
-  pixel.cpp
+  tetris-paint.cpp
 )
 add_library(Tetris::Render ALIAS TetrisRender)
 

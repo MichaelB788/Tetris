@@ -33,7 +33,7 @@ public:
   [[nodiscard]] const Tetromino &player() const { return player_; }
 
 private:
-  static constexpr Point INIT_POS = {5, 2};
+  static constexpr Point INIT_POS = {4, 2};
 
   Matrix matrix_{};
 

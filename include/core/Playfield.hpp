@@ -1,7 +1,9 @@
 #pragma once
 #include "core/Matrix.hpp"
+#include "core/NextQueue.hpp"
 #include "core/Tetromino.hpp"
 #include "core/srs.hpp"
+#include <optional>
 
 class Playfield {
 public:
@@ -16,24 +18,15 @@ public:
     player_ = Tetromino(new_type, INIT_POS);
   }
 
-  int lock_and_get_points() {
-    matrix_.place(player_);
-    return matrix_.clear_lines();
-  };
+  int lock_and_get_points();
 
-  void set_player_unchecked(Tetromino::Type new_type) {
-    player_ = Tetromino{new_type, INIT_POS};
-  }
+  bool swap_with_held(std::optional<Tetromino::Type> &held);
 
-  [[nodiscard]] bool set_player(Tetromino::Type new_type);
+  bool switch_to_next(NextQueue &next_queue);
 
   [[nodiscard]] Point compute_drop_distance() const;
 
-  [[nodiscard]] Tetromino ghost() const {
-    Tetromino ghost = player_;
-    ghost.shift(compute_drop_distance());
-    return ghost;
-  }
+  [[nodiscard]] Tetromino ghost() const;
 
   [[nodiscard]] const Matrix &matrix() const { return matrix_; }
 

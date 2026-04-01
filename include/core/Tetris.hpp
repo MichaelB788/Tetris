@@ -9,25 +9,19 @@ enum class Status : uint8_t { Running, Paused, GameOver };
 
 class Tetris {
 public:
-  Tetris() : rng_(std::random_device{}()) {
-    next_queue_.shuffle(rng_);
-    playfield_.set_player_unchecked(next_queue_.pop());
-  }
+  Tetris();
 
-  void move_left() { playfield_.shift_player({-1, 0}); }
+  void move_left() { playfield_.shift_player(Point::left()); }
 
-  void move_right() { playfield_.shift_player({1, 0}); }
+  void move_right() { playfield_.shift_player(Point::right()); }
 
   void move_down() {
-    if (!playfield_.shift_player({0, 1})) {
+    if (!playfield_.shift_player(Point::down())) {
       complete_move();
     }
   }
 
-  void drop() {
-    playfield_.shift_player(playfield_.compute_drop_distance());
-    complete_move();
-  }
+  void drop();
 
   void hold();
 

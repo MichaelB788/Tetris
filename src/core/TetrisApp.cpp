@@ -28,13 +28,12 @@ void TetrisApp::render_frame() {
   SDL_RenderClear(renderer_.get());
 
   hud_renderer_.draw_held(tetris_.held());
-  hud_renderer_.draw_next_queue(tetris_.next_queue());
+  hud_renderer_.draw_next(tetris_.next_queue());
 
-  board_renderer_.draw_current(tetris_.playfield().player());
-  board_renderer_.draw_ghost(tetris_.playfield().ghost());
-  board_renderer_.draw_matrix(tetris_.playfield().matrix());
+  board_renderer_.draw_playfield(tetris_.playfield());
 
   text_renderer_.render_text();
+  text_renderer_.render_score(tetris_.score());
 
   SDL_RenderPresent(renderer_.get());
 }

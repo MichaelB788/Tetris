@@ -17,21 +17,20 @@ int find_key_index(const auto &key,
 }
 
 constexpr std::array<std::pair<std::string_view, EventHandler::Command>, 7>
-    string_to_command{
-        {{"move_left", &Tetris::move_left},
-         {"move_down", &Tetris::move_down},
-         {"move_right", &Tetris::move_right},
-         {"rotate_clockwise", &Tetris::rotate_clockwise},
-         {"rotate_counterclockwise", &Tetris::rotate_counterclockwise},
-         {"hold", &Tetris::hold},
-         {"drop", &Tetris::drop}}};
+    string_to_command{{{"move_left", &Tetris::move_left},
+                       {"move_down", &Tetris::move_down},
+                       {"move_right", &Tetris::move_right},
+                       {"rotate_clockwise", &Tetris::rotate_cw},
+                       {"rotate_counterclockwise", &Tetris::rotate_ccw},
+                       {"hold", &Tetris::hold},
+                       {"drop", &Tetris::drop}}};
 
 constexpr std::array<std::pair<SDL_Keycode, EventHandler::Command>, 7>
     default_controls{{{SDLK_LEFT, &Tetris::move_left},
                       {SDLK_DOWN, &Tetris::move_down},
                       {SDLK_RIGHT, &Tetris::move_right},
-                      {SDLK_R, &Tetris::rotate_clockwise},
-                      {SDLK_E, &Tetris::rotate_counterclockwise},
+                      {SDLK_R, &Tetris::rotate_cw},
+                      {SDLK_E, &Tetris::rotate_ccw},
                       {SDLK_S, &Tetris::hold},
                       {SDLK_SPACE, &Tetris::drop}}};
 } // namespace
@@ -60,7 +59,7 @@ EventHandler::EventHandler(const std::filesystem::path &config_path)
   parse_controls(config_file);
 }
 
-void EventHandler::handle_event(Tetris &tetris, SDL_Window *window, int &w,
+void EventHandler::handle_event(Tetris &tetris, SDL_Window &window, int &w,
                                 int &h) {
   while (SDL_PollEvent(&sdl_event_)) {
     switch (sdl_event_.type) {
@@ -68,7 +67,7 @@ void EventHandler::handle_event(Tetris &tetris, SDL_Window *window, int &w,
       should_quit_ = true;
       break;
     case SDL_EVENT_WINDOW_RESIZED:
-      SDL_GetWindowSizeInPixels(window, &w, &h);
+      SDL_GetWindowSizeInPixels(&window, &w, &h);
       break;
     case SDL_EVENT_KEY_DOWN:
       if (const int i = find_key_index(sdl_event_.key.key, controls_); i != -1)

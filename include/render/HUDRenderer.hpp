@@ -1,9 +1,8 @@
 #pragma once
-#include "core/NextQueue.hpp"
-#include "core/Tetromino.hpp"
 #include "platform/PlatformSDL.hpp"
-#include "render/tetris-paint.hpp"
-#include <optional>
+#include "util/Point.hpp"
+
+struct HUD;
 
 class HUDRenderer {
 public:
@@ -12,16 +11,7 @@ public:
       : renderer_(renderer),
         atlas_(PlatformSDL::create_texture_from_img(renderer, path_to_atlas)) {}
 
-  void draw_next(const NextQueue &queue) {
-    tetris::paint::tetromino(Tetromino(queue.peek()), renderer_, *atlas_,
-                             queue_offset_);
-  }
-
-  void draw_held(const std::optional<Tetromino::Type> &held) {
-    if (held.has_value())
-      tetris::paint::tetromino(Tetromino(held.value()), renderer_, *atlas_,
-                               hold_offset_);
-  }
+  void draw_hud(const HUD &hud);
 
   void wrap_around_board(Point board_pos);
 

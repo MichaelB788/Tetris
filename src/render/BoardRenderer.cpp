@@ -1,6 +1,5 @@
 #include "render/BoardRenderer.hpp"
-#include "core/Matrix.hpp"
-#include "core/Playfield.hpp"
+#include "core/Tetris.hpp"
 #include <SDL3/SDL_render.h>
 
 BoardRenderer::BoardRenderer(const std::filesystem::path &path_to_atlas,
@@ -16,11 +15,13 @@ BoardRenderer::BoardRenderer(const std::filesystem::path &path_to_atlas,
       PlatformSDL::create_texture_from_surface(renderer_, *ghost_surf);
 }
 
-void BoardRenderer::draw_playfield(const Playfield &playfield) {
-  tetris::paint::tetromino(playfield.player(), renderer_, *atlas_, board_pos_);
-  tetris::paint::tetromino(playfield.ghost(), renderer_, *ghost_atlas_,
-                           board_pos_);
-  tetris::paint::matrix(playfield.matrix(), renderer_, *atlas_, board_pos_);
+void BoardRenderer::draw_board(const Board &board) {
+  tetris::paint::tetromino(board.player, renderer_, *atlas_, board_pos_);
+
+  Tetromino ghost = tetris::move::compute_dropped(board.player, board.matrix);
+  tetris::paint::tetromino(ghost, renderer_, *ghost_atlas_, board_pos_);
+
+  tetris::paint::matrix(board.matrix, renderer_, *atlas_, board_pos_);
 }
 
 void BoardRenderer::center_within_window(int win_w, int win_h) {

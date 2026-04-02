@@ -4,7 +4,7 @@
 #include "util/Point.hpp"
 
 class Matrix;
-class Playfield;
+class Board;
 class Tetromino;
 
 class BoardRenderer {
@@ -12,7 +12,7 @@ public:
   BoardRenderer(const std::filesystem::path &path_to_atlas,
                 SDL_Renderer &renderer);
 
-  void draw_playfield(const Playfield &playfield);
+  void draw_board(const Board &board);
 
   void center_within_window(int win_w, int win_h);
 

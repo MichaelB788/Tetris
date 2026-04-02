@@ -1,12 +1,13 @@
 #include "core/Tetris.hpp"
+#include "core/tetris-move.hpp"
 
-Tetris::Tetris() : rng_(std::random_device{}()) {
-  next_queue_.shuffle(rng_);
-  playfield_.switch_to_next(next_queue_);
+Tetris::Tetris() {
+  hud_.next_queue.shuffle(rng_);
+  board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
 void Tetris::drop() {
-  playfield_.shift_player(playfield_.compute_drop_distance());
+  board_.player = tetris::move::compute_dropped(board_.player, board_.matrix);
   complete_move();
 }
 
@@ -14,33 +15,39 @@ void Tetris::hold() {
   if (hold_command_triggered)
     return;
 
-  if (!playfield_.swap_with_held(held_)) {
-    playfield_.switch_to_next(next_queue_);
-    if (next_queue_.empty()) {
-      next_queue_.shuffle(rng_);
-    }
+  Tetromino::Type new_hold = board_.player.type();
+  if (hud_.held_type.has_value()) {
+    board_.player = Tetromino(hud_.held_type.value(), INIT_POS);
+    hud_.held_type = new_hold;
+  } else {
+    hud_.held_type = new_hold;
+    board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
   }
 
   hold_command_triggered = true;
 }
 
-void Tetris::reset() {
-  held_ = std::nullopt;
-  hold_command_triggered = false;
-  next_queue_.shuffle(rng_);
-  playfield_.reset(next_queue_.pop());
-  status_ = Status::Running;
-  score_ = 0;
+bool Tetris::switch_to_next() {
+  Tetromino next_piece = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
+
+  for (int i = 0; i < 5; ++i) {
+    if (board_.matrix.is_move_valid(next_piece.shape())) {
+      board_.player = next_piece;
+      return true;
+    } else {
+      next_piece.shift(Point::up());
+    }
+  }
+
+  return false;
 }
 
 void Tetris::complete_move() {
-  score_ += playfield_.lock_and_get_points();
+  board_.matrix.place(board_.player);
+  score_ += board_.matrix.clear_lines();
 
-  if (playfield_.switch_to_next(next_queue_)) {
+  if (switch_to_next()) {
     hold_command_triggered = false;
-    if (next_queue_.empty()) {
-      next_queue_.shuffle(rng_);
-    }
   } else {
     status_ = Status::GameOver;
   }

@@ -1,11 +1,10 @@
 add_library(TetrisCore
   Matrix.cpp
   NextQueue.cpp
-  Playfield.cpp
   Tetris.cpp
   TetrisApp.cpp
   Tetromino.cpp
-  srs.cpp
+  tetris-move.cpp
 )
 add_library(Tetris::Core ALIAS TetrisCore)
 

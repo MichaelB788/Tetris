@@ -11,3 +11,11 @@ void NextQueue::shuffle(std::mt19937 &rng) {
   }
   read_ = 0;
 }
+
+[[nodiscard]] Tetromino::Type NextQueue::pop(std::mt19937 &rng) {
+  const auto ret = buffer_[read_++];
+  if (read_ == buffer_.size()) {
+    shuffle(rng);
+  }
+  return ret;
+}

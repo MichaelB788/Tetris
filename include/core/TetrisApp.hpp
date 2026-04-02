@@ -18,7 +18,11 @@ public:
     float font_size;
   };
 
-  explicit TetrisApp(Specification spec);
+  explicit TetrisApp(Specification spec)
+      : text_renderer_(spec.font_path, spec.font_size, *renderer_),
+        board_renderer_(spec.tetromino_atlas, *renderer_),
+        hud_renderer_(spec.tetromino_atlas, *renderer_),
+        event_handler_(spec.controls) {}
 
   void run();
 
@@ -26,7 +30,7 @@ private:
   void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
 
   void process_input() {
-    event_handler_.handle_event(tetris_, window_.get(), win_w, win_h);
+    event_handler_.handle_event(tetris_, *window_, win_w, win_h);
   }
 
   void render_frame();
@@ -46,9 +50,14 @@ private:
 private:
   int win_w = 600, win_h = 600;
 
-  PlatformSDL::Window window_;
+  PlatformSDL::Window window_ =
+      PlatformSDL::create_window("Tetris", win_w, win_h, SDL_WINDOW_RESIZABLE);
 
-  PlatformSDL::Renderer renderer_;
+  PlatformSDL::Renderer renderer_ = PlatformSDL::create_renderer(*window_);
+
+  Tetris tetris_{};
+
+  Clock gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 
   TextRenderer text_renderer_;
 
@@ -56,9 +65,5 @@ private:
 
   HUDRenderer hud_renderer_;
 
-  Tetris tetris_;
-
   EventHandler event_handler_;
-
-  Clock gravity_clock_;
 };

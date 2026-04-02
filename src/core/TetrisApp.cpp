@@ -1,16 +1,6 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
 
-TetrisApp::TetrisApp(Specification spec)
-    : window_(PlatformSDL::create_window("Tetris", win_w, win_h,
-                                         SDL_WINDOW_RESIZABLE)),
-      renderer_(PlatformSDL::create_renderer(*window_)),
-      text_renderer_(spec.font_path, spec.font_size, *renderer_),
-      board_renderer_(spec.tetromino_atlas, *renderer_),
-      hud_renderer_(spec.tetromino_atlas, *renderer_),
-      event_handler_(spec.controls),
-      gravity_clock_(std::chrono::milliseconds(1000)) {}
-
 void TetrisApp::run() {
   while (!event_handler_.should_quit()) {
     process_input();
@@ -27,10 +17,9 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
   SDL_RenderClear(renderer_.get());
 
-  hud_renderer_.draw_held(tetris_.held());
-  hud_renderer_.draw_next(tetris_.next_queue());
+  hud_renderer_.draw_hud(tetris_.hud());
 
-  board_renderer_.draw_playfield(tetris_.playfield());
+  board_renderer_.draw_board(tetris_.playfield());
 
   text_renderer_.render_text();
   text_renderer_.render_score(tetris_.score());
@@ -84,7 +73,7 @@ void TetrisApp::update_level() {
 
 void TetrisApp::handle_tetris_state() {
   if (tetris_.status() == Status::GameOver)
-    tetris_.reset();
+    tetris_ = {};
 }
 
 void TetrisApp::center_layout() {
@@ -95,6 +84,6 @@ void TetrisApp::center_layout() {
 }
 
 void TetrisApp::reset() {
-  tetris_.reset();
-  gravity_clock_.reset();
+  tetris_ = {};
+  gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 }

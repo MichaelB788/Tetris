@@ -27,6 +27,11 @@ void TextRenderer::render_score(int score) {
   float score_x = textures_[SCORE].x;
   float score_y = textures_[SCORE].y + tetris::paint::TILE_SIZE * 2;
 
+  if (score < 10) {
+    TTF_DrawRendererText(nums_[score].get(), score_x, score_y);
+    return;
+  }
+
   int offset_x;
   TTF_GetTextSize(nums_[0].get(), &offset_x, NULL);
 

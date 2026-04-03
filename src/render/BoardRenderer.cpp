@@ -1,5 +1,6 @@
 #include "render/BoardRenderer.hpp"
-#include "core/Tetris.hpp"
+#include "core/TetrisGame_Types.hpp"
+#include "core/Tetris_Move.hpp"
 #include <SDL3/SDL_render.h>
 
 BoardRenderer::BoardRenderer(const std::filesystem::path &path_to_atlas,

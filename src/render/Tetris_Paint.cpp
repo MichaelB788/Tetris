@@ -1,4 +1,4 @@
-#include "render/tetris-paint.hpp"
+#include "render/Tetris_Paint.hpp"
 #include "core/Matrix.hpp"
 #include "core/Tetromino.hpp"
 #include "util/Point.hpp"
@@ -86,7 +86,7 @@ void tetris::paint::tetromino(const Tetromino &tetromino,
                               SDL_Renderer &renderer, SDL_Texture &atlas,
                               Point offset) {
   for (const auto pos : tetromino.shape()) {
-    draw_tetromino_tile(tetromino.type(), renderer, atlas, pos, offset);
+    draw_tetromino_tile(tetromino.type, renderer, atlas, pos, offset);
   }
 }
 

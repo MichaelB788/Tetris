@@ -1,7 +1,7 @@
 #include "render/HUDRenderer.hpp"
 #include "core/Matrix.hpp"
-#include "core/Tetris.hpp"
-#include "render/tetris-paint.hpp"
+#include "core/TetrisGame_Types.hpp"
+#include "render/Tetris_Paint.hpp"
 
 void HUDRenderer::draw_hud(const HUD &hud) {
   tetris::paint::tetromino(Tetromino(hud.next_queue.peek()), renderer_, *atlas_,

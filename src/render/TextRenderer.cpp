@@ -1,6 +1,6 @@
 #include "render/TextRenderer.hpp"
 #include "SDL3_ttf/SDL_ttf.h"
-#include "render/tetris-paint.hpp"
+#include "render/Tetris_Paint.hpp"
 #include <cstddef>
 #include <vector>
 

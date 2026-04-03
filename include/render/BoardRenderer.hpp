@@ -1,6 +1,6 @@
 #pragma once
 #include "platform/PlatformSDL.hpp"
-#include "render/tetris-paint.hpp"
+#include "render/Tetris_Paint.hpp"
 #include "util/Point.hpp"
 
 class Matrix;

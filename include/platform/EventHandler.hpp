@@ -3,16 +3,16 @@
 #include <array>
 #include <filesystem>
 
-class Tetris;
+class TetrisGame;
 class Rect;
 
 class EventHandler {
 public:
-  using Command = void (Tetris::*)();
+  using Command = void (TetrisGame::*)();
 
   explicit EventHandler(const std::filesystem::path &config_path);
 
-  void handle_event(Tetris &tetris, SDL_Window &window, int &w, int &h);
+  void handle_event(TetrisGame &tetris, SDL_Window &window, int &w, int &h);
 
   [[nodiscard]] bool should_quit() const { return should_quit_; }
 

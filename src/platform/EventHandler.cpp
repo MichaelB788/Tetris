@@ -1,5 +1,5 @@
 #include "platform/EventHandler.hpp"
-#include "core/Tetris.hpp"
+#include "core/TetrisGame.hpp"
 #include <array>
 #include <fstream>
 #include <iostream>
@@ -17,22 +17,22 @@ int find_key_index(const auto &key,
 }
 
 constexpr std::array<std::pair<std::string_view, EventHandler::Command>, 7>
-    string_to_command{{{"move_left", &Tetris::move_left},
-                       {"move_down", &Tetris::move_down},
-                       {"move_right", &Tetris::move_right},
-                       {"rotate_clockwise", &Tetris::rotate_cw},
-                       {"rotate_counterclockwise", &Tetris::rotate_ccw},
-                       {"hold", &Tetris::hold},
-                       {"drop", &Tetris::drop}}};
+    string_to_command{{{"move_left", &TetrisGame::move_left},
+                       {"move_down", &TetrisGame::move_down},
+                       {"move_right", &TetrisGame::move_right},
+                       {"rotate_clockwise", &TetrisGame::rotate_cw},
+                       {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
+                       {"hold", &TetrisGame::hold},
+                       {"drop", &TetrisGame::drop}}};
 
 constexpr std::array<std::pair<SDL_Keycode, EventHandler::Command>, 7>
-    default_controls{{{SDLK_LEFT, &Tetris::move_left},
-                      {SDLK_DOWN, &Tetris::move_down},
-                      {SDLK_RIGHT, &Tetris::move_right},
-                      {SDLK_R, &Tetris::rotate_cw},
-                      {SDLK_E, &Tetris::rotate_ccw},
-                      {SDLK_S, &Tetris::hold},
-                      {SDLK_SPACE, &Tetris::drop}}};
+    default_controls{{{SDLK_LEFT, &TetrisGame::move_left},
+                      {SDLK_DOWN, &TetrisGame::move_down},
+                      {SDLK_RIGHT, &TetrisGame::move_right},
+                      {SDLK_R, &TetrisGame::rotate_cw},
+                      {SDLK_E, &TetrisGame::rotate_ccw},
+                      {SDLK_S, &TetrisGame::hold},
+                      {SDLK_SPACE, &TetrisGame::drop}}};
 } // namespace
 
 EventHandler::EventHandler(const std::filesystem::path &config_path)
@@ -59,7 +59,7 @@ EventHandler::EventHandler(const std::filesystem::path &config_path)
   parse_controls(config_file);
 }
 
-void EventHandler::handle_event(Tetris &tetris, SDL_Window &window, int &w,
+void EventHandler::handle_event(TetrisGame &tetris, SDL_Window &window, int &w,
                                 int &h) {
   while (SDL_PollEvent(&sdl_event_)) {
     switch (sdl_event_.type) {

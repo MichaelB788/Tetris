@@ -2,7 +2,7 @@
 #include <algorithm>
 
 namespace {
-constexpr Point SHAPES[Tetromino::NUM_TETROMINO][Tetromino::NUM_ROTATION][4]{
+constexpr Point SHAPES[Tetromino::MAX_TETROMINO][Tetromino::MAX_ROTATIONS][4]{
     // I
     {{{-1, 0}, {0, 0}, {1, 0}, {2, 0}},   // R0
      {{0, -1}, {0, 0}, {0, 1}, {0, 2}},   // R90
@@ -47,16 +47,16 @@ constexpr Point SHAPES[Tetromino::NUM_TETROMINO][Tetromino::NUM_ROTATION][4]{
 };
 }
 
-Tetromino::Shape Tetromino::test_shift(Point delta) const {
-  Shape test{};
-  std::ranges::transform(SHAPES[type_][rotation_], test.begin(),
-                         [&](Point p) { return pos_ + p + delta; });
-  return test;
+Tetromino::Shape Tetromino::shifted(Point delta) const {
+  Shape shifted{};
+  std::ranges::transform(SHAPES[type][rotation.value()], shifted.begin(),
+                         [&](Point p) { return pos + p + delta; });
+  return shifted;
 }
 
 Tetromino::Shape Tetromino::shape() const {
   Shape shape{};
-  std::ranges::transform(SHAPES[type_][rotation_], shape.begin(),
-                         [this](Point p) { return pos_ + p; });
+  std::ranges::transform(SHAPES[type][rotation.value()], shape.begin(),
+                         [this](Point p) { return pos + p; });
   return shape;
 }

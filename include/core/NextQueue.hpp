@@ -12,7 +12,7 @@ public:
   [[nodiscard]] Tetromino::Type peek() const { return buffer_[read_]; }
 
 private:
-  std::array<Tetromino::Type, Tetromino::NUM_TETROMINO> buffer_{
+  std::array<Tetromino::Type, Tetromino::MAX_TETROMINO> buffer_{
       Tetromino::I, Tetromino::O, Tetromino::T, Tetromino::S,
       Tetromino::Z, Tetromino::J, Tetromino::L};
 

@@ -1,51 +1,26 @@
 #pragma once
+#include "util/CircularIntegral.hpp"
 #include "util/Point.hpp"
 #include <array>
 #include <cstddef>
 #include <cstdint>
 
-class Tetromino {
-public:
-  static constexpr size_t NUM_TETROMINO = 7;
-  static constexpr size_t NUM_ROTATION = 4;
+struct Tetromino {
+  static constexpr size_t MAX_TETROMINO = 7;
+  static constexpr size_t MAX_ROTATIONS = 4;
 
   enum Type : uint8_t { I = 0, O, T, S, Z, J, L };
-  enum Rotation : uint8_t { R0 = 0, R90, R180, R270 };
 
   using Shape = std::array<Point, 4>;
+  using Rotation = CircularIntegral<uint8_t, MAX_ROTATIONS>;
 
-  constexpr Tetromino(Type t = I, Point pos = {0, 0}, Rotation r = R0)
-      : type_(t), pos_(pos), rotation_(r) {}
+  Type type = Type::I;
 
-  void shift(Point delta) { pos_ += delta; }
+  Point pos = {.x = 0, .y = 0};
 
-  void set_pos(Point pos) { pos_ = pos; }
+  Rotation rotation = 0;
 
-  void rotate_cw() {
-    rotation_ = static_cast<Rotation>((rotation_ + 1) % NUM_ROTATION);
-  }
-
-  void rotate_ccw() {
-    rotation_ =
-        static_cast<Rotation>((rotation_ + NUM_ROTATION - 1) % NUM_ROTATION);
-  }
-
-  void set_rotation(Rotation r) { rotation_ = r; }
-
-  [[nodiscard]] Shape test_shift(Point delta) const;
+  [[nodiscard]] Shape shifted(Point delta) const;
 
   [[nodiscard]] Shape shape() const;
-
-  [[nodiscard]] Type type() const { return type_; }
-
-  [[nodiscard]] Point pos() const { return pos_; }
-
-  [[nodiscard]] Rotation rotation() const { return rotation_; }
-
-private:
-  Type type_;
-
-  Point pos_;
-
-  Rotation rotation_;
 };

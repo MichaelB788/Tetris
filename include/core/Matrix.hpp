@@ -19,23 +19,25 @@ public:
 
   void place(const Tetromino &piece);
 
-  int clear_lines();
+  auto clear_lines() -> int;
 
-  [[nodiscard]] static bool point_in_bounds(Point point) {
+  [[nodiscard]] static auto point_in_bounds(Point point) -> bool {
     return 0 <= point.x && point.x < COLS && 0 <= point.y && point.y < ROWS;
   }
 
-  [[nodiscard]] static bool shape_in_bounds(const Tetromino::Shape &shape) {
+  [[nodiscard]] static auto shape_in_bounds(const Tetromino::Shape &shape)
+      -> bool {
     return std::ranges::all_of(shape, point_in_bounds);
   }
 
-  [[nodiscard]] bool is_move_valid(const Tetromino::Shape &shape) const {
+  [[nodiscard]] auto is_move_valid(const Tetromino::Shape &shape) const
+      -> bool {
     return std::ranges::all_of(shape, [this](Point p) {
       return point_in_bounds(p) && !data_[p.y][p.x].has_value();
     });
   }
 
-  [[nodiscard]] Cell at(Point p) const {
+  [[nodiscard]] auto at(Point p) const -> Cell {
     assert(point_in_bounds(p));
     return data_[p.y][p.x];
   }

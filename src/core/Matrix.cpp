@@ -2,19 +2,18 @@
 #include <algorithm>
 
 void Matrix::place(const Tetromino &piece) {
-  auto shape = piece.shape();
-  if (is_move_valid(shape)) {
+  if (auto shape = piece.shape(); is_move_valid(shape)) {
     for (const auto &pos : shape) {
-      data_[pos.y][pos.x] = piece.type();
+      data_[pos.y][pos.x] = piece.type;
     }
   }
 }
 
-int Matrix::clear_lines() {
-  const auto is_ground = [](Cell c) { return c.has_value(); };
+auto Matrix::clear_lines() -> int {
   int cleared = 0;
   int write = ROWS - 1;
 
+  const auto is_ground = [](Cell c) { return c.has_value(); };
   for (int read = ROWS - 1; read >= 0; --read) {
     if (std::ranges::all_of(data_[read], is_ground)) {
       ++cleared;

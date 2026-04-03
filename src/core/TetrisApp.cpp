@@ -1,5 +1,6 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
+#include <SDL3/SDL_pixels.h>
 
 void TetrisApp::run() {
   while (!event_handler_.should_quit()) {
@@ -12,14 +13,13 @@ void TetrisApp::run() {
 }
 
 void TetrisApp::render_frame() {
-  static constexpr SDL_Color dark{.r = 0x17, .g = 0x18, .b = 0x2B, .a = 0xFF};
-
-  SDL_SetRenderDrawColor(renderer_.get(), dark.r, dark.g, dark.b, dark.a);
+  static const auto [r, g, b, a] = SDL_Color(0x17, 0x18, 0x28, 0xFF);
+  SDL_SetRenderDrawColor(renderer_.get(), r, g, b, a);
   SDL_RenderClear(renderer_.get());
 
   hud_renderer_.draw_hud(tetris_.hud());
 
-  board_renderer_.draw_board(tetris_.playfield());
+  board_renderer_.draw_board(tetris_.board());
 
   text_renderer_.render_text();
   text_renderer_.render_score(tetris_.score());

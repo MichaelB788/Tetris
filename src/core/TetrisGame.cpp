@@ -1,21 +1,20 @@
-#include "core/Tetris.hpp"
-#include "core/tetris-move.hpp"
+#include "core/TetrisGame.hpp"
 
-Tetris::Tetris() {
+TetrisGame::TetrisGame() {
   hud_.next_queue.shuffle(rng_);
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
-void Tetris::drop() {
+void TetrisGame::drop() {
   board_.player = tetris::move::compute_dropped(board_.player, board_.matrix);
   complete_move();
 }
 
-void Tetris::hold() {
+void TetrisGame::hold() {
   if (hold_command_triggered)
     return;
 
-  Tetromino::Type new_hold = board_.player.type();
+  Tetromino::Type new_hold = board_.player.type;
   if (hud_.held_type.has_value()) {
     board_.player = Tetromino(hud_.held_type.value(), INIT_POS);
     hud_.held_type = new_hold;
@@ -27,7 +26,7 @@ void Tetris::hold() {
   hold_command_triggered = true;
 }
 
-bool Tetris::switch_to_next() {
+auto TetrisGame::switch_to_next() -> bool {
   Tetromino next_piece = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 
   for (int i = 0; i < 5; ++i) {
@@ -35,14 +34,14 @@ bool Tetris::switch_to_next() {
       board_.player = next_piece;
       return true;
     } else {
-      next_piece.shift(Point::up());
+      next_piece.pos += Point::up();
     }
   }
 
   return false;
 }
 
-void Tetris::complete_move() {
+void TetrisGame::complete_move() {
   board_.matrix.place(board_.player);
   score_ += board_.matrix.clear_lines();
 

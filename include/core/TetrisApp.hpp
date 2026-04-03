@@ -1,5 +1,5 @@
 #pragma once
-#include "core/Tetris.hpp"
+#include "core/TetrisGame.hpp"
 #include "platform/EventHandler.hpp"
 #include "platform/PlatformSDL.hpp"
 #include "render/BoardRenderer.hpp"
@@ -55,7 +55,7 @@ private:
 
   PlatformSDL::Renderer renderer_ = PlatformSDL::create_renderer(*window_);
 
-  Tetris tetris_{};
+  TetrisGame tetris_{};
 
   Clock gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 

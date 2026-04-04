@@ -4,18 +4,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <string_view>
 
 namespace {
-template <typename K, typename V, std::size_t N>
-int find_key_index(const auto &key,
-                   const std::array<std::pair<K, V>, N> &span) {
-  for (std::size_t i = 0; i < N; ++i) {
-    if (span[i].first == key)
-      return static_cast<int>(i);
-  }
-  return -1;
-}
-
 constexpr std::array<std::pair<std::string_view, EventHandler::Command>, 7>
     string_to_command{{{"move_left", &TetrisGame::move_left},
                        {"move_down", &TetrisGame::move_down},
@@ -59,6 +50,18 @@ EventHandler::EventHandler(const std::filesystem::path &config_path)
   parse_controls(config_file);
 }
 
+namespace {
+template <typename K, typename V, size_t N>
+auto find_value(const auto &key, const std::array<std::pair<K, V>, N> &map)
+    -> const V * {
+  for (const auto &[k, v] : map) {
+    if (key == k)
+      return &v;
+  }
+  return nullptr;
+}
+} // namespace
+
 void EventHandler::handle_event(TetrisGame &tetris, SDL_Window &window, int &w,
                                 int &h) {
   while (SDL_PollEvent(&sdl_event_)) {
@@ -70,8 +73,8 @@ void EventHandler::handle_event(TetrisGame &tetris, SDL_Window &window, int &w,
       SDL_GetWindowSizeInPixels(&window, &w, &h);
       break;
     case SDL_EVENT_KEY_DOWN:
-      if (const int i = find_key_index(sdl_event_.key.key, controls_); i != -1)
-        (tetris.*controls_[i].second)();
+      if (const auto command = find_value(sdl_event_.key.key, controls_))
+        (tetris.**command)();
       break;
     default:
       break;
@@ -80,39 +83,37 @@ void EventHandler::handle_event(TetrisGame &tetris, SDL_Window &window, int &w,
 }
 
 void EventHandler::parse_controls(std::istream &input) {
-  std::size_t i = 0;
+  size_t i = 0;
   std::string current_line;
 
   while (std::getline(input, current_line)) {
-    const std::size_t first = current_line.find_first_not_of(" \t");
-    if (std::string::npos == first)
+    const auto first = current_line.find_first_not_of(" \t");
+    if (std::string::npos == first) {
       continue;
+    }
 
-    const std::size_t last = current_line.find_last_not_of(" \t");
+    const auto last = current_line.find_last_not_of(" \t");
     current_line = current_line.substr(first, (last - first + 1));
-
     if (current_line.empty() || current_line[0] == ';' ||
-        current_line[0] == '#')
+        current_line[0] == '#') {
       continue;
+    }
 
-    if (const std::size_t equalsPos = current_line.find('=');
-        equalsPos != std::string::npos) {
-      std::string keycode_name = current_line.substr(equalsPos + 1);
-      std::string input_name = current_line.substr(0, equalsPos);
+    const auto eq_pos = current_line.find('=');
+    if (eq_pos == std::string::npos) {
+      continue;
+    }
 
-      int i = find_key_index(input_name, string_to_command);
-
-      if (i == -1) {
-        std::cerr << "Warning: Could not parse input with the name "
-                  << input_name << ". Using default controls\n";
-        controls_ = default_controls;
-        return;
-      }
-
-      SDL_Keycode keycode = SDL_GetKeyFromName(keycode_name.c_str());
-      Command command = string_to_command[i].second;
-
-      controls_[i++] = {keycode, command};
+    const auto input_name = current_line.substr(0, eq_pos);
+    if (const auto command = find_value(input_name, string_to_command)) {
+      const auto keycode_name = current_line.substr(eq_pos + 1);
+      const auto keycode = SDL_GetKeyFromName(keycode_name.c_str());
+      controls_[i++] = {keycode, *command};
+    } else {
+      std::cerr << "Warn: Could not detect command from string '" << input_name
+                << "'. Using default controls\n";
+      controls_ = default_controls;
+      return;
     }
   }
 }

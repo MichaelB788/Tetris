@@ -4,7 +4,6 @@
 #include <filesystem>
 
 class TetrisGame;
-class Rect;
 
 class EventHandler {
 public:

@@ -2,12 +2,11 @@
 #include "core/TetrisGame.hpp"
 #include "platform/EventHandler.hpp"
 #include "platform/PlatformSDL.hpp"
-#include "render/BoardRenderer.hpp"
-#include "render/HUDRenderer.hpp"
-#include "render/TextRenderer.hpp"
+#include "render/TetrisGameRenderer.hpp"
 #include "util/Clock.hpp"
 #include <filesystem>
 #include <thread>
+#include <utility>
 
 class TetrisApp {
 public:
@@ -18,20 +17,14 @@ public:
     float font_size;
   };
 
-  explicit TetrisApp(Specification spec)
-      : text_renderer_(spec.font_path, spec.font_size, *renderer_),
-        board_renderer_(spec.tetromino_atlas, *renderer_),
-        hud_renderer_(spec.tetromino_atlas, *renderer_),
-        event_handler_(spec.controls) {}
+  explicit TetrisApp(Specification spec);
 
   void run();
 
 private:
   void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
 
-  void process_input() {
-    event_handler_.handle_event(tetris_, *window_, win_w, win_h);
-  }
+  void handle_events();
 
   void render_frame();
 
@@ -47,23 +40,24 @@ private:
 
   void reset();
 
-private:
-  int win_w = 600, win_h = 600;
+  bool running_ = true;
 
-  PlatformSDL::Window window_ =
-      PlatformSDL::create_window("Tetris", win_w, win_h, SDL_WINDOW_RESIZABLE);
+  std::pair<int, int> win_size_{800, 800};
 
-  PlatformSDL::Renderer renderer_ = PlatformSDL::create_renderer(*window_);
+  sdl::Window window_ = sdl::create_window(
+      "Tetris", win_size_.first, win_size_.second, SDL_WINDOW_RESIZABLE);
+
+  sdl::Renderer renderer_ = sdl::create_renderer(*window_);
+
+  sdl::Texture piece_atlas_{nullptr, nullptr};
+
+  sdl::Texture ghost_atlas_{nullptr, nullptr};
 
   TetrisGame tetris_{};
 
+  TetrisGameRenderer tetris_renderer_{};
+
   Clock gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 
-  TextRenderer text_renderer_;
-
-  BoardRenderer board_renderer_;
-
-  HUDRenderer hud_renderer_;
-
-  EventHandler event_handler_;
+  EventHandler handler_;
 };

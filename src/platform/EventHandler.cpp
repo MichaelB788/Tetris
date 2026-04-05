@@ -7,27 +7,28 @@
 #include <string_view>
 
 namespace {
-constexpr std::array<std::pair<std::string_view, EventHandler::Command>, 7>
-    string_to_command{{{"move_left", &TetrisGame::move_left},
-                       {"move_down", &TetrisGame::move_down},
-                       {"move_right", &TetrisGame::move_right},
-                       {"rotate_clockwise", &TetrisGame::rotate_cw},
-                       {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
-                       {"hold", &TetrisGame::hold},
-                       {"drop", &TetrisGame::drop}}};
+constexpr std::array<std::pair<std::string_view, Command>, 7> string_to_command{
+    {{"move_left", &TetrisGame::move_left},
+     {"move_down", &TetrisGame::move_down},
+     {"move_right", &TetrisGame::move_right},
+     {"rotate_clockwise", &TetrisGame::rotate_cw},
+     {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
+     {"hold", &TetrisGame::hold},
+     {"drop", &TetrisGame::drop}}};
 
-constexpr std::array<std::pair<SDL_Keycode, EventHandler::Command>, 7>
-    default_controls{{{SDLK_LEFT, &TetrisGame::move_left},
-                      {SDLK_DOWN, &TetrisGame::move_down},
-                      {SDLK_RIGHT, &TetrisGame::move_right},
-                      {SDLK_R, &TetrisGame::rotate_cw},
-                      {SDLK_E, &TetrisGame::rotate_ccw},
-                      {SDLK_S, &TetrisGame::hold},
-                      {SDLK_SPACE, &TetrisGame::drop}}};
+constexpr std::array<std::pair<SDL_Keycode, Command>, 7> default_controls{
+    {{SDLK_LEFT, &TetrisGame::move_left},
+     {SDLK_DOWN, &TetrisGame::move_down},
+     {SDLK_RIGHT, &TetrisGame::move_right},
+     {SDLK_R, &TetrisGame::rotate_cw},
+     {SDLK_E, &TetrisGame::rotate_ccw},
+     {SDLK_S, &TetrisGame::hold},
+     {SDLK_SPACE, &TetrisGame::drop}}};
 } // namespace
 
-EventHandler::EventHandler(const std::filesystem::path &config_path)
-    : controls_{default_controls} {
+EventHandler::EventHandler(TetrisGame &game,
+                           const std::filesystem::path &config_path)
+    : tetris_(game), controls_{default_controls} {
   if (!std::filesystem::exists(config_path)) {
     std::cerr << "Warn: Could not find file: " << config_path.filename()
               << std::endl;
@@ -62,24 +63,9 @@ auto find_value(const auto &key, const std::array<std::pair<K, V>, N> &map)
 }
 } // namespace
 
-void EventHandler::handle_event(TetrisGame &tetris, SDL_Window &window, int &w,
-                                int &h) {
-  while (SDL_PollEvent(&sdl_event_)) {
-    switch (sdl_event_.type) {
-    case SDL_EVENT_QUIT:
-      should_quit_ = true;
-      break;
-    case SDL_EVENT_WINDOW_RESIZED:
-      SDL_GetWindowSizeInPixels(&window, &w, &h);
-      break;
-    case SDL_EVENT_KEY_DOWN:
-      if (const auto command = find_value(sdl_event_.key.key, controls_))
-        (tetris.**command)();
-      break;
-    default:
-      break;
-    }
-  }
+void EventHandler::handle_kb_input(SDL_Event &event) {
+  if (const auto command = find_value(event.key.key, controls_))
+    (tetris_.**command)();
 }
 
 void EventHandler::parse_controls(std::istream &input) {

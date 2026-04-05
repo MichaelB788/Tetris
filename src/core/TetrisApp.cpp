@@ -1,14 +1,46 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
+#include "platform/PlatformSDL.hpp"
+#include <SDL3/SDL_events.h>
 #include <SDL3/SDL_pixels.h>
+#include <SDL3/SDL_surface.h>
+
+TetrisApp::TetrisApp(Specification spec)
+    : piece_atlas_(
+          sdl::img::create_texture_from_img(*renderer_, spec.tetromino_atlas)),
+      handler_(tetris_, spec.controls) {
+  auto ghost_surf = sdl::img::create_surface_from_img(spec.tetromino_atlas);
+  SDL_SetSurfaceAlphaMod(ghost_surf.get(), 0x80);
+  ghost_atlas_ = sdl::create_texture_from_surface(*renderer_, *ghost_surf);
+}
 
 void TetrisApp::run() {
-  while (!event_handler_.should_quit()) {
-    process_input();
+  while (running_) {
+    handle_events();
     update_state();
     center_layout();
     render_frame();
     sleep(std::chrono::milliseconds(12));
+  }
+}
+
+void TetrisApp::handle_events() {
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    switch (e.type) {
+    case SDL_EVENT_QUIT:
+      running_ = false;
+      break;
+    case SDL_EVENT_WINDOW_RESIZED: {
+      auto &[w, h] = win_size_;
+      SDL_GetWindowSizeInPixels(window_.get(), &w, &h);
+    } break;
+    case SDL_EVENT_KEY_DOWN:
+      handler_.handle_kb_input(e);
+      break;
+    default:
+      break;
+    }
   }
 }
 
@@ -17,12 +49,8 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), r, g, b, a);
   SDL_RenderClear(renderer_.get());
 
-  hud_renderer_.draw_hud(tetris_.hud());
-
-  board_renderer_.draw_board(tetris_.board());
-
-  text_renderer_.render_text();
-  text_renderer_.render_score(tetris_.score());
+  tetris_renderer_.draw_frame(tetris_, *renderer_, *piece_atlas_,
+                              *ghost_atlas_);
 
   SDL_RenderPresent(renderer_.get());
 }
@@ -77,10 +105,10 @@ void TetrisApp::handle_tetris_state() {
 }
 
 void TetrisApp::center_layout() {
-  board_renderer_.center_within_window(win_w, win_h);
-  hud_renderer_.wrap_around_board(board_renderer_.pos());
-  text_renderer_.adjust_lhs(hud_renderer_.queue_offset());
-  text_renderer_.adjust_rhs(hud_renderer_.hold_offset());
+  tetris_renderer_.align_inside_rect(win_size_);
+
+  // text_renderer_.adjust_lhs(hud_renderer_.queue_offset());
+  // text_renderer_.adjust_rhs(hud_renderer_.hold_offset());
 }
 
 void TetrisApp::reset() {

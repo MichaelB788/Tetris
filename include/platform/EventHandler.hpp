@@ -4,23 +4,19 @@
 #include <filesystem>
 
 class TetrisGame;
+using Command = void (TetrisGame::*)();
 
 class EventHandler {
 public:
-  using Command = void (TetrisGame::*)();
+  explicit EventHandler(TetrisGame &game,
+                        const std::filesystem::path &config_path);
 
-  explicit EventHandler(const std::filesystem::path &config_path);
-
-  void handle_event(TetrisGame &tetris, SDL_Window &window, int &w, int &h);
-
-  [[nodiscard]] bool should_quit() const { return should_quit_; }
+  void handle_kb_input(SDL_Event &event);
 
 private:
   void parse_controls(std::istream &input);
 
-  SDL_Event sdl_event_;
-
-  bool should_quit_ = false;
+  TetrisGame &tetris_;
 
   std::array<std::pair<SDL_Keycode, Command>, 7> controls_;
 };

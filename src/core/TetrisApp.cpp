@@ -5,13 +5,14 @@
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
 
-TetrisApp::TetrisApp(Specification spec)
-    : piece_atlas_(
-          sdl::img::create_texture_from_img(*renderer_, spec.tetromino_atlas)),
+TetrisApp::TetrisApp(const Specification &spec)
+    : piece_atlas_(sdl::img::create_texture_from_img(renderer_.get(),
+                                                     spec.tetromino_atlas)),
       handler_(tetris_, spec.controls) {
   auto ghost_surf = sdl::img::create_surface_from_img(spec.tetromino_atlas);
   SDL_SetSurfaceAlphaMod(ghost_surf.get(), 0x80);
-  ghost_atlas_ = sdl::create_texture_from_surface(*renderer_, *ghost_surf);
+  ghost_atlas_ =
+      sdl::create_texture_from_surface(renderer_.get(), ghost_surf.get());
 }
 
 void TetrisApp::run() {

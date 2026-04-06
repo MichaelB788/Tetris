@@ -1,105 +1,81 @@
 #include "platform/PlatformSDL.hpp"
-#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
-ExceptionSDL::ExceptionSDL(const std::string &msg_)
-    : msg(msg_ + ": " + SDL_GetError()) {}
-
-/*
-PlatformSDL::PlatformSDL() {
-  if (!SDL_InitSubSystem(SDL_INIT_VIDEO))
-    throw ExceptionSDL("Failed to initialize the SDL video subsystem");
-  if (!TTF_Init())
-    throw ExceptionSDL("Failed to initialize SDL_TTF");
-}
-
-PlatformSDL::~PlatformSDL() {
-  TTF_Quit();
-  SDL_Quit();
-}
-*/
-
 auto sdl::create_window(const char *title, int w, int h, SDL_WindowFlags flags)
     -> Window {
-  SDL_Window *raw_window = SDL_CreateWindow(title, w, h, flags);
-  if (!raw_window)
-    throw ExceptionSDL("Failed to initialize the SDL window");
+  if (auto raw_window = SDL_CreateWindow(title, w, h, flags))
+    return Window(raw_window);
 
-  return Window(raw_window, &SDL_DestroyWindow);
+  throw Exception("Failed to initialize the SDL window");
 }
 
-auto sdl::create_renderer(SDL_Window &window) -> Renderer {
-  SDL_Renderer *raw_renderer = SDL_CreateRenderer(&window, NULL);
-  if (!raw_renderer)
-    throw ExceptionSDL("Failed to initialize the SDL renderer");
+auto sdl::create_renderer(SDL_Window *window) -> Renderer {
+  if (auto raw_renderer = SDL_CreateRenderer(window, nullptr))
+    return Renderer(raw_renderer);
 
-  return Renderer(raw_renderer, &SDL_DestroyRenderer);
+  throw Exception("Failed to initialize the SDL renderer");
 }
 
-auto sdl::create_texture_from_surface(SDL_Renderer &renderer,
-                                      SDL_Surface &surface) -> Texture {
-  SDL_Texture *raw_texture = SDL_CreateTextureFromSurface(&renderer, &surface);
-  if (!raw_texture)
-    throw ExceptionSDL("Could not create texture from surface");
+auto sdl::create_texture_from_surface(SDL_Renderer *renderer,
+                                      SDL_Surface *surface) -> Texture {
+  if (auto raw_texture = SDL_CreateTextureFromSurface(renderer, surface))
+    return Texture(raw_texture);
 
-  return Texture(raw_texture, &SDL_DestroyTexture);
+  throw Exception("Could not create texture from surface");
 }
 
 auto sdl::img::create_surface_from_img(const fs::path &path_to_img) -> Surface {
-  if (!fs::exists(path_to_img))
+  if (!fs::exists(path_to_img)) {
     throw std::invalid_argument(
         std::string("Could not create SDL surface. Provided path to image does "
                     "not exist: ") +
         path_to_img.string());
+  }
 
-  SDL_Surface *raw_surface = IMG_Load(path_to_img.c_str());
-  if (!raw_surface)
-    throw ExceptionSDL("Could not load image to SDL surface");
+  if (auto raw_surface = IMG_Load(path_to_img.c_str()))
+    return Surface(raw_surface);
 
-  return Surface(raw_surface, &SDL_DestroySurface);
+  throw Exception("Could not load image to SDL surface");
 }
 
-auto sdl::img::create_texture_from_img(SDL_Renderer &renderer,
+auto sdl::img::create_texture_from_img(SDL_Renderer *renderer,
                                        const fs::path &path_to_img) -> Texture {
-  if (!fs::exists(path_to_img))
+  if (!fs::exists(path_to_img)) {
     throw std::invalid_argument(
         std::string("Could not create SDL texture. Provided path to image does "
                     "not exist: ") +
         path_to_img.string());
+  }
 
-  SDL_Texture *raw_texture = IMG_LoadTexture(&renderer, path_to_img.c_str());
-  if (!raw_texture)
-    throw ExceptionSDL("Failed to create SDL texture from file");
+  if (auto raw_texture = IMG_LoadTexture(renderer, path_to_img.c_str()))
+    return Texture(raw_texture);
 
-  return Texture(raw_texture, &SDL_DestroyTexture);
+  throw Exception("Failed to create SDL texture from file");
 }
 
-auto sdl::ttf::create_renderer_text_engine(SDL_Renderer &renderer)
-    -> TextEngine {
-  TTF_TextEngine *raw_engine = TTF_CreateRendererTextEngine(&renderer);
-  if (!raw_engine)
-    throw ExceptionSDL("Failed to create renderer text engine");
+auto sdl::ttf::create_renderer_text_engine(SDL_Renderer *renderer)
+    -> RendererTextEngine {
+  if (auto raw_engine = TTF_CreateRendererTextEngine(renderer))
+    return RendererTextEngine(raw_engine);
 
-  return TextEngine(raw_engine, &TTF_DestroyRendererTextEngine);
+  throw Exception("Failed to create renderer text engine");
 }
 
 auto sdl::ttf::open_font(const std::filesystem::path &path_to_font,
                          float font_size) -> Font {
-  TTF_Font *raw_font = TTF_OpenFont(path_to_font.c_str(), font_size);
-  if (!raw_font)
-    throw ExceptionSDL("Failed to open font");
+  if (auto raw_font = TTF_OpenFont(path_to_font.c_str(), font_size))
+    return Font(raw_font);
 
-  return Font(raw_font, &TTF_CloseFont);
+  throw Exception("Failed to open font");
 }
 
-auto sdl::ttf::create_text(TTF_TextEngine &engine, TTF_Font &font,
+auto sdl::ttf::create_text(TTF_TextEngine *engine, TTF_Font *font,
                            const char *str) -> Text {
-  TTF_Text *raw_text = TTF_CreateText(&engine, &font, str, 0);
-  if (!raw_text)
-    throw ExceptionSDL("Failed to create TTF text");
+  if (auto raw_text = TTF_CreateText(engine, font, str, 0))
+    return Text(raw_text);
 
-  return Text(raw_text, &TTF_DestroyText);
+  throw Exception("Failed to create TTF text");
 }

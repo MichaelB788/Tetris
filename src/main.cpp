@@ -33,19 +33,17 @@ std::filesystem::path get_binary_path() {
 }
 
 int main() {
-  using namespace std::literals::chrono_literals;
-
   std::filesystem::path project_root = get_binary_path();
   for (int i = 0; i < 3; ++i)
     project_root = project_root.parent_path();
 
   try {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
-      throw ExceptionSDL("Failed to init SDL video");
+      throw sdl::Exception("Failed to init SDL video");
     }
 
     if (!TTF_Init()) {
-      throw ExceptionSDL("Failed to ini SDL_TTF");
+      throw sdl::Exception("Failed to ini SDL_TTF");
     }
 
     TetrisApp tetris(
@@ -56,7 +54,7 @@ int main() {
          .font_size = 36});
 
     tetris.run();
-  } catch (const ExceptionSDL &exception) {
+  } catch (const sdl::Exception &exception) {
     std::cerr << exception.what() << std::endl;
   } catch (const std::invalid_argument &exception) {
     std::cerr << "Invalid argument encountered: " << exception.what()

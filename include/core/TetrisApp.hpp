@@ -17,12 +17,12 @@ public:
     float font_size;
   };
 
-  explicit TetrisApp(Specification spec);
+  explicit TetrisApp(const Specification &spec);
 
   void run();
 
 private:
-  void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
+  static void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
 
   void handle_events();
 
@@ -47,11 +47,11 @@ private:
   sdl::Window window_ = sdl::create_window(
       "Tetris", win_size_.first, win_size_.second, SDL_WINDOW_RESIZABLE);
 
-  sdl::Renderer renderer_ = sdl::create_renderer(*window_);
+  sdl::Renderer renderer_ = sdl::create_renderer(window_.get());
 
-  sdl::Texture piece_atlas_{nullptr, nullptr};
+  sdl::Texture piece_atlas_ = nullptr;
 
-  sdl::Texture ghost_atlas_{nullptr, nullptr};
+  sdl::Texture ghost_atlas_ = nullptr;
 
   TetrisGame tetris_{};
 

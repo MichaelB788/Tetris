@@ -1,39 +1,41 @@
 #pragma once
-#include "platform/PlatformSDL.hpp"
-#include "util/Point.hpp"
+#include "platform/PlatformSDL_TTF.hpp"
 #include <array>
+
+class TetrisGameRenderer;
 
 class TextRenderer {
 public:
   TextRenderer(const std::filesystem::path &font_path, int font_size,
-               SDL_Renderer &renderer);
+               SDL_Renderer *renderer);
 
-  void render_text();
+  void render_screen_text();
 
-  void render_score(int score);
+  void render_score_int(int score);
 
-  void adjust_lhs(Point queue_pos);
-
-  void adjust_rhs(Point hold_pos);
+  void align_with_game(const TetrisGameRenderer &game_renderer);
 
 private:
-  PlatformSDL::Text create_text(const char *str) const;
-
-private:
-  struct TextTexture {
-    PlatformSDL::Text text{};
-    float x{}, y{};
+  struct TextObj {
+    sdl::ttf::Text text = nullptr;
+    std::pair<float, float> pos{};
   };
 
-  SDL_Renderer &renderer_;
+  void render_text(const TextObj &renderer);
 
-  PlatformSDL::TextEngine text_engine_{};
+  sdl::ttf::RendererTextEngine text_engine_ = nullptr;
 
-  PlatformSDL::Font font_{};
+  sdl::ttf::Font font_ = nullptr;
 
-  enum TextIndex { SCORE, NEXT, HOLD, COUNT };
+  struct ScreenText {
+    TextObj next_{};
 
-  std::array<TextTexture, COUNT> textures_{};
+    TextObj stored_{};
 
-  std::array<PlatformSDL::Text, 10> nums_{};
+    TextObj hold_{};
+
+    TextObj score_{};
+  } screen_text_;
+
+  std::array<sdl::ttf::Text, 10> nums_{};
 };

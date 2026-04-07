@@ -1,5 +1,6 @@
 add_library(TetrisRender
   TetrisGameRenderer.cpp
+  TextRenderer.cpp
   Tetris_Paint.cpp
 )
 add_library(Tetris::Render ALIAS TetrisRender)

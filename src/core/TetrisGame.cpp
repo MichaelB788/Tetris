@@ -1,6 +1,10 @@
 #include "core/TetrisGame.hpp"
 #include "core/Tetris_Move.hpp"
 
+namespace {
+constexpr Point INIT_POS = {.x = 4, .y = 2};
+}
+
 TetrisGame::TetrisGame() {
   hud_.next_queue.shuffle(rng_);
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);

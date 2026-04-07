@@ -46,8 +46,6 @@ private:
 
   void complete_move();
 
-  static constexpr Point INIT_POS = {.x = 4, .y = 2};
-
   std::mt19937 rng_{std::random_device{}()};
 
   bool hold_command_triggered = false;

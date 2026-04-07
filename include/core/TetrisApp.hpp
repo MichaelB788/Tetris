@@ -4,7 +4,6 @@
 #include "platform/PlatformSDL.hpp"
 #include "render/TetrisGameRenderer.hpp"
 #include "render/TextRenderer.hpp"
-#include "util/Clock.hpp"
 #include <filesystem>
 #include <utility>
 
@@ -31,15 +30,9 @@ private:
 
   void center_within_window();
 
-  void update_state();
-
-  void update_level();
-
   void handle_tetris_state();
 
-  void update_gravity();
-
-  void reset();
+  void reset() { tetris_ = {}; }
 
   bool running_ = true;
 
@@ -51,8 +44,6 @@ private:
   sdl::Renderer renderer_ = sdl::create_renderer(window_.get());
 
   TetrisGame tetris_{};
-
-  Clock gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 
   TetrisGameRenderer tetris_renderer_;
 

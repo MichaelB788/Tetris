@@ -1,11 +1,14 @@
 #pragma once
 #include "core/TetrisGame_Types.hpp"
 #include "core/Tetris_Move.hpp"
+#include "util/Clock.hpp"
 #include <random>
 
 class TetrisGame {
 public:
   TetrisGame();
+
+  void tick();
 
   void move_left() {
     tetris::move::shift(board_.player, board_.matrix, Point::left());
@@ -44,7 +47,15 @@ public:
 private:
   [[nodiscard]] auto switch_to_next() -> bool;
 
+  void update_level();
+
   void complete_move();
+
+  void update_gravity();
+
+  HUD hud_{};
+
+  Board board_{};
 
   std::mt19937 rng_{std::random_device{}()};
 
@@ -54,7 +65,7 @@ private:
 
   int score_ = 0;
 
-  HUD hud_{};
+  Clock gravity_delay_{std::chrono::milliseconds(1000)};
 
-  Board board_{};
+  Clock lock_delay_{std::chrono::milliseconds(1000)};
 };

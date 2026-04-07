@@ -9,9 +9,10 @@
 void TetrisApp::run() {
   using namespace std::chrono_literals;
   while (running_) {
+    tetris_.tick();
     handle_events();
     center_within_window();
-    update_state();
+    handle_tetris_state();
     render_frame();
     std::this_thread::sleep_for(12ms);
   }
@@ -49,50 +50,6 @@ void TetrisApp::render_frame() {
   SDL_RenderPresent(renderer_.get());
 }
 
-void TetrisApp::update_state() {
-  update_gravity();
-  handle_tetris_state();
-}
-
-void TetrisApp::update_gravity() {
-  gravity_clock_.tick();
-
-  if (gravity_clock_.has_set_off()) {
-    tetris_.soft_drop();
-    gravity_clock_.reset();
-  }
-
-  update_level();
-}
-
-void TetrisApp::update_level() {
-  using namespace std::chrono_literals;
-  static constexpr std::array<std::pair<unsigned, std::chrono::milliseconds>,
-                              10>
-      levels{{
-          {10, 1000ms},
-          {20, 900ms},
-          {30, 800ms},
-          {40, 700ms},
-          {50, 600ms},
-          {60, 500ms},
-          {70, 450ms},
-          {80, 400ms},
-          {90, 300ms},
-          {100, 200ms},
-      }};
-
-  unsigned score = tetris_.score();
-
-  auto it = std::ranges::find_if(
-      levels, [score](const auto &entry) { return score < entry.first; });
-
-  if (it != std::end(levels))
-    gravity_clock_.activate_in(it->second);
-  else
-    gravity_clock_.activate_in(100ms);
-}
-
 void TetrisApp::handle_tetris_state() {
   if (tetris_.status() == Status::GameOver)
     reset();
@@ -101,9 +58,4 @@ void TetrisApp::handle_tetris_state() {
 void TetrisApp::center_within_window() {
   tetris_renderer_.align_inside_rect(win_size_);
   text_renderer_.align_with_game(tetris_renderer_);
-}
-
-void TetrisApp::reset() {
-  tetris_ = {}; // Reset
-  gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 }

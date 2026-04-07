@@ -1,6 +1,8 @@
 #pragma once
-#include "Matrix.hpp"
-#include "Tetromino.hpp"
+#include "util/Point.hpp"
+
+struct Tetromino;
+class Matrix;
 
 namespace tetris::move {
 auto shift(Tetromino &piece, const Matrix &matrix, Point delta) -> bool;

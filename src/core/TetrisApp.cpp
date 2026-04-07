@@ -58,7 +58,7 @@ void TetrisApp::update_gravity() {
   gravity_clock_.tick();
 
   if (gravity_clock_.has_set_off()) {
-    tetris_.move_down();
+    tetris_.soft_drop();
     gravity_clock_.reset();
   }
 

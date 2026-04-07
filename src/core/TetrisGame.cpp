@@ -1,12 +1,14 @@
 #include "core/TetrisGame.hpp"
+#include "core/Tetris_Move.hpp"
 
 TetrisGame::TetrisGame() {
   hud_.next_queue.shuffle(rng_);
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
-void TetrisGame::drop() {
-  board_.player = tetris::move::compute_dropped(board_.player, board_.matrix);
+void TetrisGame::hard_drop() {
+  board_.player.pos +=
+      tetris::move::hard_drop_delta(board_.player, board_.matrix);
   complete_move();
 }
 

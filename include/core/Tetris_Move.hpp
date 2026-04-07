@@ -5,7 +5,10 @@
 namespace tetris::move {
 auto shift(Tetromino &piece, const Matrix &matrix, Point delta) -> bool;
 
-[[nodiscard]] auto compute_dropped(const Tetromino &piece, const Matrix &matrix)
+[[nodiscard]] auto hard_drop_delta(const Tetromino &piece, const Matrix &matrix)
+    -> Point;
+
+[[nodiscard]] auto hard_dropped(const Tetromino &piece, const Matrix &matrix)
     -> Tetromino;
 } // namespace tetris::move
 

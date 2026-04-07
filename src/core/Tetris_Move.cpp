@@ -13,15 +13,19 @@ auto tetris::move::shift(Tetromino &piece, const Matrix &matrix, Point delta)
   return success;
 }
 
-auto tetris::move::compute_dropped(const Tetromino &piece, const Matrix &matrix)
-    -> Tetromino {
+auto tetris::move::hard_drop_delta(const Tetromino &piece, const Matrix &matrix)
+    -> Point {
   Point delta{.x = 0, .y = 0};
   while (matrix.is_move_valid(piece.shifted(delta + Point::down()))) {
     delta += Point::down();
   }
+  return delta;
+}
 
+auto tetris::move::hard_dropped(const Tetromino &piece, const Matrix &matrix)
+    -> Tetromino {
   auto dropped = piece;
-  dropped.pos += delta;
+  dropped.pos += hard_drop_delta(dropped, matrix);
   return dropped;
 }
 

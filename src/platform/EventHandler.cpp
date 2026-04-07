@@ -7,23 +7,14 @@
 #include <string_view>
 
 namespace {
-constexpr std::array<std::pair<std::string_view, Command>, 7> string_to_command{
-    {{"move_left", &TetrisGame::move_left},
-     {"move_down", &TetrisGame::move_down},
-     {"move_right", &TetrisGame::move_right},
-     {"rotate_clockwise", &TetrisGame::rotate_cw},
-     {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
-     {"hold", &TetrisGame::hold},
-     {"drop", &TetrisGame::drop}}};
-
 constexpr std::array<std::pair<SDL_Keycode, Command>, 7> default_controls{
     {{SDLK_LEFT, &TetrisGame::move_left},
-     {SDLK_DOWN, &TetrisGame::move_down},
      {SDLK_RIGHT, &TetrisGame::move_right},
+     {SDLK_DOWN, &TetrisGame::soft_drop},
+     {SDLK_SPACE, &TetrisGame::hard_drop},
      {SDLK_R, &TetrisGame::rotate_cw},
      {SDLK_E, &TetrisGame::rotate_ccw},
-     {SDLK_S, &TetrisGame::hold},
-     {SDLK_SPACE, &TetrisGame::drop}}};
+     {SDLK_S, &TetrisGame::hold}}};
 } // namespace
 
 EventHandler::EventHandler(TetrisGame &game,
@@ -69,6 +60,15 @@ void EventHandler::handle_kb_input(SDL_Event &event) {
 }
 
 void EventHandler::parse_controls(std::istream &input) {
+  static constexpr std::array<std::pair<std::string_view, Command>, 7>
+      string_to_command{{{"move_left", &TetrisGame::move_left},
+                         {"move_right", &TetrisGame::move_right},
+                         {"soft_drop", &TetrisGame::soft_drop},
+                         {"hard_drop", &TetrisGame::hard_drop},
+                         {"rotate_clockwise", &TetrisGame::rotate_cw},
+                         {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
+                         {"hold", &TetrisGame::hold}}};
+
   size_t i = 0;
   std::string current_line;
 

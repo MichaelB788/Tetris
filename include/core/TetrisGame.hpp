@@ -15,15 +15,13 @@ public:
     tetris::move::shift(board_.player, board_.matrix, Point::right());
   }
 
-  void move_down() {
+  void soft_drop() {
     if (!tetris::move::shift(board_.player, board_.matrix, Point::down())) {
       complete_move();
     }
   }
 
-  void drop();
-
-  void hold();
+  void hard_drop();
 
   void rotate_cw() {
     tetris::srs::rotation(board_.player, board_.matrix, RotationDir::CW);
@@ -32,6 +30,8 @@ public:
   void rotate_ccw() {
     tetris::srs::rotation(board_.player, board_.matrix, RotationDir::CCW);
   }
+
+  void hold();
 
   [[nodiscard]] auto board() const -> const Board & { return board_; }
 

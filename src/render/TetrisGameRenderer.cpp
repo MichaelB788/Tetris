@@ -23,7 +23,7 @@ void TetrisGameRenderer::draw_board(const Board &board,
                                     SDL_Renderer &renderer) {
   tetris::paint::tetromino(board.player, renderer, *piece_atlas_, pos_.board);
 
-  Tetromino ghost = tetris::move::compute_dropped(board.player, board.matrix);
+  Tetromino ghost = tetris::move::hard_dropped(board.player, board.matrix);
   tetris::paint::tetromino(ghost, renderer, *ghost_atlas_, pos_.board);
 
   tetris::paint::matrix(board.matrix, renderer, *piece_atlas_, pos_.board);

@@ -7,10 +7,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
-
 #elif defined(__APPLE__)
 #include <mach-o/dyld.h>
-
 #elif defined(__linux__)
 #include <unistd.h>
 #endif
@@ -20,13 +18,11 @@ std::filesystem::path get_binary_path() {
   wchar_t path[MAX_PATH];
   GetModuleFileNameW(nullptr, path, MAX_PATH);
   return std::filesystem::path(path);
-
 #elif defined(__APPLE__)
   char path[1024];
   uint32_t size = sizeof(path);
   _NSGetExecutablePath(path, &size);
   return std::filesystem::canonical(path);
-
 #elif defined(__linux__)
   return std::filesystem::canonical("/proc/self/exe");
 #endif
@@ -38,22 +34,17 @@ int main() {
     project_root = project_root.parent_path();
 
   try {
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-      throw sdl::Exception("Failed to init SDL video");
+    if (SDL_Init(SDL_INIT_VIDEO) && TTF_Init()) {
+      TetrisApp(
+          {.controls = project_root / "controls.ini",
+           .tetromino_atlas =
+               project_root / "assets" / "sprites" / "tetromino.png",
+           .font_path = project_root / "assets" / "font" / "Arcade-Classic.ttf",
+           .font_size = 36})
+          .run();
+    } else {
+      throw sdl::Exception("Failed to initialize SDL");
     }
-
-    if (!TTF_Init()) {
-      throw sdl::Exception("Failed to ini SDL_TTF");
-    }
-
-    TetrisApp tetris(
-        {.controls = project_root / "controls.ini",
-         .tetromino_atlas =
-             project_root / "assets" / "sprites" / "tetromino.png",
-         .font_path = project_root / "assets" / "font" / "Arcade-Classic.ttf",
-         .font_size = 36});
-
-    tetris.run();
   } catch (const sdl::Exception &exception) {
     std::cerr << exception.what() << std::endl;
   } catch (const std::invalid_argument &exception) {

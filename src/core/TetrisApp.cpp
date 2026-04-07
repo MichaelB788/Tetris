@@ -4,24 +4,16 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
-
-TetrisApp::TetrisApp(const Specification &spec)
-    : piece_atlas_(sdl::img::create_texture_from_img(renderer_.get(),
-                                                     spec.tetromino_atlas)),
-      handler_(tetris_, spec.controls) {
-  auto ghost_surf = sdl::img::create_surface_from_img(spec.tetromino_atlas);
-  SDL_SetSurfaceAlphaMod(ghost_surf.get(), 0x80);
-  ghost_atlas_ =
-      sdl::create_texture_from_surface(renderer_.get(), ghost_surf.get());
-}
+#include <thread>
 
 void TetrisApp::run() {
+  using namespace std::chrono_literals;
   while (running_) {
     handle_events();
+    center_within_window();
     update_state();
-    center_layout();
     render_frame();
-    sleep(std::chrono::milliseconds(12));
+    std::this_thread::sleep_for(12ms);
   }
 }
 
@@ -50,8 +42,9 @@ void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), r, g, b, a);
   SDL_RenderClear(renderer_.get());
 
-  tetris_renderer_.draw_frame(tetris_, *renderer_, *piece_atlas_,
-                              *ghost_atlas_);
+  tetris_renderer_.draw_frame(tetris_, *renderer_);
+  text_renderer_.render_screen_text();
+  text_renderer_.render_score_int(tetris_.score());
 
   SDL_RenderPresent(renderer_.get());
 }
@@ -102,17 +95,15 @@ void TetrisApp::update_level() {
 
 void TetrisApp::handle_tetris_state() {
   if (tetris_.status() == Status::GameOver)
-    tetris_ = {};
+    reset();
 }
 
-void TetrisApp::center_layout() {
+void TetrisApp::center_within_window() {
   tetris_renderer_.align_inside_rect(win_size_);
-
-  // text_renderer_.adjust_lhs(hud_renderer_.queue_offset());
-  // text_renderer_.adjust_rhs(hud_renderer_.hold_offset());
+  text_renderer_.align_with_game(tetris_renderer_);
 }
 
 void TetrisApp::reset() {
-  tetris_ = {};
+  tetris_ = {}; // Reset
   gravity_clock_ = Clock(std::chrono::milliseconds(1000));
 }

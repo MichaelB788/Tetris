@@ -3,9 +3,9 @@
 #include "platform/EventHandler.hpp"
 #include "platform/PlatformSDL.hpp"
 #include "render/TetrisGameRenderer.hpp"
+#include "render/TextRenderer.hpp"
 #include "util/Clock.hpp"
 #include <filesystem>
-#include <thread>
 #include <utility>
 
 class TetrisApp {
@@ -17,18 +17,19 @@ public:
     float font_size;
   };
 
-  explicit TetrisApp(const Specification &spec);
+  explicit TetrisApp(const Specification &spec)
+      : tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
+        text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
+        handler_(tetris_, spec.controls) {}
 
   void run();
 
 private:
-  static void sleep(std::chrono::milliseconds ms) { std::this_thread::sleep_for(ms); }
-
   void handle_events();
 
   void render_frame();
 
-  void center_layout();
+  void center_within_window();
 
   void update_state();
 
@@ -49,15 +50,13 @@ private:
 
   sdl::Renderer renderer_ = sdl::create_renderer(window_.get());
 
-  sdl::Texture piece_atlas_ = nullptr;
-
-  sdl::Texture ghost_atlas_ = nullptr;
-
   TetrisGame tetris_{};
 
-  TetrisGameRenderer tetris_renderer_{};
-
   Clock gravity_clock_ = Clock(std::chrono::milliseconds(1000));
+
+  TetrisGameRenderer tetris_renderer_;
+
+  TextRenderer text_renderer_;
 
   EventHandler handler_;
 };

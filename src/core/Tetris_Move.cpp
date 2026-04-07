@@ -31,14 +31,15 @@ auto tetris::move::hard_dropped(const Tetromino &piece, const Matrix &matrix)
 
 namespace {
 constexpr size_t NUM_TRIALS = 5;
+constexpr size_t MAX_ROTATIONS = 4;
 
-constexpr Point STANDARD_PIECE_OFFSETS[Tetromino::MAX_ROTATIONS][NUM_TRIALS]{
+constexpr Point STANDARD_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
     {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
     {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
 
-constexpr Point I_PIECE_OFFSETS[Tetromino::MAX_ROTATIONS][NUM_TRIALS]{
+constexpr Point I_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
     {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
     {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
     {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180

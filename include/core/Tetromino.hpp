@@ -1,18 +1,14 @@
 #pragma once
-#include "util/CircularIntegral.hpp"
+#include "util/CircularUint.hpp"
 #include "util/Point.hpp"
 #include <array>
-#include <cstddef>
 #include <cstdint>
 
 struct Tetromino {
-  static constexpr size_t MAX_TETROMINO = 7;
-  static constexpr size_t MAX_ROTATIONS = 4;
+  using Shape = std::array<Point, 4>;
+  using Rotation = CircularUint<uint8_t, 4>;
 
   enum Type : uint8_t { I = 0, O, T, S, Z, J, L };
-
-  using Shape = std::array<Point, 4>;
-  using Rotation = CircularIntegral<uint8_t, MAX_ROTATIONS>;
 
   Type type = Type::I;
 
@@ -20,7 +16,7 @@ struct Tetromino {
 
   Rotation rotation = 0;
 
-  [[nodiscard]] Shape shifted(Point delta) const;
+  [[nodiscard]] auto shifted(Point delta) const -> Shape;
 
-  [[nodiscard]] Shape shape() const;
+  [[nodiscard]] auto shape() const -> Shape;
 };

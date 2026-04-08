@@ -4,12 +4,19 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
+#include <chrono>
 #include <thread>
 
 void TetrisApp::run() {
   using namespace std::chrono_literals;
+  std::chrono::time_point<std::chrono::steady_clock> curr_time{}, prev_time{};
+
   while (running_) {
-    tetris_.tick();
+    prev_time = curr_time;
+    curr_time = std::chrono::steady_clock::now();
+    const auto delta = curr_time - prev_time;
+
+    tetris_.tick(std::chrono::duration_cast<std::chrono::milliseconds>(delta));
     handle_events();
     center_within_window();
     handle_tetris_state();

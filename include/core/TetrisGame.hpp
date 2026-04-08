@@ -1,14 +1,19 @@
 #pragma once
 #include "core/TetrisGame_Types.hpp"
 #include "core/Tetris_Move.hpp"
-#include "util/Clock.hpp"
+#include <chrono>
 #include <random>
+
+struct Timer {
+  std::chrono::milliseconds duration{0};
+  std::chrono::milliseconds elapsed{0};
+};
 
 class TetrisGame {
 public:
   TetrisGame();
 
-  void tick();
+  void tick(std::chrono::milliseconds delta_time);
 
   void move_left() {
     tetris::move::shift(board_.player, board_.matrix, Point::left());
@@ -19,9 +24,7 @@ public:
   }
 
   void soft_drop() {
-    if (!tetris::move::shift(board_.player, board_.matrix, Point::down())) {
-      complete_move();
-    }
+    tetris::move::shift(board_.player, board_.matrix, Point::down());
   }
 
   void hard_drop();
@@ -51,21 +54,19 @@ private:
 
   void complete_move();
 
-  void update_gravity();
-
   HUD hud_{};
 
   Board board_{};
 
   std::mt19937 rng_{std::random_device{}()};
 
-  bool hold_command_triggered = false;
+  bool hold_command_triggered_ = false;
 
   Status status_ = Status::Running;
 
   int score_ = 0;
 
-  Clock gravity_delay_{std::chrono::milliseconds(1000)};
+  Timer lock_delay_{.duration{1000}};
 
-  Clock lock_delay_{std::chrono::milliseconds(1000)};
+  Timer gravity_delay_{.duration{1000}};
 };

@@ -11,10 +11,21 @@ TetrisGame::TetrisGame() {
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
-void TetrisGame::tick() {
-  gravity_delay_.tick();
-  update_gravity();
-  lock_delay_.tick();
+void TetrisGame::tick(std::chrono::milliseconds delta_time) {
+  // Update gravity
+  gravity_delay_.elapsed += delta_time;
+  if (gravity_delay_.elapsed >= gravity_delay_.duration) {
+    soft_drop();
+    gravity_delay_.elapsed = std::chrono::milliseconds::zero();
+  }
+
+  // Update lock delay only if a step down has failed
+  if (!board_.matrix.is_move_valid(board_.player.shifted(Point::down())))
+    lock_delay_.elapsed += delta_time;
+
+  if (lock_delay_.elapsed >= lock_delay_.duration) {
+    complete_move();
+  }
 }
 
 void TetrisGame::hard_drop() {
@@ -24,7 +35,7 @@ void TetrisGame::hard_drop() {
 }
 
 void TetrisGame::hold() {
-  if (hold_command_triggered)
+  if (hold_command_triggered_)
     return;
 
   Tetromino::Type new_hold = board_.player.type;
@@ -36,7 +47,7 @@ void TetrisGame::hold() {
     board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
   }
 
-  hold_command_triggered = true;
+  hold_command_triggered_ = true;
 }
 
 auto TetrisGame::switch_to_next() -> bool {
@@ -60,11 +71,7 @@ void TetrisGame::update_level() {
       1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
       450ms,  400ms, 350ms, 300ms, 200ms};
 
-  if (score_ < 100) {
-    gravity_delay_.activate_in(LEVELS[score_ / 10]);
-  } else {
-    gravity_delay_.activate_in(LEVELS.back());
-  }
+  gravity_delay_.duration = score_ < 100 ? LEVELS[score_ / 10] : LEVELS.back();
 }
 
 void TetrisGame::complete_move() {
@@ -73,15 +80,9 @@ void TetrisGame::complete_move() {
   update_level();
 
   if (switch_to_next()) {
-    hold_command_triggered = false;
+    hold_command_triggered_ = false;
+    lock_delay_.elapsed = std::chrono::milliseconds::zero();
   } else {
     status_ = Status::GameOver;
-  }
-}
-
-void TetrisGame::update_gravity() {
-  if (gravity_delay_.has_set_off()) {
-    soft_drop();
-    gravity_delay_.reset();
   }
 }

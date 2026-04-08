@@ -13,7 +13,7 @@ class TetrisGame {
 public:
   TetrisGame();
 
-  void tick(std::chrono::milliseconds delta_time);
+  void update(std::chrono::milliseconds delta_time);
 
   void move_left() {
     tetris::move::shift(board_.player, board_.matrix, Point::left());

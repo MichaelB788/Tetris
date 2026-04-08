@@ -11,7 +11,7 @@ TetrisGame::TetrisGame() {
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
-void TetrisGame::tick(std::chrono::milliseconds delta_time) {
+void TetrisGame::update(std::chrono::milliseconds delta_time) {
   // Update gravity
   gravity_delay_.elapsed += delta_time;
   if (gravity_delay_.elapsed >= gravity_delay_.duration) {

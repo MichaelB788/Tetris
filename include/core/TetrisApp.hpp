@@ -14,6 +14,7 @@ public:
     std::filesystem::path tetromino_atlas;
     std::filesystem::path font_path;
     float font_size;
+    int target_fps;
   };
 
   explicit TetrisApp(const Specification &spec)
@@ -35,6 +36,8 @@ private:
   void reset() { tetris_ = {}; }
 
   bool running_ = true;
+
+  int target_fps_ = 60;
 
   std::pair<int, int> win_size_{800, 800};
 

@@ -1,32 +1,55 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
 #include "platform/PlatformSDL.hpp"
-#include <SDL3/SDL_events.h>
-#include <SDL3/SDL_pixels.h>
-#include <SDL3/SDL_surface.h>
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 void TetrisApp::run() {
-  using namespace std::chrono_literals;
-  std::chrono::time_point<std::chrono::steady_clock> curr_time{}, prev_time{};
+  using nano = std::chrono::nanoseconds;
+  using milli = std::chrono::milliseconds;
+  using clock = std::chrono::steady_clock;
+
+  const nano FPS_CAP{1'000'000'000 / target_fps_};
+  int frame_count = 0;
+
+  auto prev_time{clock::now()};
+
+#ifndef NDEBUG
+  nano accumulator{0};
+#endif
 
   while (running_) {
-    prev_time = curr_time;
-    curr_time = std::chrono::steady_clock::now();
+    const auto curr_time = clock::now();
     const auto delta = curr_time - prev_time;
+    prev_time = curr_time;
 
-    tetris_.tick(std::chrono::duration_cast<std::chrono::milliseconds>(delta));
+    tetris_.update(std::chrono::duration_cast<milli>(delta));
     handle_events();
     center_within_window();
     handle_tetris_state();
     render_frame();
-    std::this_thread::sleep_for(12ms);
+
+#ifndef NDEBUG
+    accumulator += delta;
+    ++frame_count;
+    if (accumulator >= std::chrono::seconds(1)) {
+      std::cout << frame_count << "\n";
+      accumulator = milli::zero();
+      frame_count = 0;
+    }
+#endif
+
+    const auto frame_time = clock::now() - curr_time;
+    if (frame_time < FPS_CAP) {
+      std::this_thread::sleep_for(FPS_CAP - frame_time);
+    }
   }
 }
 
 void TetrisApp::handle_events() {
   SDL_Event e;
+
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_EVENT_QUIT:
@@ -36,13 +59,12 @@ void TetrisApp::handle_events() {
       auto &[w, h] = win_size_;
       SDL_GetWindowSizeInPixels(window_.get(), &w, &h);
     } break;
-    case SDL_EVENT_KEY_DOWN:
-      handler_.handle_kb_input(e);
-      break;
     default:
       break;
     }
   }
+
+  handler_.handle_kb_input();
 }
 
 void TetrisApp::render_frame() {

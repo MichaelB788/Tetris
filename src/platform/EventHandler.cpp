@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 namespace {
 constexpr std::array<std::pair<SDL_Keycode, Command>, 7> default_controls{
@@ -44,30 +45,31 @@ EventHandler::EventHandler(TetrisGame &game,
 
 namespace {
 template <typename K, typename V, size_t N>
-auto find_value(const auto &key, const std::array<std::pair<K, V>, N> &map)
-    -> const V * {
+  requires std::is_member_function_pointer_v<V>
+auto find_func_ptr(const auto &key, const std::array<std::pair<K, V>, N> &map)
+    -> V {
   for (const auto &[k, v] : map) {
     if (key == k)
-      return &v;
+      return v;
   }
   return nullptr;
 }
 } // namespace
 
 void EventHandler::handle_kb_input(SDL_Event &event) {
-  if (const auto command = find_value(event.key.key, controls_))
-    (tetris_.**command)();
+  if (const auto command = find_func_ptr(event.key.key, controls_))
+    (tetris_.*command)();
 }
 
 void EventHandler::parse_controls(std::istream &input) {
   static constexpr std::array<std::pair<std::string_view, Command>, 7>
-      string_to_command{{{"move_left", &TetrisGame::move_left},
-                         {"move_right", &TetrisGame::move_right},
-                         {"soft_drop", &TetrisGame::soft_drop},
-                         {"hard_drop", &TetrisGame::hard_drop},
-                         {"rotate_clockwise", &TetrisGame::rotate_cw},
-                         {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
-                         {"hold", &TetrisGame::hold}}};
+      COMMAND_STR_TO_FUNC{{{"move_left", &TetrisGame::move_left},
+                           {"move_right", &TetrisGame::move_right},
+                           {"soft_drop", &TetrisGame::soft_drop},
+                           {"hard_drop", &TetrisGame::hard_drop},
+                           {"rotate_clockwise", &TetrisGame::rotate_cw},
+                           {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
+                           {"hold", &TetrisGame::hold}}};
 
   size_t i = 0;
   std::string current_line;
@@ -90,13 +92,13 @@ void EventHandler::parse_controls(std::istream &input) {
       continue;
     }
 
-    const auto input_name = current_line.substr(0, eq_pos);
-    if (const auto command = find_value(input_name, string_to_command)) {
-      const auto keycode_name = current_line.substr(eq_pos + 1);
-      const auto keycode = SDL_GetKeyFromName(keycode_name.c_str());
-      controls_[i++] = {keycode, *command};
+    const auto command_str = current_line.substr(0, eq_pos);
+    if (const auto command = find_func_ptr(command_str, COMMAND_STR_TO_FUNC)) {
+      const auto sdl_keycode_str = current_line.substr(eq_pos + 1);
+      const auto sdl_keycode = SDL_GetKeyFromName(sdl_keycode_str.c_str());
+      controls_[i++] = {sdl_keycode, command};
     } else {
-      std::cerr << "Warn: Could not detect command from string '" << input_name
+      std::cerr << "Warn: Could not detect command from string '" << command_str
                 << "'. Using default controls\n";
       controls_ = default_controls;
       return;

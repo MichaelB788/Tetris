@@ -1,33 +1,48 @@
 #pragma once
-#include <cstddef>
+#include <limits>
 #include <type_traits>
 
 /// Small wrapper around an unsigned integer to represent circular values given
 /// a range
-template <typename T, size_t N>
-  requires(std::is_unsigned_v<T> and N > 0)
+template <typename T, T N>
+  requires(std::is_unsigned_v<T> and N > 0 and
+           N < std::numeric_limits<T>::max())
 class CircularUint {
 public:
-  CircularUint(T init = 0) : val(init) {}
+  constexpr CircularUint(T init = 0) : val_(init % N) {}
 
-  void operator++() { val = (val + 1) % N; }
+  [[nodiscard]] operator T() const { return val_; }
 
-  void operator--() { val = (val + N - 1) % N; }
+  [[nodiscard]] auto incremented() const -> CircularUint {
+    return (val_ + 1) % N;
+  }
 
-  auto operator++(int) -> T {
-    const auto ret = val;
+  [[nodiscard]] auto decremented() const -> CircularUint {
+    return (val_ + N - 1) % N;
+  }
+
+  auto operator++() -> CircularUint & {
+    val_ = incremented();
+    return *this;
+  }
+
+  auto operator--() -> CircularUint & {
+    val_ = decremented();
+    return *this;
+  }
+
+  auto operator++(int) -> CircularUint {
+    const auto ret = val_;
     operator++();
     return ret;
   }
 
-  auto operator--(int) -> T {
-    const auto ret = val;
+  auto operator--(int) -> CircularUint {
+    const auto ret = val_;
     operator--();
     return ret;
   }
 
-  [[nodiscard]] auto value() const -> T { return val; }
-
 private:
-  T val = 0;
+  T val_ = 0;
 };

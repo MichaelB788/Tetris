@@ -49,22 +49,17 @@ constexpr Point I_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
 void tetris::srs::rotation(Tetromino &piece, const Matrix &matrix,
                            RotationDir dir) {
   const auto prev = piece.rotation;
-  if (dir == RotationDir::CW) {
-    ++piece.rotation;
-  } else {
-    --piece.rotation;
-  }
-  const auto curr = piece.rotation;
+  const auto curr = dir == RotationDir::CW ? piece.rotation.incremented()
+                                           : piece.rotation.decremented();
 
   const auto &offsets =
       piece.type == Tetromino::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
   for (size_t i = 0; i < NUM_TRIALS; ++i) {
-    Point kick = offsets[prev.value()][i] - offsets[curr.value()][i];
-    if (matrix.is_move_valid(piece.shifted(kick))) {
+    const Point kick = offsets[prev][i] - offsets[curr][i];
+    if (matrix.is_move_valid(piece.shape_at(piece.pos + kick, curr))) {
+      piece.rotation = curr;
       piece.pos += kick;
       return;
     }
   }
-
-  piece.rotation = prev;
 }

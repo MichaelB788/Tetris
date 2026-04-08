@@ -19,4 +19,6 @@ struct Tetromino {
   [[nodiscard]] auto shifted(Point delta) const -> Shape;
 
   [[nodiscard]] auto shape() const -> Shape;
+
+  [[nodiscard]] auto shape_at(Point p, Rotation r) const -> Shape;
 };

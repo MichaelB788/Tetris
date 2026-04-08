@@ -53,14 +53,21 @@ constexpr Point SHAPES[MAX_TETROMINO][MAX_ROTATIONS][BLOCKS]{
 
 auto Tetromino::shifted(Point delta) const -> Shape {
   Shape shifted{};
-  std::ranges::transform(SHAPES[type][rotation.value()], shifted.begin(),
+  std::ranges::transform(SHAPES[type][rotation], shifted.begin(),
                          [&](Point p) { return pos + p + delta; });
   return shifted;
 }
 
 auto Tetromino::shape() const -> Shape {
   Shape shape{};
-  std::ranges::transform(SHAPES[type][rotation.value()], shape.begin(),
+  std::ranges::transform(SHAPES[type][rotation], shape.begin(),
                          [this](Point p) { return pos + p; });
+  return shape;
+}
+
+auto Tetromino::shape_at(Point p, Rotation r) const -> Shape {
+  Shape shape{};
+  std::ranges::transform(SHAPES[type][r], shape.begin(),
+                         [&](Point point) { return p + point; });
   return shape;
 }

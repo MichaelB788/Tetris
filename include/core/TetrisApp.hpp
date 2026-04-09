@@ -25,7 +25,7 @@ public:
   void run();
 
 private:
-  void handle_events();
+  void poll_events();
 
   void render_frame();
 

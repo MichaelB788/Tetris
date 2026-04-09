@@ -11,20 +11,22 @@ TetrisGame::TetrisGame() {
   board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
 }
 
-void TetrisGame::update(std::chrono::milliseconds delta_time) {
+void TetrisGame::update(std::chrono::nanoseconds delta_time) {
   // Update gravity
-  gravity_delay_.elapsed += delta_time;
   if (gravity_delay_.elapsed >= gravity_delay_.duration) {
     soft_drop();
-    gravity_delay_.elapsed = std::chrono::milliseconds::zero();
+    gravity_delay_.elapsed = {};
+  } else {
+    gravity_delay_.elapsed += delta_time;
   }
 
-  // Update lock delay only if a step down has failed
-  if (!board_.matrix.is_move_valid(board_.player.shifted(Point::down())))
-    lock_delay_.elapsed += delta_time;
-
+  // Update lock delay elapsed time only if a soft drop has failed (in other
+  // words, the piece is touching the ground).
   if (lock_delay_.elapsed >= lock_delay_.duration) {
     complete_move();
+  } else if (!board_.matrix.is_move_valid(
+                 board_.player.shifted(Point::down()))) {
+    lock_delay_.elapsed += delta_time;
   }
 }
 
@@ -81,7 +83,7 @@ void TetrisGame::complete_move() {
 
   if (switch_to_next()) {
     hold_command_triggered_ = false;
-    lock_delay_.elapsed = std::chrono::milliseconds::zero();
+    lock_delay_.elapsed = {};
   } else {
     status_ = Status::GameOver;
   }

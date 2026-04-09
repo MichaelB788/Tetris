@@ -1,19 +1,15 @@
 #pragma once
 #include "core/TetrisGame_Types.hpp"
 #include "core/Tetris_Move.hpp"
+#include "util/Timer.hpp"
 #include <chrono>
 #include <random>
-
-struct Timer {
-  std::chrono::milliseconds duration{0};
-  std::chrono::milliseconds elapsed{0};
-};
 
 class TetrisGame {
 public:
   TetrisGame();
 
-  void update(std::chrono::milliseconds delta_time);
+  void update(std::chrono::nanoseconds delta_time);
 
   void move_left() {
     tetris::move::shift(board_.player, board_.matrix, Point::left());
@@ -66,7 +62,7 @@ private:
 
   int score_ = 0;
 
-  Timer lock_delay_{.duration{1000}};
+  Timer lock_delay_{.duration = std::chrono::seconds{1}};
 
-  Timer gravity_delay_{.duration{1000}};
+  Timer gravity_delay_{.duration = std::chrono::seconds{1}};
 };

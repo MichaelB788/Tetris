@@ -1,53 +1,63 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
 #include "platform/PlatformSDL.hpp"
+#include "util/Timer.hpp"
+#include <SDL3/SDL_events.h>
 #include <chrono>
 #include <iostream>
 #include <thread>
 
 void TetrisApp::run() {
-  using nano = std::chrono::nanoseconds;
-  using milli = std::chrono::milliseconds;
-  using clock = std::chrono::steady_clock;
-
-  const nano FPS_CAP{1'000'000'000 / target_fps_};
-  int frame_count = 0;
-
-  auto prev_time{clock::now()};
+  // FPS cap recorded in nanoseconds. Uses integer division.
+  const std::chrono::nanoseconds FPS_CAP{1'000'000'000 / target_fps_};
 
 #ifndef NDEBUG
-  nano accumulator{0};
+  // Variables used for logging FPS
+  int frame_count = 0;
+  Timer log_frame = {.duration = std::chrono::seconds(1)};
 #endif
 
+  // Start of game loop
+  auto prev_time{std::chrono::steady_clock::now()};
   while (running_) {
-    const auto curr_time = clock::now();
-    const auto delta = curr_time - prev_time;
+    // Compute delta and update previous time point
+    const auto curr_time = std::chrono::steady_clock::now();
+    const auto delta = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        curr_time - prev_time);
     prev_time = curr_time;
 
-    tetris_.update(std::chrono::duration_cast<milli>(delta));
-    handle_events();
-    center_within_window();
+    // Poll events and update game state
+    poll_events();
+    tetris_.update(delta);
+
+    // Handle keyboard input AFTER polling events
+    handler_.handle_kb_input(delta);
+
     handle_tetris_state();
+
     render_frame();
 
 #ifndef NDEBUG
-    accumulator += delta;
-    ++frame_count;
-    if (accumulator >= std::chrono::seconds(1)) {
+    // Log FPS in debug
+    if (log_frame.elapsed >= log_frame.duration) {
       std::cout << frame_count << "\n";
-      accumulator = milli::zero();
+      log_frame.elapsed = {};
       frame_count = 0;
+    } else {
+      log_frame.elapsed += delta;
+      ++frame_count;
     }
 #endif
 
-    const auto frame_time = clock::now() - curr_time;
+    // If frame finished early, sleep for remainder of time
+    const auto frame_time = std::chrono::steady_clock::now() - curr_time;
     if (frame_time < FPS_CAP) {
       std::this_thread::sleep_for(FPS_CAP - frame_time);
     }
   }
 }
 
-void TetrisApp::handle_events() {
+void TetrisApp::poll_events() {
   SDL_Event e;
 
   while (SDL_PollEvent(&e)) {
@@ -58,18 +68,16 @@ void TetrisApp::handle_events() {
     case SDL_EVENT_WINDOW_RESIZED: {
       auto &[w, h] = win_size_;
       SDL_GetWindowSizeInPixels(window_.get(), &w, &h);
+      center_within_window();
     } break;
     default:
       break;
     }
   }
-
-  handler_.handle_kb_input();
 }
 
 void TetrisApp::render_frame() {
-  static const auto [r, g, b, a] = SDL_Color(0x17, 0x18, 0x28, 0xFF);
-  SDL_SetRenderDrawColor(renderer_.get(), r, g, b, a);
+  SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer_.get());
 
   tetris_renderer_.draw_frame(tetris_, *renderer_);

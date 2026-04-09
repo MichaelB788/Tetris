@@ -2,6 +2,8 @@
 #include "core/TetrisGame.hpp"
 #include <SDL3/SDL_keyboard.h>
 #include <array>
+#include <chrono>
+#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -57,13 +59,26 @@ auto find_func_ptr(const auto &key, const std::array<std::pair<K, V>, N> &map)
 }
 } // namespace
 
-void EventHandler::handle_kb_input() {
-  const auto current_key_states = SDL_GetKeyboardState(NULL);
+void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
+  auto curr_kb_state = SDL_GetKeyboardState(nullptr);
 
   for (const auto &[scancode, func] : controls_) {
-    if (current_key_states[scancode]) {
+    if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
+      // First key press
       (tetris_.*func)();
+      rapid_fire_delay_.elapsed = {};
+    } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
+      // Key is held down
+      if (rapid_fire_delay_.elapsed >= rapid_fire_delay_.duration) {
+        (tetris_.*func)();
+      } else {
+        rapid_fire_delay_.elapsed += delta;
+      }
     }
+  }
+
+  for (size_t i = 0; i < SDL_SCANCODE_COUNT; ++i) {
+    prev_kb_state_[i] = curr_kb_state[i];
   }
 }
 

@@ -10,36 +10,24 @@
 #include <string_view>
 #include <type_traits>
 
-namespace {
-constexpr std::array<std::pair<SDL_Scancode, Command>, 7> default_controls{
-    {{SDL_SCANCODE_LEFT, &TetrisGame::move_left},
-     {SDL_SCANCODE_RIGHT, &TetrisGame::move_right},
-     {SDL_SCANCODE_DOWN, &TetrisGame::soft_drop},
-     {SDL_SCANCODE_SPACE, &TetrisGame::hard_drop},
-     {SDL_SCANCODE_R, &TetrisGame::rotate_cw},
-     {SDL_SCANCODE_E, &TetrisGame::rotate_ccw},
-     {SDL_SCANCODE_S, &TetrisGame::hold}}};
-} // namespace
-
 EventHandler::EventHandler(TetrisGame &game,
                            const std::filesystem::path &config_path)
-    : tetris_(game), controls_{default_controls} {
-  if (!std::filesystem::exists(config_path)) {
-    std::cerr << "Warn: Could not find file: " << config_path.filename()
-              << std::endl;
+    : tetris_(game) {
+  if (config_path.empty()) {
+    std::cerr << "Using default controls.\n";
     return;
   }
 
-  if (config_path.filename() != "controls.ini") {
+  if (!std::filesystem::exists(config_path) ||
+      config_path.filename() != "controls.ini") {
     std::cerr << "Warn: expected file \"controls.ini\", instead got "
-              << config_path.filename() << std::endl;
+              << config_path.filename() << "\n";
     return;
   }
 
   std::ifstream config_file(config_path);
-
   if (!config_file.is_open()) {
-    std::cerr << "Warn: Unable to open the config file." << std::endl;
+    std::cerr << "Warn: Unable to open the config file.\n";
     return;
   }
 
@@ -66,13 +54,18 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
     if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // First key press
       (tetris_.*func)();
-      rapid_fire_delay_.elapsed = {};
+      delay_until_rapid_fire_.elapsed = {};
     } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // Key is held down
-      if (rapid_fire_delay_.elapsed >= rapid_fire_delay_.duration) {
-        (tetris_.*func)();
+      if (delay_until_rapid_fire_.elapsed >= delay_until_rapid_fire_.duration) {
+        if (rapid_fire_delay_.elapsed >= rapid_fire_delay_.duration) {
+          (tetris_.*func)();
+          rapid_fire_delay_.elapsed = {};
+        } else {
+          rapid_fire_delay_.elapsed += delta;
+        }
       } else {
-        rapid_fire_delay_.elapsed += delta;
+        delay_until_rapid_fire_.elapsed += delta;
       }
     }
   }
@@ -83,14 +76,17 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
 }
 
 void EventHandler::parse_controls(std::istream &input) {
-  static constexpr std::array<std::pair<std::string_view, Command>, 7>
-      COMMAND_STR_TO_FUNC{{{"move_left", &TetrisGame::move_left},
-                           {"move_right", &TetrisGame::move_right},
-                           {"soft_drop", &TetrisGame::soft_drop},
-                           {"hard_drop", &TetrisGame::hard_drop},
-                           {"rotate_clockwise", &TetrisGame::rotate_cw},
-                           {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
-                           {"hold", &TetrisGame::hold}}};
+  static constexpr std::array<std::pair<std::string_view, Command>, MAX_COMMAND>
+      STR_TO_FUNC{{{"move_left", &TetrisGame::move_left},
+                   {"move_right", &TetrisGame::move_right},
+                   {"soft_drop", &TetrisGame::soft_drop},
+                   {"hard_drop", &TetrisGame::hard_drop},
+                   {"rotate_clockwise", &TetrisGame::rotate_cw},
+                   {"rotate_counterclockwise", &TetrisGame::rotate_ccw},
+                   {"rotate_half_turn", &TetrisGame::rotate_ht},
+                   {"hold", &TetrisGame::hold}}};
+
+  const auto default_controls = controls_;
 
   size_t i = 0;
   std::string current_line;
@@ -114,7 +110,7 @@ void EventHandler::parse_controls(std::istream &input) {
     }
 
     const auto command_str = current_line.substr(0, eq_pos);
-    if (const auto command = find_func_ptr(command_str, COMMAND_STR_TO_FUNC)) {
+    if (const auto command = find_func_ptr(command_str, STR_TO_FUNC)) {
       const auto sdl_scancode_str = current_line.substr(eq_pos + 1);
       const auto sdl_scancode =
           SDL_GetScancodeFromName(sdl_scancode_str.c_str());

@@ -1,4 +1,5 @@
 #pragma once
+#include "core/TetrisGame.hpp"
 #include "util/Timer.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_scancode.h>
@@ -11,15 +12,16 @@ using Command = void (TetrisGame::*)();
 
 class EventHandler {
 public:
-  bool first_key_press = true;
-
   explicit EventHandler(TetrisGame &game,
                         const std::filesystem::path &config_path);
 
   void handle_kb_input(std::chrono::nanoseconds delta);
 
 private:
-  Timer rapid_fire_delay_{.duration = std::chrono::milliseconds(300)};
+  static constexpr auto MAX_COMMAND = 8;
+  Timer delay_until_rapid_fire_{.duration = std::chrono::milliseconds(300)};
+
+  Timer rapid_fire_delay_{.duration = std::chrono::microseconds(1500)};
 
   std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
 
@@ -27,5 +29,13 @@ private:
 
   TetrisGame &tetris_;
 
-  std::array<std::pair<SDL_Scancode, Command>, 7> controls_;
+  std::array<std::pair<SDL_Scancode, Command>, MAX_COMMAND> controls_{
+      {{SDL_SCANCODE_W, &TetrisGame::hard_drop},
+       {SDL_SCANCODE_A, &TetrisGame::move_left},
+       {SDL_SCANCODE_S, &TetrisGame::soft_drop},
+       {SDL_SCANCODE_D, &TetrisGame::move_right},
+       {SDL_SCANCODE_UP, &TetrisGame::hold},
+       {SDL_SCANCODE_RIGHT, &TetrisGame::rotate_cw},
+       {SDL_SCANCODE_LEFT, &TetrisGame::rotate_ccw},
+       {SDL_SCANCODE_DOWN, &TetrisGame::rotate_ht}}};
 };

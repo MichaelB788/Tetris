@@ -18,7 +18,8 @@ public:
   };
 
   explicit TetrisApp(const Specification &spec)
-      : tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
+      : target_fps_(spec.target_fps),
+        tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
         text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
         handler_(tetris_, spec.controls) {}
 

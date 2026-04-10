@@ -5,39 +5,53 @@ class Timer {
 public:
   Timer(std::chrono::nanoseconds duration) : duration_(duration) {}
 
-  void operator+=(std::chrono::nanoseconds delta) { elapsed_ += delta; }
+  void operator+=(std::chrono::nanoseconds delta) { accumulator_ += delta; }
 
   template <typename Fn>
-  void tick(std::chrono::nanoseconds delta, Fn &&do_action);
+  void invoke_when_elapsed(std::chrono::nanoseconds delta, Fn &&function);
+
+  template <typename Fn>
+  void invoke_periodically(std::chrono::nanoseconds delta, Fn &&function);
 
   void set_duration(std::chrono::nanoseconds duration) { duration_ = duration; }
 
-  void reset() { elapsed_ = {}; }
+  void reset() { accumulator_ = {}; }
 
-  [[nodiscard]] auto has_set_off() const -> bool {
-    return elapsed_ >= duration_;
+  [[nodiscard]] auto has_elapsed() const -> bool {
+    return accumulator_ >= duration_;
   }
 
   [[nodiscard]] auto duration() const -> std::chrono::nanoseconds {
     return duration_;
   }
 
-  [[nodiscard]] auto elapsed() const -> std::chrono::nanoseconds {
-    return elapsed_;
+  [[nodiscard]] auto accumulator() const -> std::chrono::nanoseconds {
+    return accumulator_;
   }
 
 private:
   std::chrono::nanoseconds duration_{0};
 
-  std::chrono::nanoseconds elapsed_{0};
+  std::chrono::nanoseconds accumulator_{0};
 };
 
 template <typename Fn>
-inline void Timer::tick(std::chrono::nanoseconds delta, Fn &&function) {
-  if (has_set_off()) {
-    function();
-    elapsed_ = {};
+inline void Timer::invoke_when_elapsed(std::chrono::nanoseconds delta,
+                                       Fn &&function) {
+  if (!has_elapsed()) {
+    accumulator_ += delta;
   } else {
-    elapsed_ += delta;
+    function();
+  }
+}
+
+template <typename Fn>
+inline void Timer::invoke_periodically(std::chrono::nanoseconds delta,
+                                       Fn &&function) {
+  if (!has_elapsed()) {
+    accumulator_ += delta;
+  } else {
+    function();
+    accumulator_ = {};
   }
 }

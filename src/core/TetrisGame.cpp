@@ -13,12 +13,12 @@ TetrisGame::TetrisGame() {
 
 void TetrisGame::update(std::chrono::nanoseconds delta_time) {
   // Update gravity
-  gravity_delay_.tick(delta_time, [this] { soft_drop(); });
+  gravity_delay_.invoke_periodically(delta_time, [this] { soft_drop(); });
 
   // Update lock delay elapsed time only if a soft drop has failed (in other
   // words, the piece is touching the ground).
   if (!board_.matrix.is_move_valid(board_.player.shifted(Point::down())))
-    lock_delay_.tick(delta_time, [this] { complete_move(); });
+    lock_delay_.invoke_periodically(delta_time, [this] { complete_move(); });
 }
 
 void TetrisGame::hard_drop() {

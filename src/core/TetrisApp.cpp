@@ -39,9 +39,9 @@ void TetrisApp::run() {
 
 #ifndef NDEBUG
     // Log FPS in debug
-    if (!log_frame.has_set_off())
+    if (!log_frame.has_elapsed())
       ++frame_count;
-    log_frame.tick(delta, [&] {
+    log_frame.invoke_periodically(delta, [&] {
       std::cout << frame_count << "\n";
       frame_count = 0;
     });

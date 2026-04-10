@@ -50,17 +50,17 @@ auto find_func_ptr(const auto &key, const std::array<std::pair<K, V>, N> &map)
 void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
   auto curr_kb_state = SDL_GetKeyboardState(nullptr);
 
-  for (const auto &[scancode, func] : controls_) {
+  for (const auto &[scancode, command] : controls_) {
     if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // First key press
-      (tetris_.*func)();
+      (tetris_.*command)();
       delay_until_rapid_fire_.reset();
     } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // Key is held down
-      delay_until_rapid_fire_ += delta;
-      if (delay_until_rapid_fire_.has_set_off()) {
-        rapid_fire_delay_.tick(delta, [&] { (tetris_.*func)(); });
-      }
+      delay_until_rapid_fire_.invoke_when_elapsed(delta, [&] {
+        rapid_fire_delay_.invoke_periodically(delta,
+                                              [&] { (tetris_.*command)(); });
+      });
     }
   }
 

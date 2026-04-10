@@ -24,7 +24,7 @@ private:
 
   Timer delay_until_rapid_fire_{std::chrono::milliseconds(250)};
 
-  Timer rapid_fire_delay_{std::chrono::microseconds(1500)};
+  Timer rapid_fire_delay_{std::chrono::microseconds(1000)};
 
   std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
 

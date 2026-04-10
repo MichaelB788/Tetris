@@ -58,8 +58,15 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
     } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // Key is held down
       delay_until_rapid_fire_.invoke_when_elapsed(delta, [&] {
-        rapid_fire_delay_.invoke_periodically(delta,
-                                              [&] { (tetris_.*command)(); });
+        if (command == &TetrisGame::rotate_cw ||
+            command == &TetrisGame::rotate_ccw ||
+            command == &TetrisGame::rotate_ht) {
+          rapid_fire_rotation_delay_.invoke_periodically(
+              delta, [&] { (tetris_.*command)(); });
+        } else {
+          rapid_fire_movement_delay_.invoke_periodically(
+              delta, [&] { (tetris_.*command)(); });
+        }
       });
     }
   }

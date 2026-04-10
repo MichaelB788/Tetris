@@ -22,9 +22,11 @@ private:
 
   TetrisGame &tetris_;
 
-  Timer delay_until_rapid_fire_{std::chrono::milliseconds(250)};
+  Timer delay_until_rapid_fire_{std::chrono::milliseconds(150)};
 
-  Timer rapid_fire_delay_{std::chrono::microseconds(1000)};
+  Timer rapid_fire_movement_delay_{std::chrono::microseconds(200)};
+
+  Timer rapid_fire_rotation_delay_{std::chrono::milliseconds(100)};
 
   std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
 

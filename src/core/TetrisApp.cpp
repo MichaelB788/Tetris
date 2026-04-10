@@ -14,7 +14,7 @@ void TetrisApp::run() {
 #ifndef NDEBUG
   // Variables used for logging FPS
   int frame_count = 0;
-  Timer log_frame = {.duration = std::chrono::seconds(1)};
+  Timer log_frame{std::chrono::seconds(1)};
 #endif
 
   // Start of game loop
@@ -39,14 +39,12 @@ void TetrisApp::run() {
 
 #ifndef NDEBUG
     // Log FPS in debug
-    if (log_frame.elapsed >= log_frame.duration) {
-      std::cout << frame_count << "\n";
-      log_frame.elapsed = {};
-      frame_count = 0;
-    } else {
-      log_frame.elapsed += delta;
+    if (!log_frame.has_set_off())
       ++frame_count;
-    }
+    log_frame.tick(delta, [&] {
+      std::cout << frame_count << "\n";
+      frame_count = 0;
+    });
 #endif
 
     // If frame finished early, sleep for remainder of time

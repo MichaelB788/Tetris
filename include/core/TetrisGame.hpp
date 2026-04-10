@@ -67,7 +67,7 @@ private:
 
   int score_ = 0;
 
-  Timer lock_delay_{.duration = std::chrono::seconds{1}};
+  Timer lock_delay_{std::chrono::seconds{1}};
 
-  Timer gravity_delay_{.duration = std::chrono::seconds{1}};
+  Timer gravity_delay_{std::chrono::seconds{1}};
 };

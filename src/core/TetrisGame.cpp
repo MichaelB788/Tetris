@@ -13,21 +13,12 @@ TetrisGame::TetrisGame() {
 
 void TetrisGame::update(std::chrono::nanoseconds delta_time) {
   // Update gravity
-  if (gravity_delay_.elapsed >= gravity_delay_.duration) {
-    soft_drop();
-    gravity_delay_.elapsed = {};
-  } else {
-    gravity_delay_.elapsed += delta_time;
-  }
+  gravity_delay_.tick(delta_time, [this] { soft_drop(); });
 
   // Update lock delay elapsed time only if a soft drop has failed (in other
   // words, the piece is touching the ground).
-  if (lock_delay_.elapsed >= lock_delay_.duration) {
-    complete_move();
-  } else if (!board_.matrix.is_move_valid(
-                 board_.player.shifted(Point::down()))) {
-    lock_delay_.elapsed += delta_time;
-  }
+  if (!board_.matrix.is_move_valid(board_.player.shifted(Point::down())))
+    lock_delay_.tick(delta_time, [this] { complete_move(); });
 }
 
 void TetrisGame::hard_drop() {
@@ -71,9 +62,10 @@ void TetrisGame::update_level() {
   using namespace std::chrono_literals;
   static constexpr std::array<std::chrono::milliseconds, 11> LEVELS{
       1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
-      450ms,  400ms, 350ms, 300ms, 200ms};
+      450ms,  400ms, 300ms, 200ms, 100ms};
 
-  gravity_delay_.duration = score_ < 100 ? LEVELS[score_ / 10] : LEVELS.back();
+  gravity_delay_.set_duration(score_ < 100 ? LEVELS[score_ / 10]
+                                           : LEVELS.back());
 }
 
 void TetrisGame::complete_move() {
@@ -83,7 +75,7 @@ void TetrisGame::complete_move() {
 
   if (switch_to_next()) {
     hold_command_triggered_ = false;
-    lock_delay_.elapsed = {};
+    lock_delay_.reset();
   } else {
     status_ = Status::GameOver;
   }

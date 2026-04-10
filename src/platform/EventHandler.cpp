@@ -54,18 +54,12 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
     if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // First key press
       (tetris_.*func)();
-      delay_until_rapid_fire_.elapsed = {};
+      delay_until_rapid_fire_.reset();
     } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // Key is held down
-      if (delay_until_rapid_fire_.elapsed >= delay_until_rapid_fire_.duration) {
-        if (rapid_fire_delay_.elapsed >= rapid_fire_delay_.duration) {
-          (tetris_.*func)();
-          rapid_fire_delay_.elapsed = {};
-        } else {
-          rapid_fire_delay_.elapsed += delta;
-        }
-      } else {
-        delay_until_rapid_fire_.elapsed += delta;
+      delay_until_rapid_fire_ += delta;
+      if (delay_until_rapid_fire_.has_set_off()) {
+        rapid_fire_delay_.tick(delta, [&] { (tetris_.*func)(); });
       }
     }
   }
@@ -76,7 +70,7 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta) {
 }
 
 void EventHandler::parse_controls(std::istream &input) {
-  static constexpr std::array<std::pair<std::string_view, Command>, MAX_COMMAND>
+  static constexpr std::array<std::pair<std::string_view, Command>, 8>
       STR_TO_FUNC{{{"move_left", &TetrisGame::move_left},
                    {"move_right", &TetrisGame::move_right},
                    {"soft_drop", &TetrisGame::soft_drop},

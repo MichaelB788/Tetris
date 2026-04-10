@@ -55,12 +55,6 @@ private:
 
   void complete_move();
 
-  HUD hud_{};
-
-  Board board_{};
-
-  std::mt19937 rng_{std::random_device{}()};
-
   bool hold_command_triggered_ = false;
 
   Status status_ = Status::Running;
@@ -70,4 +64,10 @@ private:
   Timer lock_delay_{std::chrono::seconds{1}};
 
   Timer gravity_delay_{std::chrono::seconds{1}};
+
+  HUD hud_{};
+
+  Board board_{};
+
+  std::mt19937 rng_{std::random_device{}()};
 };

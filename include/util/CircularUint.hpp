@@ -13,12 +13,12 @@ public:
 
   [[nodiscard]] operator T() const { return val_; }
 
-  [[nodiscard]] auto incremented() const -> CircularUint {
-    return (val_ + 1) % N;
+  [[nodiscard]] auto incremented(const T addend = 1) const -> CircularUint {
+    return (val_ + addend) % N;
   }
 
-  [[nodiscard]] auto decremented() const -> CircularUint {
-    return (val_ + N - 1) % N;
+  [[nodiscard]] auto decremented(const T addend = 1) const -> CircularUint {
+    return (val_ + N - addend) % N;
   }
 
   auto operator++() -> CircularUint & {

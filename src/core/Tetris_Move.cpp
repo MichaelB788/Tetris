@@ -49,8 +49,18 @@ constexpr Point I_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
 void tetris::srs::rotation(Tetromino &piece, const Matrix &matrix,
                            RotationDir dir) {
   const auto prev = piece.rotation;
-  const auto curr = dir == RotationDir::CW ? piece.rotation.incremented()
-                                           : piece.rotation.decremented();
+  Tetromino::Rotation curr;
+  switch (dir) {
+  case RotationDir::Clockwise:
+    curr = piece.rotation.incremented();
+    break;
+  case RotationDir::CounterClockwise:
+    curr = piece.rotation.decremented();
+    break;
+  case RotationDir::HalfTurn:
+    curr = piece.rotation.incremented(2);
+    break;
+  }
 
   const auto &offsets =
       piece.type == Tetromino::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;

@@ -26,11 +26,16 @@ public:
   void hard_drop();
 
   void rotate_cw() {
-    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::CW);
+    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::Clockwise);
   }
 
   void rotate_ccw() {
-    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::CCW);
+    tetris::srs::rotation(board_.player, board_.matrix,
+                          RotationDir::CounterClockwise);
+  }
+
+  void rotate_ht() {
+    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::HalfTurn);
   }
 
   void hold();

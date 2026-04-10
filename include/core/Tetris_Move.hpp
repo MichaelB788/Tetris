@@ -14,7 +14,7 @@ auto shift(Tetromino &piece, const Matrix &matrix, Point delta) -> bool;
     -> Tetromino;
 } // namespace tetris::move
 
-enum class RotationDir { CW, CCW };
+enum class RotationDir { Clockwise, CounterClockwise, HalfTurn };
 namespace tetris::srs {
 void rotation(Tetromino &tet, const Matrix &matrix, RotationDir dir);
 } // namespace tetris::srs

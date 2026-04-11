@@ -3,7 +3,7 @@
 #include <chrono>
 
 namespace {
-constexpr Point INIT_POS = {.x = 4, .y = 2};
+constexpr Point INIT_POS = {.x = 4, .y = 4};
 }
 
 TetrisGame::TetrisGame() {
@@ -21,32 +21,32 @@ void TetrisGame::update(std::chrono::nanoseconds delta_time) {
     lock_delay_.invoke_periodically(delta_time, [this] { complete_move(); });
 }
 
-void TetrisGame::hard_drop() {
-  board_.player.pos +=
-      tetris::move::hard_drop_delta(board_.player, board_.matrix);
-  complete_move();
-}
-
 void TetrisGame::hold() {
   if (hold_command_triggered_)
     return;
 
   Tetromino::Type new_hold = board_.player.type;
   if (hud_.held_type.has_value()) {
-    board_.player = Tetromino(hud_.held_type.value(), INIT_POS);
+    if (!switch_to_next(hud_.held_type.value())) {
+      status_ = Status::GameOver;
+      return;
+    }
     hud_.held_type = new_hold;
   } else {
     hud_.held_type = new_hold;
-    board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
+    if (!switch_to_next(hud_.held_type.value())) {
+      status_ = Status::GameOver;
+      return;
+    }
   }
 
   hold_command_triggered_ = true;
 }
 
-auto TetrisGame::switch_to_next() -> bool {
-  Tetromino next_piece = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
+auto TetrisGame::switch_to_next(Tetromino::Type next) -> bool {
+  Tetromino next_piece = Tetromino(next, INIT_POS);
 
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < (Matrix::ROWS - INIT_POS.y); ++i) {
     if (board_.matrix.is_move_valid(next_piece.shape())) {
       board_.player = next_piece;
       return true;
@@ -73,7 +73,7 @@ void TetrisGame::complete_move() {
   score_ += board_.matrix.clear_lines();
   update_level();
 
-  if (switch_to_next()) {
+  if (switch_to_next(hud_.next_queue.pop(rng_))) {
     hold_command_triggered_ = false;
     lock_delay_.reset();
   } else {

@@ -24,7 +24,7 @@ private:
 
   Timer delay_until_rapid_fire_{std::chrono::milliseconds(150)};
 
-  Timer rapid_fire_movement_delay_{std::chrono::microseconds(200)};
+  Timer rapid_fire_movement_delay_{std::chrono::milliseconds(30)};
 
   Timer rapid_fire_rotation_delay_{std::chrono::milliseconds(100)};
 

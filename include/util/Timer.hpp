@@ -38,9 +38,8 @@ private:
 template <typename Fn>
 inline void Timer::invoke_when_elapsed(std::chrono::nanoseconds delta,
                                        Fn &&function) {
-  if (!has_elapsed()) {
-    accumulator_ += delta;
-  } else {
+  accumulator_ += delta;
+  if (has_elapsed()) {
     function();
   }
 }
@@ -48,10 +47,9 @@ inline void Timer::invoke_when_elapsed(std::chrono::nanoseconds delta,
 template <typename Fn>
 inline void Timer::invoke_periodically(std::chrono::nanoseconds delta,
                                        Fn &&function) {
-  if (!has_elapsed()) {
-    accumulator_ += delta;
-  } else {
+  accumulator_ += delta;
+  while (has_elapsed()) {
+    accumulator_ -= duration_;
     function();
-    accumulator_ = {};
   }
 }

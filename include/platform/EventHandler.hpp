@@ -18,15 +18,20 @@ public:
   void handle_kb_input(std::chrono::nanoseconds delta);
 
 private:
+  struct InputTiming {
+    Timer init_delay;
+    Timer repeat_interval;
+  };
+
   void parse_controls(std::istream &input);
 
   TetrisGame &tetris_;
 
-  Timer delay_until_rapid_fire_{std::chrono::milliseconds(150)};
+  InputTiming rotation_{.init_delay{std::chrono::milliseconds(300)},
+                        .repeat_interval{std::chrono::milliseconds(100)}};
 
-  Timer rapid_fire_movement_delay_{std::chrono::milliseconds(30)};
-
-  Timer rapid_fire_rotation_delay_{std::chrono::milliseconds(100)};
+  InputTiming movement_{.init_delay{std::chrono::milliseconds(200)},
+                        .repeat_interval{std::chrono::milliseconds(30)}};
 
   std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
 

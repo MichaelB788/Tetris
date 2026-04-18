@@ -34,7 +34,7 @@ void TetrisGame::hold() {
     hud_.held_type = new_hold;
   } else {
     hud_.held_type = new_hold;
-    if (!switch_to_next(hud_.held_type.value())) {
+    if (!switch_to_next(hud_.next_queue.pop(rng_))) {
       status_ = Status::GameOver;
       return;
     }

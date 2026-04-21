@@ -21,7 +21,9 @@ public:
       : target_fps_(spec.target_fps),
         tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
         text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
-        handler_(tetris_, spec.controls) {}
+        handler_(tetris_, spec.controls) {
+    center_within_window();
+  }
 
   void run();
 
@@ -40,7 +42,7 @@ private:
 
   int target_fps_ = 60;
 
-  std::pair<int, int> win_size_{800, 800};
+  std::pair<int, int> win_size_{800, 1000};
 
   sdl::Window window_ = sdl::create_window(
       "Tetris", win_size_.first, win_size_.second, SDL_WINDOW_RESIZABLE);

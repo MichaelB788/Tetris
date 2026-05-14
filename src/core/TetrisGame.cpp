@@ -1,5 +1,6 @@
 #include "core/TetrisGame.hpp"
 #include "core/Tetris_Move.hpp"
+#include "core/Tetromino.hpp"
 #include <chrono>
 
 namespace {
@@ -17,7 +18,8 @@ void TetrisGame::update(std::chrono::nanoseconds delta_time) {
 
   // Update lock delay elapsed time only if a soft drop has failed (in other
   // words, the piece is touching the ground).
-  if (!board_.matrix.is_move_valid(board_.player.shifted(Point::down())))
+  if (!board_.matrix.is_move_valid(tetromino::shape_at(
+          board_.player, board_.player.pos + Point{.x = 0, .y = 1})))
     lock_delay_.invoke_periodically(delta_time, [this] { complete_move(); });
 }
 
@@ -47,7 +49,7 @@ auto TetrisGame::switch_to_next(Tetromino::Type next) -> bool {
   Tetromino next_piece = Tetromino(next, INIT_POS);
 
   for (int i = 0; i < (Matrix::ROWS - INIT_POS.y); ++i) {
-    if (board_.matrix.is_move_valid(next_piece.shape())) {
+    if (board_.matrix.is_move_valid(tetromino::shape_of(next_piece))) {
       board_.player = next_piece;
       return true;
     } else {

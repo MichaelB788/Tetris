@@ -6,69 +6,64 @@
 
 auto tetris::move::shift(Tetromino &piece, const Matrix &matrix, Point delta)
     -> bool {
-  bool success = matrix.is_move_valid(piece.shifted(delta));
-  if (success) {
+  if (matrix.is_move_valid(tetromino::shape_at(piece, piece.pos + delta))) {
     piece.pos += delta;
+    return true;
   }
-  return success;
+  return false;
 }
 
-auto tetris::move::hard_drop_delta(const Tetromino &piece, const Matrix &matrix)
-    -> Point {
-  Point delta{.x = 0, .y = 0};
-  while (matrix.is_move_valid(piece.shifted(delta + Point::down()))) {
-    delta += Point::down();
+void tetris::move::hard_drop(Tetromino &piece, const Matrix &matrix) {
+  int delta_y = 0;
+  while (matrix.is_move_valid(tetromino::shape_at(
+      piece, piece.pos + Point{.x = 0, .y = delta_y + 1}))) {
+    ++delta_y;
   }
-  return delta;
+  piece.pos.y += delta_y;
 }
 
-auto tetris::move::hard_dropped(const Tetromino &piece, const Matrix &matrix)
-    -> Tetromino {
-  auto dropped = piece;
-  dropped.pos += hard_drop_delta(dropped, matrix);
-  return dropped;
-}
-
-namespace {
-constexpr size_t NUM_TRIALS = 5;
-constexpr size_t MAX_ROTATIONS = 4;
-
-constexpr Point STANDARD_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
-    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
-    {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
-    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
-    {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
-
-constexpr Point I_PIECE_OFFSETS[MAX_ROTATIONS][NUM_TRIALS]{
-    {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
-    {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
-    {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
-    {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
-} // namespace
-
-void tetris::srs::rotation(Tetromino &piece, const Matrix &matrix,
+void tetris::srs::rotation(Tetromino &current, const Matrix &matrix,
                            RotationDir dir) {
-  const auto prev = piece.rotation;
-  Tetromino::Rotation curr;
+  /**
+   * Offset data for all Tetromino. The data can be parsed via the following
+   * pattern:
+   *
+   * PIECE_OFFSETS[TetrominoRotation][Trial]
+   */
+  static constexpr Point STANDARD_PIECE_OFFSETS[4][5]{
+      {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
+      {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
+      {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
+      {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
+  static constexpr Point I_PIECE_OFFSETS[4][5]{
+      {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
+      {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
+      {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
+      {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
+
+  Tetromino rotated;
   switch (dir) {
-  case RotationDir::Clockwise:
-    curr = piece.rotation.incremented();
+    using enum RotationDir;
+  case Clockwise:
+    rotated = tetromino::rotated_clockwise(current);
     break;
-  case RotationDir::CounterClockwise:
-    curr = piece.rotation.decremented();
+  case CounterClockwise:
+    rotated = tetromino::rotated_counterclockwise(current);
     break;
-  case RotationDir::HalfTurn:
-    curr = piece.rotation.incremented(2);
+  case HalfTurn:
+    rotated = tetromino::rotated_half_turn(current);
     break;
   }
 
   const auto &offsets =
-      piece.type == Tetromino::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
-  for (size_t i = 0; i < NUM_TRIALS; ++i) {
-    const Point kick = offsets[prev][i] - offsets[curr][i];
-    if (matrix.is_move_valid(piece.shape_at(piece.pos + kick, curr))) {
-      piece.rotation = curr;
-      piece.pos += kick;
+      current.type == Tetromino::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
+  const auto from = current.rotation, to = rotated.rotation;
+  for (size_t i = 0; i < 5; ++i) {
+    const Point kick = offsets[from][i] - offsets[to][i];
+    if (matrix.is_move_valid(
+            tetromino::shape_at(rotated, rotated.pos + kick))) {
+      rotated.pos += kick;
+      current = rotated;
       return;
     }
   }

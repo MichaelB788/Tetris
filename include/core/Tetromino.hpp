@@ -1,24 +1,26 @@
 #pragma once
-#include "util/CircularUint.hpp"
 #include "util/Point.hpp"
 #include <array>
 #include <cstdint>
 
 struct Tetromino {
   using Shape = std::array<Point, 4>;
-  using Rotation = CircularUint<uint8_t, 4>;
-
   enum Type : uint8_t { I = 0, O, T, S, Z, J, L };
+  enum Rotation : uint8_t { R0, R90, R180, R270 };
 
-  Type type = Type::I;
-
-  Point pos = {.x = 0, .y = 0};
-
-  Rotation rotation = 0;
-
-  [[nodiscard]] auto shifted(Point delta) const -> Shape;
-
-  [[nodiscard]] auto shape() const -> Shape;
-
-  [[nodiscard]] auto shape_at(Point p, Rotation r) const -> Shape;
+  Type type = I;
+  Point pos{};
+  Rotation rotation = R0;
 };
+
+namespace tetromino {
+auto shape_of(Tetromino tetromino) -> Tetromino::Shape;
+
+auto shape_at(Tetromino tetromino, Point pos) -> Tetromino::Shape;
+
+auto rotated_clockwise(Tetromino tetromino) -> Tetromino;
+
+auto rotated_counterclockwise(Tetromino tetromino) -> Tetromino;
+
+auto rotated_half_turn(Tetromino tetromino) -> Tetromino;
+} // namespace tetromino

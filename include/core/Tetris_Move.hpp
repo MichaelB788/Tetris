@@ -7,11 +7,7 @@ class Matrix;
 namespace tetris::move {
 auto shift(Tetromino &piece, const Matrix &matrix, Point delta) -> bool;
 
-[[nodiscard]] auto hard_drop_delta(const Tetromino &piece, const Matrix &matrix)
-    -> Point;
-
-[[nodiscard]] auto hard_dropped(const Tetromino &piece, const Matrix &matrix)
-    -> Tetromino;
+void hard_drop(Tetromino &piece, const Matrix &matrix);
 } // namespace tetris::move
 
 enum class RotationDir { Clockwise, CounterClockwise, HalfTurn };

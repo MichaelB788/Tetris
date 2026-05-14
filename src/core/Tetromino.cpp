@@ -2,11 +2,13 @@
 #include <algorithm>
 
 namespace {
-static constexpr size_t MAX_TETROMINO = 7;
-static constexpr size_t MAX_ROTATIONS = 4;
-static constexpr size_t BLOCKS = 4;
-
-constexpr Point SHAPES[MAX_TETROMINO][MAX_ROTATIONS][BLOCKS]{
+/**
+ * All possible rotational states of each Tetromino. The data can be parsed via
+ * the following pattern:
+ *
+ * SHAPES[TetrominoType][TetrominoRotation][BlockIndex]
+ */
+constexpr Point SHAPES[7][4][4]{
     // I
     {{{-1, 0}, {0, 0}, {1, 0}, {2, 0}},   // R0
      {{0, -1}, {0, 0}, {0, 1}, {0, 2}},   // R90
@@ -51,23 +53,36 @@ constexpr Point SHAPES[MAX_TETROMINO][MAX_ROTATIONS][BLOCKS]{
 };
 } // namespace
 
-auto Tetromino::shifted(Point delta) const -> Shape {
-  Shape shifted{};
-  std::ranges::transform(SHAPES[type][rotation], shifted.begin(),
-                         [&](Point p) { return pos + p + delta; });
-  return shifted;
-}
-
-auto Tetromino::shape() const -> Shape {
-  Shape shape{};
-  std::ranges::transform(SHAPES[type][rotation], shape.begin(),
-                         [this](Point p) { return pos + p; });
+auto tetromino::shape_of(Tetromino tetromino) -> Tetromino::Shape {
+  Tetromino::Shape shape{};
+  std::ranges::transform(SHAPES[tetromino.type][tetromino.rotation],
+                         shape.begin(),
+                         [&](Point origin) { return tetromino.pos + origin; });
   return shape;
 }
 
-auto Tetromino::shape_at(Point p, Rotation r) const -> Shape {
-  Shape shape{};
-  std::ranges::transform(SHAPES[type][r], shape.begin(),
-                         [&](Point point) { return p + point; });
+auto tetromino::shape_at(Tetromino tetromino, Point pos) -> Tetromino::Shape {
+  Tetromino::Shape shape{};
+  std::ranges::transform(SHAPES[tetromino.type][tetromino.rotation],
+                         shape.begin(),
+                         [&](Point origin) { return pos + origin; });
   return shape;
+}
+
+auto tetromino::rotated_clockwise(Tetromino tetromino) -> Tetromino {
+  tetromino.rotation =
+      static_cast<Tetromino::Rotation>((tetromino.rotation + 1) % 4);
+  return tetromino;
+}
+
+auto tetromino::rotated_counterclockwise(Tetromino tetromino) -> Tetromino {
+  tetromino.rotation =
+      static_cast<Tetromino::Rotation>((tetromino.rotation + 3) % 4);
+  return tetromino;
+}
+
+auto tetromino::rotated_half_turn(Tetromino tetromino) -> Tetromino {
+  tetromino.rotation =
+      static_cast<Tetromino::Rotation>((tetromino.rotation + 2) % 4);
+  return tetromino;
 }

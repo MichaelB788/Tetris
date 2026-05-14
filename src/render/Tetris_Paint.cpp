@@ -85,7 +85,7 @@ void draw_matrix_outline(SDL_Renderer &renderer, Point offset) {
 void tetris::paint::tetromino(const Tetromino &tetromino,
                               SDL_Renderer &renderer, SDL_Texture &atlas,
                               Point offset) {
-  for (const auto pos : tetromino.shape()) {
+  for (const auto pos : tetromino::shape_of(tetromino)) {
     draw_tetromino_tile(tetromino.type, renderer, atlas, pos, offset);
   }
 }

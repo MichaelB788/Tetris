@@ -72,8 +72,7 @@ inline void TetrisGame::soft_drop() {
 }
 
 inline void TetrisGame::hard_drop() {
-  board_.player.pos +=
-      tetris::move::hard_drop_delta(board_.player, board_.matrix);
+  tetris::move::hard_drop(board_.player, board_.matrix);
   complete_move();
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "platform/PlatformSDL_TTF.hpp"
+#include "util/Point.hpp"
 #include <array>
 
 class TetrisGameRenderer;
@@ -18,22 +19,17 @@ public:
 private:
   struct TextObj {
     sdl::ttf::Text text = nullptr;
-    std::pair<float, float> pos{};
+    Point<float> pos{};
   };
-
   void render_text(const TextObj &renderer);
 
   sdl::ttf::RendererTextEngine text_engine_ = nullptr;
-
   sdl::ttf::Font font_ = nullptr;
 
   struct ScreenText {
     TextObj next_{};
-
     TextObj stored_{};
-
     TextObj hold_{};
-
     TextObj score_{};
   } screen_text_;
 

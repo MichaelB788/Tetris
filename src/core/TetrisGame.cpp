@@ -53,7 +53,7 @@ auto TetrisGame::switch_to_next(Tetromino::Type next) -> bool {
       board_.player = next_piece;
       return true;
     } else {
-      next_piece.pos += Point::up();
+      --next_piece.pos.y;
     }
   }
 
@@ -71,7 +71,7 @@ void TetrisGame::update_level() {
 }
 
 void TetrisGame::complete_move() {
-  board_.matrix.place(board_.player);
+  board_.matrix.lock_down(board_.player);
   score_ += board_.matrix.clear_lines();
   update_level();
 

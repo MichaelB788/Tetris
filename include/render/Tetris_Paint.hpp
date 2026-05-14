@@ -7,12 +7,11 @@ class SDL_Texture;
 class Tetromino;
 class Matrix;
 
+static constexpr float TILE_SIZE = 32;
 namespace tetris::paint {
-constexpr float TILE_SIZE = 32;
+void tetromino(const Tetromino &tetromino, Point<float> offset,
+               SDL_Renderer &renderer, SDL_Texture &atlas);
 
-void tetromino(const Tetromino &tetromino, SDL_Renderer &renderer,
-               SDL_Texture &atlas, Point offset);
-
-void matrix(const Matrix &matrix, SDL_Renderer &renderer, SDL_Texture &atlas,
-            Point offset);
+void matrix(const Matrix &matrix, Point<float> offset, SDL_Renderer &renderer,
+            SDL_Texture &atlas);
 } // namespace tetris::paint

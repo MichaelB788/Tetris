@@ -4,8 +4,8 @@
 #include "util/Point.hpp"
 #include <cstddef>
 
-auto tetris::move::shift(Tetromino &piece, const Matrix &matrix, Point delta)
-    -> bool {
+auto tetris::move::shift(Tetromino &piece, const Matrix &matrix,
+                         Point<int> delta) -> bool {
   if (matrix.is_move_valid(tetromino::shape_at(piece, piece.pos + delta))) {
     piece.pos += delta;
     return true;
@@ -30,12 +30,12 @@ void tetris::srs::rotation(Tetromino &current, const Matrix &matrix,
    *
    * PIECE_OFFSETS[TetrominoRotation][Trial]
    */
-  static constexpr Point STANDARD_PIECE_OFFSETS[4][5]{
+  static constexpr Point<int> STANDARD_PIECE_OFFSETS[4][5]{
       {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
       {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
       {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
       {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
-  static constexpr Point I_PIECE_OFFSETS[4][5]{
+  static constexpr Point<int> I_PIECE_OFFSETS[4][5]{
       {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
       {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
       {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180

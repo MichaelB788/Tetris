@@ -42,7 +42,7 @@ void TextRenderer::render_text(const TextObj &text_obj) {
 void TextRenderer::render_score_int(int score) {
   // Align position to be under SCORE text
   auto [x, y] = screen_text_.score_.pos;
-  y += tetris::paint::TILE_SIZE * 2;
+  y += TILE_SIZE * 2;
 
   // If the score is only one digit, we can exit early
   if (score < 10) {
@@ -77,10 +77,10 @@ void TextRenderer::align_with_game(const TetrisGameRenderer &game_renderer) {
   auto &[score_x, score_y] = screen_text_.score_.pos;
   auto &[hold_x, hold_y] = screen_text_.hold_.pos;
 
-  next_x = game_pos.queue.x - tetris::paint::TILE_SIZE;
-  next_y = game_pos.queue.y - tetris::paint::TILE_SIZE * 3;
+  next_x = game_pos.queue.x - TILE_SIZE;
+  next_y = game_pos.queue.y - TILE_SIZE * 3;
 
-  score_x = hold_x = game_pos.hold.x - tetris::paint::TILE_SIZE;
-  hold_y = game_pos.hold.y - tetris::paint::TILE_SIZE * 3;
-  score_y = game_pos.hold.y + tetris::paint::TILE_SIZE * 4;
+  score_x = hold_x = game_pos.hold.x - TILE_SIZE;
+  hold_y = game_pos.hold.y - TILE_SIZE * 3;
+  score_y = game_pos.hold.y + TILE_SIZE * 4;
 }

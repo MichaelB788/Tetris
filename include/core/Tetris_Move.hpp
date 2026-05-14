@@ -5,7 +5,7 @@ struct Tetromino;
 class Matrix;
 
 namespace tetris::move {
-auto shift(Tetromino &piece, const Matrix &matrix, Point delta) -> bool;
+auto shift(Tetromino &piece, const Matrix &matrix, Point<int> delta) -> bool;
 
 void hard_drop(Tetromino &piece, const Matrix &matrix);
 } // namespace tetris::move

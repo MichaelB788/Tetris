@@ -8,7 +8,7 @@ namespace {
  *
  * SHAPES[TetrominoType][TetrominoRotation][BlockIndex]
  */
-constexpr Point SHAPES[7][4][4]{
+constexpr Point<int> SHAPES[7][4][4]{
     // I
     {{{-1, 0}, {0, 0}, {1, 0}, {2, 0}},   // R0
      {{0, -1}, {0, 0}, {0, 1}, {0, 2}},   // R90
@@ -55,17 +55,18 @@ constexpr Point SHAPES[7][4][4]{
 
 auto tetromino::shape_of(Tetromino tetromino) -> Tetromino::Shape {
   Tetromino::Shape shape{};
-  std::ranges::transform(SHAPES[tetromino.type][tetromino.rotation],
-                         shape.begin(),
-                         [&](Point origin) { return tetromino.pos + origin; });
+  std::ranges::transform(
+      SHAPES[tetromino.type][tetromino.rotation], shape.begin(),
+      [&](Point<int> origin) { return tetromino.pos + origin; });
   return shape;
 }
 
-auto tetromino::shape_at(Tetromino tetromino, Point pos) -> Tetromino::Shape {
+auto tetromino::shape_at(Tetromino tetromino, Point<int> pos)
+    -> Tetromino::Shape {
   Tetromino::Shape shape{};
   std::ranges::transform(SHAPES[tetromino.type][tetromino.rotation],
                          shape.begin(),
-                         [&](Point origin) { return pos + origin; });
+                         [&](Point<int> origin) { return pos + origin; });
   return shape;
 }
 

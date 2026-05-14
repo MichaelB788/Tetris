@@ -1,51 +1,43 @@
 #pragma once
 
+#include <type_traits>
+template <typename T>
+  requires std::is_arithmetic_v<T>
 struct Point {
-  int x, y;
+  T x, y;
 
-  static constexpr Point up() { return {.x = 0, .y = -1}; }
+  Point operator+(Point other) const { return {x + other.x, y + other.y}; }
+  Point operator-(Point other) const { return {x - other.x, y - other.y}; }
+  Point operator*(Point other) const { return {x * other.x, y * other.y}; }
+  Point operator/(Point other) const { return {x / other.x, y / other.y}; }
 
-  static constexpr Point down() { return {.x = 0, .y = 1}; }
+  Point operator*(T val) const { return {x * val, y * val}; }
+  Point operator/(T val) const { return {x / val, y / val}; }
 
-  static constexpr Point left() { return {.x = -1, .y = 0}; }
+  Point operator-() { return {x * -1, y * -1}; }
 
-  static constexpr Point right() { return {.x = 1, .y = 0}; }
-
-  Point operator+(const Point &other) const {
-    return {x + other.x, y + other.y};
-  }
-
-  Point operator-(const Point &other) const {
-    return {x - other.x, y - other.y};
-  }
-
-  Point operator*(const Point &other) const {
-    return {x * other.x, y * other.y};
-  }
-
-  Point operator/(const Point &other) const {
-    return {x / other.x, y / other.y};
-  }
-
-  void operator+=(const Point &other) {
+  void operator+=(Point other) {
     x += other.x;
     y += other.y;
   }
-
-  void operator-=(const Point &other) {
+  void operator-=(Point other) {
     x -= other.x;
     y -= other.y;
   }
-
-  void operator*=(const Point &other) {
+  void operator*=(Point other) {
     x *= other.x;
     y *= other.y;
   }
-
-  void operator/=(const Point &other) {
+  void operator/=(Point other) {
     x /= other.x;
     y /= other.y;
   }
-
-  Point operator-() { return {x * -1, y * -1}; }
+  void operator*=(T val) {
+    x *= val;
+    y *= val;
+  }
+  void operator/=(T val) {
+    x /= val;
+    y /= val;
+  }
 };

@@ -21,22 +21,22 @@ void TetrisGameRenderer::draw_frame(const TetrisGame &game,
 
 void TetrisGameRenderer::draw_board(const Board &board,
                                     SDL_Renderer &renderer) {
-  tetris::paint::tetromino(board.player, renderer, *piece_atlas_, pos_.board);
+  tetris::paint::tetromino(board.player, pos_.board, renderer, *piece_atlas_);
 
   auto ghost = board.player;
   tetris::move::hard_drop(ghost, board.matrix);
-  tetris::paint::tetromino(ghost, renderer, *ghost_atlas_, pos_.board);
+  tetris::paint::tetromino(ghost, pos_.board, renderer, *ghost_atlas_);
 
-  tetris::paint::matrix(board.matrix, renderer, *piece_atlas_, pos_.board);
+  tetris::paint::matrix(board.matrix, pos_.board, renderer, *piece_atlas_);
 }
 
 void TetrisGameRenderer::draw_hud(const HUD &hud, SDL_Renderer &renderer) {
-  tetris::paint::tetromino(Tetromino(hud.next_queue.peek()), renderer,
-                           *piece_atlas_, pos_.queue);
+  tetris::paint::tetromino(Tetromino(hud.next_queue.peek()), pos_.queue,
+                           renderer, *piece_atlas_);
 
   if (hud.held_type.has_value()) {
-    tetris::paint::tetromino(Tetromino(hud.held_type.value()), renderer,
-                             *piece_atlas_, pos_.hold);
+    tetris::paint::tetromino(Tetromino(hud.held_type.value()), pos_.hold,
+                             renderer, *piece_atlas_);
   }
 }
 
@@ -46,12 +46,12 @@ void TetrisGameRenderer::align_inside_rect(std::pair<int, int> rect) {
   auto &[hold_x, hold_y] = pos_.hold;
 
   const auto [w, h] = rect;
-  board_x = (w - (Matrix::COLS * tetris::paint::TILE_SIZE)) / 2;
-  board_y = (h - (Matrix::ROWS * tetris::paint::TILE_SIZE)) / 2;
+  board_x = (w - (Matrix::COLS * TILE_SIZE)) / 2;
+  board_y = (h - (Matrix::ROWS * TILE_SIZE)) / 2;
 
-  queue_x = board_x - (4 * tetris::paint::TILE_SIZE);
+  queue_x = board_x - (4 * TILE_SIZE);
 
-  hold_x = board_x + ((Matrix::COLS + 3) * tetris::paint::TILE_SIZE);
+  hold_x = board_x + ((Matrix::COLS + 3) * TILE_SIZE);
 
-  queue_y = hold_y = board_y + tetris::paint::TILE_SIZE;
+  queue_y = hold_y = board_y + TILE_SIZE;
 }

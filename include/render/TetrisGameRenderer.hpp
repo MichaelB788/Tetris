@@ -8,10 +8,13 @@ struct Board;
 struct HUD;
 
 class TetrisGameRenderer {
-private:
-  struct Positions;
-
 public:
+  struct Positions {
+    Point<float> board{};
+    Point<float> queue{};
+    Point<float> hold{};
+  };
+
   TetrisGameRenderer(const std::filesystem::path &atlas_path,
                      SDL_Renderer *renderer);
 
@@ -26,15 +29,7 @@ private:
 
   void draw_hud(const HUD &hud, SDL_Renderer &renderer);
 
-  struct Positions {
-    Point board{.x = 0, .y = 0};
-
-    Point queue{.x = 0, .y = 0};
-
-    Point hold{.x = 0, .y = 0};
-  } pos_;
-
+  Positions pos_{};
   sdl::Texture piece_atlas_ = nullptr;
-
   sdl::Texture ghost_atlas_ = nullptr;
 };

@@ -49,9 +49,9 @@ void draw_tetromino_tile(Tetromino::Type type, Point<int> tetromino_pos,
 }
 } // namespace
 
-void tetris::paint::tetromino(const Tetromino &tetromino, Point<float> offset,
+void tetris::paint::tetromino(Tetromino tetromino, Point<float> offset,
                               SDL_Renderer &renderer, SDL_Texture &atlas) {
-  for (const auto pos : tetromino::shape_of(tetromino)) {
+  for (auto pos : tetromino::shape_of(tetromino)) {
     draw_tetromino_tile(tetromino.type, pos, offset, renderer, atlas);
   }
 }
@@ -60,14 +60,13 @@ void tetris::paint::matrix(const Matrix &matrix, Point<float> offset,
                            SDL_Renderer &renderer, SDL_Texture &atlas) {
   // Draw all locked pieces
   {
-    std::array<std::vector<Point<int>>, 8> grounded_rects;
+    std::array<std::vector<Point<int>>, 7> grounded_rects;
 
     for (int y = 0; y < Matrix::ROWS; ++y) {
       for (int x = 0; x < Matrix::COLS; ++x) {
-        Point curr_pos = {x, y};
-        if (matrix.at(curr_pos).has_value())
-          draw_tetromino_tile(matrix.at(curr_pos).value(), curr_pos, offset,
-                              renderer, atlas);
+        if (auto tile = matrix.at(x, y)) {
+          draw_tetromino_tile(tile.value(), {x, y}, offset, renderer, atlas);
+        }
       }
     }
   }

@@ -9,8 +9,8 @@ class Matrix;
 
 static constexpr float TILE_SIZE = 32;
 namespace tetris::paint {
-void tetromino(const Tetromino &tetromino, Point<float> offset,
-               SDL_Renderer &renderer, SDL_Texture &atlas);
+void tetromino(Tetromino tetromino, Point<float> offset, SDL_Renderer &renderer,
+               SDL_Texture &atlas);
 
 void matrix(const Matrix &matrix, Point<float> offset, SDL_Renderer &renderer,
             SDL_Texture &atlas);

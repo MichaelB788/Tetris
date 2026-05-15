@@ -15,28 +15,28 @@ TetrisGameRenderer::TetrisGameRenderer(const std::filesystem::path &atlas_path,
 
 void TetrisGameRenderer::draw_frame(const TetrisGame &game,
                                     SDL_Renderer &renderer) {
-  draw_board(game.board(), renderer);
-  draw_hud(game.hud(), renderer);
-}
-
-void TetrisGameRenderer::draw_board(const Board &board,
-                                    SDL_Renderer &renderer) {
-  tetris::paint::tetromino(board.player, pos_.board, renderer, *piece_atlas_);
-
-  auto ghost = board.player;
-  tetris::move::hard_drop(ghost, board.matrix);
-  tetris::paint::tetromino(ghost, pos_.board, renderer, *ghost_atlas_);
-
-  tetris::paint::matrix(board.matrix, pos_.board, renderer, *piece_atlas_);
-}
-
-void TetrisGameRenderer::draw_hud(const HUD &hud, SDL_Renderer &renderer) {
-  tetris::paint::tetromino(Tetromino(hud.next_queue.peek()), pos_.queue,
-                           renderer, *piece_atlas_);
-
-  if (hud.held_type.has_value()) {
-    tetris::paint::tetromino(Tetromino(hud.held_type.value()), pos_.hold,
+  const auto snapshot = game.snapshot();
+  // Draw the main board
+  {
+    tetris::paint::tetromino(snapshot.active, pos_.board, renderer,
+                             *piece_atlas_);
+    // Draw the ghost piece
+    {
+      auto ghost = snapshot.active;
+      tetris::move::hard_drop(ghost, snapshot.matrix);
+      tetris::paint::tetromino(ghost, pos_.board, renderer, *ghost_atlas_);
+    }
+    tetris::paint::matrix(snapshot.matrix, pos_.board, renderer, *piece_atlas_);
+  }
+  // Draw the HUD elements
+  {
+    tetris::paint::tetromino(Tetromino(snapshot.next_queue.peek()), pos_.queue,
                              renderer, *piece_atlas_);
+
+    if (snapshot.held.has_value()) {
+      tetris::paint::tetromino(snapshot.held.value(), pos_.hold, renderer,
+                               *piece_atlas_);
+    }
   }
 }
 

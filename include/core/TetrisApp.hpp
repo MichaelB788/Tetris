@@ -5,6 +5,7 @@
 #include "render/TetrisGameRenderer.hpp"
 #include "render/TextRenderer.hpp"
 #include <filesystem>
+#include <random>
 #include <utility>
 
 class TetrisApp {
@@ -36,7 +37,7 @@ private:
 
   void handle_tetris_state();
 
-  void reset() { tetris_ = {}; }
+  void reset() { tetris_ = TetrisGame{rng_}; }
 
   bool running_ = true;
 
@@ -49,7 +50,9 @@ private:
 
   sdl::Renderer renderer_ = sdl::create_renderer(window_.get());
 
-  TetrisGame tetris_{};
+  std::mt19937 rng_{std::random_device{}()};
+
+  TetrisGame tetris_{rng_};
 
   TetrisGameRenderer tetris_renderer_;
 

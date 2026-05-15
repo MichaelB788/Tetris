@@ -1,76 +1,69 @@
 #pragma once
-#include "core/TetrisGame_Types.hpp"
+#include "core/Matrix.hpp"
+#include "core/NextQueue.hpp"
 #include "core/Tetris_Move.hpp"
+#include "core/Tetromino.hpp"
 #include "util/Timer.hpp"
 #include <chrono>
+#include <cstdint>
 #include <random>
 
 class TetrisGame {
 public:
-  TetrisGame();
+  enum class Action : uint8_t {
+    MoveLeft,
+    MoveRight,
+    SoftDrop,
+    HardDrop,
+    RotateClockwise,
+    RotateCounterclockwise,
+    RotateHalf,
+    Hold
+  };
 
-  void update(std::chrono::nanoseconds delta_time);
+  struct Snapshot {
+    Tetromino active{};
+    std::optional<Tetromino> held{};
+    const NextQueue &next_queue{};
+    const Matrix &matrix{};
+  };
 
-  void move_left() {
-    tetris::move::shift(board_.player, board_.matrix, {.x = -1});
+  TetrisGame(std::mt19937 &rng);
+
+  void invoke_action(Action action, std::mt19937 &rng);
+
+  void update(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
+
+  auto snapshot() const -> Snapshot {
+    return {.active = active_,
+            .held = held_,
+            .next_queue = next_queue_,
+            .matrix = matrix_};
   }
 
-  void move_right() {
-    tetris::move::shift(board_.player, board_.matrix, {.x = 1});
-  }
+  auto score() const -> int { return score_; }
 
-  void soft_drop() {
-    tetris::move::shift(board_.player, board_.matrix, {.y = 1});
-  }
-
-  void hard_drop() {
-    tetris::move::hard_drop(board_.player, board_.matrix);
-    complete_move();
-  }
-
-  void rotate_cw() {
-    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::Clockwise);
-  }
-
-  void rotate_ccw() {
-    tetris::srs::rotation(board_.player, board_.matrix,
-                          RotationDir::CounterClockwise);
-  }
-
-  void rotate_ht() {
-    tetris::srs::rotation(board_.player, board_.matrix, RotationDir::HalfTurn);
-  }
-
-  void hold();
-
-  [[nodiscard]] auto board() const -> const Board & { return board_; }
-
-  [[nodiscard]] auto hud() const -> const HUD & { return hud_; }
-
-  [[nodiscard]] auto status() const -> Status { return status_; }
-
-  [[nodiscard]] auto score() const -> int { return score_; }
+  auto game_over() const -> bool { return game_over_; }
 
 private:
-  [[nodiscard]] auto switch_to_next(Tetromino::Type next) -> bool;
+  // Sets the `game_over_` flag to true in the case of an unsuccessful
+  // operation. Returns the success of the operation.
+  auto attempt_swap(Tetromino next) -> bool;
 
-  void update_level();
+  void complete_move(std::mt19937 &rng);
 
-  void complete_move();
+  void hold(std::mt19937 &rng);
 
-  bool hold_command_triggered_ = false;
-
-  Status status_ = Status::Running;
+  Tetromino active_{};
+  std::optional<Tetromino> held_{};
+  NextQueue next_queue_{};
+  Matrix matrix_{};
 
   int score_ = 0;
+  int max_score_ = 0;
+  bool hold_command_triggered_ = false;
+  bool game_over_ = false;
 
   Timer lock_delay_{std::chrono::seconds{1}};
-
   Timer gravity_delay_{std::chrono::seconds{1}};
-
-  HUD hud_{};
-
-  Board board_{};
-
-  std::mt19937 rng_{std::random_device{}()};
 };

@@ -4,6 +4,7 @@
 #include "platform/PlatformSDL.hpp"
 #include "render/TetrisGameRenderer.hpp"
 #include "render/TextRenderer.hpp"
+#include <SDL3/SDL_render.h>
 #include <filesystem>
 #include <random>
 #include <utility>
@@ -18,13 +19,7 @@ public:
     int target_fps;
   };
 
-  explicit TetrisApp(const Specification &spec)
-      : target_fps_(spec.target_fps),
-        tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
-        text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
-        handler_(tetris_, spec.controls) {
-    center_within_window();
-  }
+  explicit TetrisApp(const Specification &spec);
 
   void run();
 
@@ -45,10 +40,10 @@ private:
 
   std::pair<int, int> win_size_{800, 1000};
 
-  sdl::Window window_ = sdl::create_window(
-      "Tetris", win_size_.first, win_size_.second, SDL_WINDOW_RESIZABLE);
+  Window window_{SDL_CreateWindow("Tetris", win_size_.first, win_size_.second,
+                                  SDL_WINDOW_RESIZABLE)};
 
-  sdl::Renderer renderer_ = sdl::create_renderer(window_.get());
+  Renderer renderer_{SDL_CreateRenderer(window_.get(), nullptr)};
 
   std::mt19937 rng_{std::random_device{}()};
 

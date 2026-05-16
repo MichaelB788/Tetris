@@ -1,16 +1,18 @@
 #include "render/TetrisGameRenderer.hpp"
 #include "core/TetrisGame.hpp"
 #include "core/Tetris_Move.hpp"
-#include "platform/PlatformSDL_IMG.hpp"
+#include "platform/PlatformSDL.hpp"
 #include "render/Tetris_Paint.hpp"
 #include <SDL3/SDL_render.h>
+#include <SDL3/SDL_surface.h>
+#include <SDL3_image/SDL_image.h>
 
 TetrisGameRenderer::TetrisGameRenderer(const std::filesystem::path &atlas_path,
                                        SDL_Renderer *renderer)
-    : piece_atlas_(sdl::img::create_texture_from_img(renderer, atlas_path)) {
-  auto ghost_surf = sdl::img::create_surface_from_img(atlas_path);
+    : piece_atlas_(IMG_LoadTexture(renderer, atlas_path.c_str())) {
+  Surface ghost_surf{IMG_Load(atlas_path.c_str())};
   SDL_SetSurfaceAlphaMod(ghost_surf.get(), 0x80);
-  ghost_atlas_ = sdl::create_texture_from_surface(renderer, ghost_surf.get());
+  ghost_atlas_.reset(SDL_CreateTextureFromSurface(renderer, ghost_surf.get()));
 }
 
 void TetrisGameRenderer::draw_frame(const TetrisGame &game,

@@ -1,9 +1,9 @@
 #include "core/TetrisApp.hpp"
-#include "platform/PlatformSDL.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 
 int main() {
   try {
@@ -18,10 +18,8 @@ int main() {
            .target_fps = 60})
           .run();
     } else {
-      throw sdl::Exception("Failed to initialize SDL");
+      throw std::runtime_error("Failed to initialize SDL");
     }
-  } catch (const sdl::Exception &exception) {
-    std::cerr << exception.what() << std::endl;
   } catch (const std::invalid_argument &exception) {
     std::cerr << "Invalid argument encountered: " << exception.what()
               << std::endl;

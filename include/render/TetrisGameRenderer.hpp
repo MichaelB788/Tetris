@@ -26,6 +26,6 @@ public:
 
 private:
   Positions pos_{};
-  sdl::Texture piece_atlas_ = nullptr;
-  sdl::Texture ghost_atlas_ = nullptr;
+  Texture piece_atlas_ = nullptr;
+  Texture ghost_atlas_ = nullptr;
 };

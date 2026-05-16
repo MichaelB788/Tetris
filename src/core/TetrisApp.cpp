@@ -3,9 +3,18 @@
 #include "platform/PlatformSDL.hpp"
 #include "util/Timer.hpp"
 #include <SDL3/SDL_events.h>
+#include <SDL3/SDL_video.h>
 #include <chrono>
 #include <iostream>
 #include <thread>
+
+TetrisApp::TetrisApp(const Specification &spec)
+    : target_fps_(spec.target_fps),
+      tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
+      text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
+      handler_(tetris_, spec.controls) {
+  center_within_window();
+}
 
 void TetrisApp::run() {
   // FPS cap recorded in nanoseconds. Uses integer division.

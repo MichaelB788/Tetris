@@ -1,8 +1,5 @@
 add_library(TetrisPlatform
   EventHandler.cpp
-  PlatformSDL.cpp
-  PlatformSDL_IMG.cpp
-  PlatformSDL_TTF.cpp
 )
 add_library(Tetris::Platform ALIAS TetrisPlatform)
 

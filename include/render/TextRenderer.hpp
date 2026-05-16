@@ -2,6 +2,7 @@
 #include "platform/PlatformSDL_TTF.hpp"
 #include "util/Point.hpp"
 #include <array>
+#include <filesystem>
 
 class TetrisGameRenderer;
 
@@ -18,20 +19,18 @@ public:
 
 private:
   struct TextObj {
-    sdl::ttf::Text text = nullptr;
+    Text text = nullptr;
     Point<float> pos{};
   };
   void render_text(const TextObj &renderer);
 
-  sdl::ttf::RendererTextEngine text_engine_ = nullptr;
-  sdl::ttf::Font font_ = nullptr;
+  RendererTextEngine text_engine_ = nullptr;
+  Font font_ = nullptr;
 
-  struct ScreenText {
-    TextObj next_{};
-    TextObj stored_{};
-    TextObj hold_{};
-    TextObj score_{};
-  } screen_text_;
+  TextObj next_{};
+  TextObj stored_{};
+  TextObj hold_{};
+  TextObj score_{};
 
-  std::array<sdl::ttf::Text, 10> nums_{};
+  std::array<Text, 10> nums_{};
 };

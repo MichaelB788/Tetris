@@ -2,83 +2,99 @@
 #include "core/Tetris_Move.hpp"
 #include "core/Tetromino.hpp"
 #include <chrono>
+#include <cmath>
+#include <random>
 
-namespace {
-constexpr Point INIT_POS = {.x = 4, .y = 4};
+static constexpr Point INIT_POS = {.x = 4, .y = 4};
+
+TetrisGame::TetrisGame(std::mt19937 &rng) {
+  next_queue_.shuffle(rng);
+  active_ = next_queue_.pop(rng);
+  active_.pos = INIT_POS;
 }
 
-TetrisGame::TetrisGame() {
-  hud_.next_queue.shuffle(rng_);
-  board_.player = Tetromino(hud_.next_queue.pop(rng_), INIT_POS);
-}
-
-void TetrisGame::update(std::chrono::nanoseconds delta_time) {
-  // Update gravity
-  gravity_delay_.invoke_periodically(delta_time, [this] { soft_drop(); });
-
-  // Update lock delay elapsed time only if a soft drop has failed (in other
-  // words, the piece is touching the ground).
-  if (!board_.matrix.is_move_valid(tetromino::shape_at(
-          board_.player, board_.player.pos + Point{.x = 0, .y = 1})))
-    lock_delay_.invoke_periodically(delta_time, [this] { complete_move(); });
-}
-
-void TetrisGame::hold() {
-  if (hold_command_triggered_)
-    return;
-
-  Tetromino::Type new_hold = board_.player.type;
-  if (hud_.held_type.has_value()) {
-    if (!switch_to_next(hud_.held_type.value())) {
-      status_ = Status::GameOver;
-      return;
-    }
-    hud_.held_type = new_hold;
-  } else {
-    hud_.held_type = new_hold;
-    if (!switch_to_next(hud_.next_queue.pop(rng_))) {
-      status_ = Status::GameOver;
-      return;
-    }
+void TetrisGame::invoke_action(Action action, std::mt19937 &rng) {
+  switch (action) {
+    using enum Action;
+  case MoveLeft:
+    tetris::move::shift(active_, matrix_, {.x = -1});
+    break;
+  case MoveRight:
+    tetris::move::shift(active_, matrix_, {.x = 1});
+    break;
+  case SoftDrop:
+    tetris::move::shift(active_, matrix_, {.y = 1});
+    break;
+  case HardDrop:
+    tetris::move::hard_drop(active_, matrix_);
+    complete_move(rng);
+    break;
+  case RotateClockwise:
+    tetris::srs::rotation(active_, matrix_, RotationDir::Clockwise);
+    break;
+  case RotateCounterclockwise:
+    tetris::srs::rotation(active_, matrix_, RotationDir::CounterClockwise);
+    break;
+  case RotateHalf:
+    tetris::srs::rotation(active_, matrix_, RotationDir::HalfTurn);
+    break;
+  case Hold:
+    hold(rng);
+    break;
   }
-
-  hold_command_triggered_ = true;
 }
 
-auto TetrisGame::switch_to_next(Tetromino::Type next) -> bool {
-  Tetromino next_piece = Tetromino(next, INIT_POS);
+void TetrisGame::update(std::chrono::nanoseconds delta_time,
+                        std::mt19937 &rng) {
+  gravity_delay_.invoke_periodically(
+      delta_time, [this] { tetris::move::shift(active_, matrix_, {.y = 1}); });
 
+  if (!matrix_.is_move_valid(
+          tetromino::shape_at(active_, active_.pos + Point{.y = 1}))) {
+    lock_delay_.invoke_periodically(delta_time, [&] { complete_move(rng); });
+  }
+}
+
+void TetrisGame::hold(std::mt19937 &rng) {
+  if (!hold_command_triggered_) {
+    hold_command_triggered_ = true;
+    const auto to_hold = Tetromino(active_.type);
+    attempt_swap(held_.has_value() ? held_.value() : next_queue_.pop(rng));
+    held_ = to_hold;
+  }
+}
+
+auto TetrisGame::attempt_swap(Tetromino next) -> bool {
+  next.pos = INIT_POS;
   for (int i = 0; i < (Matrix::ROWS - INIT_POS.y); ++i) {
-    if (board_.matrix.is_move_valid(tetromino::shape_of(next_piece))) {
-      board_.player = next_piece;
+    if (matrix_.is_move_valid(tetromino::shape_of(next))) {
+      active_ = next;
       return true;
-    } else {
-      --next_piece.pos.y;
     }
+    --next.pos.y;
   }
-
+  game_over_ = true;
   return false;
 }
 
-void TetrisGame::update_level() {
-  using namespace std::chrono_literals;
-  static constexpr std::array<std::chrono::milliseconds, 11> LEVELS{
-      1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
-      450ms,  400ms, 300ms, 200ms, 100ms};
+void TetrisGame::complete_move(std::mt19937 &rng) {
+  // Place Tetromino and update scores
+  matrix_.lock_down(active_);
+  score_ += matrix_.clear_lines();
 
-  gravity_delay_.set_duration(score_ < 100 ? LEVELS[score_ / 10]
-                                           : LEVELS.back());
-}
+  // Update the gravity rate
+  {
+    using namespace std::chrono_literals;
+    static constexpr std::array<std::chrono::milliseconds, 11> LEVELS{
+        1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
+        450ms,  400ms, 300ms, 200ms, 100ms};
 
-void TetrisGame::complete_move() {
-  board_.matrix.lock_down(board_.player);
-  score_ += board_.matrix.clear_lines();
-  update_level();
+    gravity_delay_.set_duration(score_ < 100 ? LEVELS[score_ / 10]
+                                             : LEVELS.back());
+  }
 
-  if (switch_to_next(hud_.next_queue.pop(rng_))) {
+  if (attempt_swap(next_queue_.pop(rng))) {
     hold_command_triggered_ = false;
     lock_delay_.reset();
-  } else {
-    status_ = Status::GameOver;
   }
 }

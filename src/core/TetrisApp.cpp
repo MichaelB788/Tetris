@@ -28,10 +28,10 @@ void TetrisApp::run() {
 
     // Poll events and update game state
     poll_events();
-    tetris_.update(delta);
+    tetris_.update(delta, rng_);
 
     // Handle keyboard input AFTER polling events
-    handler_.handle_kb_input(delta);
+    handler_.handle_kb_input(delta, rng_);
 
     handle_tetris_state();
 
@@ -86,7 +86,7 @@ void TetrisApp::render_frame() {
 }
 
 void TetrisApp::handle_tetris_state() {
-  if (tetris_.status() == Status::GameOver)
+  if (tetris_.game_over())
     reset();
 }
 

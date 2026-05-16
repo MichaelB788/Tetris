@@ -7,15 +7,12 @@
 #include <chrono>
 #include <filesystem>
 
-class TetrisGame;
-using Command = void (TetrisGame::*)();
-
 class EventHandler {
 public:
   explicit EventHandler(TetrisGame &game,
                         const std::filesystem::path &config_path);
 
-  void handle_kb_input(std::chrono::nanoseconds delta);
+  void handle_kb_input(std::chrono::nanoseconds delta, std::mt19937 &rng);
 
 private:
   struct InputTiming {
@@ -35,13 +32,13 @@ private:
 
   std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
 
-  std::array<std::pair<SDL_Scancode, Command>, 8> controls_{
-      {{SDL_SCANCODE_W, &TetrisGame::hard_drop},
-       {SDL_SCANCODE_A, &TetrisGame::move_left},
-       {SDL_SCANCODE_S, &TetrisGame::soft_drop},
-       {SDL_SCANCODE_D, &TetrisGame::move_right},
-       {SDL_SCANCODE_UP, &TetrisGame::hold},
-       {SDL_SCANCODE_RIGHT, &TetrisGame::rotate_cw},
-       {SDL_SCANCODE_LEFT, &TetrisGame::rotate_ccw},
-       {SDL_SCANCODE_DOWN, &TetrisGame::rotate_ht}}};
+  std::array<std::pair<SDL_Scancode, TetrisGame::Action>, 8> controls_{
+      {{SDL_SCANCODE_W, TetrisGame::Action::HardDrop},
+       {SDL_SCANCODE_A, TetrisGame::Action::MoveLeft},
+       {SDL_SCANCODE_S, TetrisGame::Action::SoftDrop},
+       {SDL_SCANCODE_D, TetrisGame::Action::MoveRight},
+       {SDL_SCANCODE_UP, TetrisGame::Action::Hold},
+       {SDL_SCANCODE_RIGHT, TetrisGame::Action::RotateClockwise},
+       {SDL_SCANCODE_LEFT, TetrisGame::Action::RotateCounterclockwise},
+       {SDL_SCANCODE_DOWN, TetrisGame::Action::RotateHalf}}};
 };

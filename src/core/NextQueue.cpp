@@ -1,4 +1,5 @@
 #include "core/NextQueue.hpp"
+#include "core/Tetromino.hpp"
 #include <algorithm>
 
 void NextQueue::shuffle(std::mt19937 &rng) {
@@ -12,10 +13,10 @@ void NextQueue::shuffle(std::mt19937 &rng) {
   read_ = 0;
 }
 
-[[nodiscard]] Tetromino::Type NextQueue::pop(std::mt19937 &rng) {
-  const auto ret = buffer_[read_++];
+auto NextQueue::pop(std::mt19937 &rng) -> Tetromino {
+  const auto next_type_ = buffer_[read_++];
   if (read_ == buffer_.size()) {
     shuffle(rng);
   }
-  return ret;
+  return Tetromino{.type = next_type_};
 }

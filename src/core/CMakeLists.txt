@@ -4,6 +4,5 @@ add_library(TetrisCore
   TetrisGame.cpp
   TetrisApp.cpp
   Tetromino.cpp
-  Tetris_Move.cpp
 )
 add_library(Tetris::Core ALIAS TetrisCore)

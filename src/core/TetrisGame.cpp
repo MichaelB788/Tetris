@@ -1,5 +1,4 @@
 #include "core/TetrisGame.hpp"
-#include "core/Tetris_Move.hpp"
 #include "core/Tetromino.hpp"
 #include <chrono>
 #include <cmath>
@@ -17,26 +16,26 @@ void TetrisGame::invoke_action(Action action, std::mt19937 &rng) {
   switch (action) {
     using enum Action;
   case MoveLeft:
-    tetris::move::shift(active_, matrix_, {.x = -1});
+    local_shift(active_, {.x = -1}, matrix_);
     break;
   case MoveRight:
-    tetris::move::shift(active_, matrix_, {.x = 1});
+    local_shift(active_, {.x = 1}, matrix_);
     break;
   case SoftDrop:
-    tetris::move::shift(active_, matrix_, {.y = 1});
+    local_shift(active_, {.y = 1}, matrix_);
     break;
   case HardDrop:
-    tetris::move::hard_drop(active_, matrix_);
+    hard_drop(active_, matrix_);
     complete_move(rng);
     break;
   case RotateClockwise:
-    tetris::srs::rotation(active_, matrix_, RotationDir::Clockwise);
+    srs_rotation(active_, RotationDir::Clockwise, matrix_);
     break;
   case RotateCounterclockwise:
-    tetris::srs::rotation(active_, matrix_, RotationDir::CounterClockwise);
+    srs_rotation(active_, RotationDir::CounterClockwise, matrix_);
     break;
   case RotateHalf:
-    tetris::srs::rotation(active_, matrix_, RotationDir::HalfTurn);
+    srs_rotation(active_, RotationDir::HalfTurn, matrix_);
     break;
   case Hold:
     hold(rng);
@@ -47,10 +46,9 @@ void TetrisGame::invoke_action(Action action, std::mt19937 &rng) {
 void TetrisGame::update(std::chrono::nanoseconds delta_time,
                         std::mt19937 &rng) {
   gravity_delay_.invoke_periodically(
-      delta_time, [this] { tetris::move::shift(active_, matrix_, {.y = 1}); });
+      delta_time, [this] { local_shift(active_, {.y = 1}, matrix_); });
 
-  if (!matrix_.is_move_valid(
-          tetromino::shape_at(active_, active_.pos + Point{.y = 1}))) {
+  if (!matrix_.is_move_valid(shape_at(active_, active_.pos + Point{.y = 1}))) {
     lock_delay_.invoke_periodically(delta_time, [&] { complete_move(rng); });
   }
 }
@@ -67,7 +65,7 @@ void TetrisGame::hold(std::mt19937 &rng) {
 auto TetrisGame::attempt_swap(Tetromino next) -> bool {
   next.pos = INIT_POS;
   for (int i = 0; i < (Matrix::ROWS - INIT_POS.y); ++i) {
-    if (matrix_.is_move_valid(tetromino::shape_of(next))) {
+    if (matrix_.is_move_valid(shape_of(next))) {
       active_ = next;
       return true;
     }

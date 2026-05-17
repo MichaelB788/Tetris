@@ -26,7 +26,7 @@ auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
 }
 
 void Matrix::lock_down(Tetromino piece) {
-  auto shape = tetromino::shape_of(piece);
+  auto shape = shape_of(piece);
   if (is_move_valid(shape)) {
     for (const auto &pos : shape) {
       data_[pos.y][pos.x] = piece.type;

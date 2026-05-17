@@ -1,6 +1,5 @@
 #include "render/TetrisGameRenderer.hpp"
 #include "core/TetrisGame.hpp"
-#include "core/Tetris_Move.hpp"
 #include "platform/PlatformSDL.hpp"
 #include "render/Tetris_Paint.hpp"
 #include <SDL3/SDL_render.h>
@@ -25,7 +24,7 @@ void TetrisGameRenderer::draw_frame(const TetrisGame &game,
     // Draw the ghost piece
     {
       auto ghost = snapshot.active;
-      tetris::move::hard_drop(ghost, snapshot.matrix);
+      hard_drop(ghost, snapshot.matrix);
       tetris::paint::tetromino(ghost, pos_.board, renderer, *ghost_atlas_);
     }
     tetris::paint::matrix(snapshot.matrix, pos_.board, renderer, *piece_atlas_);

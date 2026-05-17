@@ -13,14 +13,22 @@ struct Tetromino {
   Rotation rotation = R0;
 };
 
-namespace tetromino {
 auto shape_of(Tetromino tetromino) -> Tetromino::Shape;
 
 auto shape_at(Tetromino tetromino, Point<int> pos) -> Tetromino::Shape;
 
-auto rotated_clockwise(Tetromino tetromino) -> Tetromino;
+auto clockwise_rotation(Tetromino tetromino) -> Tetromino;
 
-auto rotated_counterclockwise(Tetromino tetromino) -> Tetromino;
+auto counterclockwise_rotation(Tetromino tetromino) -> Tetromino;
 
-auto rotated_half_turn(Tetromino tetromino) -> Tetromino;
-} // namespace tetromino
+auto half_turn_rotation(Tetromino tetromino) -> Tetromino;
+
+class Matrix;
+
+auto local_shift(Tetromino &piece, Point<int> delta, const Matrix &matrix)
+    -> bool;
+
+void hard_drop(Tetromino &piece, const Matrix &matrix);
+
+enum class RotationDir { Clockwise, CounterClockwise, HalfTurn };
+void srs_rotation(Tetromino &tet, RotationDir dir, const Matrix &matrix);

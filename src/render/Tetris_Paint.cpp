@@ -51,7 +51,7 @@ void draw_tetromino_tile(Tetromino::Type type, Point<int> tetromino_pos,
 
 void tetris::paint::tetromino(Tetromino tetromino, Point<float> offset,
                               SDL_Renderer &renderer, SDL_Texture &atlas) {
-  for (auto pos : tetromino::shape_of(tetromino)) {
+  for (auto pos : shape_of(tetromino)) {
     draw_tetromino_tile(tetromino.type, pos, offset, renderer, atlas);
   }
 }

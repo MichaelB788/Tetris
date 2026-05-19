@@ -1,4 +1,4 @@
-#include "core/TetrisGame.hpp"
+#include "core/Tetris.hpp"
 #include "core/Tetromino.hpp"
 #include <chrono>
 #include <cmath>

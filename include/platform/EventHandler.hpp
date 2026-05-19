@@ -1,5 +1,5 @@
 #pragma once
-#include "core/TetrisGame.hpp"
+#include "core/Tetris.hpp"
 #include "util/Timer.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_scancode.h>

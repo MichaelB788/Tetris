@@ -1,5 +1,5 @@
-#include "render/TetrisGameRenderer.hpp"
-#include "core/TetrisGame.hpp"
+#include "render/GameRenderer.hpp"
+#include "core/Tetris.hpp"
 #include "core/Tetromino.hpp"
 #include "platform/PlatformSDL.hpp"
 #include "util/Point.hpp"

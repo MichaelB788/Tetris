@@ -1,4 +1,4 @@
-#include "core/TetrisApp.hpp"
+#include "core/App.hpp"
 #include "platform/PlatformSDL.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3_ttf/SDL_ttf.h>

@@ -1,8 +1,8 @@
 #pragma once
-#include "core/TetrisGame.hpp"
+#include "core/Tetris.hpp"
 #include "platform/EventHandler.hpp"
 #include "platform/PlatformSDL.hpp"
-#include "render/TetrisGameRenderer.hpp"
+#include "render/GameRenderer.hpp"
 #include "render/TextRenderer.hpp"
 #include <SDL3/SDL_render.h>
 #include <chrono>
@@ -36,7 +36,7 @@ private:
   std::mt19937 rng_{std::random_device{}()};
 
   SDL::Window window_{
-      SDL_CreateWindow("Tetris", 800, 1000, SDL_WINDOW_RESIZABLE)};
+      SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE)};
   SDL::Renderer renderer_{SDL_CreateRenderer(window_.get(), nullptr)};
 
   Tetris tetris_{rng_};

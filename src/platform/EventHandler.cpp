@@ -1,5 +1,5 @@
 #include "platform/EventHandler.hpp"
-#include "core/TetrisGame.hpp"
+#include "core/Tetris.hpp"
 #include <SDL3/SDL_keyboard.h>
 #include <array>
 #include <chrono>

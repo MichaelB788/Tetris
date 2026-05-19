@@ -10,9 +10,7 @@
 #include <random>
 #include <string>
 
-EventHandler::EventHandler(TetrisGame &game,
-                           const std::filesystem::path &config_path)
-    : tetris_(game) {
+EventHandler::EventHandler(const std::filesystem::path &config_path) {
   if (config_path.empty()) {
     std::cerr << "Using default controls.\n";
     return;
@@ -46,20 +44,20 @@ auto find_value(const auto &key, const std::array<std::pair<K, V>, N> &map)
 }
 } // namespace
 
-void EventHandler::handle_kb_input(std::chrono::nanoseconds delta,
-                                   std::mt19937 &rng) {
+void EventHandler::handle_kb_input(Tetris &tetris, std::mt19937 &rng,
+                                   std::chrono::nanoseconds delta) {
   auto curr_kb_state = SDL_GetKeyboardState(nullptr);
 
   for (const auto &[scancode, command] : controls_) {
-    auto execute_input = [&] { tetris_.invoke_action(command, rng); };
+    auto execute_input = [&] { tetris.invoke_action(command, rng); };
     if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // First key press
-      tetris_.invoke_action(command, rng);
+      tetris.invoke_action(command, rng);
       movement_.init_delay.reset();
       rotation_.init_delay.reset();
     } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       // Key is held down
-      using enum TetrisGame::Action;
+      using enum Tetris::Action;
       if (command == RotateClockwise || command == RotateCounterclockwise ||
           command == RotateHalf) {
         rotation_.init_delay.invoke_when_elapsed(delta, [&] {
@@ -79,9 +77,8 @@ void EventHandler::handle_kb_input(std::chrono::nanoseconds delta,
 }
 
 void EventHandler::parse_controls(std::istream &input) {
-  using enum TetrisGame::Action;
-  static constexpr std::array<std::pair<std::string_view, TetrisGame::Action>,
-                              8>
+  using enum Tetris::Action;
+  static constexpr std::array<std::pair<std::string_view, Tetris::Action>, 8>
       STR_TO_FUNC{{{"move_left", MoveLeft},
                    {"move_right", MoveRight},
                    {"soft_drop", SoftDrop},

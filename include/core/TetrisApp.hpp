@@ -5,9 +5,9 @@
 #include "render/TetrisGameRenderer.hpp"
 #include "render/TextRenderer.hpp"
 #include <SDL3/SDL_render.h>
+#include <chrono>
 #include <filesystem>
 #include <random>
-#include <utility>
 
 class TetrisApp {
 public:
@@ -15,8 +15,7 @@ public:
     std::filesystem::path controls;
     std::filesystem::path tetromino_atlas;
     std::filesystem::path font_path;
-    float font_size;
-    int target_fps;
+    int target_fps = 60;
   };
 
   explicit TetrisApp(const Specification &spec);
@@ -24,34 +23,24 @@ public:
   void run();
 
 private:
-  void poll_events();
-
   void render_frame();
-
-  void center_within_window();
 
   void handle_tetris_state();
 
-  void reset() { tetris_ = TetrisGame{rng_}; }
-
   bool running_ = true;
+  int target_fps_{};
 
-  int target_fps_ = 60;
-
-  std::pair<int, int> win_size_{800, 1000};
-
-  Window window_{SDL_CreateWindow("Tetris", win_size_.first, win_size_.second,
-                                  SDL_WINDOW_RESIZABLE)};
-
-  Renderer renderer_{SDL_CreateRenderer(window_.get(), nullptr)};
-
+  std::chrono::time_point<std::chrono::steady_clock> prev_time{
+      std::chrono::steady_clock::now()};
+  std::chrono::time_point<std::chrono::steady_clock> curr_time{};
   std::mt19937 rng_{std::random_device{}()};
 
-  TetrisGame tetris_{rng_};
+  SDL::Window window_{
+      SDL_CreateWindow("Tetris", 800, 1000, SDL_WINDOW_RESIZABLE)};
+  SDL::Renderer renderer_{SDL_CreateRenderer(window_.get(), nullptr)};
 
-  TetrisGameRenderer tetris_renderer_;
-
+  Tetris tetris_{rng_};
+  GameRenderer tetris_renderer_;
   TextRenderer text_renderer_;
-
   EventHandler handler_;
 };

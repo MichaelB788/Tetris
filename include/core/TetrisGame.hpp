@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <random>
 
-class TetrisGame {
+class Tetris {
 public:
   enum class Action : uint8_t {
     MoveLeft,
@@ -27,7 +27,7 @@ public:
     const Matrix &matrix{};
   };
 
-  TetrisGame(std::mt19937 &rng);
+  Tetris(std::mt19937 &rng);
 
   void invoke_action(Action action, std::mt19937 &rng);
 

@@ -6,13 +6,13 @@
 
 static constexpr Point INIT_POS = {.x = 4, .y = 4};
 
-TetrisGame::TetrisGame(std::mt19937 &rng) {
+Tetris::Tetris(std::mt19937 &rng) {
   next_queue_.shuffle(rng);
   active_ = next_queue_.pop(rng);
   active_.pos = INIT_POS;
 }
 
-void TetrisGame::invoke_action(Action action, std::mt19937 &rng) {
+void Tetris::invoke_action(Action action, std::mt19937 &rng) {
   switch (action) {
     using enum Action;
   case MoveLeft:
@@ -43,8 +43,7 @@ void TetrisGame::invoke_action(Action action, std::mt19937 &rng) {
   }
 }
 
-void TetrisGame::update(std::chrono::nanoseconds delta_time,
-                        std::mt19937 &rng) {
+void Tetris::update(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
   gravity_delay_.invoke_periodically(
       delta_time, [this] { local_shift(active_, {.y = 1}, matrix_); });
 
@@ -53,7 +52,7 @@ void TetrisGame::update(std::chrono::nanoseconds delta_time,
   }
 }
 
-void TetrisGame::hold(std::mt19937 &rng) {
+void Tetris::hold(std::mt19937 &rng) {
   if (!hold_command_triggered_) {
     hold_command_triggered_ = true;
     const auto to_hold = Tetromino(active_.type);
@@ -62,7 +61,7 @@ void TetrisGame::hold(std::mt19937 &rng) {
   }
 }
 
-auto TetrisGame::attempt_swap(Tetromino next) -> bool {
+auto Tetris::attempt_swap(Tetromino next) -> bool {
   next.pos = INIT_POS;
   for (int i = 0; i < (Matrix::ROWS - INIT_POS.y); ++i) {
     if (matrix_.is_move_valid(shape_of(next))) {
@@ -75,7 +74,7 @@ auto TetrisGame::attempt_swap(Tetromino next) -> bool {
   return false;
 }
 
-void TetrisGame::complete_move(std::mt19937 &rng) {
+void Tetris::complete_move(std::mt19937 &rng) {
   // Place Tetromino and update scores
   matrix_.lock_down(active_);
   score_ += matrix_.clear_lines();

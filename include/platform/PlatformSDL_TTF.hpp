@@ -2,6 +2,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <memory>
 
+namespace SDL::TTF {
 struct RendererTextEngineDeleter {
   void operator()(TTF_TextEngine *engine) {
     TTF_DestroyRendererTextEngine(engine);
@@ -18,3 +19,4 @@ using RendererTextEngine =
     std::unique_ptr<TTF_TextEngine, RendererTextEngineDeleter>;
 using Font = std::unique_ptr<TTF_Font, FontDeleter>;
 using Text = std::unique_ptr<TTF_Text, TextDeleter>;
+} // namespace SDL::TTF

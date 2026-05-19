@@ -1,5 +1,0 @@
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /home/migdez/repos/Tetris/build
-ninja: Entering directory `/home/migdez/repos/Tetris/build'
-[1/1] Linking CXX executable bin/Tetris

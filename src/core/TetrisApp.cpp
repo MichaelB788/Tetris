@@ -1,6 +1,7 @@
 #include "core/TetrisApp.hpp"
 #include "SDL3/SDL_render.h"
 #include "platform/PlatformSDL.hpp"
+#include "util/Point.hpp"
 #include "util/Timer.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_video.h>
@@ -8,12 +9,14 @@
 #include <iostream>
 #include <thread>
 
+static constexpr float PIXEL_SCALE = 32;
+
 TetrisApp::TetrisApp(const Specification &spec)
     : target_fps_(spec.target_fps),
-      tetris_renderer_(spec.tetromino_atlas, renderer_.get()),
-      text_renderer_(spec.font_path, spec.font_size, renderer_.get()),
-      handler_(tetris_, spec.controls) {
-  center_within_window();
+      tetris_renderer_(*renderer_, spec.tetromino_atlas, PIXEL_SCALE),
+      text_renderer_(*renderer_, spec.font_path, PIXEL_SCALE),
+      handler_(spec.controls) {
+  tetris_renderer_.fit_within_window(*window_);
 }
 
 void TetrisApp::run() {
@@ -27,21 +30,31 @@ void TetrisApp::run() {
 #endif
 
   // Start of game loop
-  auto prev_time{std::chrono::steady_clock::now()};
   while (running_) {
     // Compute delta and update previous time point
-    const auto curr_time = std::chrono::steady_clock::now();
-    const auto delta = std::chrono::duration_cast<std::chrono::nanoseconds>(
-        curr_time - prev_time);
+    curr_time = std::chrono::steady_clock::now();
+    const auto delta = curr_time - prev_time;
     prev_time = curr_time;
 
     // Poll events and update game state
-    poll_events();
+    {
+      SDL_Event event;
+
+      while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_EVENT_QUIT:
+          running_ = false;
+          break;
+        case SDL_EVENT_WINDOW_RESIZED:
+          tetris_renderer_.fit_within_window(*window_);
+          break;
+        default:
+          break;
+        }
+      }
+    }
+    handler_.handle_kb_input(tetris_, rng_, delta);
     tetris_.update(delta, rng_);
-
-    // Handle keyboard input AFTER polling events
-    handler_.handle_kb_input(delta, rng_);
-
     handle_tetris_state();
 
     render_frame();
@@ -64,42 +77,25 @@ void TetrisApp::run() {
   }
 }
 
-void TetrisApp::poll_events() {
-  SDL_Event e;
-
-  while (SDL_PollEvent(&e)) {
-    switch (e.type) {
-    case SDL_EVENT_QUIT:
-      running_ = false;
-      break;
-    case SDL_EVENT_WINDOW_RESIZED: {
-      auto &[w, h] = win_size_;
-      SDL_GetWindowSizeInPixels(window_.get(), &w, &h);
-      center_within_window();
-    } break;
-    default:
-      break;
-    }
-  }
-}
-
 void TetrisApp::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer_.get());
 
-  tetris_renderer_.draw_frame(tetris_, *renderer_);
-  text_renderer_.render_screen_text();
-  text_renderer_.render_score_int(tetris_.score());
+  tetris_renderer_.draw_snapshot(*renderer_, tetris_.snapshot());
+
+  // Render screen text
+  {
+    const auto hud_layout = tetris_renderer_.compute_hud_layout();
+    text_renderer_.render_text("NEXT", hud_layout.next_label);
+    text_renderer_.render_text("HOLD", hud_layout.hold_label);
+    text_renderer_.render_text("SCORE", hud_layout.score_label);
+    text_renderer_.render_int(tetris_.score(), hud_layout.score_value);
+  }
 
   SDL_RenderPresent(renderer_.get());
 }
 
 void TetrisApp::handle_tetris_state() {
   if (tetris_.game_over())
-    reset();
-}
-
-void TetrisApp::center_within_window() {
-  tetris_renderer_.align_inside_rect(win_size_);
-  text_renderer_.align_with_game(tetris_renderer_);
+    tetris_ = Tetris{rng_};
 }

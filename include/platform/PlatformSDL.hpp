@@ -1,7 +1,20 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_render.h>
+#include <exception>
 #include <memory>
+#include <string>
+
+namespace SDL {
+class Error final : public std::exception {
+public:
+  Error(const char *message)
+      : msg(std::string(message) + ": " + SDL_GetError()) {}
+
+  const char *what() const noexcept override { return msg.c_str(); };
+
+private:
+  std::string msg;
+};
 
 struct WindowDeleter {
   void operator()(SDL_Window *window) { SDL_DestroyWindow(window); }
@@ -20,3 +33,4 @@ using Window = std::unique_ptr<SDL_Window, WindowDeleter>;
 using Renderer = std::unique_ptr<SDL_Renderer, RendererDeleter>;
 using Texture = std::unique_ptr<SDL_Texture, TextureDeleter>;
 using Surface = std::unique_ptr<SDL_Surface, SurfaceDeleter>;
+} // namespace SDL

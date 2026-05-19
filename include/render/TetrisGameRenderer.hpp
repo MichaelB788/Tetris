@@ -1,31 +1,49 @@
 #pragma once
+#include "core/TetrisGame.hpp"
 #include "platform/PlatformSDL.hpp"
-#include "util/Point.hpp"
 #include <filesystem>
 
-class TetrisGame;
-struct Board;
-struct HUD;
-
-class TetrisGameRenderer {
+class GameRenderer {
 public:
-  struct Positions {
+  struct GameLayout {
     Point<float> board{};
     Point<float> queue{};
     Point<float> hold{};
   };
+  struct HudLayout {
+    Point<float> next_label{};
+    Point<float> hold_label{};
+    Point<float> score_label{};
+    Point<float> score_value{};
+  };
 
-  TetrisGameRenderer(const std::filesystem::path &atlas_path,
-                     SDL_Renderer *renderer);
+  GameRenderer(SDL_Renderer &renderer, const std::filesystem::path &atlas_path,
+               float tile_size = 32);
 
-  void draw_frame(const TetrisGame &game, SDL_Renderer &renderer);
+  void draw_snapshot(SDL_Renderer &renderer, const Tetris::Snapshot &game);
 
-  void align_inside_rect(std::pair<int, int> rect);
+  void fit_within_window(SDL_Window &window);
 
-  [[nodiscard]] auto get_positions() const -> const Positions & { return pos_; }
+  auto get_game_layout() const -> GameLayout { return game_layout; }
+
+  auto compute_hud_layout() const -> HudLayout;
 
 private:
-  Positions pos_{};
-  Texture piece_atlas_ = nullptr;
-  Texture ghost_atlas_ = nullptr;
+  auto resolve(Point<float> base, Point<float> offset) const -> Point<float> {
+    return base + (offset * tile_size_);
+  }
+
+  enum class TetrominoRenderType { Ghost, Normal };
+  void draw_tetromino_tile(SDL_Renderer &renderer, Tetromino::Type type,
+                           TetrominoRenderType render_type,
+                           Point<int> tetromino_pos, Point<float> offset);
+
+  void draw_tetromino(SDL_Renderer &renderer, Tetromino tetromino,
+                      TetrominoRenderType render_type, Point<float> offset);
+
+  void draw_matrix(SDL_Renderer &renderer, const Matrix &matrix);
+
+  float tile_size_{};
+  GameLayout game_layout{};
+  SDL::Texture piece_atlas_ = nullptr;
 };

@@ -20,9 +20,10 @@ TextRenderer::TextRenderer(SDL_Renderer &renderer,
   if (!font_)
     throw SDL::Error("Error opening font");
 
+  // Use string representations of [0, 9] to create numeric textures
   {
-    static constexpr std::array<const char *, 10> NUM_STR{
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+    static constexpr const char *NUM_STR[] = {"0", "1", "2", "3", "4",
+                                              "5", "6", "7", "8", "9"};
     for (size_t i = 0; i < nums_text_.size(); ++i) {
       nums_text_[i].reset(
           TTF_CreateText(text_engine_.get(), font_.get(), NUM_STR[i], 1));
@@ -39,14 +40,9 @@ void TextRenderer::render_text(std::string_view str, Point<float> pos) {
 }
 
 void TextRenderer::render_int(int num, Point<float> pos) const {
-  // Check if only a single digit to render
-  if (num < 10) {
+  if (num < 10) { // Render the only digit
     TTF_DrawRendererText(nums_text_[num].get(), pos.x, pos.y);
-    return;
-  }
-
-  // Render each individual digit
-  {
+  } else { // Render each individual digit
     std::vector<int> digits{};
     while (num > 0) {
       digits.push_back(num % 10);
@@ -59,20 +55,3 @@ void TextRenderer::render_int(int num, Point<float> pos) const {
     }
   }
 }
-
-/*
-void TextRenderer::align_with_game(const GameRenderer &game_renderer) {
-  auto game_pos = game_renderer.get_positions();
-
-  auto &[next_x, next_y] = next_.pos;
-  auto &[score_x, score_y] = score_.pos;
-  auto &[hold_x, hold_y] = hold_.pos;
-
-  next_x = game_pos.queue.x - TILE_SIZE;
-  next_y = game_pos.queue.y - TILE_SIZE * 3;
-
-  score_x = hold_x = game_pos.hold.x - TILE_SIZE;
-  hold_y = game_pos.hold.y - TILE_SIZE * 3;
-  score_y = game_pos.hold.y + TILE_SIZE * 4;
-}
-*/

@@ -6,9 +6,8 @@
 
 static constexpr Point INIT_POS = {.x = 4, .y = 4};
 
-Tetris::Tetris(std::mt19937 &rng) {
-  next_queue_.shuffle(rng);
-  active_ = next_queue_.pop(rng);
+Tetris::Tetris(std::mt19937 &rng)
+    : seven_bag_(rng), active_(seven_bag_.pop(rng)) {
   active_.pos = INIT_POS;
 }
 
@@ -56,8 +55,9 @@ void Tetris::hold(std::mt19937 &rng) {
   if (!hold_command_triggered_) {
     hold_command_triggered_ = true;
     const auto to_hold = Tetromino(active_.type);
-    attempt_swap(held_.has_value() ? held_.value() : next_queue_.pop(rng));
+    attempt_swap(held_.has_value() ? held_.value() : seven_bag_.pop(rng));
     held_ = to_hold;
+    lock_delay_.reset();
   }
 }
 
@@ -70,7 +70,6 @@ auto Tetris::attempt_swap(Tetromino next) -> bool {
     }
     --next.pos.y;
   }
-  game_over_ = true;
   return false;
 }
 
@@ -90,8 +89,10 @@ void Tetris::complete_move(std::mt19937 &rng) {
                                              : LEVELS.back());
   }
 
-  if (attempt_swap(next_queue_.pop(rng))) {
+  if (attempt_swap(seven_bag_.pop(rng))) {
     hold_command_triggered_ = false;
     lock_delay_.reset();
+  } else {
+    game_over_ = true;
   }
 }

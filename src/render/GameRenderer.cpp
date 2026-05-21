@@ -31,11 +31,16 @@ void GameRenderer::draw_snapshot(SDL_Renderer &renderer,
 
   draw_matrix(renderer, snapshot.matrix);
 
-  draw_tetromino(renderer, snapshot.next_queue.peek(),
-                 TetrominoRenderType::Normal, game_layout.queue);
   if (snapshot.held.has_value()) {
     draw_tetromino(renderer, snapshot.held.value(), TetrominoRenderType::Normal,
                    game_layout.hold);
+  }
+
+  auto next_pos = game_layout.queue;
+  for (const auto next_type : snapshot.seven_bag) {
+    draw_tetromino(renderer, Tetromino{.type = next_type},
+                   TetrominoRenderType::Normal, next_pos);
+    next_pos = resolve(next_pos, {.y = 3});
   }
 }
 

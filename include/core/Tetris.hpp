@@ -1,6 +1,6 @@
 #pragma once
 #include "core/Matrix.hpp"
-#include "core/NextQueue.hpp"
+#include "core/SevenBag.hpp"
 #include "core/Tetromino.hpp"
 #include "util/Timer.hpp"
 #include <chrono>
@@ -9,6 +9,8 @@
 
 class Tetris {
 public:
+  Tetris(std::mt19937 &rng);
+
   enum class Action : uint8_t {
     MoveLeft,
     MoveRight,
@@ -19,24 +21,20 @@ public:
     RotateHalf,
     Hold
   };
-
-  struct Snapshot {
-    Tetromino active{};
-    std::optional<Tetromino> held{};
-    const NextQueue &next_queue{};
-    const Matrix &matrix{};
-  };
-
-  Tetris(std::mt19937 &rng);
-
   void invoke_action(Action action, std::mt19937 &rng);
 
   void update(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
 
+  struct Snapshot {
+    Tetromino active{};
+    std::optional<Tetromino> held{};
+    SevenBag::Preview seven_bag{};
+    const Matrix &matrix{};
+  };
   auto snapshot() const -> Snapshot {
     return {.active = active_,
             .held = held_,
-            .next_queue = next_queue_,
+            .seven_bag = seven_bag_.preview(),
             .matrix = matrix_};
   }
 
@@ -53,10 +51,10 @@ private:
 
   void hold(std::mt19937 &rng);
 
-  Tetromino active_{};
   std::optional<Tetromino> held_{};
-  NextQueue next_queue_{};
   Matrix matrix_{};
+  SevenBag seven_bag_;
+  Tetromino active_;
 
   int score_ = 0;
   bool hold_command_triggered_ = false;

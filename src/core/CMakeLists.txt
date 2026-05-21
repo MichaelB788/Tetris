@@ -1,6 +1,6 @@
 add_library(TetrisCore
   Matrix.cpp
-  NextQueue.cpp
+  SevenBag.cpp
   Tetris.cpp
   App.cpp
   Tetromino.cpp

@@ -65,6 +65,8 @@ auto GameRenderer::compute_hud_layout() const -> HudLayout {
       .hold_label = resolve(game_layout.hold, {.x = -1, .y = -3}),
       .score_label = resolve(game_layout.hold, {.x = -1, .y = 4}),
       .score_value = resolve(game_layout.hold, {.x = -1, .y = 6}),
+      .fps_label = resolve(game_layout.queue, {.x = -1, .y = 15}),
+      .fps_value = resolve(game_layout.queue, {.x = -1, .y = 17}),
   };
 }
 

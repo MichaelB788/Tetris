@@ -15,6 +15,8 @@ public:
     Point<float> hold_label{};
     Point<float> score_label{};
     Point<float> score_value{};
+    Point<float> fps_label{};
+    Point<float> fps_value{};
   };
 
   GameRenderer(SDL_Renderer &renderer, const std::filesystem::path &atlas_path,

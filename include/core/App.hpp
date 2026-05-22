@@ -4,6 +4,7 @@
 #include "platform/PlatformSDL.hpp"
 #include "render/GameRenderer.hpp"
 #include "render/TextRenderer.hpp"
+#include "util/Timer.hpp"
 #include <SDL3/SDL_render.h>
 #include <chrono>
 #include <filesystem>
@@ -30,6 +31,14 @@ private:
   bool running_ = true;
   int target_fps_{};
 
+#ifndef NDEBUG
+  struct FPS_Counter {
+    int ticks{};
+    int fps{};
+    Timer delay{std::chrono::seconds(1)};
+  } fps_counter_;
+#endif
+
   std::chrono::time_point<std::chrono::steady_clock> prev_time{
       std::chrono::steady_clock::now()};
   std::chrono::time_point<std::chrono::steady_clock> curr_time{};
@@ -40,7 +49,7 @@ private:
   SDL::Renderer renderer_{SDL_CreateRenderer(window_.get(), nullptr)};
 
   Tetris tetris_{rng_};
-  GameRenderer tetris_renderer_;
+  GameRenderer game_renderer_;
   TextRenderer text_renderer_;
   EventHandler handler_;
 };

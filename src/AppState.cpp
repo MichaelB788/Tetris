@@ -1,4 +1,4 @@
-#include "App.hpp"
+#include "AppState.hpp"
 #include "PlatformSDL.hpp"
 #include "Point.hpp"
 #include "SDL3/SDL_render.h"
@@ -7,19 +7,16 @@
 #include <chrono>
 #include <thread>
 
-static constexpr float PIXEL_SCALE = 32;
+static constexpr auto PIXEL_SCALE = 32.00f;
 
-TetrisApp::TetrisApp(const Specification &spec)
-    : target_fps_(spec.target_fps),
-      game_renderer_(*renderer_, spec.tetromino_atlas, PIXEL_SCALE),
-      text_renderer_(*renderer_, spec.font_path), handler_(spec.controls) {
+AppState::AppState(const FilePaths &path, int fps)
+    : target_fps_(fps),
+      game_renderer_(*renderer_, path.tetromino_atlas, PIXEL_SCALE),
+      text_renderer_(*renderer_, path.font), handler_(path.controls) {
   game_renderer_.fit_within_window(*window_);
 }
 
-void TetrisApp::run() {
-  // FPS cap recorded in nanoseconds. Uses integer division.
-  const std::chrono::nanoseconds FPS_CAP{1'000'000'000 / target_fps_};
-
+void AppState::run() {
   // Start of game loop
   while (running_) {
     // Compute delta and update previous time point
@@ -48,13 +45,7 @@ void TetrisApp::run() {
     tetris_.update(delta, rng_);
     handle_tetris_state();
     render_frame();
-#ifndef NDEBUG
-    ++fps_counter_.ticks;
-    fps_counter_.delay.invoke_periodically(delta, [this] {
-      fps_counter_.fps = fps_counter_.ticks;
-      fps_counter_.ticks = 0;
-    });
-#endif
+    fps_counter_.tick(delta);
 
     // If frame finished early, sleep for remainder of time
     const auto frame_time = std::chrono::steady_clock::now() - curr_time;
@@ -64,7 +55,7 @@ void TetrisApp::run() {
   }
 }
 
-void TetrisApp::render_frame() {
+void AppState::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer_.get());
 
@@ -86,7 +77,7 @@ void TetrisApp::render_frame() {
   SDL_RenderPresent(renderer_.get());
 }
 
-void TetrisApp::handle_tetris_state() {
+void AppState::handle_tetris_state() {
   if (tetris_.game_over())
     tetris_ = Tetris{rng_};
 }

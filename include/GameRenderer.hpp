@@ -47,5 +47,4 @@ private:
 
   float tile_size_{};
   GameLayout game_layout{};
-  SDL::Texture piece_atlas_ = nullptr;
 };

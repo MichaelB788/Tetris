@@ -13,6 +13,7 @@ add_library(TetrisSource
   SevenBag.cpp
   Tetris.cpp
   Tetromino.cpp
+  TextMap.cpp
   TextRenderer.cpp
 )
 

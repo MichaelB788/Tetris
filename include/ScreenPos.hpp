@@ -6,8 +6,8 @@ struct SDL_Window;
 namespace ScreenPos {
 struct Playfield {
   Point<float> board{};
-  Point<float> queue{};
-  Point<float> hold{};
+  Point<float> seven_bag_pos{};
+  Point<float> held_piece{};
 };
 
 struct Text {

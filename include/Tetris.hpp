@@ -21,26 +21,19 @@ public:
     RotateHalf,
     Hold
   };
+
   void invoke_action(Action action, std::mt19937 &rng);
 
   void update(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
 
-  struct Snapshot {
-    Tetromino active{};
-    std::optional<Tetromino> held{};
-    SevenBag::Preview seven_bag{};
-    const Matrix &matrix{};
-  };
-  auto snapshot() const -> Snapshot {
-    return {.active = active_,
-            .held = held_,
-            .seven_bag = seven_bag_.preview(),
-            .matrix = matrix_};
-  }
-
   auto score() const -> int { return score_; }
-
   auto game_over() const -> bool { return game_over_; }
+  auto matrix() const -> const Matrix & { return matrix_; }
+  auto active_piece() const -> Tetromino { return active_piece_; }
+  auto seven_bag() const -> SevenBag::Preview { return seven_bag_.preview(); }
+  auto held_piece() const -> std::optional<Tetromino> { return held_piece_; }
+
+  auto ghost_piece() const -> Tetromino;
 
 private:
   // Sets the `game_over_` flag to true in the case of an unsuccessful
@@ -51,10 +44,10 @@ private:
 
   void hold(std::mt19937 &rng);
 
-  std::optional<Tetromino> held_{};
+  std::optional<Tetromino> held_piece_{};
   Matrix matrix_{};
   SevenBag seven_bag_;
-  Tetromino active_;
+  Tetromino active_piece_;
 
   int score_ = 0;
   bool hold_command_triggered_ = false;

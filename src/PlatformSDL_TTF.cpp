@@ -1,4 +1,3 @@
-#pragma once
 #include "PlatformSDL_TTF.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
 

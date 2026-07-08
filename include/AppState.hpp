@@ -1,9 +1,9 @@
 #pragma once
 #include "EventHandler.hpp"
 #include "FPS.hpp"
-#include "GameRenderer.hpp"
 #include "NumberRenderer.hpp"
 #include "PlatformSDL.hpp"
+#include "ScreenPos.hpp"
 #include "Tetris.hpp"
 #include "TextRenderer.hpp"
 #include <SDL3/SDL_render.h>
@@ -11,22 +11,24 @@
 #include <random>
 
 struct AppState {
-  std::mt19937 rng_{std::random_device{}()};
+  std::mt19937 rng{std::random_device{}()};
 
-  std::chrono::time_point<std::chrono::steady_clock> prev_time =
-      std::chrono::steady_clock::now();
-  std::chrono::time_point<std::chrono::steady_clock> curr_time =
-      std::chrono::steady_clock::now();
+  std::chrono::time_point<std::chrono::steady_clock>
+      prev_time = std::chrono::steady_clock::now(),
+      curr_time = std::chrono::steady_clock::now();
+
   FPS fps = 60;
-  FPS_Counter fps_counter_{};
+  FPS_Counter fps_counter{};
 
-  Tetris tetris_{rng_};
+  ScreenPos::Playfield pf_pos;
+  ScreenPos::Text text_pos;
 
-  // GameRenderer game_renderer_;
+  Tetris tetris{rng};
 
-  EventHandler handler_;
+  EventHandler handler;
+
   TextRenderer text_renderer{};
-  NumberRenderer num_renderer{};
+  NumberRenderer num_renderer{nullptr, nullptr};
 
   SDL::Window window = nullptr;
   SDL::Renderer renderer = nullptr;

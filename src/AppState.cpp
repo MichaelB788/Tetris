@@ -7,59 +7,11 @@
 #include <chrono>
 #include <thread>
 
-static constexpr auto PIXEL_SCALE = 32.00f;
-
-AppState::AppState(const FilePaths &path, int fps)
-    : target_fps_(fps),
-      game_renderer_(*renderer_, path.tetromino_atlas, PIXEL_SCALE),
-      text_renderer_(*renderer_, path.font), handler_(path.controls) {
-  game_renderer_.fit_within_window(*window_);
-}
-
-void AppState::run() {
-  // Start of game loop
-  while (running_) {
-    // Compute delta and update previous time point
-    curr_time = std::chrono::steady_clock::now();
-    const auto delta = curr_time - prev_time;
-    prev_time = curr_time;
-
-    // Poll events and update game state
-    {
-      SDL_Event event;
-
-      while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_EVENT_QUIT:
-          running_ = false;
-          break;
-        case SDL_EVENT_WINDOW_RESIZED:
-          game_renderer_.fit_within_window(*window_);
-          break;
-        default:
-          break;
-        }
-      }
-    }
-    handler_.handle_kb_input(tetris_, rng_, delta);
-    tetris_.update(delta, rng_);
-    handle_tetris_state();
-    render_frame();
-    fps_counter_.tick(delta);
-
-    // If frame finished early, sleep for remainder of time
-    const auto frame_time = std::chrono::steady_clock::now() - curr_time;
-    if (frame_time < FPS_CAP) {
-      std::this_thread::sleep_for(FPS_CAP - frame_time);
-    }
-  }
-}
-
 void AppState::render_frame() {
   SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer_.get());
 
-  game_renderer_.draw_snapshot(*renderer_, tetris_.snapshot());
+  game_renderer_.draw_snapshot(*renderer_, tetris.snapshot());
 
   // Render screen text
   {
@@ -77,7 +29,4 @@ void AppState::render_frame() {
   SDL_RenderPresent(renderer_.get());
 }
 
-void AppState::handle_tetris_state() {
-  if (tetris_.game_over())
-    tetris_ = Tetris{rng_};
-}
+void AppState::handle_tetris_state() {}

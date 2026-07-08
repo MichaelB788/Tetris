@@ -5,18 +5,18 @@
 
 class GameRenderer {
 public:
-  struct GameLayout {
+  struct PlayfieldScreenPos {
     Point<float> board{};
     Point<float> queue{};
     Point<float> hold{};
   };
-  struct HudLayout {
-    Point<float> next_label{};
-    Point<float> hold_label{};
+  struct TextScreenPos {
+    Point<float> next{};
+    Point<float> hold{};
     Point<float> score_label{};
-    Point<float> score_value{};
+    Point<float> score_val{};
     Point<float> fps_label{};
-    Point<float> fps_value{};
+    Point<float> fps_val{};
   };
 
   GameRenderer(SDL_Renderer &renderer, const std::filesystem::path &atlas_path,
@@ -26,9 +26,9 @@ public:
 
   void fit_within_window(SDL_Window &window);
 
-  auto get_game_layout() const -> GameLayout { return game_layout; }
+  auto get_game_layout() const -> PlayfieldScreenPos { return game_layout; }
 
-  auto compute_hud_layout() const -> HudLayout;
+  auto compute_hud_layout() const -> TextScreenPos;
 
 private:
   auto resolve(Point<float> base, Point<float> offset) const -> Point<float> {
@@ -46,5 +46,5 @@ private:
   void draw_matrix(SDL_Renderer &renderer, const Matrix &matrix);
 
   float tile_size_{};
-  GameLayout game_layout{};
+  PlayfieldScreenPos game_layout{};
 };

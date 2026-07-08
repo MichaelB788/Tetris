@@ -44,31 +44,7 @@ void GameRenderer::draw_snapshot(SDL_Renderer &renderer,
   }
 }
 
-void GameRenderer::fit_within_window(SDL_Window &window) {
-  // Center the board within the center of the screen
-  {
-    int w = 0, h = 0;
-    SDL_GetWindowSizeInPixels(&window, &w, &h);
-    game_layout.board = {.x = (w - (Matrix::COLS * tile_size_)) / 2,
-                         .y = (h - (Matrix::ROWS * tile_size_)) / 2};
-  }
-
-  // All other ui elements are anchored off of the board's screen position
-  game_layout.queue = resolve(game_layout.board, {.x = -4, .y = 3});
-  game_layout.hold =
-      resolve(game_layout.board, {.x = Matrix::COLS + 3, .y = 3});
-}
-
-auto GameRenderer::compute_hud_layout() const -> HudLayout {
-  return {
-      .next_label = resolve(game_layout.queue, {.x = -1, .y = -3}),
-      .hold_label = resolve(game_layout.hold, {.x = -1, .y = -3}),
-      .score_label = resolve(game_layout.hold, {.x = -1, .y = 4}),
-      .score_value = resolve(game_layout.hold, {.x = -1, .y = 6}),
-      .fps_label = resolve(game_layout.queue, {.x = -1, .y = 15}),
-      .fps_value = resolve(game_layout.queue, {.x = -1, .y = 17}),
-  };
-}
+auto GameRenderer::compute_hud_layout() const -> TextScreenPos { return {}; }
 
 void GameRenderer::draw_tetromino_tile(SDL_Renderer &renderer,
                                        Tetromino::Type type,

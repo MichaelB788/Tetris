@@ -4,12 +4,13 @@
 #include <cassert>
 
 auto Matrix::at(size_t x, size_t y) const -> Cell {
-  assert(x < COLS && y < ROWS);
+  assert(x < MATRIX_COLS && y < MATRIX_ROWS);
   return data_[y][x];
 }
 
 auto Matrix::at(Point<int> pos) const -> Cell {
-  assert(0 <= pos.x && pos.x < COLS && 0 <= pos.x && pos.y < ROWS);
+  assert(0 <= pos.x && pos.x < MATRIX_COLS && 0 <= pos.x &&
+         pos.y < MATRIX_ROWS);
   return data_[pos.y][pos.x];
 }
 
@@ -20,8 +21,8 @@ void Matrix::clear() {
 
 auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
   return std::ranges::all_of(shape, [this](auto pos) {
-    return 0 <= pos.x && pos.x < COLS && 0 <= pos.y && pos.y < ROWS &&
-           !data_[pos.y][pos.x].has_value();
+    return 0 <= pos.x && pos.x < MATRIX_COLS && 0 <= pos.y &&
+           pos.y < MATRIX_ROWS && !data_[pos.y][pos.x].has_value();
   });
 }
 
@@ -36,9 +37,9 @@ void Matrix::lock_down(Tetromino piece) {
 
 auto Matrix::clear_lines() -> int {
   int cleared = 0;
-  int write = ROWS - 1;
+  int write = MATRIX_ROWS - 1;
 
-  for (int read = ROWS - 1; read >= 0; --read) {
+  for (int read = MATRIX_ROWS - 1; read >= 0; --read) {
     if (std::ranges::all_of(data_[read], [](auto matrix_cell) {
           return matrix_cell.has_value();
         })) {

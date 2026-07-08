@@ -1,4 +1,5 @@
 #pragma once
+#include "Constants.hpp"
 #include "Tetromino.hpp"
 #include <array>
 #include <cassert>
@@ -7,7 +8,6 @@
 
 class Matrix {
 public:
-  static constexpr size_t ROWS = 22, COLS = 10;
   using Cell = std::optional<Tetromino::Type>;
 
   auto at(size_t x, size_t y) const -> Cell;
@@ -22,5 +22,5 @@ public:
   void lock_down(Tetromino piece);
 
 private:
-  std::array<std::array<Cell, COLS>, ROWS> data_{};
+  std::array<std::array<Cell, MATRIX_COLS>, MATRIX_ROWS> data_{};
 };

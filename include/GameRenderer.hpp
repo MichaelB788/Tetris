@@ -1,6 +1,6 @@
 #pragma once
-#include "core/Tetris.hpp"
-#include "platform/PlatformSDL.hpp"
+#include "PlatformSDL.hpp"
+#include "Tetris.hpp"
 #include <filesystem>
 
 class GameRenderer {

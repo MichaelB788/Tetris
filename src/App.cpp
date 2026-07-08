@@ -1,7 +1,7 @@
-#include "core/App.hpp"
+#include "App.hpp"
+#include "PlatformSDL.hpp"
+#include "Point.hpp"
 #include "SDL3/SDL_render.h"
-#include "platform/PlatformSDL.hpp"
-#include "util/Point.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_video.h>
 #include <chrono>

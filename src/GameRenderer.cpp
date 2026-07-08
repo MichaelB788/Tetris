@@ -1,8 +1,8 @@
-#include "render/GameRenderer.hpp"
-#include "core/Tetris.hpp"
-#include "core/Tetromino.hpp"
-#include "platform/PlatformSDL.hpp"
-#include "util/Point.hpp"
+#include "GameRenderer.hpp"
+#include "PlatformSDL.hpp"
+#include "Point.hpp"
+#include "Tetris.hpp"
+#include "Tetromino.hpp"
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
@@ -18,9 +18,6 @@ GameRenderer::GameRenderer(SDL_Renderer &renderer,
 
 void GameRenderer::draw_snapshot(SDL_Renderer &renderer,
                                  const Tetris::Snapshot &snapshot) {
-  draw_tetromino(renderer, snapshot.active, TetrominoRenderType::Normal,
-                 game_layout.board);
-
   // Draw the ghost piece
   {
     auto ghost = snapshot.active;
@@ -28,6 +25,9 @@ void GameRenderer::draw_snapshot(SDL_Renderer &renderer,
     draw_tetromino(renderer, ghost, TetrominoRenderType::Ghost,
                    game_layout.board);
   }
+
+  draw_tetromino(renderer, snapshot.active, TetrominoRenderType::Normal,
+                 game_layout.board);
 
   draw_matrix(renderer, snapshot.matrix);
 

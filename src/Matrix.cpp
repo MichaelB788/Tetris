@@ -1,5 +1,5 @@
-#include "core/Matrix.hpp"
-#include "core/Tetromino.hpp"
+#include "Matrix.hpp"
+#include "Tetromino.hpp"
 #include <algorithm>
 #include <cassert>
 

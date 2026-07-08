@@ -16,4 +16,8 @@ include_directories(BEFORE
     ${CMAKE_CURRENT_BINARY_DIR}/include
 )
 
+find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL3_image CONFIG REQUIRED)
+find_package(SDL3_ttf CONFIG REQUIRED)
+
 add_subdirectory(src)

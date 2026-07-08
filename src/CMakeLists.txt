@@ -5,13 +5,21 @@ add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
   PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 
-add_subdirectory(core)
-add_subdirectory(platform)
-add_subdirectory(render)
+add_library(TetrisSource
+  App.cpp
+  EventHandler.cpp
+  GameRenderer.cpp
+  Matrix.cpp
+  SevenBag.cpp
+  Tetris.cpp
+  Tetromino.cpp
+  TextRenderer.cpp
+)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-  Tetris::Core
-  Tetris::Platform
-  Tetris::Render
+  TetrisSource
+  SDL3::SDL3
+  SDL3_ttf::SDL3_ttf
+  SDL3_image::SDL3_image
 )
 

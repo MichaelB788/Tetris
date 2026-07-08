@@ -1,5 +1,5 @@
-#include "core/Tetris.hpp"
-#include "core/Tetromino.hpp"
+#include "Tetris.hpp"
+#include "Tetromino.hpp"
 #include <chrono>
 #include <cmath>
 #include <random>

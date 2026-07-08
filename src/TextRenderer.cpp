@@ -1,7 +1,7 @@
-#include "render/TextRenderer.hpp"
-#include "platform/PlatformSDL.hpp"
-#include "platform/PlatformSDL_TTF.hpp"
-#include "util/Point.hpp"
+#include "TextRenderer.hpp"
+#include "PlatformSDL.hpp"
+#include "PlatformSDL_TTF.hpp"
+#include "Point.hpp"
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_render.h>

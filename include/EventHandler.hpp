@@ -1,10 +1,9 @@
 #pragma once
-#include "core/Tetris.hpp"
-#include "util/Timer.hpp"
+#include "Tetris.hpp"
+#include "Timer.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_scancode.h>
 #include <array>
-#include <chrono>
 #include <filesystem>
 
 class EventHandler {

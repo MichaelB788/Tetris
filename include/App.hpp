@@ -1,10 +1,10 @@
 #pragma once
-#include "core/Tetris.hpp"
-#include "platform/EventHandler.hpp"
-#include "platform/PlatformSDL.hpp"
-#include "render/GameRenderer.hpp"
-#include "render/TextRenderer.hpp"
-#include "util/Timer.hpp"
+#include "EventHandler.hpp"
+#include "GameRenderer.hpp"
+#include "PlatformSDL.hpp"
+#include "Tetris.hpp"
+#include "TextRenderer.hpp"
+#include "Timer.hpp"
 #include <SDL3/SDL_render.h>
 #include <chrono>
 #include <filesystem>

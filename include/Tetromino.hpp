@@ -1,5 +1,5 @@
 #pragma once
-#include "util/Point.hpp"
+#include "Point.hpp"
 #include <array>
 #include <cstdint>
 

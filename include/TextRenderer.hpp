@@ -1,6 +1,6 @@
 #pragma once
-#include "platform/PlatformSDL_TTF.hpp"
-#include "util/Point.hpp"
+#include "PlatformSDL_TTF.hpp"
+#include "Point.hpp"
 #include <array>
 #include <filesystem>
 #include <unordered_map>

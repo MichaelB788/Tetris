@@ -1,5 +1,5 @@
-#include "core/App.hpp"
-#include "platform/PlatformSDL.hpp"
+#include "App.hpp"
+#include "PlatformSDL.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <filesystem>

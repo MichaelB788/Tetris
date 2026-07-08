@@ -1,5 +1,5 @@
-#include "core/SevenBag.hpp"
-#include "core/Tetromino.hpp"
+#include "SevenBag.hpp"
+#include "Tetromino.hpp"
 #include <algorithm>
 #include <cstddef>
 

@@ -1,8 +1,8 @@
 #pragma once
-#include "core/Matrix.hpp"
-#include "core/SevenBag.hpp"
-#include "core/Tetromino.hpp"
-#include "util/Timer.hpp"
+#include "Matrix.hpp"
+#include "SevenBag.hpp"
+#include "Tetromino.hpp"
+#include "Timer.hpp"
 #include <chrono>
 #include <cstdint>
 #include <random>

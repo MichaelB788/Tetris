@@ -1,5 +1,5 @@
-#include "core/Tetromino.hpp"
-#include "core/Matrix.hpp"
+#include "Tetromino.hpp"
+#include "Matrix.hpp"
 #include <array>
 
 /**

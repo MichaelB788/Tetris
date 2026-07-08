@@ -32,7 +32,9 @@ struct AppState {
 
   SDL::Window window = nullptr;
   SDL::Renderer renderer = nullptr;
-  SDL::Texture piece_atlas = nullptr;
+  SDL::Texture texture_atlas = nullptr;
   SDL::TTF::RendererTextEngine text_engine = nullptr;
   SDL::TTF::Font font = nullptr;
 };
+
+void render_frame(AppState &state);

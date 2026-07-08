@@ -8,19 +8,19 @@ struct SDL_Texture;
 
 namespace SDL {
 struct WindowDeleter {
-  void operator()(SDL_Window *window);
+  void operator()(SDL_Window *window) const;
 };
 
 struct RendererDeleter {
-  void operator()(SDL_Renderer *renderer);
+  void operator()(SDL_Renderer *renderer) const;
 };
 
 struct SurfaceDeleter {
-  void operator()(SDL_Surface *surface);
+  void operator()(SDL_Surface *surface) const;
 };
 
 struct TextureDeleter {
-  void operator()(SDL_Texture *texture);
+  void operator()(SDL_Texture *texture) const;
 };
 
 using Window = std::unique_ptr<SDL_Window, WindowDeleter>;

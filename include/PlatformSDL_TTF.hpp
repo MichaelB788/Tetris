@@ -7,15 +7,15 @@ struct TTF_Font;
 
 namespace SDL::TTF {
 struct RendererTextEngineDeleter {
-  void operator()(TTF_TextEngine *engine);
+  void operator()(TTF_TextEngine *engine) const;
 };
 
 struct FontDeleter {
-  void operator()(TTF_Font *font);
+  void operator()(TTF_Font *font) const;
 };
 
 struct TextDeleter {
-  void operator()(TTF_Text *text);
+  void operator()(TTF_Text *text) const;
 };
 
 using RendererTextEngine =

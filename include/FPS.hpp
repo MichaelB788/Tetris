@@ -4,7 +4,7 @@
 
 class FPS {
 public:
-  FPS(unsigned fps) { set_fps(fps); }
+  explicit FPS(unsigned fps) { set_fps(fps); }
 
   void set_fps(unsigned val);
 

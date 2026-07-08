@@ -11,7 +11,7 @@ public:
   void handle_kb_input(Tetris &tetris, std::mt19937 &rng,
                        std::chrono::nanoseconds delta);
 
-  auto set_controls_from_file(const std::filesystem::path &config_file) -> bool;
+  auto set_controls_from_file(const std::filesystem::path &config_path) -> bool;
 
 private:
   auto parse_config_file(std::istream &input) -> bool;

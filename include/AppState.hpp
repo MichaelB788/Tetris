@@ -17,7 +17,7 @@ struct AppState {
       prev_time = std::chrono::steady_clock::now(),
       curr_time = std::chrono::steady_clock::now();
 
-  FPS fps = 60;
+  FPS fps{60};
   FPS_Counter fps_counter{};
 
   ScreenPos::Playfield pf_pos;

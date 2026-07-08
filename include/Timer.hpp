@@ -3,7 +3,7 @@
 
 class Timer {
 public:
-  Timer(std::chrono::nanoseconds duration) : duration_(duration) {}
+  explicit Timer(std::chrono::nanoseconds duration) : duration_(duration) {}
 
   void operator+=(std::chrono::nanoseconds delta) { accumulator_ += delta; }
 
@@ -36,7 +36,7 @@ private:
 };
 
 template <typename Fn>
-inline void Timer::invoke_when_elapsed(Fn &&function,
+void Timer::invoke_when_elapsed(Fn &&function,
                                        std::chrono::nanoseconds delta) {
   accumulator_ += delta;
   if (has_elapsed()) {
@@ -45,7 +45,7 @@ inline void Timer::invoke_when_elapsed(Fn &&function,
 }
 
 template <typename Fn>
-inline void Timer::invoke_periodically(Fn &&function,
+void Timer::invoke_periodically(Fn &&function,
                                        std::chrono::nanoseconds delta) {
   accumulator_ += delta;
   while (has_elapsed()) {

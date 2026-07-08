@@ -4,12 +4,11 @@
 #include "Tetromino.hpp"
 #include "Timer.hpp"
 #include <chrono>
-#include <cstdint>
 #include <random>
 
 class Tetris {
 public:
-  Tetris(std::mt19937 &rng);
+  explicit Tetris(std::mt19937 &rng);
 
   enum class Action : uint8_t {
     MoveLeft,

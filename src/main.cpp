@@ -17,8 +17,16 @@
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   const std::filesystem::path project_root = PROJECT_ROOT;
 
+  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
+    return SDL_APP_FAILURE;
+  }
+
+  if (!TTF_Init()) {
+    return SDL_APP_FAILURE;
+  }
+
   *appstate = new AppState;
-  AppState *state = static_cast<AppState *>(*appstate);
+  auto *state = static_cast<AppState *>(*appstate);
 
   // Window init
   state->window.reset(
@@ -36,9 +44,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   // Texture atlas init
   const std::filesystem::path atlas_path =
       project_root / "assets" / "sprites" / "TetrominoAtlas.png";
-  state->piece_atlas.reset(
+  state->texture_atlas.reset(
       IMG_LoadTexture(state->renderer.get(), atlas_path.c_str()));
-  if (!state->piece_atlas) {
+  if (!state->texture_atlas) {
     return SDL_APP_FAILURE;
   }
 
@@ -51,7 +59,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   // Font init
   const std::filesystem::path font_path =
       project_root / "assets" / "font" / "Arcade-Classic.ttf";
-  state->font.reset(TTF_OpenFont(font_path.c_str(), 32.00f));
+  state->font.reset(TTF_OpenFont(font_path.c_str(), FONT_SCALE));
   if (!state->font) {
     return SDL_APP_FAILURE;
   }
@@ -68,7 +76,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
-  AppState *state = static_cast<AppState *>(appstate);
+  auto *state = static_cast<AppState *>(appstate);
 
   state->prev_time = state->curr_time;
   state->curr_time = std::chrono::steady_clock::now();
@@ -80,7 +88,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   if (state->tetris.game_over())
     state->tetris = Tetris{state->rng};
 
-  // render_frame();
+  render_frame(*state);
 
   state->fps_counter.tick(delta);
 
@@ -97,7 +105,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-  AppState *state = static_cast<AppState *>(appstate);
+  auto *state = static_cast<AppState *>(appstate);
   switch (event->type) {
   case SDL_EVENT_QUIT:
     return SDL_APP_SUCCESS;

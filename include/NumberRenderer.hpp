@@ -5,9 +5,7 @@
 
 class NumberRenderer {
 public:
-  NumberRenderer() = default;
-
-  explicit NumberRenderer(TTF_TextEngine &engine, TTF_Font &font);
+  explicit NumberRenderer(TTF_TextEngine *engine, TTF_Font *font);
 
   void render_num(int num, Point<float> pos) const;
 

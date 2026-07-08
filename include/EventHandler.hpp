@@ -8,21 +8,28 @@
 
 class EventHandler {
 public:
-  explicit EventHandler(const std::filesystem::path &config_path);
-
   void handle_kb_input(Tetris &tetris, std::mt19937 &rng,
                        std::chrono::nanoseconds delta);
 
+  auto set_controls_from_file(const std::filesystem::path &config_file) -> bool;
+
 private:
+  auto parse_config_file(std::istream &input) -> bool;
+
+  void handle_first_key_press(Tetris &tetris, Tetris::Action command,
+                              std::mt19937 &rng);
+
+  void handle_key_down(Tetris &tetris, Tetris::Action action, std::mt19937 &rng,
+                       std::chrono::nanoseconds delta);
+
   struct InputTiming {
     Timer init_delay;
     Timer repeat_interval;
   };
 
-  void parse_controls(std::istream &input);
-
   InputTiming rotation_{.init_delay{std::chrono::milliseconds(300)},
                         .repeat_interval{std::chrono::milliseconds(100)}};
+
   InputTiming movement_{.init_delay{std::chrono::milliseconds(200)},
                         .repeat_interval{std::chrono::milliseconds(30)}};
 
@@ -36,5 +43,5 @@ private:
        {SDL_SCANCODE_LEFT, Tetris::Action::RotateCounterclockwise},
        {SDL_SCANCODE_DOWN, Tetris::Action::RotateHalf}}};
 
-  std::array<bool, SDL_SCANCODE_COUNT> prev_kb_state_{};
+  bool prev_kb_state_[SDL_SCANCODE_COUNT]{};
 };

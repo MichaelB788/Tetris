@@ -1,5 +1,4 @@
 #include "AppState.hpp"
-#include "PlatformSDL.hpp"
 #include "ScreenPos.hpp"
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_init.h>
@@ -127,6 +126,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result) {
   if (result == SDL_APP_SUCCESS) {
     std::cout << "App closed successfully\n";
   } else if (result == SDL_APP_FAILURE) {
-    std::cerr << "An error occured: " << SDL_GetError() << "\n";
+    std::cerr << "An error occurred: " << SDL_GetError() << "\n";
   }
 }

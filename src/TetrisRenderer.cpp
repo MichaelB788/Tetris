@@ -4,8 +4,6 @@
 #include "Point.hpp"
 #include "Tetromino.hpp"
 #include <SDL3/SDL_render.h>
-#include <SDL3/SDL_video.h>
-#include <SDL3_image/SDL_image.h>
 #include <array>
 #include <vector>
 
@@ -18,8 +16,8 @@ void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
                                   .h = PIXEL_SCALE};
 
   const SDL_FRect texture_screen_pos = {
-      .x = (matrix_pos.x * PIXEL_SCALE) + screen_offset.x,
-      .y = (matrix_pos.y * PIXEL_SCALE) + screen_offset.y,
+      .x = static_cast<float>(matrix_pos.x) * PIXEL_SCALE + screen_offset.x,
+      .y = static_cast<float>(matrix_pos.y) * PIXEL_SCALE + screen_offset.y,
       .w = PIXEL_SCALE,
       .h = PIXEL_SCALE};
 

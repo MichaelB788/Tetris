@@ -1,7 +1,6 @@
 #include "Tetris.hpp"
 #include "Tetromino.hpp"
 #include <chrono>
-#include <cmath>
 #include <random>
 
 static constexpr Point INIT_POS = {.x = 4, .y = 4};
@@ -89,7 +88,7 @@ void Tetris::complete_move(std::mt19937 &rng) {
   // Update the gravity rate
   {
     using namespace std::chrono_literals;
-    static constexpr std::array<std::chrono::milliseconds, 11> LEVELS{
+    static constexpr std::array LEVELS{
         1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
         450ms,  400ms, 300ms, 200ms, 100ms};
 

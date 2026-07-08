@@ -3,7 +3,6 @@
 #include <SDL3/SDL_keyboard.h>
 #include <array>
 #include <chrono>
-#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -63,8 +62,7 @@ std::optional<Tetris::Action> find_command_from_str(std::string_view str) {
                       {"rotate_half_turn", RotateHalf},
                       {"hold", Hold}}};
 
-  for (int i = 0; i < STR_TO_COMMAND.size(); ++i) {
-    const auto [name, command] = STR_TO_COMMAND[i];
+  for (auto [name, command] : STR_TO_COMMAND) {
     if (name == str)
       return command;
   }

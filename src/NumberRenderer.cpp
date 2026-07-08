@@ -4,8 +4,9 @@
 
 NumberRenderer::NumberRenderer(TTF_TextEngine *engine, TTF_Font *font) {
   if (engine && font) {
-    const char *NUM_STR[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
     for (size_t i = 0; i < nums_text_.size(); ++i) {
+      const char *NUM_STR[] = {"0", "1", "2", "3", "4",
+                               "5", "6", "7", "8", "9"};
       nums_text_[i].reset(TTF_CreateText(engine, font, NUM_STR[i], 1));
     }
   }

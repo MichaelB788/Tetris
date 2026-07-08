@@ -1,4 +1,5 @@
 #include "TextRenderer.hpp"
+#include "SDL3_ttf/SDL_ttf.h"
 
 void TextRenderer::render_text(std::string_view str, Point<float> pos,
                                TTF_TextEngine &engine, TTF_Font &font) {

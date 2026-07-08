@@ -1,4 +1,5 @@
 #include "NumberRenderer.hpp"
+#include "SDL3_ttf/SDL_ttf.h"
 #include <vector>
 
 NumberRenderer::NumberRenderer(TTF_TextEngine *engine, TTF_Font *font) {

@@ -8,15 +8,15 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <vector>
 
+static constexpr float FONT_SIZE = 32;
+
 TextRenderer::TextRenderer(SDL_Renderer &renderer,
-                           const std::filesystem::path &font_path,
-                           float font_size)
-    : font_size_(font_size) {
+                           const std::filesystem::path &font_path) {
   text_engine_.reset(TTF_CreateRendererTextEngine(&renderer));
   if (!text_engine_)
     throw SDL::Error("Error creating text engine");
 
-  font_.reset(TTF_OpenFont(font_path.c_str(), font_size));
+  font_.reset(TTF_OpenFont(font_path.c_str(), FONT_SIZE));
   if (!font_)
     throw SDL::Error("Error opening font");
 
@@ -31,12 +31,25 @@ TextRenderer::TextRenderer(SDL_Renderer &renderer,
   }
 }
 
-void TextRenderer::render_text(std::string_view str, Point<float> pos) {
-  if (!cached_text_.contains(str)) {
-    cached_text_[str] = SDL::TTF::Text{
-        TTF_CreateText(text_engine_.get(), font_.get(), str.data(), 0)};
+auto TextRenderer::index_of_text(std::string_view str) const -> size_t {
+  size_t i = 0;
+  for (; i < text_map_.size(); ++i) {
+    if (text_map_[i].str == str) {
+      return i;
+    }
   }
-  TTF_DrawRendererText(cached_text_[str].get(), pos.x, pos.y);
+  return i;
+}
+
+void TextRenderer::render_text(std::string_view str, Point<float> pos) {
+  const auto i = index_of_text(str);
+  if (i == text_map_.size()) {
+    text_map_.push_back(
+        TextEntry{.str = str,
+                  .texture{TTF_CreateText(text_engine_.get(), font_.get(),
+                                          str.data(), str.size())}});
+  }
+  TTF_DrawRendererText(text_map_[i].texture.get(), pos.x, pos.y);
 }
 
 void TextRenderer::render_int(int num, Point<float> pos) const {
@@ -51,7 +64,7 @@ void TextRenderer::render_int(int num, Point<float> pos) const {
     while (!digits.empty()) {
       TTF_DrawRendererText(nums_text_[digits.back()].get(), pos.x, pos.y);
       digits.pop_back();
-      pos.x += font_size_;
+      pos.x += FONT_SIZE;
     }
   }
 }

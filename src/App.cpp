@@ -12,8 +12,7 @@ static constexpr float PIXEL_SCALE = 32;
 TetrisApp::TetrisApp(const Specification &spec)
     : target_fps_(spec.target_fps),
       game_renderer_(*renderer_, spec.tetromino_atlas, PIXEL_SCALE),
-      text_renderer_(*renderer_, spec.font_path, PIXEL_SCALE),
-      handler_(spec.controls) {
+      text_renderer_(*renderer_, spec.font_path), handler_(spec.controls) {
   game_renderer_.fit_within_window(*window_);
 }
 

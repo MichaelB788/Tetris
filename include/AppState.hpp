@@ -37,4 +37,6 @@ struct AppState {
   SDL::TTF::Font font = nullptr;
 };
 
+namespace appstate {
 void render_frame(AppState &state);
+}

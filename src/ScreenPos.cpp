@@ -2,9 +2,11 @@
 #include "Constants.hpp"
 #include <SDL3/SDL_video.h>
 
+namespace {
 auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
   return base + (offset * PIXEL_SCALE);
 }
+} // namespace
 
 void screen_pos::fit_offsets_within_window(screen_pos::Playfield &pf_pos,
                                            screen_pos::Text &text_pos,

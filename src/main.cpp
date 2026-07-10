@@ -87,7 +87,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   if (state->tetris.game_over())
     state->tetris = Tetris{state->rng};
 
-  render_frame(*state);
+  appstate::render_frame(*state);
 
   state->fps_counter.tick(delta);
 

@@ -4,6 +4,7 @@
 #include "TetrisRenderer.hpp"
 #include <SDL3/SDL_video.h>
 
+namespace {
 void render_game_obj(AppState &state) {
   tetris::renderer::draw_ghost(state.tetris.ghost_piece(), state.pf_pos.board,
                                *state.renderer, *state.texture_atlas);
@@ -45,8 +46,9 @@ void render_screen_int(AppState &state) {
   state.num_renderer.render_num(state.fps_counter.get_current_fps(),
                                 state.text_pos.fps_val);
 }
+} // namespace
 
-void render_frame(AppState &state) {
+void appstate::render_frame(AppState &state) {
   SDL_SetRenderDrawColor(state.renderer.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(state.renderer.get());
 

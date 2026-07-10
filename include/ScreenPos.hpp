@@ -3,7 +3,7 @@
 
 struct SDL_Window;
 
-namespace ScreenPos {
+namespace screen_pos {
 struct Playfield {
   Point<float> board{};
   Point<float> seven_bag_pos{};
@@ -19,6 +19,6 @@ struct Text {
   Point<float> fps_val{};
 };
 
-void fit_offsets_within_window(ScreenPos::Playfield &pf_pos,
-                               ScreenPos::Text &text_pos, SDL_Window &win);
-} // namespace ScreenPos
+void fit_offsets_within_window(screen_pos::Playfield &pf_pos,
+                               screen_pos::Text &text_pos, SDL_Window &win);
+} // namespace screen_pos

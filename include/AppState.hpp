@@ -20,8 +20,8 @@ struct AppState {
   FPS fps{60};
   FPS_Counter fps_counter{};
 
-  ScreenPos::Playfield pf_pos;
-  ScreenPos::Text text_pos;
+  screen_pos::Playfield pf_pos;
+  screen_pos::Text text_pos;
 
   Tetris tetris{rng};
 

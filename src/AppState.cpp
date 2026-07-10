@@ -5,26 +5,26 @@
 #include <SDL3/SDL_video.h>
 
 void render_game_obj(AppState &state) {
-  TetrisRenderer::draw_ghost(state.tetris.ghost_piece(), state.pf_pos.board,
-                             *state.renderer, *state.texture_atlas);
+  tetris::renderer::draw_ghost(state.tetris.ghost_piece(), state.pf_pos.board,
+                               *state.renderer, *state.texture_atlas);
 
-  TetrisRenderer::draw_tetromino(state.tetris.active_piece(),
-                                 state.pf_pos.board, *state.renderer,
-                                 *state.texture_atlas);
+  tetris::renderer::draw_tetromino(state.tetris.active_piece(),
+                                   state.pf_pos.board, *state.renderer,
+                                   *state.texture_atlas);
 
-  TetrisRenderer::draw_matrix(state.tetris.matrix(), state.pf_pos.board,
-                              *state.renderer, *state.texture_atlas);
+  tetris::renderer::draw_matrix(state.tetris.matrix(), state.pf_pos.board,
+                                *state.renderer, *state.texture_atlas);
 
   if (state.tetris.held_piece().has_value()) {
-    TetrisRenderer::draw_tetromino(state.tetris.held_piece().value(),
-                                   state.pf_pos.held_piece, *state.renderer,
-                                   *state.texture_atlas);
+    tetris::renderer::draw_tetromino(state.tetris.held_piece().value(),
+                                     state.pf_pos.held_piece, *state.renderer,
+                                     *state.texture_atlas);
   }
 
   auto next_pos = state.pf_pos.seven_bag_pos;
   for (const auto next_type : state.tetris.seven_bag()) {
-    TetrisRenderer::draw_tetromino(Tetromino(next_type), next_pos,
-                                   *state.renderer, *state.texture_atlas);
+    tetris::renderer::draw_tetromino(Tetromino(next_type), next_pos,
+                                     *state.renderer, *state.texture_atlas);
     next_pos.y += 3 * PIXEL_SCALE;
   }
 }

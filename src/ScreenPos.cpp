@@ -6,9 +6,9 @@ auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
   return base + (offset * PIXEL_SCALE);
 }
 
-void ScreenPos::fit_offsets_within_window(ScreenPos::Playfield &pf_pos,
-                                          ScreenPos::Text &text_pos,
-                                          SDL_Window &win) {
+void screen_pos::fit_offsets_within_window(screen_pos::Playfield &pf_pos,
+                                           screen_pos::Text &text_pos,
+                                           SDL_Window &win) {
   int w = 0, h = 0;
   SDL_GetWindowSize(&win, &w, &h);
 

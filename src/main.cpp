@@ -64,8 +64,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   }
 
   // Fix offsets before starting
-  ScreenPos::fit_offsets_within_window(state->pf_pos, state->text_pos,
-                                       *state->window);
+  screen_pos::fit_offsets_within_window(state->pf_pos, state->text_pos,
+                                        *state->window);
 
   // Init number renderer
   state->num_renderer =
@@ -109,8 +109,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
   case SDL_EVENT_QUIT:
     return SDL_APP_SUCCESS;
   case SDL_EVENT_WINDOW_RESIZED:
-    ScreenPos::fit_offsets_within_window(state->pf_pos, state->text_pos,
-                                         *state->window);
+    screen_pos::fit_offsets_within_window(state->pf_pos, state->text_pos,
+                                          *state->window);
     return SDL_APP_CONTINUE;
   default:
     return SDL_APP_CONTINUE;

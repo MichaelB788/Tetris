@@ -3,7 +3,7 @@
 #include "Point.hpp"
 #include "Tetromino.hpp"
 
-namespace TetrisRenderer {
+namespace tetris::renderer {
 void draw_tetromino(Tetromino tet, Point<float> screen_offset,
                     SDL_Renderer &renderer, SDL_Texture &texture_atlas);
 
@@ -12,4 +12,4 @@ void draw_ghost(Tetromino tet, Point<float> screen_offset,
 
 void draw_matrix(const Matrix &matrix, Point<float> screen_offset,
                  SDL_Renderer &renderer, SDL_Texture &texture_atlas);
-} // namespace TetrisRenderer
+} // namespace tetris::renderer

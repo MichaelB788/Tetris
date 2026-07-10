@@ -25,17 +25,17 @@ void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
                     &texture_screen_pos);
 }
 
-void TetrisRenderer::draw_tetromino(Tetromino tet, Point<float> screen_offset,
-                                    SDL_Renderer &renderer,
-                                    SDL_Texture &texture_atlas) {
+void tetris::renderer::draw_tetromino(Tetromino tet, Point<float> screen_offset,
+                                      SDL_Renderer &renderer,
+                                      SDL_Texture &texture_atlas) {
   for (const auto pos : shape_of(tet)) {
     draw_tile(tet.type, pos, screen_offset, false, renderer, texture_atlas);
   }
 }
 
-void TetrisRenderer::draw_ghost(Tetromino tet, Point<float> screen_offset,
-                                SDL_Renderer &renderer,
-                                SDL_Texture &texture_atlas) {
+void tetris::renderer::draw_ghost(Tetromino tet, Point<float> screen_offset,
+                                  SDL_Renderer &renderer,
+                                  SDL_Texture &texture_atlas) {
   for (const auto pos : shape_of(tet)) {
     draw_tile(tet.type, pos, screen_offset, true, renderer, texture_atlas);
   }
@@ -64,10 +64,10 @@ void draw_outline(Point<float> screen_offset, SDL_Renderer &renderer) {
   SDL_RenderRect(&renderer, &outline_rect);
 }
 
-void TetrisRenderer::draw_matrix(const Matrix &matrix,
-                                 Point<float> screen_offset,
-                                 SDL_Renderer &renderer,
-                                 SDL_Texture &texture_atlas) {
+void tetris::renderer::draw_matrix(const Matrix &matrix,
+                                   Point<float> screen_offset,
+                                   SDL_Renderer &renderer,
+                                   SDL_Texture &texture_atlas) {
   draw_locked_tiles(matrix, screen_offset, renderer, texture_atlas);
   draw_outline(screen_offset, renderer);
 }

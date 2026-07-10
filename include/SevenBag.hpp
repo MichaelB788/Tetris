@@ -10,7 +10,7 @@ public:
 
   void shuffle(std::mt19937 &rng);
 
-  auto pop(std::mt19937 &rng) -> Tetromino;
+  auto pop(std::mt19937 &rng) -> Tetromino::Type;
 
   using Preview = std::array<Tetromino::Type, 4>;
   auto preview() const -> Preview;
@@ -19,10 +19,14 @@ public:
 
 private:
   size_t read_ = 0;
+
   std::array<Tetromino::Type, 7> curr_bag_{
-      Tetromino::I, Tetromino::O, Tetromino::T, Tetromino::S,
-      Tetromino::Z, Tetromino::J, Tetromino::L};
+      Tetromino::Type::I, Tetromino::Type::O, Tetromino::Type::T,
+      Tetromino::Type::S, Tetromino::Type::Z, Tetromino::Type::J,
+      Tetromino::Type::L};
+
   std::array<Tetromino::Type, 7> next_bag_{
-      Tetromino::I, Tetromino::O, Tetromino::T, Tetromino::S,
-      Tetromino::Z, Tetromino::J, Tetromino::L};
+      Tetromino::Type::I, Tetromino::Type::O, Tetromino::Type::T,
+      Tetromino::Type::S, Tetromino::Type::Z, Tetromino::Type::J,
+      Tetromino::Type::L};
 };

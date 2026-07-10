@@ -30,7 +30,9 @@ public:
   auto matrix() const -> const Matrix & { return matrix_; }
   auto active_piece() const -> Tetromino { return active_piece_; }
   auto seven_bag() const -> SevenBag::Preview { return seven_bag_.preview(); }
-  auto held_piece() const -> std::optional<Tetromino> { return held_piece_; }
+  auto held_piece() const -> std::optional<Tetromino::Type> {
+    return held_piece_;
+  }
 
   auto ghost_piece() const -> Tetromino;
 
@@ -43,7 +45,7 @@ private:
 
   void hold(std::mt19937 &rng);
 
-  std::optional<Tetromino> held_piece_{};
+  std::optional<Tetromino::Type> held_piece_{};
   Matrix matrix_{};
   SevenBag seven_bag_;
   Tetromino active_piece_;

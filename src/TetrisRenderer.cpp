@@ -28,7 +28,7 @@ void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
 void tetris::renderer::draw_tetromino(Tetromino tet, Point<float> screen_offset,
                                       SDL_Renderer &renderer,
                                       SDL_Texture &texture_atlas) {
-  for (const auto pos : shape_of(tet)) {
+  for (const auto pos : tetromino::shape_at(tet, tet.pos)) {
     draw_tile(tet.type, pos, screen_offset, false, renderer, texture_atlas);
   }
 }
@@ -36,7 +36,7 @@ void tetris::renderer::draw_tetromino(Tetromino tet, Point<float> screen_offset,
 void tetris::renderer::draw_ghost(Tetromino tet, Point<float> screen_offset,
                                   SDL_Renderer &renderer,
                                   SDL_Texture &texture_atlas) {
-  for (const auto pos : shape_of(tet)) {
+  for (const auto pos : tetromino::shape_at(tet, tet.pos)) {
     draw_tile(tet.type, pos, screen_offset, true, renderer, texture_atlas);
   }
 }

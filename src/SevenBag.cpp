@@ -20,12 +20,12 @@ void SevenBag::shuffle(std::mt19937 &rng) {
   }
 }
 
-auto SevenBag::pop(std::mt19937 &rng) -> Tetromino {
+auto SevenBag::pop(std::mt19937 &rng) -> Tetromino::Type {
   const auto next_type_ = curr_bag_[read_++];
   if (read_ == curr_bag_.size()) {
     shuffle(rng);
   }
-  return Tetromino{.type = next_type_};
+  return next_type_;
 }
 
 auto SevenBag::preview() const -> Preview {

@@ -16,9 +16,9 @@ void render_game_obj(AppState &state) {
                                 *state.renderer, *state.texture_atlas);
 
   if (state.tetris.held_piece().has_value()) {
-    tetris::renderer::draw_tetromino(state.tetris.held_piece().value(),
-                                     state.pf_pos.held_piece, *state.renderer,
-                                     *state.texture_atlas);
+    tetris::renderer::draw_tetromino(
+        Tetromino(state.tetris.held_piece().value()), state.pf_pos.held_piece,
+        *state.renderer, *state.texture_atlas);
   }
 
   auto next_pos = state.pf_pos.seven_bag_pos;

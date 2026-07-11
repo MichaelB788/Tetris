@@ -50,9 +50,10 @@ void EventHandler::handle_kb_input(Tetris &tetris, std::mt19937 &rng,
   }
 }
 
-std::optional<Tetris::Action> find_command_from_str(std::string_view str) {
-  using enum Tetris::Action;
-  static constexpr std::array<std::pair<std::string_view, Tetris::Action>, 8>
+auto find_command_from_str(std::string_view str)
+    -> std::optional<Tetris::Command> {
+  using enum Tetris::Command;
+  static constexpr std::array<std::pair<std::string_view, Tetris::Command>, 8>
       STR_TO_COMMAND{{{"move_left", MoveLeft},
                       {"move_right", MoveRight},
                       {"soft_drop", SoftDrop},
@@ -105,30 +106,26 @@ auto EventHandler::parse_config_file(std::istream &input) -> bool {
 }
 
 void EventHandler::handle_first_key_press(Tetris &tetris,
-                                          Tetris::Action command,
+                                          Tetris::Command command,
                                           std::mt19937 &rng) {
   tetris.invoke_action(command, rng);
   movement_.init_delay.reset();
   rotation_.init_delay.reset();
 }
 
-void EventHandler::handle_key_down(Tetris &tetris, Tetris::Action command,
+void EventHandler::handle_key_down(Tetris &tetris, Tetris::Command command,
                                    std::mt19937 &rng,
                                    std::chrono::nanoseconds delta) {
-  using enum Tetris::Action;
+  using enum Tetris::Command;
   auto execute_input = [&] { tetris.invoke_action(command, rng); };
   if (command == RotateClockwise || command == RotateCounterclockwise ||
       command == RotateHalf) {
-    rotation_.init_delay.invoke_when_elapsed(
-        [&] {
-          rotation_.repeat_interval.invoke_periodically(execute_input, delta);
-        },
-        delta);
+    rotation_.init_delay.invoke_when_elapsed(delta, [&] {
+      rotation_.repeat_interval.invoke_periodically(delta, execute_input);
+    });
   } else {
-    movement_.init_delay.invoke_when_elapsed(
-        [&] {
-          movement_.repeat_interval.invoke_periodically(execute_input, delta);
-        },
-        delta);
+    movement_.init_delay.invoke_when_elapsed(delta, [&] {
+      movement_.repeat_interval.invoke_periodically(delta, execute_input);
+    });
   }
 }

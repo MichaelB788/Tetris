@@ -8,9 +8,7 @@
 
 class Tetris {
 public:
-  explicit Tetris(std::mt19937 &rng);
-
-  enum class Action : uint8_t {
+  enum class Command : uint8_t {
     MoveLeft,
     MoveRight,
     SoftDrop,
@@ -21,9 +19,11 @@ public:
     Hold
   };
 
-  void invoke_action(Action action, std::mt19937 &rng);
+  explicit Tetris(std::mt19937 &rng);
 
-  void update(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
+  void invoke_action(Command action, std::mt19937 &rng);
+
+  void tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
 
   auto score() const -> int { return score_; }
   auto game_over() const -> bool { return game_over_; }
@@ -45,15 +45,15 @@ private:
 
   void hold(std::mt19937 &rng);
 
-  std::optional<Tetromino::Type> held_piece_{};
-  Matrix matrix_{};
-  SevenBag seven_bag_;
-  Tetromino active_piece_;
-
   int score_ = 0;
   bool hold_command_triggered_ = false;
   bool game_over_ = false;
 
   Timer lock_delay_{std::chrono::seconds{1}};
   Timer gravity_delay_{std::chrono::seconds{1}};
+
+  std::optional<Tetromino::Type> held_piece_{};
+  Matrix matrix_{};
+  SevenBag seven_bag_;
+  Tetromino active_piece_;
 };

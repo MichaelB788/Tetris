@@ -7,10 +7,8 @@ void FPS::set_fps(unsigned val) {
 
 void FPS_Counter::tick(std::chrono::nanoseconds delta) {
   ++ticks_;
-  delay_.invoke_periodically(
-      [this] {
-        current_fps_ = ticks_;
-        ticks_ = 0;
-      },
-      delta);
+  delay_.invoke_periodically(delta, [this] {
+    current_fps_ = ticks_;
+    ticks_ = 0;
+  });
 }

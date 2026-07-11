@@ -8,10 +8,21 @@ public:
   void operator+=(std::chrono::nanoseconds delta) { accumulator_ += delta; }
 
   template <typename Fn>
-  void invoke_when_elapsed(Fn &&function, std::chrono::nanoseconds delta);
+  void invoke_when_elapsed(std::chrono::nanoseconds delta, Fn &&function) {
+    accumulator_ += delta;
+    if (has_elapsed()) {
+      function();
+    }
+  }
 
   template <typename Fn>
-  void invoke_periodically(Fn &&function, std::chrono::nanoseconds delta);
+  void invoke_periodically(std::chrono::nanoseconds delta, Fn &&function) {
+    accumulator_ += delta;
+    while (has_elapsed()) {
+      accumulator_ -= duration_;
+      function();
+    }
+  }
 
   void set_duration(std::chrono::nanoseconds duration) { duration_ = duration; }
 
@@ -34,22 +45,3 @@ private:
 
   std::chrono::nanoseconds accumulator_{0};
 };
-
-template <typename Fn>
-void Timer::invoke_when_elapsed(Fn &&function,
-                                       std::chrono::nanoseconds delta) {
-  accumulator_ += delta;
-  if (has_elapsed()) {
-    function();
-  }
-}
-
-template <typename Fn>
-void Timer::invoke_periodically(Fn &&function,
-                                       std::chrono::nanoseconds delta) {
-  accumulator_ += delta;
-  while (has_elapsed()) {
-    accumulator_ -= duration_;
-    function();
-  }
-}

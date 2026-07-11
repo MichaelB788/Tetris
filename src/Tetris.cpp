@@ -9,9 +9,9 @@ Tetris::Tetris(std::mt19937 &rng)
     : seven_bag_(rng),
       active_piece_{.type = seven_bag_.pop(rng), .pos = INIT_POS} {}
 
-void Tetris::invoke_action(Action action, std::mt19937 &rng) {
+void Tetris::invoke_action(Command action, std::mt19937 &rng) {
   switch (action) {
-    using enum Action;
+    using enum Command;
   case MoveLeft:
     tetromino::local_shift(active_piece_, {.x = -1}, matrix_);
     break;
@@ -43,14 +43,14 @@ void Tetris::invoke_action(Action action, std::mt19937 &rng) {
   }
 }
 
-void Tetris::update(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
-  gravity_delay_.invoke_periodically(
-      [this] { tetromino::local_shift(active_piece_, {.y = 1}, matrix_); },
-      delta_time);
+void Tetris::tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
+  gravity_delay_.invoke_periodically(delta_time, [this] {
+    tetromino::local_shift(active_piece_, {.y = 1}, matrix_);
+  });
 
   if (!matrix_.is_move_valid(tetromino::shape_at(
           active_piece_, active_piece_.pos + Point{.y = 1}))) {
-    lock_delay_.invoke_periodically([&] { complete_move(rng); }, delta_time);
+    lock_delay_.invoke_periodically(delta_time, [&] { complete_move(rng); });
   }
 }
 

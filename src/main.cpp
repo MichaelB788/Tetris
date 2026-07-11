@@ -83,7 +83,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
   state->handler.handle_kb_input(state->tetris, state->rng, delta);
 
-  state->tetris.update(delta, state->rng);
+  state->tetris.tick(delta, state->rng);
   if (state->tetris.game_over())
     state->tetris = Tetris{state->rng};
 

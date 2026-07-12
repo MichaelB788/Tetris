@@ -3,6 +3,23 @@
 #include "SDL3/SDL_render.h"
 #include "TetrisRenderer.hpp"
 #include <SDL3/SDL_video.h>
+#include <chrono>
+
+void appstate::handle_tetris_state(AppState &state,
+                                   std::chrono::nanoseconds delta) {
+  switch (state.tetris.get_state()) {
+    using enum Tetris::State;
+  case Running:
+    state.handler.handle_kb_input(state.tetris, state.rng, delta);
+    state.tetris.tick(delta, state.rng);
+    break;
+  case GameOver: // TODO: Add option to continue/quit
+    state.tetris.reset(state.rng);
+    break;
+  case Paused:
+    break;
+  }
+}
 
 namespace {
 // clang-format off

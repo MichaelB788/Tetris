@@ -37,5 +37,7 @@ struct AppState {
 };
 
 namespace appstate {
+void handle_tetris_state(AppState &state, std::chrono::nanoseconds delta);
+
 void render_frame(AppState &state);
-}
+} // namespace appstate

@@ -21,7 +21,7 @@ public:
 
   explicit Tetris(std::mt19937 &rng);
 
-  void invoke_action(Command action, std::mt19937 &rng);
+  void invoke_command(Command command, std::mt19937 &rng);
 
   void tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
 

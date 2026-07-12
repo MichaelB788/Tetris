@@ -8,8 +8,8 @@ static constexpr Point INIT_POS = {.x = 4, .y = 4};
 Tetris::Tetris(std::mt19937 &rng)
     : seven_bag_(rng), active_piece_(seven_bag_.pop(rng), INIT_POS) {}
 
-void Tetris::invoke_action(Command action, std::mt19937 &rng) {
-  switch (action) {
+void Tetris::invoke_command(Command command, std::mt19937 &rng) {
+  switch (command) {
     using enum Command;
   case MoveLeft:
     active_piece_.local_shift({.x = -1}, matrix_);

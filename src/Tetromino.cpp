@@ -1,10 +1,11 @@
 #include "Tetromino.hpp"
 #include "Matrix.hpp"
 #include "Point.hpp"
-#include <array>
 #include <cstddef>
+#include <type_traits>
 
 namespace {
+// Tetromino shape/rotation data
 constexpr Tetromino::Shape SHAPES[7][4]{
     // I
     {{{{-1, 0}, {0, 0}, {1, 0}, {2, 0}}},   // R0
@@ -49,80 +50,103 @@ constexpr Tetromino::Shape SHAPES[7][4]{
      {{{0, -1}, {0, 0}, {0, 1}, {-1, -1}}}} // R270
 };
 
-auto n_clockwise_rotations(Tetromino t, unsigned n) -> Tetromino {
-  const auto r = static_cast<unsigned>(t.rotation);
-  return Tetromino{.type = t.type,
-                   .pos = t.pos,
-                   .rotation = static_cast<Tetromino::Rotation>((r + n) % 4)};
-}
+// SRS offset data
+constexpr Point<int> STANDARD_PIECE_OFFSETS[4][5]{
+    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
+    {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
+    {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
+    {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
+constexpr Point<int> I_PIECE_OFFSETS[4][5]{
+    {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
+    {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
+    {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
+    {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
 } // namespace
 
-auto tetromino::shape_at(Tetromino tetromino, Point<int> pos)
-    -> Tetromino::Shape {
-  const auto t = static_cast<size_t>(tetromino.type);
-  const auto r = static_cast<size_t>(tetromino.rotation);
-  auto ret = SHAPES[t][r];
-  for (auto &p : ret)
-    p += pos;
-  return ret;
-}
+void Tetromino::shift(Point<int> delta) { pos_ += delta; }
 
-auto tetromino::cw_rotation(Tetromino tetromino) -> Tetromino {
-  return n_clockwise_rotations(tetromino, 1);
-}
+void Tetromino::set_pos(Point<int> pos) { pos_ = pos; }
 
-auto tetromino::ccw_rotation(Tetromino tetromino) -> Tetromino {
-  return n_clockwise_rotations(tetromino, 3);
-}
-
-auto tetromino::half_rotation(Tetromino tetromino) -> Tetromino {
-  return n_clockwise_rotations(tetromino, 2);
-}
-
-auto tetromino::local_shift(Tetromino &piece, Point<int> delta,
-                            const Matrix &matrix) -> bool {
-  const auto shifted_pos = piece.pos + delta;
-  if (matrix.is_move_valid(tetromino::shape_at(piece, shifted_pos))) {
-    piece.pos = shifted_pos;
+auto Tetromino::local_shift(Point<int> delta, const Matrix &matrix) -> bool {
+  if (matrix.is_move_valid(get_shifted_shape(delta))) {
+    pos_ += delta;
     return true;
   }
   return false;
 }
 
-void tetromino::hard_drop(Tetromino &piece, const Matrix &matrix) {
-  auto new_pos = piece.pos;
-  auto test_pos = new_pos + Point{.y = 1};
-  while (matrix.is_move_valid(tetromino::shape_at(piece, test_pos))) {
-    ++test_pos.y;
-    ++new_pos.y;
-  }
-  piece.pos = new_pos;
+void Tetromino::hard_drop(const Matrix &matrix) {
+  pos_ = get_pos_after_hard_drop(matrix);
 }
 
-void tetromino::srs_rotation(Tetromino &current, Tetromino rotated,
-                             const Matrix &matrix) {
-  static constexpr Point<int> STANDARD_PIECE_OFFSETS[4][5]{
-      {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
-      {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
-      {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
-      {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
-  static constexpr Point<int> I_PIECE_OFFSETS[4][5]{
-      {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
-      {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
-      {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
-      {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
-  const auto &offsets = current.type == Tetromino::Type::I
-                            ? I_PIECE_OFFSETS
-                            : STANDARD_PIECE_OFFSETS;
+void Tetromino::rotate_cw() { rotation_ = n_clockwise_rotations(1); }
 
-  const auto from = static_cast<size_t>(current.rotation);
-  const auto to = static_cast<size_t>(rotated.rotation);
+void Tetromino::rotate_ccw() { rotation_ = n_clockwise_rotations(3); }
+
+void Tetromino::rotate_half() { rotation_ = n_clockwise_rotations(2); }
+
+void Tetromino::srs_rotate_cw(const Matrix &matrix) {
+  srs_rotation(n_clockwise_rotations(1), matrix);
+}
+
+void Tetromino::srs_rotate_ccw(const Matrix &matrix) {
+  srs_rotation(n_clockwise_rotations(3), matrix);
+}
+
+void Tetromino::srs_rotate_half(const Matrix &matrix) {
+  srs_rotation(n_clockwise_rotations(2), matrix);
+}
+
+auto Tetromino::get_shape_at(Point<int> pos) const -> Shape {
+  const auto t = static_cast<size_t>(type_);
+  const auto r = static_cast<size_t>(rotation_);
+  auto ret = SHAPES[t][r];
+  for (auto &p : ret) {
+    p += pos;
+  }
+  return ret;
+}
+
+auto Tetromino::get_shifted_shape(Point<int> delta) const -> Shape {
+  return get_shape_at(pos_ + delta);
+}
+
+auto Tetromino::get_shape() const -> Shape { return get_shape_at(pos_); }
+
+auto Tetromino::get_pos_after_hard_drop(const Matrix &matrix) const
+    -> Point<int> {
+  Point<int> drop_pos = pos_;
+  Point<int> test_pos = pos_ + Point{.y = 1};
+  while (matrix.is_move_valid(get_shape_at(test_pos))) {
+    ++test_pos.y;
+    ++drop_pos.y;
+  }
+  return drop_pos;
+}
+
+auto Tetromino::get_type() const -> Type { return type_; }
+
+auto Tetromino::get_pos() const -> Point<int> { return pos_; }
+
+auto Tetromino::get_rotation() const -> Rotation { return rotation_; }
+
+auto Tetromino::n_clockwise_rotations(unsigned n) const -> Rotation {
+  const auto curr = std::underlying_type_t<Rotation>(rotation_);
+  return static_cast<Tetromino::Rotation>((curr + n) % 4);
+}
+
+void Tetromino::srs_rotation(Rotation next_rotation, const Matrix &matrix) {
+  const auto &offsets =
+      type_ == Tetromino::Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
+
+  Tetromino rotated{type_, pos_, next_rotation};
+  const auto from = static_cast<size_t>(rotation_);
+  const auto to = static_cast<size_t>(next_rotation);
   for (size_t i = 0; i < 5; ++i) {
     const auto wall_kick = offsets[from][i] - offsets[to][i];
-    const auto test_pos = rotated.pos + wall_kick;
-    if (matrix.is_move_valid(tetromino::shape_at(rotated, test_pos))) {
-      current.rotation = rotated.rotation;
-      current.pos = test_pos;
+    if (matrix.is_move_valid(rotated.get_shifted_shape(wall_kick))) {
+      rotation_ = next_rotation;
+      pos_ += wall_kick;
       return;
     }
   }

@@ -15,7 +15,7 @@ public:
   using Preview = std::array<Tetromino::Type, 4>;
   auto preview() const -> Preview;
 
-  auto peek() const -> Tetromino { return Tetromino{.type = curr_bag_[read_]}; }
+  auto peek() const -> Tetromino { return Tetromino(curr_bag_[read_]); }
 
 private:
   size_t read_ = 0;

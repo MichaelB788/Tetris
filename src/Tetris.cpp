@@ -6,36 +6,32 @@
 static constexpr Point INIT_POS = {.x = 4, .y = 4};
 
 Tetris::Tetris(std::mt19937 &rng)
-    : seven_bag_(rng),
-      active_piece_{.type = seven_bag_.pop(rng), .pos = INIT_POS} {}
+    : seven_bag_(rng), active_piece_(seven_bag_.pop(rng), INIT_POS) {}
 
 void Tetris::invoke_action(Command action, std::mt19937 &rng) {
   switch (action) {
     using enum Command;
   case MoveLeft:
-    tetromino::local_shift(active_piece_, {.x = -1}, matrix_);
+    active_piece_.local_shift({.x = -1}, matrix_);
     break;
   case MoveRight:
-    tetromino::local_shift(active_piece_, {.x = 1}, matrix_);
+    active_piece_.local_shift({.x = 1}, matrix_);
     break;
   case SoftDrop:
-    tetromino::local_shift(active_piece_, {.y = 1}, matrix_);
+    active_piece_.local_shift({.y = 1}, matrix_);
     break;
   case HardDrop:
-    tetromino::hard_drop(active_piece_, matrix_);
+    active_piece_.hard_drop(matrix_);
     complete_move(rng);
     break;
   case RotateClockwise:
-    tetromino::srs_rotation(active_piece_,
-                            tetromino::cw_rotation(active_piece_), matrix_);
+    active_piece_.srs_rotate_cw(matrix_);
     break;
   case RotateCounterclockwise:
-    tetromino::srs_rotation(active_piece_,
-                            tetromino::ccw_rotation(active_piece_), matrix_);
+    active_piece_.srs_rotate_ccw(matrix_);
     break;
   case RotateHalf:
-    tetromino::srs_rotation(active_piece_,
-                            tetromino::half_rotation(active_piece_), matrix_);
+    active_piece_.srs_rotate_half(matrix_);
     break;
   case Hold:
     hold(rng);
@@ -44,29 +40,26 @@ void Tetris::invoke_action(Command action, std::mt19937 &rng) {
 }
 
 void Tetris::tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
-  gravity_delay_.invoke_periodically(delta_time, [this] {
-    tetromino::local_shift(active_piece_, {.y = 1}, matrix_);
-  });
+  gravity_delay_.invoke_periodically(
+      delta_time, [this] { active_piece_.local_shift({.y = 1}, matrix_); });
 
-  if (!matrix_.is_move_valid(tetromino::shape_at(
-          active_piece_, active_piece_.pos + Point{.y = 1}))) {
+  if (!matrix_.is_move_valid(active_piece_.get_shifted_shape({.y = 1}))) {
     lock_delay_.invoke_periodically(delta_time, [&] { complete_move(rng); });
   }
 }
 
 auto Tetris::ghost_piece() const -> Tetromino {
-  Tetromino ghost = active_piece_;
-  tetromino::hard_drop(ghost, matrix_);
-  return ghost;
+  return Tetromino(active_piece_.get_type(),
+                   active_piece_.get_pos_after_hard_drop(matrix_),
+                   active_piece_.get_rotation());
 }
 
 void Tetris::hold(std::mt19937 &rng) {
   if (!hold_command_triggered_) {
     hold_command_triggered_ = true;
-    const auto to_hold = active_piece_.type;
-    attempt_swap(Tetromino{.type = held_piece_.has_value()
-                                       ? held_piece_.value()
-                                       : seven_bag_.pop(rng)});
+    const auto to_hold = active_piece_.get_type();
+    attempt_swap(Tetromino(held_piece_.has_value() ? held_piece_.value()
+                                                   : seven_bag_.pop(rng)));
     held_piece_ = to_hold;
     lock_delay_.reset();
   }
@@ -76,8 +69,8 @@ auto Tetris::attempt_swap(Tetromino next) -> bool {
   active_piece_ = next;
   auto new_pos = INIT_POS;
   for (int i = 0; i < (MATRIX_ROWS - INIT_POS.y); ++i) {
-    if (matrix_.is_move_valid(tetromino::shape_at(active_piece_, new_pos))) {
-      active_piece_.pos = new_pos;
+    if (matrix_.is_move_valid(active_piece_.get_shifted_shape(new_pos))) {
+      active_piece_.set_pos(new_pos);
       return true;
     } else {
       --new_pos.y;
@@ -102,7 +95,7 @@ void Tetris::complete_move(std::mt19937 &rng) {
                                              : LEVELS.back());
   }
 
-  if (attempt_swap(Tetromino{.type = seven_bag_.pop(rng)})) {
+  if (attempt_swap(Tetromino(seven_bag_.pop(rng)))) {
     hold_command_triggered_ = false;
     lock_delay_.reset();
   } else {

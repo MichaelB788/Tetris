@@ -27,10 +27,10 @@ auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
 }
 
 void Matrix::lock_down(Tetromino piece) {
-  auto shape = tetromino::shape_at(piece, piece.pos);
+  auto shape = piece.get_shape();
   if (is_move_valid(shape)) {
     for (const auto &pos : shape) {
-      data_[pos.y][pos.x] = piece.type;
+      data_[pos.y][pos.x] = piece.get_type();
     }
   }
 }

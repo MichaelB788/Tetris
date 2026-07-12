@@ -16,7 +16,7 @@ public:
 
   void shift(Point<int> delta);
   void set_pos(Point<int> pos);
-  auto local_shift(Point<int> delta, const Matrix &matrix) -> bool;
+  auto try_shift(Point<int> delta, const Matrix &matrix) -> bool;
   void hard_drop(const Matrix &matrix);
 
   void rotate_cw();

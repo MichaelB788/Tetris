@@ -5,6 +5,7 @@
 #include "Timer.hpp"
 #include <chrono>
 #include <cstdint>
+#include <optional>
 #include <random>
 
 class Tetris {
@@ -20,14 +21,17 @@ public:
     RotateHalf,
     Hold
   };
-  enum class State : uint8_t { Running, GameOver };
+  enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng)
       : seven_bag_(rng), active_piece_(seven_bag_.pop(rng), INIT_POS) {}
 
   void handle_command(Command command, std::mt19937 &rng);
+  void toggle_pause();
 
   void tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
+
+  void reset(std::mt19937 &rng);
 
   auto get_score() const -> int;
   auto get_state() const -> State;
@@ -40,8 +44,8 @@ public:
 private:
   void hold_active(std::mt19937 &rng);
 
-  auto try_spawn_next(Tetromino next) -> bool;
-
+  auto try_spawn_next(Tetromino::Type next) -> bool;
+  auto get_current_level_drop_speed() const -> std::chrono::nanoseconds;
   void continue_to_next_turn(std::mt19937 &rng);
 
   State state_ = State::Running;
@@ -51,7 +55,7 @@ private:
   Timer lock_delay_{std::chrono::seconds{1}};
   Timer gravity_delay_{std::chrono::seconds{1}};
 
-  std::optional<Tetromino::Type> held_piece_{};
+  std::optional<Tetromino::Type> held_piece_ = std::nullopt;
   Matrix matrix_{};
   SevenBag seven_bag_;
   Tetromino active_piece_;

@@ -66,7 +66,7 @@ void Tetromino::shift(Point<int> delta) { pos_ += delta; }
 
 void Tetromino::set_pos(Point<int> pos) { pos_ = pos; }
 
-auto Tetromino::local_shift(Point<int> delta, const Matrix &matrix) -> bool {
+auto Tetromino::try_shift(Point<int> delta, const Matrix &matrix) -> bool {
   if (matrix.is_move_valid(get_shifted_shape(delta))) {
     pos_ += delta;
     return true;

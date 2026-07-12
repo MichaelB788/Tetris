@@ -1,4 +1,5 @@
 #include "Matrix.hpp"
+#include "Constants.hpp"
 #include "Tetromino.hpp"
 #include <algorithm>
 #include <cassert>
@@ -19,9 +20,22 @@ void Matrix::clear() {
     row.fill(std::nullopt);
 }
 
+auto Matrix::is_shape_hitting_ground(const Tetromino::Shape &shape) const
+    -> bool {
+  for (const auto [x, y] : shape) {
+    if (x < 0 || y < 0 || x >= MATRIX_COLS || y >= MATRIX_ROWS) {
+      continue;
+    }
+    if (data_[y][x].has_value()) {
+      return true;
+    }
+  }
+  return false;
+}
+
 auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
   return std::ranges::all_of(shape, [this](auto pos) {
-    return 0 <= pos.x && pos.x < MATRIX_COLS && 0 <= pos.y &&
+    return pos.x >= 0 && pos.y >= 0 && pos.x < MATRIX_COLS &&
            pos.y < MATRIX_ROWS && !data_[pos.y][pos.x].has_value();
   });
 }

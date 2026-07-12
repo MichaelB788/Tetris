@@ -12,11 +12,10 @@ public:
   auto at(Point<int> pos) const -> Cell;
 
   auto clear_lines() -> int;
-
-  auto is_move_valid(const Tetromino::Shape &shape) const -> bool;
-
   void clear();
 
+  auto is_shape_hitting_ground(const Tetromino::Shape &shape) const -> bool;
+  auto is_move_valid(const Tetromino::Shape &shape) const -> bool;
   void lock_down(Tetromino piece);
 
 private:

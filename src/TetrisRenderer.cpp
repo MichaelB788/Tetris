@@ -4,7 +4,6 @@
 #include "Point.hpp"
 #include "Tetromino.hpp"
 #include <SDL3/SDL_render.h>
-#include <array>
 
 namespace {
 void draw_tile(Tetromino::Type type, Point<int> matrix_pos,

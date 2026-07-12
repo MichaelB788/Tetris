@@ -7,12 +7,8 @@ public:
   explicit FPS(unsigned fps) { set_fps(fps); }
 
   void set_fps(unsigned val);
-
-  auto get_fps() const -> unsigned { return fps_; }
-
-  auto get_frame_duration() const -> std::chrono::nanoseconds {
-    return frame_duration_ns_;
-  }
+  auto get_fps() const -> unsigned;
+  auto get_frame_duration() const -> std::chrono::nanoseconds;
 
 private:
   unsigned fps_ = 0;
@@ -23,7 +19,7 @@ class FPS_Counter {
 public:
   void tick(std::chrono::nanoseconds delta);
 
-  auto get_current_fps() const -> unsigned { return current_fps_; }
+  auto get_current_fps() const -> unsigned;
 
 private:
   unsigned ticks_ = 0, current_fps_ = 0;

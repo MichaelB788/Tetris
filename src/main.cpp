@@ -22,7 +22,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   }
 
   *appstate = new AppState;
-  auto *state = static_cast<AppState *>(*appstate);
+  auto state = static_cast<AppState *>(*appstate);
 
   // Window init
   state->window.reset(
@@ -77,7 +77,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
-  auto *state = static_cast<AppState *>(appstate);
+  auto state = static_cast<AppState *>(appstate);
 
   state->prev_time = state->curr_time;
   state->curr_time = std::chrono::steady_clock::now();
@@ -85,12 +85,12 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
   state->handler.handle_kb_input(state->tetris, state->rng, delta);
   state->tetris.tick(delta, state->rng);
-  if (state->tetris.game_over())
+  state->fps_counter.tick(delta);
+  if (state->tetris.get_state() == Tetris::State::GameOver) {
     state->tetris = Tetris{state->rng};
+  }
 
   appstate::render_frame(*state);
-
-  state->fps_counter.tick(delta);
 
   const auto frame_time = std::chrono::steady_clock::now() - state->curr_time;
   const auto frame_duration = state->fps.get_frame_duration();
@@ -102,7 +102,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-  auto *state = static_cast<AppState *>(appstate);
+  auto state = static_cast<AppState *>(appstate);
   switch (event->type) {
   case SDL_EVENT_QUIT:
     return SDL_APP_SUCCESS;

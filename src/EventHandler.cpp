@@ -111,7 +111,7 @@ auto EventHandler::parse_config_file(std::istream &input) -> bool {
 void EventHandler::handle_first_key_press(Tetris &tetris,
                                           Tetris::Command command,
                                           std::mt19937 &rng) {
-  tetris.invoke_command(command, rng);
+  tetris.handle_command(command, rng);
   movement_.init_delay.reset();
   rotation_.init_delay.reset();
 }
@@ -120,7 +120,7 @@ void EventHandler::handle_key_down(Tetris &tetris, Tetris::Command command,
                                    std::mt19937 &rng,
                                    std::chrono::nanoseconds delta) {
   using enum Tetris::Command;
-  auto execute_input = [&] { tetris.invoke_command(command, rng); };
+  auto execute_input = [&] { tetris.handle_command(command, rng); };
   if (command == RotateClockwise || command == RotateCounterclockwise ||
       command == RotateHalf) {
     rotation_.init_delay.invoke_when_elapsed(delta, [&] {

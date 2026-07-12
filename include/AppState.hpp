@@ -7,9 +7,34 @@
 #include "Tetris.hpp"
 #include "TextRenderer.hpp"
 #include <chrono>
+#include <filesystem>
 #include <random>
 
-struct AppState {
+class AppState {
+public:
+  struct Configuration {
+    std::filesystem::path atlas_path;
+    std::filesystem::path font_path;
+    std::filesystem::path custom_controls_path;
+  };
+
+  AppState(const Configuration &config);
+
+  void tick();
+
+  void handle_tetris_state();
+
+  void render_frame();
+
+  void sleep_thread();
+
+private:
+  void render_game_objects();
+
+  void render_screen_text();
+
+  void render_screen_numbers();
+
   std::mt19937 rng{std::random_device{}()};
 
   std::chrono::time_point<std::chrono::steady_clock>
@@ -36,8 +61,4 @@ struct AppState {
   SDL::TTF::Font font = nullptr;
 };
 
-namespace appstate {
-void handle_tetris_state(AppState &state, std::chrono::nanoseconds delta);
-
-void render_frame(AppState &state);
-} // namespace appstate
+namespace appstate {} // namespace appstate

@@ -7,10 +7,10 @@
 #include <SDL3/SDL_keycode.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
-#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 #include <thread>
 
 #define SDL_MAIN_USE_CALLBACKS
@@ -24,57 +24,17 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     return SDL_APP_FAILURE;
   }
 
-  *appstate = new AppState;
-  auto state = static_cast<AppState *>(*appstate);
-
-  // Window init
-  state->window.reset(
-      SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE));
-  if (!state->window) {
+  try {
+    *appstate = new AppState(
+        {.atlas_path =
+             project_root / "assets" / "sprites" / "TetrominoAtlas.png",
+         .font_path = project_root / "assets" / "font" / "Arcade-Classic.ttf",
+         .custom_controls_path = argv[1] ? argv[1] : ""});
+    auto state = static_cast<AppState *>(*appstate);
+  } catch (std::runtime_error &err) {
+    std::cout << err.what() << std::endl;
     return SDL_APP_FAILURE;
   }
-
-  // Renderer init
-  state->renderer.reset(SDL_CreateRenderer(state->window.get(), nullptr));
-  if (!state->renderer) {
-    return SDL_APP_FAILURE;
-  }
-
-  // Texture atlas init
-  const std::filesystem::path atlas_path =
-      project_root / "assets" / "sprites" / "TetrominoAtlas.png";
-  state->texture_atlas.reset(
-      IMG_LoadTexture(state->renderer.get(), atlas_path.c_str()));
-  if (!state->texture_atlas) {
-    return SDL_APP_FAILURE;
-  }
-
-  // Text engine init
-  state->text_engine.reset(TTF_CreateRendererTextEngine(state->renderer.get()));
-  if (!state->text_engine) {
-    return SDL_APP_FAILURE;
-  }
-
-  // Font init
-  const std::filesystem::path font_path =
-      project_root / "assets" / "font" / "Arcade-Classic.ttf";
-  state->font.reset(TTF_OpenFont(font_path.c_str(), FONT_SCALE));
-  if (!state->font) {
-    return SDL_APP_FAILURE;
-  }
-
-  // Event handler init
-  if (argv[1]) {
-    state->handler.set_controls_from_file(argv[1]);
-  }
-
-  // Number renderer init
-  state->num_renderer =
-      NumberRenderer(state->text_engine.get(), state->font.get());
-
-  // Fix offsets before starting
-  screen_pos::fit_offsets_within_window(state->pf_pos, state->text_pos,
-                                        *state->window);
 
   return SDL_APP_CONTINUE;
 }
@@ -86,15 +46,8 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   state->curr_time = std::chrono::steady_clock::now();
   const auto delta = state->curr_time - state->prev_time;
 
-  state->fps_counter.tick(delta);
   appstate::handle_tetris_state(*state, delta);
   appstate::render_frame(*state);
-
-  const auto frame_time = std::chrono::steady_clock::now() - state->curr_time;
-  const auto frame_duration = state->fps.get_frame_duration();
-  if (frame_time < frame_duration) {
-    std::this_thread::sleep_for(frame_duration - frame_time);
-  }
 
   return SDL_APP_CONTINUE;
 }
@@ -108,14 +61,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
     screen_pos::fit_offsets_within_window(state->pf_pos, state->text_pos,
                                           *state->window);
     return SDL_APP_CONTINUE;
-  case SDL_EVENT_KEY_DOWN: // TODO: Make EventHandler handle this
-    switch (event->key.key) {
-    case SDLK_SPACE:
-      state->tetris.toggle_pause();
-      return SDL_APP_CONTINUE;
-    default:
-      break;
-    }
   default:
     return SDL_APP_CONTINUE;
   }

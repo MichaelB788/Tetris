@@ -3,18 +3,15 @@
 #include "Timer.hpp"
 #include <SDL3/SDL_scancode.h>
 #include <array>
-#include <filesystem>
 
 class EventHandler {
 public:
+  enum class KeyPress { FirstPress, HeldDown, None };
+
   void handle_kb_input(Tetris &tetris, std::mt19937 &rng,
                        std::chrono::nanoseconds delta);
 
-  auto set_controls_from_file(const std::filesystem::path &config_path) -> bool;
-
 private:
-  auto parse_config_file(std::istream &input) -> bool;
-
   void handle_first_key_press(Tetris &tetris, Tetris::Command command,
                               std::mt19937 &rng);
 

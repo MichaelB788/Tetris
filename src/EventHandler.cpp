@@ -35,7 +35,7 @@ auto EventHandler::set_controls_from_file(
 void EventHandler::handle_kb_input(Tetris &tetris, std::mt19937 &rng,
                                    std::chrono::nanoseconds delta) {
   // Handle current keyboard inputs
-  auto curr_kb_state = SDL_GetKeyboardState(nullptr);
+  const auto curr_kb_state = SDL_GetKeyboardState(nullptr);
   for (const auto &[scancode, command] : controls_) {
     if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
       handle_first_key_press(tetris, command, rng);
@@ -75,7 +75,10 @@ auto EventHandler::parse_config_file(std::istream &input) -> bool {
   const auto default_controls = controls_;
   size_t i = 0;
   std::string curr;
-  while (std::getline(input, curr)) {
+  while (std::getline(input, curr) && i < controls_.size()) {
+    if (curr.empty())
+      continue;
+
     const auto begin = curr.find_first_not_of(" \t");
     const auto end = curr.find_last_not_of(" \t");
     const auto trimmed = curr.substr(begin, (end - begin + 1));
@@ -86,7 +89,7 @@ auto EventHandler::parse_config_file(std::istream &input) -> bool {
     const auto command_str = trimmed.substr(0, eq_pos);
     const auto command = find_command_from_str(command_str);
     if (!command) {
-      std::cerr << "Unknown command: '" << command_str << "\n";
+      std::cerr << "Unknown command: \"" << command_str << "\"\n";
       controls_ = default_controls;
       return false;
     }
@@ -94,7 +97,7 @@ auto EventHandler::parse_config_file(std::istream &input) -> bool {
     const auto sdl_scancode_str = trimmed.substr(eq_pos + 1);
     const auto sdl_scancode = SDL_GetScancodeFromName(sdl_scancode_str.c_str());
     if (sdl_scancode == SDL_SCANCODE_UNKNOWN) {
-      std::cerr << "Unknown scancode: '" << sdl_scancode_str << "\n";
+      std::cerr << "Unknown scancode: \"" << sdl_scancode_str << "\"\n";
       controls_ = default_controls;
       return false;
     }

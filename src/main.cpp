@@ -16,11 +16,8 @@
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   const std::filesystem::path project_root = PROJECT_ROOT;
 
-  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
-    return SDL_APP_FAILURE;
-  }
-
-  if (!TTF_Init()) {
+  // SDL subsystems init
+  if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) || !TTF_Init()) {
     return SDL_APP_FAILURE;
   }
 
@@ -63,13 +60,18 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     return SDL_APP_FAILURE;
   }
 
+  // Event handler init
+  if (argc > 1) {
+    state->handler.set_controls_from_file(argv[1]);
+  }
+
+  // Number renderer init
+  state->num_renderer =
+      NumberRenderer(state->text_engine.get(), state->font.get());
+
   // Fix offsets before starting
   screen_pos::fit_offsets_within_window(state->pf_pos, state->text_pos,
                                         *state->window);
-
-  // Init number renderer
-  state->num_renderer =
-      NumberRenderer(state->text_engine.get(), state->font.get());
 
   return SDL_APP_CONTINUE;
 }
@@ -82,7 +84,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
   const auto delta = state->curr_time - state->prev_time;
 
   state->handler.handle_kb_input(state->tetris, state->rng, delta);
-
   state->tetris.tick(delta, state->rng);
   if (state->tetris.game_over())
     state->tetris = Tetris{state->rng};
@@ -91,13 +92,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
   state->fps_counter.tick(delta);
 
-  // If frame finished early, sleep for remainder of time
-  {
-    const auto frame_time = std::chrono::steady_clock::now() - state->curr_time;
-    const auto frame_duration = state->fps.get_frame_duration();
-    if (frame_time < frame_duration) {
-      std::this_thread::sleep_for(frame_duration - frame_time);
-    }
+  const auto frame_time = std::chrono::steady_clock::now() - state->curr_time;
+  const auto frame_duration = state->fps.get_frame_duration();
+  if (frame_time < frame_duration) {
+    std::this_thread::sleep_for(frame_duration - frame_time);
   }
 
   return SDL_APP_CONTINUE;

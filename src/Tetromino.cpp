@@ -2,7 +2,6 @@
 #include "Matrix.hpp"
 #include "Point.hpp"
 #include <cstddef>
-#include <type_traits>
 
 namespace {
 // Tetromino shape/rotation data
@@ -131,15 +130,15 @@ auto Tetromino::get_pos() const -> Point<int> { return pos_; }
 auto Tetromino::get_rotation() const -> Rotation { return rotation_; }
 
 auto Tetromino::n_clockwise_rotations(unsigned n) const -> Rotation {
-  const auto curr = std::underlying_type_t<Rotation>(rotation_);
-  return static_cast<Tetromino::Rotation>((curr + n) % 4);
+  const auto curr = static_cast<uint8_t>(rotation_);
+  return static_cast<Rotation>((curr + n) % 4);
 }
 
 void Tetromino::srs_rotation(Rotation next_rotation, const Matrix &matrix) {
   const auto &offsets =
-      type_ == Tetromino::Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
+      type_ == Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
 
-  Tetromino rotated{type_, pos_, next_rotation};
+  const Tetromino rotated{type_, pos_, next_rotation};
   const auto from = static_cast<size_t>(rotation_);
   const auto to = static_cast<size_t>(next_rotation);
   for (size_t i = 0; i < 5; ++i) {

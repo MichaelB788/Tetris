@@ -37,3 +37,5 @@ auto SevenBag::preview() const -> Preview {
   }
   return view;
 }
+
+auto SevenBag::peek() const -> Tetromino { return {curr_bag_[read_]}; }

@@ -5,7 +5,6 @@
 #include "Tetromino.hpp"
 #include <SDL3/SDL_render.h>
 #include <array>
-#include <vector>
 
 namespace {
 void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
@@ -28,8 +27,6 @@ void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
 
 void draw_locked_tiles(const Matrix &matrix, Point<float> screen_offset,
                        SDL_Renderer &renderer, SDL_Texture &texture_atlas) {
-  std::array<std::vector<Point<int>>, 7> grounded_rects;
-
   for (int y = 0; y < MATRIX_ROWS; ++y) {
     for (int x = 0; x < MATRIX_COLS; ++x) {
       if (auto tile = matrix.at(x, y)) {

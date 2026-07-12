@@ -2,8 +2,6 @@
 #include "Constants.hpp"
 #include "Tetromino.hpp"
 #include <array>
-#include <cassert>
-#include <cstddef>
 #include <optional>
 
 class Matrix {

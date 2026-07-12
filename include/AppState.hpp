@@ -6,7 +6,6 @@
 #include "ScreenPos.hpp"
 #include "Tetris.hpp"
 #include "TextRenderer.hpp"
-#include <SDL3/SDL_render.h>
 #include <chrono>
 #include <random>
 

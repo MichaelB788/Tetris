@@ -1,7 +1,6 @@
 #pragma once
 #include "Tetris.hpp"
 #include "Timer.hpp"
-#include <SDL3/SDL_events.h>
 #include <SDL3/SDL_scancode.h>
 #include <array>
 #include <filesystem>

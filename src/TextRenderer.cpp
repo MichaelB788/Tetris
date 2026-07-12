@@ -5,9 +5,9 @@ void TextRenderer::render_text(std::string_view str, Point<float> pos,
                                TTF_TextEngine &engine, TTF_Font &font) {
   const auto i = index_of_text(str);
   if (i == text_map_.size()) {
-    text_map_.push_back(TextEntry{
-        .str = str,
-        .texture{TTF_CreateText(&engine, &font, str.data(), str.size())}});
+    text_map_.push_back(
+        {.str = str,
+         .texture{TTF_CreateText(&engine, &font, str.data(), str.size())}});
   }
   TTF_DrawRendererText(text_map_[i].texture.get(), pos.x, pos.y);
 }

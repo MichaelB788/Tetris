@@ -6,7 +6,7 @@
 
 class SevenBag {
 public:
-  SevenBag(std::mt19937 &rng);
+  explicit SevenBag(std::mt19937 &rng);
 
   void shuffle(std::mt19937 &rng);
 
@@ -15,7 +15,7 @@ public:
   using Preview = std::array<Tetromino::Type, 4>;
   auto preview() const -> Preview;
 
-  auto peek() const -> Tetromino { return Tetromino(curr_bag_[read_]); }
+  auto peek() const -> Tetromino;
 
 private:
   size_t read_ = 0;

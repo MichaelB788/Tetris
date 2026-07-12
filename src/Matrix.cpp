@@ -27,10 +27,9 @@ auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
 }
 
 void Matrix::lock_down(Tetromino piece) {
-  auto shape = piece.get_shape();
-  if (is_move_valid(shape)) {
-    for (const auto &pos : shape) {
-      data_[pos.y][pos.x] = piece.get_type();
+  if (const auto shape = piece.get_shape(); is_move_valid(shape)) {
+    for (const auto [x, y] : shape) {
+      data_[y][x] = piece.get_type();
     }
   }
 }
@@ -45,8 +44,9 @@ auto Matrix::clear_lines() -> int {
         })) {
       ++cleared;
     } else {
-      if (write != read)
+      if (write != read) {
         data_[write] = data_[read];
+      }
       --write;
     }
   }

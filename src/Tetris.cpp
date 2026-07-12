@@ -49,9 +49,9 @@ void Tetris::tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
 }
 
 auto Tetris::ghost_piece() const -> Tetromino {
-  return Tetromino(active_piece_.get_type(),
-                   active_piece_.get_pos_after_hard_drop(matrix_),
-                   active_piece_.get_rotation());
+  return {active_piece_.get_type(),
+          active_piece_.get_pos_after_hard_drop(matrix_),
+          active_piece_.get_rotation()};
 }
 
 void Tetris::hold(std::mt19937 &rng) {

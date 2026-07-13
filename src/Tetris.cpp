@@ -4,39 +4,45 @@
 #include <optional>
 #include <random>
 
-void Tetris::handle_command(Command command, std::mt19937 &rng) {
-  switch (command) {
-    using enum Command;
-  case MoveLeft:
-    active_piece_.try_shift({.x = -1}, matrix_);
-    break;
-  case MoveRight:
-    active_piece_.try_shift({.x = 1}, matrix_);
-    break;
-  case SoftDrop:
-    active_piece_.try_shift({.y = 1}, matrix_);
-    break;
-  case HardDrop:
-    active_piece_.hard_drop(matrix_);
-    continue_to_next_turn(rng);
-    break;
-  case RotateClockwise:
-    active_piece_.srs_rotate_cw(matrix_);
-    break;
-  case RotateCounterclockwise:
-    active_piece_.srs_rotate_ccw(matrix_);
-    break;
-  case RotateHalf:
-    active_piece_.srs_rotate_half(matrix_);
-    break;
-  case Hold:
-    hold_active(rng);
-    break;
+void Tetris::move_left() { active_piece_.try_shift({.x = -1}, matrix_); }
+
+void Tetris::move_right() { active_piece_.try_shift({.x = 1}, matrix_); }
+
+void Tetris::soft_drop(std::mt19937 &rng) {
+  active_piece_.try_shift({.y = 1}, matrix_);
+}
+
+void Tetris::hard_drop(std::mt19937 &rng) {
+  active_piece_.hard_drop(matrix_);
+  continue_to_next_turn(rng);
+}
+
+void Tetris::rotate_cw() { active_piece_.srs_rotate_cw(matrix_); }
+
+void Tetris::rotate_ccw() { active_piece_.srs_rotate_ccw(matrix_); }
+
+void Tetris::rotate_half() { active_piece_.srs_rotate_half(matrix_); }
+
+void Tetris::hold_active(std::mt19937 &rng) {
+  if (!hold_command_triggered_) {
+    hold_command_triggered_ = true;
+    const auto to_hold = active_piece_.get_type();
+    if (try_spawn_next(held_piece_.has_value() ? held_piece_.value()
+                                               : seven_bag_.pop(rng))) {
+      held_piece_ = to_hold;
+      lock_delay_.reset();
+    } else {
+      state_ = State::GameOver;
+    }
   }
 }
 
 void Tetris::toggle_pause() {
-  state_ = state_ != State::Paused ? State::Paused : State::Running;
+  if (state_ == State::Running) {
+    state_ = State::Paused;
+  } else if (state_ == State::Paused) {
+    state_ = State::Running;
+  }
 }
 
 void Tetris::tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
@@ -83,20 +89,6 @@ auto Tetris::get_ghost_piece() const -> Tetromino {
   return {active_piece_.get_type(),
           active_piece_.get_pos_after_hard_drop(matrix_),
           active_piece_.get_rotation()};
-}
-
-void Tetris::hold_active(std::mt19937 &rng) {
-  if (!hold_command_triggered_) {
-    hold_command_triggered_ = true;
-    const auto to_hold = active_piece_.get_type();
-    if (try_spawn_next(held_piece_.has_value() ? held_piece_.value()
-                                               : seven_bag_.pop(rng))) {
-      held_piece_ = to_hold;
-      lock_delay_.reset();
-    } else {
-      state_ = State::GameOver;
-    }
-  }
 }
 
 auto Tetris::try_spawn_next(Tetromino::Type next) -> bool {

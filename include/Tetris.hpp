@@ -11,25 +11,25 @@
 class Tetris {
 public:
   static constexpr Point INIT_POS = {.x = 4, .y = 4};
-  enum class Command : uint8_t {
-    MoveLeft,
-    MoveRight,
-    SoftDrop,
-    HardDrop,
-    RotateClockwise,
-    RotateCounterclockwise,
-    RotateHalf,
-    Hold
-  };
   enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng)
       : seven_bag_(rng), active_piece_(seven_bag_.pop(rng), INIT_POS) {}
 
-  void handle_command(Command command, std::mt19937 &rng);
-  void toggle_pause();
-
   void tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
+
+  void move_left();
+  void move_right();
+  void soft_drop(std::mt19937 &rng);
+  void hard_drop(std::mt19937 &rng);
+
+  void rotate_cw();
+  void rotate_ccw();
+  void rotate_half();
+
+  void hold_active(std::mt19937 &rng);
+
+  void toggle_pause();
 
   void reset(std::mt19937 &rng);
 
@@ -42,8 +42,6 @@ public:
   auto get_ghost_piece() const -> Tetromino;
 
 private:
-  void hold_active(std::mt19937 &rng);
-
   auto try_spawn_next(Tetromino::Type next) -> bool;
   auto get_current_level_drop_speed() const -> std::chrono::nanoseconds;
   void continue_to_next_turn(std::mt19937 &rng);
@@ -52,8 +50,8 @@ private:
   int score_ = 0;
   bool hold_command_triggered_ = false;
 
-  Timer lock_delay_{std::chrono::seconds{1}};
-  Timer gravity_delay_{std::chrono::seconds{1}};
+  Timer<std::chrono::nanoseconds> lock_delay_{std::chrono::seconds(1)};
+  Timer<std::chrono::nanoseconds> gravity_delay_{std::chrono::seconds(1)};
 
   std::optional<Tetromino::Type> held_piece_ = std::nullopt;
   Matrix matrix_{};

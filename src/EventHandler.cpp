@@ -1,48 +1,97 @@
 #include "EventHandler.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_keyboard.h>
+#include <cassert>
 #include <chrono>
+#include <cstddef>
 #include <random>
 
-void EventHandler::handle_kb_input(Tetris &tetris, std::mt19937 &rng,
-                                   std::chrono::nanoseconds delta) {
+void EventHandler::listen_to_keyboard_input() {
   // Handle current keyboard inputs
-  const auto curr_kb_state = SDL_GetKeyboardState(nullptr);
-  for (const auto &[scancode, command] : controls_) {
-    if (!prev_kb_state_[scancode] && curr_kb_state[scancode]) {
-      handle_first_key_press(tetris, command, rng);
-    } else if (prev_kb_state_[scancode] && curr_kb_state[scancode]) {
-      handle_key_down(tetris, command, rng, delta);
+  const auto curr_keyboard = SDL_GetKeyboardState(nullptr);
+  for (const auto &control : controls_) {
+    const auto scancode = control.scancode;
+    const auto command = control.command;
+    if (!prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_new_events |= command;
+    } else if (prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_held_events |= command;
+    } else if (prev_keyboard[scancode] && !curr_keyboard[scancode]) {
+      pending_new_events &= ~command;
+      pending_held_events &= ~command;
     }
   }
 
   // Take a snapshot of current keyboard state
   for (size_t i = 0; i < SDL_SCANCODE_COUNT; ++i) {
-    prev_kb_state_[i] = curr_kb_state[i];
+    prev_keyboard[i] = curr_keyboard[i];
   }
 }
 
-void EventHandler::handle_first_key_press(Tetris &tetris,
-                                          Tetris::Command command,
-                                          std::mt19937 &rng) {
-  tetris.handle_command(command, rng);
-  movement_.init_delay.reset();
-  rotation_.init_delay.reset();
+auto EventHandler::idx_of_command(Command command) const -> int {
+  for (int i = 0; i < controls_.size(); ++i) {
+    if (controls_[i].command == command) {
+      return i;
+    }
+  }
+  assert(false);
 }
 
-void EventHandler::handle_key_down(Tetris &tetris, Tetris::Command command,
-                                   std::mt19937 &rng,
-                                   std::chrono::nanoseconds delta) {
-  using enum Tetris::Command;
-  auto execute_input = [&] { tetris.handle_command(command, rng); };
-  if (command == RotateClockwise || command == RotateCounterclockwise ||
-      command == RotateHalf) {
-    rotation_.init_delay.invoke_when_elapsed(delta, [&] {
-      rotation_.repeat_interval.invoke_periodically(delta, execute_input);
-    });
-  } else {
-    movement_.init_delay.invoke_when_elapsed(delta, [&] {
-      movement_.repeat_interval.invoke_periodically(delta, execute_input);
-    });
+void EventHandler::handle_new_events(Tetris &tetris, std::mt19937 &rng) {
+  for (size_t bit_idx = 0; bit_idx < controls_.size(); ++bit_idx) {
+    const auto cmd = static_cast<Command>(1 << bit_idx);
+    if (pending_new_events & cmd) {
+      pending_new_events &= ~cmd;
+      handle_command(cmd, tetris, rng);
+
+      if (const auto i = idx_of_command(cmd); controls_[i].timer.has_value()) {
+        controls_[i].timer->init_delay.reset();
+        controls_[i].timer->repeat_interval.reset();
+      }
+    }
+  }
+}
+
+void EventHandler::handle_repeated_events(Tetris &tetris, std::mt19937 &rng,
+                                          std::chrono::nanoseconds delta) {
+  for (size_t bit_idx = 0; bit_idx < controls_.size(); ++bit_idx) {
+    const auto cmd = static_cast<Command>(1 << bit_idx);
+    if (pending_held_events & cmd) {
+      if (const auto i = idx_of_command(cmd); controls_[i].timer.has_value()) {
+        controls_[i].timer->init_delay.invoke_when_elapsed(delta, [&] {
+          controls_[i].timer->repeat_interval.invoke_periodically(
+              delta, [&] { handle_command(cmd, tetris, rng); });
+        });
+      }
+    }
+  }
+}
+
+void EventHandler::handle_command(Command command, Tetris &tetris,
+                                  std::mt19937 &rng) {
+  if (command == TOGGLE_PAUSE_CMD) {
+    tetris.toggle_pause();
+    pending_new_events = 0;
+    pending_held_events = 0;
+    return;
+  }
+
+  if (tetris.get_state() == Tetris::State::Paused) {
+    return;
+  }
+
+  // clang-format off
+  switch (command) {
+    case NULL_CMD: break;
+    case MOVE_LEFT_CMD: tetris.move_left(); break;
+    case MOVE_RIGHT_CMD: tetris.move_right(); break;
+    case SOFT_DROP_CMD: tetris.soft_drop(rng); break;
+    case HARD_DROP_CMD: tetris.hard_drop(rng); break;
+    case ROTATE_CW_CMD: tetris.rotate_cw(); break;
+    case ROTATE_CCW_CMD: tetris.rotate_ccw(); break;
+    case ROTATE_HALF_CMD: tetris.rotate_half(); break;
+    case HOLD_ACTIVE_CMD: tetris.hold_active(rng); break;
+    case TOGGLE_PAUSE_CMD: break;
+    // clang-format on
   }
 }

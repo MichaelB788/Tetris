@@ -7,7 +7,7 @@ class NumberRenderer {
 public:
   explicit NumberRenderer(TTF_TextEngine *engine, TTF_Font *font);
 
-  void render_num(int num, Point<float> pos) const;
+  void render_num(unsigned num, Point<float> pos) const;
 
 private:
   std::array<SDL::TTF::Text, 10> nums_text_{};

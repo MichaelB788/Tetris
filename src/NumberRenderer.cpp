@@ -12,7 +12,7 @@ NumberRenderer::NumberRenderer(TTF_TextEngine *engine, TTF_Font *font) {
   }
 }
 
-void NumberRenderer::render_num(int num, Point<float> pos) const {
+void NumberRenderer::render_num(unsigned num, Point<float> pos) const {
   static constexpr auto FONT_SIZE = 32u;
 
   if (num < 10) { // Render the only digit

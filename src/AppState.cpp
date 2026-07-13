@@ -41,14 +41,15 @@ AppState::AppState(const Configuration &config) {
     throw std::runtime_error("Couldn't create text engine");
   }
 
-  // Event handler init
-  handler.set_controls_from_file(config.custom_controls_path);
-
   // Number renderer init
   num_renderer = NumberRenderer(text_engine.get(), font.get());
 
   // Fix offsets before starting
   screen_pos::fit_offsets_within_window(pf_pos, text_pos, *window);
+}
+
+void AppState::listen_to_keyboard_input() {
+  handler.listen_to_keyboard_input();
 }
 
 void AppState::tick() {
@@ -60,31 +61,32 @@ void AppState::tick() {
 
   if (tetris.get_state() == Tetris::State::Running) {
     tetris.tick(delta, rng);
+    handler.handle_repeated_events(tetris, rng, delta);
   }
 }
 
 void AppState::handle_tetris_state() {
   switch (tetris.get_state()) {
     using enum Tetris::State;
-  case Running: {
-    handler.handle_kb_input(tetris, rng, delta);
-  } break;
+  case Running:
+  case Paused:
+    handler.handle_new_events(tetris, rng);
+    break;
   case GameOver: // TODO: Add option to continue/quit
     tetris.reset(rng);
     break;
-  case Paused:
     break;
   }
 }
 
-void AppState::render_game_objects() {
+void AppState::render_game_objects() const {
   // clang-format off
   tetris::renderer::draw_ghost(tetris.get_ghost_piece(), pf_pos.board, *renderer, *texture_atlas);
   tetris::renderer::draw_tetromino(tetris.get_active_piece(), pf_pos.board, *renderer, *texture_atlas);
   tetris::renderer::draw_matrix(tetris.get_matrix(), pf_pos.board, *renderer, *texture_atlas);
 
   if (const auto held_piece = tetris.get_held_piece()) {
-    tetris::renderer::draw_tetromino({tetris.get_held_piece().value()}, pf_pos.held_piece, *renderer, *texture_atlas);
+    tetris::renderer::draw_tetromino({held_piece.value()}, pf_pos.held_piece, *renderer, *texture_atlas);
   }
 
   auto next_pos = pf_pos.seven_bag_pos;
@@ -102,7 +104,7 @@ void AppState::render_screen_text() {
   text_renderer.render_text("FPS", text_pos.fps_label, *text_engine, *font);
 }
 
-void AppState::render_screen_numbers() {
+void AppState::render_screen_numbers() const {
   num_renderer.render_num(tetris.get_score(), text_pos.score_val);
   num_renderer.render_num(fps_counter.get_current_fps(), text_pos.fps_val);
 }
@@ -118,10 +120,14 @@ void AppState::render_frame() {
   SDL_RenderPresent(renderer.get());
 }
 
-void AppState::sleep_thread() {
+void AppState::sleep_thread() const {
   const auto frame_time = std::chrono::steady_clock::now() - curr_time;
   const auto frame_duration = fps.get_frame_duration();
   if (frame_time < frame_duration) {
     std::this_thread::sleep_for(frame_duration - frame_time);
   }
+}
+
+void AppState::handle_window_resize_event() {
+  screen_pos::fit_offsets_within_window(pf_pos, text_pos, *window);
 }

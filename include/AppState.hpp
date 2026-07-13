@@ -20,20 +20,18 @@ public:
 
   AppState(const Configuration &config);
 
+  void listen_to_keyboard_input();
   void tick();
-
   void handle_tetris_state();
-
   void render_frame();
+  void sleep_thread() const;
 
-  void sleep_thread();
+  void handle_window_resize_event();
 
 private:
-  void render_game_objects();
-
+  void render_game_objects() const;
   void render_screen_text();
-
-  void render_screen_numbers();
+  void render_screen_numbers() const;
 
   std::mt19937 rng{std::random_device{}()};
 

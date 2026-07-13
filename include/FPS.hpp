@@ -23,5 +23,5 @@ public:
 
 private:
   unsigned ticks_ = 0, current_fps_ = 0;
-  Timer delay_{std::chrono::seconds(1)};
+  Timer<std::chrono::nanoseconds> delay_{std::chrono::seconds(1)};
 };

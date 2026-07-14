@@ -14,18 +14,14 @@ public:
   Tetromino(Type t, Point<int> p = {0, 0}, Rotation r = Rotation::R0)
       : type_(t), pos_(p), rotation_(r) {}
 
-  void shift(Point<int> delta);
   void set_pos(Point<int> pos);
+  void set_rotation(Rotation r);
+
+  void shift(Point<int> delta);
   auto try_shift(Point<int> delta, const Matrix &matrix) -> bool;
   void hard_drop(const Matrix &matrix);
 
-  void rotate_cw();
-  void rotate_ccw();
-  void rotate_half();
-
-  void srs_rotate_cw(const Matrix &matrix);
-  void srs_rotate_ccw(const Matrix &matrix);
-  void srs_rotate_half(const Matrix &matrix);
+  auto srs_rotation(Rotation next_rotation, const Matrix &matrix) -> bool;
 
   auto get_shape_at(Point<int> pos) const -> Shape;
   auto get_shifted_shape(Point<int> delta) const -> Shape;
@@ -38,10 +34,11 @@ public:
   auto get_rotation() const -> Rotation;
 
 private:
-  auto n_clockwise_rotations(unsigned n) const -> Rotation;
-  void srs_rotation(Rotation next_rotation, const Matrix &matrix);
-
   Type type_ = Type::I;
   Point<int> pos_{};
   Rotation rotation_ = Rotation::R0;
 };
+
+namespace tetromino {
+auto rotated_cw(Tetromino::Rotation from, unsigned n) -> Tetromino::Rotation;
+}

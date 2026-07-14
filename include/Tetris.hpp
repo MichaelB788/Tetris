@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix.hpp"
+#include "Point.hpp"
 #include "SevenBag.hpp"
 #include "Tetromino.hpp"
 #include "Timer.hpp"
@@ -20,7 +21,7 @@ public:
 
   void move_left();
   void move_right();
-  void soft_drop(std::mt19937 &rng);
+  void soft_drop();
   void hard_drop(std::mt19937 &rng);
 
   void rotate_cw();
@@ -33,7 +34,7 @@ public:
 
   void reset(std::mt19937 &rng);
 
-  auto get_score() const -> int;
+  auto get_score() const -> unsigned;
   auto get_state() const -> State;
   auto get_matrix() const -> const Matrix &;
   auto get_active_piece() const -> Tetromino;
@@ -42,16 +43,22 @@ public:
   auto get_ghost_piece() const -> Tetromino;
 
 private:
+  void shift_active(Point<int> delta);
+  void rotate_active(Tetromino::Rotation next);
+
   auto try_spawn_next(Tetromino::Type next) -> bool;
-  auto get_current_level_drop_speed() const -> std::chrono::nanoseconds;
+  void update_level();
   void continue_to_next_turn(std::mt19937 &rng);
 
   State state_ = State::Running;
-  int score_ = 0;
+  unsigned score_ = 0;
+  unsigned lock_resets_ = 0;
+  unsigned lock_reset_limit_ = 10;
+  bool lock_pending_ = false;
   bool hold_command_triggered_ = false;
 
-  Timer<std::chrono::nanoseconds> lock_delay_{std::chrono::seconds(1)};
   Timer<std::chrono::nanoseconds> gravity_delay_{std::chrono::seconds(1)};
+  Timer<std::chrono::nanoseconds> lock_delay_{gravity_delay_.duration() * 2};
 
   std::optional<Tetromino::Type> held_piece_ = std::nullopt;
   Matrix matrix_{};

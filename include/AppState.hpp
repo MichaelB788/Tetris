@@ -33,30 +33,28 @@ private:
   void render_screen_text();
   void render_screen_numbers() const;
 
-  std::mt19937 rng{std::random_device{}()};
+  std::mt19937 rng_{std::random_device{}()};
 
   std::chrono::time_point<std::chrono::steady_clock>
-      prev_time = std::chrono::steady_clock::now(),
-      curr_time = std::chrono::steady_clock::now();
+      prev_time_ = std::chrono::steady_clock::now(),
+      curr_time_ = std::chrono::steady_clock::now();
 
-  FPS fps{60};
-  FPS_Counter fps_counter{};
+  FPS fps_{60};
+  FPS_Counter fps_counter_{};
 
-  screen_pos::Playfield pf_pos;
-  screen_pos::Text text_pos;
+  screen_pos::Playfield pf_pos_;
+  screen_pos::Text text_pos_;
 
-  Tetris tetris{rng};
+  Tetris tetris_{rng_};
 
-  EventHandler handler;
+  EventHandler handler_;
 
-  TextRenderer text_renderer{};
-  NumberRenderer num_renderer{nullptr, nullptr};
+  TextRenderer text_renderer_{};
+  NumberRenderer num_renderer_{nullptr, nullptr};
 
-  SDL::Window window = nullptr;
-  SDL::Renderer renderer = nullptr;
-  SDL::Texture texture_atlas = nullptr;
-  SDL::TTF::RendererTextEngine text_engine = nullptr;
-  SDL::TTF::Font font = nullptr;
+  SDL::Window window_ = nullptr;
+  SDL::Renderer renderer_ = nullptr;
+  SDL::Texture texture_atlas_ = nullptr;
+  SDL::TTF::RendererTextEngine text_engine_ = nullptr;
+  SDL::TTF::Font font_ = nullptr;
 };
-
-namespace appstate {} // namespace appstate

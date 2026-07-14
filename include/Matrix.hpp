@@ -11,7 +11,7 @@ public:
   auto at(size_t x, size_t y) const -> Cell;
   auto at(Point<int> pos) const -> Cell;
 
-  auto clear_lines() -> int;
+  auto clear_lines() -> unsigned;
   void clear();
 
   auto is_shape_hitting_ground(const Tetromino::Shape &shape) const -> bool;

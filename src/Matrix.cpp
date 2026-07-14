@@ -48,8 +48,8 @@ void Matrix::lock_down(Tetromino piece) {
   }
 }
 
-auto Matrix::clear_lines() -> int {
-  int cleared = 0;
+auto Matrix::clear_lines() -> unsigned {
+  unsigned cleared = 0;
   int write = MATRIX_ROWS - 1;
 
   for (int read = MATRIX_ROWS - 1; read >= 0; --read) {

@@ -44,8 +44,8 @@ private:
     std::optional<InputTimer> timer = std::nullopt;
   };
 
-  uint16_t pending_new_events = 0;
-  uint16_t pending_held_events = 0;
+  uint16_t pending_new_events_ = 0;
+  uint16_t pending_held_events_ = 0;
 
   static constexpr InputTimer MOVEMENT_TIMER{
       .init_delay{std::chrono::milliseconds(150)},
@@ -87,5 +87,5 @@ private:
 
        {.scancode = SDL_SCANCODE_SPACE, .command = TOGGLE_PAUSE_CMD}}};
 
-  bool prev_keyboard[SDL_SCANCODE_COUNT]{};
+  bool prev_keyboard_[SDL_SCANCODE_COUNT]{};
 };

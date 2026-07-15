@@ -9,6 +9,7 @@ add_library(TetrisSource
   AppState.cpp
   EventHandler.cpp
   FPS.cpp
+  LockDelay.cpp
   Matrix.cpp
   NumberRenderer.cpp
   PlatformSDL.cpp

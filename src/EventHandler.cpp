@@ -80,18 +80,32 @@ void EventHandler::handle_command(Command command, Tetris &tetris,
     return;
   }
 
-  // clang-format off
   switch (command) {
-    case NULL_CMD: break;
-    case MOVE_LEFT_CMD: tetris.move_left(); break;
-    case MOVE_RIGHT_CMD: tetris.move_right(); break;
-    case SOFT_DROP_CMD: tetris.soft_drop(); break;
-    case HARD_DROP_CMD: tetris.hard_drop(rng); break;
-    case ROTATE_CW_CMD: tetris.rotate_cw(); break;
-    case ROTATE_CCW_CMD: tetris.rotate_ccw(); break;
-    case ROTATE_HALF_CMD: tetris.rotate_half(); break;
-    case HOLD_ACTIVE_CMD: tetris.hold_active(rng); break;
-    case TOGGLE_PAUSE_CMD: break;
-    // clang-format on
+  case MOVE_LEFT_CMD:
+    tetris.move_left();
+    break;
+  case MOVE_RIGHT_CMD:
+    tetris.move_right();
+    break;
+  case SOFT_DROP_CMD:
+    tetris.soft_drop();
+    break;
+  case HARD_DROP_CMD:
+    tetris.hard_drop(rng);
+    break;
+  case ROTATE_CW_CMD:
+    tetris.rotate_cw();
+    break;
+  case ROTATE_CCW_CMD:
+    tetris.rotate_ccw();
+    break;
+  case ROTATE_HALF_CMD:
+    tetris.rotate_half();
+    break;
+  case HOLD_ACTIVE_CMD:
+    tetris.hold_active(rng);
+    break;
+  default:
+    break;
   }
 }

@@ -101,6 +101,10 @@ void AppState::render_screen_text() {
   text_renderer_.render_text("HOLD", text_pos_.hold, *text_engine_, *font_);
   text_renderer_.render_text("SCORE", text_pos_.score_label, *text_engine_, *font_);
   text_renderer_.render_text("FPS", text_pos_.fps_label, *text_engine_, *font_);
+
+  if (tetris_.get_state() == Tetris::State::Paused) {
+    text_renderer_.render_text("PAUSED", {0, 0}, *text_engine_, *font_);
+  }
 }
 // clang-format on
 

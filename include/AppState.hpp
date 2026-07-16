@@ -1,24 +1,17 @@
 #pragma once
+#include "AppRenderer.hpp"
 #include "EventHandler.hpp"
 #include "FPS.hpp"
-#include "NumberRenderer.hpp"
-#include "PlatformSDL.hpp"
-#include "ScreenPos.hpp"
 #include "Tetris.hpp"
-#include "TextRenderer.hpp"
 #include <chrono>
 #include <filesystem>
 #include <random>
 
 class AppState {
 public:
-  struct Configuration {
-    std::filesystem::path atlas_path;
-    std::filesystem::path font_path;
-    std::filesystem::path custom_controls_path;
-  };
-
-  AppState(const Configuration &config);
+  AppState(const std::filesystem::path &atlas_path,
+           const std::filesystem::path &font_path)
+      : app_renderer_(atlas_path, font_path) {}
 
   void listen_to_keyboard_input();
   void tick();
@@ -29,10 +22,6 @@ public:
   void handle_window_resize_event();
 
 private:
-  void render_game_objects() const;
-  void render_screen_text();
-  void render_screen_numbers() const;
-
   std::mt19937 rng_{std::random_device{}()};
 
   std::chrono::time_point<std::chrono::steady_clock>
@@ -42,19 +31,7 @@ private:
   FPS fps_{60};
   FPS_Counter fps_counter_{};
 
-  screen_pos::Playfield pf_pos_;
-  screen_pos::Text text_pos_;
-
   Tetris tetris_{rng_};
-
   EventHandler handler_;
-
-  TextRenderer text_renderer_{};
-  NumberRenderer num_renderer_{nullptr, nullptr};
-
-  SDL::Window window_ = nullptr;
-  SDL::Renderer renderer_ = nullptr;
-  SDL::Texture texture_atlas_ = nullptr;
-  SDL::TTF::RendererTextEngine text_engine_ = nullptr;
-  SDL::TTF::Font font_ = nullptr;
+  AppRenderer app_renderer_;
 };

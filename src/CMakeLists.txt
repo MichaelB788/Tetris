@@ -7,19 +7,16 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 
 add_library(TetrisSource
   AppState.cpp
+  AppRenderer.cpp
   EventHandler.cpp
   FPS.cpp
   LockDelay.cpp
   Matrix.cpp
-  NumberRenderer.cpp
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp
-  ScreenPos.cpp
   SevenBag.cpp
   Tetris.cpp
-  TetrisRenderer.cpp
   Tetromino.cpp
-  TextRenderer.cpp
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

@@ -19,11 +19,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
   }
 
   try {
-    *appstate = new AppState(
-        {.atlas_path =
-             project_root / "assets" / "sprites" / "TetrominoAtlas.png",
-         .font_path = project_root / "assets" / "font" / "Arcade-Classic.ttf",
-         .custom_controls_path = argv[1] ? argv[1] : ""});
+    *appstate =
+        new AppState({.atlas_path = project_root / "assets" / "sprites" /
+                                    "TetrominoAtlas.png",
+                      .font_path = project_root / "assets" / "font" /
+                                   "PressStart2P" / "PressStart2P-vaV7.ttf",
+                      .custom_controls_path = argv[1] ? argv[1] : ""});
   } catch (std::runtime_error &err) {
     std::cout << err.what() << std::endl;
     return SDL_APP_FAILURE;

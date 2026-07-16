@@ -11,17 +11,15 @@ class AppState {
 public:
   AppState(const std::filesystem::path &atlas_path,
            const std::filesystem::path &font_path)
-      : app_renderer_(atlas_path, font_path) {}
+      : renderer_(atlas_path, font_path) {}
 
-  void listen_to_keyboard_input();
-  void tick();
-  void handle_tetris_state();
-  void render_frame();
-  void sleep_thread() const;
-
+  void update_frame();
   void handle_window_resize_event();
 
 private:
+  void tick(std::chrono::nanoseconds delta);
+  void handle_tetris_state();
+
   std::mt19937 rng_{std::random_device{}()};
 
   std::chrono::time_point<std::chrono::steady_clock>
@@ -29,9 +27,8 @@ private:
       curr_time_ = std::chrono::steady_clock::now();
 
   FPS fps_{60};
-  FPS_Counter fps_counter_{};
 
   Tetris tetris_{rng_};
   EventHandler handler_;
-  AppRenderer app_renderer_;
+  AppRenderer renderer_;
 };

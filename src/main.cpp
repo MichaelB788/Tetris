@@ -32,24 +32,16 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
-  auto &state = *static_cast<AppState *>(appstate);
-
-  state.tick();
-  state.listen_to_keyboard_input();
-  state.handle_tetris_state();
-  state.render_frame();
-  state.sleep_thread();
-
+  static_cast<AppState *>(appstate)->update_frame();
   return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-  auto &state = *static_cast<AppState *>(appstate);
   switch (event->type) {
   case SDL_EVENT_QUIT:
     return SDL_APP_SUCCESS;
   case SDL_EVENT_WINDOW_RESIZED:
-    state.handle_window_resize_event();
+    static_cast<AppState *>(appstate)->handle_window_resize_event();
     return SDL_APP_CONTINUE;
   default:
     return SDL_APP_CONTINUE;

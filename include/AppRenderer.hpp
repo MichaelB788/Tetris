@@ -28,8 +28,8 @@ private:
 
   void draw_game_objects(const Tetris &tetris) const;
   void draw_screen_text(const Tetris &tetris);
-  void draw_pause_menu() const;
 
+  std::pair<int, int> win_size_{};
   Point<float> section_matrix_{};
   Point<float> section_left_{};
   Point<float> section_right_{};

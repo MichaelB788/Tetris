@@ -33,7 +33,7 @@ AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
 }
 
 void AppRenderer::center_frame_within_window() {
-  int w, h;
+  auto &[w, h] = win_size_;
   SDL_GetWindowSize(window_.get(), &w, &h);
 
   section_matrix_.x = (w - MATRIX_WIDTH) / 2;
@@ -46,8 +46,22 @@ void AppRenderer::render_frame(Tetris &tetris) {
   SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer_.get());
 
-  draw_game_objects(tetris);
-  draw_screen_text(tetris);
+  switch (tetris.get_state()) {
+    using enum Tetris::State;
+  case Running:
+    draw_game_objects(tetris);
+    draw_screen_text(tetris);
+    break;
+  case Paused: {
+    auto [win_w, win_h] = win_size_;
+    auto [tex_w, tex_h] = text_renderer_.get_text_size("PAUSED");
+    Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
+              .y = (static_cast<float>(win_h - tex_h)) / 2};
+    text_renderer_.draw_text("PAUSED", pos);
+  } break;
+  case GameOver:
+    break;
+  }
 
   SDL_RenderPresent(renderer_.get());
 }

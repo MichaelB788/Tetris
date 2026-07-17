@@ -1,21 +1,20 @@
 #pragma once
-#include "Tetris.hpp"
 #include "Timer.hpp"
 #include <SDL3/SDL_scancode.h>
 #include <chrono>
 #include <optional>
-#include <random>
+
+class Tetris;
 
 class EventHandler {
 public:
   void listen_to_keyboard_input();
 
-  void handle_new_events(Tetris &tetris, std::mt19937 &rng);
-  void handle_repeated_events(Tetris &tetris, std::mt19937 &rng,
-                              std::chrono::nanoseconds delta);
+  void handle_new_events(Tetris &tetris);
+  void handle_repeated_events(Tetris &tetris, std::chrono::nanoseconds delta);
 
 private:
-  enum Command : uint16_t {
+  enum Event : uint16_t {
     // clang-format off
     NULL_CMD          = 0x0,
     MOVE_LEFT_CMD     = 0x1,
@@ -30,17 +29,17 @@ private:
     // clang-format on
   };
 
-  auto idx_of_command(Command command) const -> int;
-  void handle_command(Command command, Tetris &tetris, std::mt19937 &rng);
+  auto idx_of_event(Event event) const -> int;
+  void handle_event(Event event, Tetris &tetris);
 
   struct InputTimer {
     Timer<std::chrono::nanoseconds> init_delay{};
     Timer<std::chrono::nanoseconds> repeat_interval{};
   };
 
-  struct KeyboardCommand {
+  struct Command {
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
-    Command command = NULL_CMD;
+    Event event = NULL_CMD;
     std::optional<InputTimer> timer = std::nullopt;
   };
 
@@ -54,38 +53,38 @@ private:
       .init_delay{std::chrono::milliseconds(300)},
       .repeat_interval{std::chrono::milliseconds(100)}};
 
-  std::array<KeyboardCommand, 9> controls_{
+  std::array<Command, 9> controls_{
       {{.scancode = SDL_SCANCODE_W,
-        .command = HARD_DROP_CMD,
+        .event = HARD_DROP_CMD,
         .timer = MOVEMENT_TIMER},
 
        {.scancode = SDL_SCANCODE_S,
-        .command = SOFT_DROP_CMD,
+        .event = SOFT_DROP_CMD,
         .timer = MOVEMENT_TIMER},
 
        {.scancode = SDL_SCANCODE_D,
-        .command = MOVE_RIGHT_CMD,
+        .event = MOVE_RIGHT_CMD,
         .timer = MOVEMENT_TIMER},
 
        {.scancode = SDL_SCANCODE_A,
-        .command = MOVE_LEFT_CMD,
+        .event = MOVE_LEFT_CMD,
         .timer = MOVEMENT_TIMER},
 
        {.scancode = SDL_SCANCODE_RIGHT,
-        .command = ROTATE_CW_CMD,
+        .event = ROTATE_CW_CMD,
         .timer = ROTATION_TIMER},
 
        {.scancode = SDL_SCANCODE_LEFT,
-        .command = ROTATE_CCW_CMD,
+        .event = ROTATE_CCW_CMD,
         .timer = ROTATION_TIMER},
 
        {.scancode = SDL_SCANCODE_DOWN,
-        .command = ROTATE_HALF_CMD,
+        .event = ROTATE_HALF_CMD,
         .timer = ROTATION_TIMER},
 
-       {.scancode = SDL_SCANCODE_UP, .command = HOLD_ACTIVE_CMD},
+       {.scancode = SDL_SCANCODE_UP, .event = HOLD_ACTIVE_CMD},
 
-       {.scancode = SDL_SCANCODE_SPACE, .command = TOGGLE_PAUSE_CMD}}};
+       {.scancode = SDL_SCANCODE_SPACE, .event = TOGGLE_PAUSE_CMD}}};
 
   bool prev_keyboard_[SDL_SCANCODE_COUNT]{};
 };

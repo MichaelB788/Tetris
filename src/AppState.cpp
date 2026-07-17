@@ -19,7 +19,7 @@ void AppState::update_frame() {
 
 void AppState::tick(std::chrono::nanoseconds delta) {
   if (tetris_.get_state() == Tetris::State::Running) {
-    tetris_.tick(delta, rng_);
+    tetris_.tick(delta);
     handler_.handle_repeated_events(tetris_, rng_, delta);
   }
 }
@@ -32,7 +32,7 @@ void AppState::handle_tetris_state() {
     handler_.handle_new_events(tetris_, rng_);
     break;
   case GameOver: // TODO: Add option to continue/quit
-    tetris_.reset(rng_);
+    tetris_.reset();
     break;
     break;
   }

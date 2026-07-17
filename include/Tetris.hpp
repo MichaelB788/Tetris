@@ -12,30 +12,29 @@
 
 class Tetris {
 public:
-  static constexpr Point INIT_POS = {.x = 4, .y = 4};
+  static constexpr Point SPAWN_POINT = {.x = 4, .y = 4};
   enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng)
-      : seven_bag_(rng), active_piece_(seven_bag_.pop(rng), INIT_POS) {}
+      : rng_(rng), seven_bag_(rng),
+        active_piece_(seven_bag_.pop(rng), SPAWN_POINT) {}
 
-  void tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng);
+  void tick(std::chrono::nanoseconds delta_time);
 
   void move_left();
   void move_right();
   void soft_drop();
-  void hard_drop(std::mt19937 &rng);
+  void hard_drop();
 
   void rotate_cw();
   void rotate_ccw();
   void rotate_half();
 
-  void hold_active(std::mt19937 &rng);
+  void hold_active();
 
   void toggle_pause();
 
-  auto finalize_move_when_grounded(std::mt19937 &rng) -> bool;
-
-  void reset(std::mt19937 &rng);
+  void reset();
 
   auto get_score() const -> unsigned;
   auto get_state() const -> State;
@@ -46,12 +45,15 @@ public:
   auto get_ghost_piece() const -> Tetromino;
 
 private:
-  auto shift_active(Point<int> delta) -> bool;
+  auto move_active(Point<int> delta) -> bool;
   auto rotate_active(Tetromino::Rotation next) -> bool;
 
   auto try_spawn_next(Tetromino::Type next) -> bool;
   void update_level();
-  void finalize_move(std::mt19937 &rng);
+
+  void finalize_move();
+
+  std::mt19937 &rng_;
 
   State state_ = State::Running;
   unsigned score_ = 0;

@@ -3,19 +3,16 @@
 #include "Tetromino.hpp"
 #include <chrono>
 #include <optional>
-#include <random>
 
-void Tetris::move_left() { shift_active({.x = -1}); }
+void Tetris::move_left() { move_active({.x = -1}); }
 
-void Tetris::move_right() { shift_active({.x = 1}); }
+void Tetris::move_right() { move_active({.x = 1}); }
 
-void Tetris::soft_drop() {
-  lock_delay_.begin_timer_if(!shift_active({.y = 1}));
-}
+void Tetris::soft_drop() { lock_delay_.begin_timer_if(!move_active({.y = 1})); }
 
-void Tetris::hard_drop(std::mt19937 &rng) {
+void Tetris::hard_drop() {
   active_piece_.hard_drop(matrix_);
-  finalize_move(rng);
+  finalize_move();
 }
 
 void Tetris::rotate_cw() {
@@ -30,14 +27,14 @@ void Tetris::rotate_half() {
   rotate_active(tetromino::rotated_cw(active_piece_.get_rotation(), 2));
 }
 
-void Tetris::hold_active(std::mt19937 &rng) {
+void Tetris::hold_active() {
   if (hold_command_triggered_) {
     return;
   }
 
   const auto to_hold = active_piece_.get_type();
   if (try_spawn_next(held_piece_.has_value() ? held_piece_.value()
-                                             : seven_bag_.pop(rng))) {
+                                             : seven_bag_.pop(rng_))) {
     hold_command_triggered_ = true;
     held_piece_ = to_hold;
   } else {
@@ -53,23 +50,19 @@ void Tetris::toggle_pause() {
   }
 }
 
-void Tetris::tick(std::chrono::nanoseconds delta_time, std::mt19937 &rng) {
+void Tetris::tick(std::chrono::nanoseconds delta_time) {
   gravity_delay_.invoke_periodically(delta_time, [this] {
     lock_delay_.begin_timer_if(!active_piece_.try_shift({.y = 1}, matrix_));
   });
 
-  lock_delay_.tick(delta_time, *this, rng);
+  lock_delay_.tick(delta_time, [this] {
+    if (!matrix_.is_move_valid(active_piece_.get_shifted_shape({.y = 1}))) {
+      finalize_move();
+    }
+  });
 }
 
-auto Tetris::finalize_move_when_grounded(std::mt19937 &rng) -> bool {
-  if (!matrix_.is_move_valid(active_piece_.get_shifted_shape({.y = 1}))) {
-    finalize_move(rng);
-    return true;
-  }
-  return false;
-}
-
-void Tetris::reset(std::mt19937 &rng) {
+void Tetris::reset() {
   state_ = State::Running;
   score_ = 0;
   hold_command_triggered_ = false;
@@ -79,8 +72,8 @@ void Tetris::reset(std::mt19937 &rng) {
 
   held_piece_ = std::nullopt;
   matrix_.clear();
-  seven_bag_.shuffle(rng);
-  active_piece_ = {seven_bag_.pop(rng), INIT_POS};
+  seven_bag_.shuffle(rng_);
+  active_piece_ = {seven_bag_.pop(rng_), SPAWN_POINT};
 }
 
 auto Tetris::get_state() const -> State { return state_; }
@@ -105,7 +98,7 @@ auto Tetris::get_ghost_piece() const -> Tetromino {
           active_piece_.get_rotation()};
 }
 
-auto Tetris::shift_active(Point<int> delta) -> bool {
+auto Tetris::move_active(Point<int> delta) -> bool {
   const auto has_shifted = active_piece_.try_shift(delta, matrix_);
   lock_delay_.perform_lock_reset_if(has_shifted);
   return has_shifted;
@@ -118,7 +111,7 @@ auto Tetris::rotate_active(Tetromino::Rotation next) -> bool {
 }
 
 auto Tetris::try_spawn_next(Tetromino::Type next) -> bool {
-  active_piece_ = {next, INIT_POS};
+  active_piece_ = {next, SPAWN_POINT};
 
   auto was_successful_turn = true;
   while (matrix_.is_shape_hitting_ground(active_piece_.get_shape())) {
@@ -143,13 +136,13 @@ void Tetris::update_level() {
                                            : LEVELS.back());
 }
 
-void Tetris::finalize_move(std::mt19937 &rng) {
+void Tetris::finalize_move() {
   matrix_.lock_down(active_piece_);
   score_ += matrix_.clear_lines();
 
   update_level();
 
-  if (try_spawn_next(seven_bag_.pop(rng))) {
+  if (try_spawn_next(seven_bag_.pop(rng_))) {
     hold_command_triggered_ = false;
   } else {
     state_ = State::GameOver;

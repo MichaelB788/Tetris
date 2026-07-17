@@ -91,7 +91,7 @@ void EventHandler::handle_command(Command command, Tetris &tetris,
     tetris.soft_drop();
     break;
   case HARD_DROP_CMD:
-    tetris.hard_drop(rng);
+    tetris.hard_drop();
     break;
   case ROTATE_CW_CMD:
     tetris.rotate_cw();
@@ -103,7 +103,7 @@ void EventHandler::handle_command(Command command, Tetris &tetris,
     tetris.rotate_half();
     break;
   case HOLD_ACTIVE_CMD:
-    tetris.hold_active(rng);
+    tetris.hold_active();
     break;
   default:
     break;

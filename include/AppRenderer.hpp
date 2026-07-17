@@ -1,13 +1,10 @@
 #pragma once
 #include "PlatformSDL.hpp"
-#include "PlatformSDL_TTF.hpp"
 #include "Point.hpp"
 #include "Tetromino.hpp"
-#include <array>
+#include "TextRenderer.hpp"
 #include <cstdint>
 #include <filesystem>
-#include <string_view>
-#include <vector>
 
 class Tetris;
 class Matrix;
@@ -29,11 +26,9 @@ private:
                       Style style) const;
   void draw_matrix(const Matrix &matrix, Point<float> screen_offset) const;
 
-  void draw_text(std::string_view str, Point<float> pos);
-  void draw_num(unsigned num, Point<float> pos) const;
-
   void draw_game_objects(const Tetris &tetris) const;
   void draw_screen_text(const Tetris &tetris);
+  void draw_pause_menu() const;
 
   Point<float> section_matrix_{};
   Point<float> section_left_{};
@@ -42,14 +37,6 @@ private:
   SDL::Window window_ = nullptr;
   SDL::Renderer renderer_ = nullptr;
   SDL::Texture texture_atlas_ = nullptr;
-  SDL::TTF::RendererTextEngine text_engine_ = nullptr;
-  SDL::TTF::Font font_ = nullptr;
 
-  struct TextEntry {
-    std::string_view str;
-    SDL::TTF::Text texture;
-  };
-  std::vector<TextEntry> text_map_{};
-
-  std::array<SDL::TTF::Text, 10> nums_text_{};
+  TextRenderer text_renderer_;
 };

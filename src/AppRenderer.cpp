@@ -2,6 +2,7 @@
 #include "Constants.hpp"
 #include "Point.hpp"
 #include "Tetris.hpp"
+#include "TextRenderer.hpp"
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
@@ -14,42 +15,17 @@ auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
 } // namespace
 
 AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
-                         const std::filesystem::path &font_path) {
-  // Window init
-  window_.reset(SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE));
+                         const std::filesystem::path &font_path)
+    : window_(SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE)),
+      renderer_(SDL_CreateRenderer(window_.get(), nullptr)),
+      texture_atlas_(IMG_LoadTexture(renderer_.get(), atlas_path.c_str())),
+      text_renderer_(*renderer_, font_path) {
   if (!window_) {
     throw std::runtime_error("Couldn't create window");
-  }
-
-  // Renderer init
-  renderer_.reset(SDL_CreateRenderer(window_.get(), nullptr));
-  if (!renderer_) {
+  } else if (!renderer_) {
     throw std::runtime_error("Couldn't create renderer");
-  }
-
-  // Texture atlas init
-  texture_atlas_.reset(IMG_LoadTexture(renderer_.get(), atlas_path.c_str()));
-  if (!texture_atlas_) {
+  } else if (!texture_atlas_) {
     throw std::runtime_error("Couldn't create renderer");
-  }
-
-  // Text engine init
-  text_engine_.reset(TTF_CreateRendererTextEngine(renderer_.get()));
-  if (!text_engine_) {
-    throw std::runtime_error("Couldn't create text engine");
-  }
-
-  // Font init
-  font_.reset(TTF_OpenFont(font_path.c_str(), FONT_SCALE));
-  if (!font_) {
-    throw std::runtime_error("Couldn't create text engine");
-  }
-
-  // Numbers text init
-  const std::array nums_str{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-  for (size_t i = 0; i < nums_text_.size(); ++i) {
-    nums_text_[i].reset(
-        TTF_CreateText(text_engine_.get(), font_.get(), nums_str[i], 1));
   }
 
   // Center content before starting
@@ -116,42 +92,6 @@ void AppRenderer::draw_matrix(const Matrix &matrix,
   SDL_RenderRect(renderer_.get(), &outline_rect);
 }
 
-void AppRenderer::draw_text(std::string_view str, Point<float> pos) {
-  size_t i = 0;
-  for (const auto &entry : text_map_) {
-    if (entry.str == str)
-      break;
-    else
-      ++i;
-  }
-
-  if (i == text_map_.size()) {
-    text_map_.push_back(
-        {.str = str,
-         .texture{TTF_CreateText(text_engine_.get(), font_.get(), str.data(),
-                                 str.size())}});
-  }
-
-  TTF_DrawRendererText(text_map_[i].texture.get(), pos.x, pos.y);
-}
-
-void AppRenderer::draw_num(unsigned num, Point<float> pos) const {
-  if (num < 10) {
-    TTF_DrawRendererText(nums_text_[num].get(), pos.x, pos.y);
-    return;
-  }
-  std::vector<unsigned> digits{};
-  while (num > 0) {
-    digits.push_back(num % 10);
-    num /= 10;
-  }
-  while (!digits.empty()) {
-    TTF_DrawRendererText(nums_text_[digits.back()].get(), pos.x, pos.y);
-    digits.pop_back();
-    pos.x += FONT_SCALE;
-  }
-}
-
 void AppRenderer::draw_game_objects(const Tetris &tetris) const {
   draw_tetromino(tetris.get_ghost_piece(), section_matrix_, Style::Transparent);
   draw_tetromino(tetris.get_active_piece(), section_matrix_, Style::Filled);
@@ -170,8 +110,9 @@ void AppRenderer::draw_game_objects(const Tetris &tetris) const {
 }
 
 void AppRenderer::draw_screen_text(const Tetris &tetris) {
-  draw_text("NEXT", section_left_);
-  draw_text("HOLD", section_right_);
-  draw_text("SCORE", resolve(section_right_, {.y = 8}));
-  draw_num(tetris.get_score(), resolve(section_right_, {.y = 10}));
+  text_renderer_.draw_text("NEXT", section_left_);
+  text_renderer_.draw_text("HOLD", section_right_);
+  text_renderer_.draw_text("SCORE", resolve(section_right_, {.y = 8}));
+  text_renderer_.draw_num(tetris.get_score(),
+                          resolve(section_right_, {.y = 10}));
 }

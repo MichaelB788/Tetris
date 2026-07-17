@@ -17,6 +17,7 @@ add_library(TetrisSource
   SevenBag.cpp
   Tetris.cpp
   Tetromino.cpp
+  TextRenderer.cpp
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

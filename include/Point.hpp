@@ -26,7 +26,7 @@ struct Point {
     return {x / val, y / val};
   }
 
-  auto operator-() const -> Point { return {x * -1, y * -1}; }
+  [[nodiscard]] auto operator-() const -> Point { return {x * -1, y * -1}; }
 
   void operator+=(Point other) {
     x += other.x;

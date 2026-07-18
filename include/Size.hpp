@@ -26,7 +26,7 @@ struct Size {
     return {w / val, h / val};
   }
 
-  auto operator-() const -> Size { return {w * -1, h * -1}; }
+  [[nodiscard]] auto operator-() const -> Size { return {w * -1, h * -1}; }
 
   void operator+=(Size other) {
     w += other.w;

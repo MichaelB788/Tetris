@@ -1,38 +1,31 @@
 #include "EventHandler.hpp"
 #include "Tetris.hpp"
+#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_keyboard.h>
 #include <cassert>
 #include <chrono>
 #include <cstddef>
 
-void EventHandler::listen_to_keyboard_input() {
+auto EventHandler::listen_to_keyboard_input() -> SDL_AppResult {
   // Handle current keyboard inputs
   const auto curr_keyboard = SDL_GetKeyboardState(nullptr);
-  for (const auto &command : controls) {
-    const auto scancode = command.scancode;
-    const auto event = command.event;
-    if (!prev_keyboard[scancode] && curr_keyboard[scancode]) {
-      pending_new_events |= event;
-    } else if (prev_keyboard[scancode] && curr_keyboard[scancode]) {
-      pending_held_events |= event;
-    } else if (prev_keyboard[scancode] && !curr_keyboard[scancode]) {
-      pending_held_events &= ~event;
-    }
+
+  switch (tetris.get_state()) {
+    using enum Tetris::State;
+  case Paused:
+  case Running:
+    update_pending_events(curr_keyboard);
+    break;
+  case GameOver:
+    return handle_game_over_event(curr_keyboard);
   }
 
   // Take a snapshot of current keyboard state
   for (size_t i = 0; i < SDL_SCANCODE_COUNT; ++i) {
     prev_keyboard[i] = curr_keyboard[i];
   }
-}
 
-auto EventHandler::find_command_from_event(Event event) -> Command & {
-  for (auto &command : controls) {
-    if (command.event == event) {
-      return command;
-    }
-  }
-  assert(false);
+  return SDL_APP_CONTINUE;
 }
 
 void EventHandler::handle_new_events() {
@@ -79,6 +72,39 @@ void EventHandler::handle_pause_event() {
       }
     }
   }
+}
+
+auto EventHandler::find_command_from_event(Event event) -> Command & {
+  for (auto &command : controls) {
+    if (command.event == event) {
+      return command;
+    }
+  }
+  assert(false);
+}
+
+void EventHandler::update_pending_events(const bool *curr_keyboard) {
+  for (const auto &command : controls) {
+    const auto scancode = command.scancode;
+    const auto event = command.event;
+    if (!prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_new_events |= event;
+    } else if (prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_held_events |= event;
+    } else if (prev_keyboard[scancode] && !curr_keyboard[scancode]) {
+      pending_held_events &= ~event;
+    }
+  }
+}
+
+auto EventHandler::handle_game_over_event(const bool *curr_keyboard)
+    -> SDL_AppResult {
+  if (curr_keyboard[SDL_SCANCODE_Y]) {
+    tetris.reset();
+  } else if (curr_keyboard[SDL_SCANCODE_N]) {
+    return SDL_APP_SUCCESS;
+  }
+  return SDL_APP_CONTINUE;
 }
 
 void EventHandler::handle_event(Event command) {

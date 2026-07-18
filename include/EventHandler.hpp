@@ -1,5 +1,6 @@
 #pragma once
 #include "Timer.hpp"
+#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_scancode.h>
 #include <chrono>
 #include <optional>
@@ -10,7 +11,7 @@ class EventHandler {
 public:
   EventHandler(Tetris &tetris) : tetris(tetris) {}
 
-  void listen_to_keyboard_input();
+  [[nodiscard]] auto listen_to_keyboard_input() -> SDL_AppResult;
 
   void handle_new_events();
   void handle_repeated_events(std::chrono::nanoseconds delta);
@@ -42,6 +43,9 @@ private:
   };
 
   [[nodiscard]] auto find_command_from_event(Event event) -> Command &;
+  void update_pending_events(const bool *curr_keyboard);
+  [[nodiscard]] auto handle_game_over_event(const bool *curr_keyboard)
+      -> SDL_AppResult;
   void handle_event(Event event);
 
   static constexpr InputTimer MOVEMENT_TIMER{

@@ -16,7 +16,7 @@ auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
 
 AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
                          const std::filesystem::path &font_path)
-    : window(SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE)),
+    : window(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE)),
       renderer(SDL_CreateRenderer(window.get(), nullptr)),
       texture_atlas(IMG_LoadTexture(renderer.get(), atlas_path.c_str())),
       text_renderer(*renderer, font_path) {
@@ -52,14 +52,11 @@ void AppRenderer::render_frame(Tetris &tetris) {
     draw_game_objects(tetris);
     draw_screen_text(tetris);
     break;
-  case Paused: {
-    auto [win_w, win_h] = win_size;
-    auto [tex_w, tex_h] = text_renderer.get_text_size("PAUSED");
-    Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
-              .y = (static_cast<float>(win_h - tex_h)) / 2};
-    text_renderer.draw_text("PAUSED", pos);
-  } break;
+  case Paused:
+    draw_pause_label();
+    break;
   case GameOver:
+    draw_game_over_label();
     break;
   }
 
@@ -128,4 +125,22 @@ void AppRenderer::draw_screen_text(const Tetris &tetris) {
   text_renderer.draw_text("HOLD", section_right);
   text_renderer.draw_text("SCORE", resolve(section_right, {.y = 8}));
   text_renderer.draw_num(tetris.get_score(), resolve(section_right, {.y = 10}));
+}
+
+void AppRenderer::draw_pause_label() {
+  const char *str = "PAUSED";
+  const auto [win_w, win_h] = win_size;
+  const auto [tex_w, tex_h] = text_renderer.get_text_size(str);
+  const Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
+                  .y = (static_cast<float>(win_h - tex_h)) / 2};
+  text_renderer.draw_text(str, pos);
+}
+
+void AppRenderer::draw_game_over_label() {
+  const char *str = "GAMEOVER!\n\nCONTINUE?\n\n[Y/N]";
+  const auto [win_w, win_h] = win_size;
+  const auto [tex_w, tex_h] = text_renderer.get_text_size(str);
+  const Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
+                  .y = (static_cast<float>(win_h - tex_h)) / 2};
+  text_renderer.draw_text(str, pos);
 }

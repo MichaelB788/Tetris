@@ -1,11 +1,13 @@
 #include "AppState.hpp"
 #include <thread>
 
-void AppState::update_frame() {
+auto AppState::update_frame() -> SDL_AppResult {
+  SDL_AppResult result;
+
   prev_time = curr_time;
   curr_time = std::chrono::steady_clock::now();
 
-  handler.listen_to_keyboard_input();
+  result = handler.listen_to_keyboard_input();
   tick(curr_time - prev_time);
   handle_tetris_state();
   renderer.render_frame(tetris);
@@ -15,6 +17,8 @@ void AppState::update_frame() {
   if (frame_time < frame_duration) {
     std::this_thread::sleep_for(frame_duration - frame_time);
   }
+
+  return result;
 }
 
 void AppState::tick(std::chrono::nanoseconds delta) {
@@ -33,8 +37,7 @@ void AppState::handle_tetris_state() {
   case Paused:
     handler.handle_pause_event();
     break;
-  case GameOver: // TODO: Add option to continue/quit
-    tetris.reset();
+  case GameOver:
     break;
   }
 }

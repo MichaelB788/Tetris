@@ -3,6 +3,7 @@
 #include "EventHandler.hpp"
 #include "FPS.hpp"
 #include "Tetris.hpp"
+#include <SDL3/SDL_init.h>
 #include <chrono>
 #include <filesystem>
 #include <random>
@@ -13,7 +14,7 @@ public:
            const std::filesystem::path &font_path)
       : renderer(atlas_path, font_path), handler(tetris) {}
 
-  void update_frame();
+  [[nodiscard]] auto update_frame() -> SDL_AppResult;
   void handle_window_resize_event();
 
 private:

@@ -29,6 +29,9 @@ private:
   void draw_game_objects(const Tetris &tetris) const;
   void draw_screen_text(const Tetris &tetris);
 
+  void draw_pause_label();
+  void draw_game_over_label();
+
   std::pair<int, int> win_size{};
   Point<float> section_matrix{};
   Point<float> section_left{};

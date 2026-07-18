@@ -29,19 +29,18 @@ private:
     // clang-format on
   };
 
-  auto idx_of_event(Event event) const -> int;
-  void handle_event(Event event, Tetris &tetris);
-
   struct InputTimer {
     Timer init_delay{};
     Timer repeat_interval{};
   };
-
   struct Command {
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
     Event event = NULL_CMD;
     std::optional<InputTimer> timer = std::nullopt;
   };
+
+  auto find_command(Event event) -> Command &;
+  void handle_event(Event event, Tetris &tetris);
 
   uint16_t pending_new_events_ = 0;
   uint16_t pending_held_events_ = 0;

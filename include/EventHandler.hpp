@@ -8,11 +8,13 @@ class Tetris;
 
 class EventHandler {
 public:
+  EventHandler(Tetris &tetris) : tetris(tetris) {}
+
   void listen_to_keyboard_input();
 
-  void handle_new_events(Tetris &tetris);
-  void handle_repeated_events(Tetris &tetris, std::chrono::nanoseconds delta);
-  void handle_pause_event(Tetris &tetris);
+  void handle_new_events();
+  void handle_repeated_events(std::chrono::nanoseconds delta);
+  void handle_pause_event();
 
 private:
   enum Event : uint16_t {
@@ -29,7 +31,6 @@ private:
     TOGGLE_PAUSE_CMD  = 0x100
     // clang-format on
   };
-
   struct InputTimer {
     Timer init_delay{};
     Timer repeat_interval{};
@@ -40,11 +41,8 @@ private:
     std::optional<InputTimer> timer = std::nullopt;
   };
 
-  [[nodiscard]] auto find_command(Event event) -> Command &;
-  void handle_event(Event event, Tetris &tetris);
-
-  uint16_t pending_new_events = 0;
-  uint16_t pending_held_events = 0;
+  [[nodiscard]] auto find_command_from_event(Event event) -> Command &;
+  void handle_event(Event event);
 
   static constexpr InputTimer MOVEMENT_TIMER{
       .init_delay{std::chrono::milliseconds(150)},
@@ -52,6 +50,11 @@ private:
   static constexpr InputTimer ROTATION_TIMER{
       .init_delay{std::chrono::milliseconds(300)},
       .repeat_interval{std::chrono::milliseconds(100)}};
+
+  Tetris &tetris;
+
+  uint16_t pending_new_events = 0;
+  uint16_t pending_held_events = 0;
 
   std::array<Command, 9> controls{
       {{.scancode = SDL_SCANCODE_W,

@@ -26,7 +26,7 @@ void EventHandler::listen_to_keyboard_input() {
   }
 }
 
-auto EventHandler::find_command(Event event) -> Command & {
+auto EventHandler::find_command_from_event(Event event) -> Command & {
   for (auto &command : controls) {
     if (command.event == event) {
       return command;
@@ -35,13 +35,14 @@ auto EventHandler::find_command(Event event) -> Command & {
   assert(false);
 }
 
-void EventHandler::handle_new_events(Tetris &tetris) {
+void EventHandler::handle_new_events() {
   for (size_t bit_idx = 0; bit_idx < controls.size(); ++bit_idx) {
     const auto event = static_cast<Event>(1 << bit_idx);
     if (pending_new_events & event) {
-      handle_event(event, tetris);
+      handle_event(event);
 
-      if (auto &command = find_command(event); command.timer.has_value()) {
+      if (auto &command = find_command_from_event(event);
+          command.timer.has_value()) {
         command.timer->init_delay.reset();
         command.timer->repeat_interval.reset();
       }
@@ -50,22 +51,22 @@ void EventHandler::handle_new_events(Tetris &tetris) {
   pending_new_events = 0;
 }
 
-void EventHandler::handle_repeated_events(Tetris &tetris,
-                                          std::chrono::nanoseconds delta) {
+void EventHandler::handle_repeated_events(std::chrono::nanoseconds delta) {
   for (size_t bit_idx = 0; bit_idx < controls.size(); ++bit_idx) {
     const auto event = static_cast<Event>(1 << bit_idx);
     if (pending_held_events & event) {
-      if (auto &command = find_command(event); command.timer.has_value()) {
+      if (auto &command = find_command_from_event(event);
+          command.timer.has_value()) {
         command.timer->init_delay.invoke_when_elapsed(delta, [&] {
           command.timer->repeat_interval.invoke_periodically(
-              delta, [&] { handle_event(event, tetris); });
+              delta, [&] { handle_event(event); });
         });
       }
     }
   }
 }
 
-void EventHandler::handle_pause_event(Tetris &tetris) {
+void EventHandler::handle_pause_event() {
   if (pending_new_events & TOGGLE_PAUSE_CMD) {
     tetris.unpause();
     pending_new_events = 0;
@@ -80,7 +81,7 @@ void EventHandler::handle_pause_event(Tetris &tetris) {
   }
 }
 
-void EventHandler::handle_event(Event command, Tetris &tetris) {
+void EventHandler::handle_event(Event command) {
   switch (command) {
   case NULL_CMD:
     break;
@@ -110,5 +111,6 @@ void EventHandler::handle_event(Event command, Tetris &tetris) {
     break;
   case TOGGLE_PAUSE_CMD:
     tetris.pause();
+    break;
   }
 }

@@ -33,13 +33,18 @@ AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
 }
 
 void AppRenderer::center_frame_within_window() {
-  auto &[w, h] = win_size;
-  SDL_GetWindowSize(window.get(), &w, &h);
+  // Update window size
+  {
+    int w, h;
+    SDL_GetWindowSize(window.get(), &w, &h);
+    win_size.w = static_cast<float>(w);
+    win_size.h = static_cast<float>(h);
+  }
 
-  section_matrix.x = (w - MATRIX_WIDTH) / 2;
-  section_matrix.y = (h - MATRIX_HEIGHT) / 2;
-  section_left = resolve(section_matrix, {.x = -6});
-  section_right = resolve(section_matrix, {.x = MATRIX_COLS + 2});
+  section_matrix.x = (win_size.w - MATRIX_WIDTH) / 2;
+  section_matrix.y = (win_size.h - MATRIX_HEIGHT) / 2;
+  section_left = resolve(section_matrix, {-6, 0});
+  section_right = resolve(section_matrix, {(MATRIX_COLS + 2), 0});
 }
 
 void AppRenderer::render_frame(Tetris &tetris) {
@@ -50,13 +55,13 @@ void AppRenderer::render_frame(Tetris &tetris) {
     using enum Tetris::State;
   case Running:
     draw_game_objects(tetris);
-    draw_screen_text(tetris);
+    draw_game_text(tetris);
     break;
   case Paused:
-    draw_pause_label();
+    draw_centered_text("PAUSED");
     break;
   case GameOver:
-    draw_game_over_label();
+    draw_centered_text("GAMEOVER!\n\nCONTINUE?\n\n[Y/N]");
     break;
   }
 
@@ -65,18 +70,19 @@ void AppRenderer::render_frame(Tetris &tetris) {
 
 void AppRenderer::draw_tile(Tetromino::Type type, Point<int> matrix_pos,
                             Point<float> screen_offset, Style style) const {
-  const auto y_coord = style == Style::Transparent ? PIXEL_SCALE : 0;
-  const SDL_FRect texture_rect = {.x = PIXEL_SCALE * static_cast<float>(type),
-                                  .y = y_coord,
-                                  .w = PIXEL_SCALE,
-                                  .h = PIXEL_SCALE};
+  const auto texture_rect_y = style == Style::Transparent ? PIXEL_SCALE : 0;
+  const auto adjusted_pos =
+      resolve(screen_offset, {.x = static_cast<float>(matrix_pos.x),
+                              .y = static_cast<float>(matrix_pos.y)});
 
-  const SDL_FRect texture_screen_pos = {
-      .x = static_cast<float>(matrix_pos.x) * PIXEL_SCALE + screen_offset.x,
-      .y = static_cast<float>(matrix_pos.y) * PIXEL_SCALE + screen_offset.y,
-      .w = PIXEL_SCALE,
-      .h = PIXEL_SCALE};
-
+  const SDL_FRect texture_rect{.x = PIXEL_SCALE * static_cast<float>(type),
+                               .y = texture_rect_y,
+                               .w = PIXEL_SCALE,
+                               .h = PIXEL_SCALE};
+  const SDL_FRect texture_screen_pos{.x = adjusted_pos.x,
+                                     .y = adjusted_pos.y,
+                                     .w = PIXEL_SCALE,
+                                     .h = PIXEL_SCALE};
   SDL_RenderTexture(renderer.get(), texture_atlas.get(), &texture_rect,
                     &texture_screen_pos);
 }
@@ -95,10 +101,10 @@ void AppRenderer::draw_matrix(const Matrix &matrix,
       if (auto tile = matrix.at(x, y))
         draw_tile(tile.value(), {x, y}, screen_offset, Style::Filled);
 
-  const SDL_FRect outline_rect = {.x = screen_offset.x,
-                                  .y = screen_offset.y,
-                                  .w = MATRIX_COLS * PIXEL_SCALE,
-                                  .h = MATRIX_ROWS * PIXEL_SCALE};
+  const SDL_FRect outline_rect{.x = screen_offset.x,
+                               .y = screen_offset.y,
+                               .w = MATRIX_COLS * PIXEL_SCALE,
+                               .h = MATRIX_ROWS * PIXEL_SCALE};
   SDL_SetRenderDrawColor(renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
   SDL_RenderRect(renderer.get(), &outline_rect);
 }
@@ -108,39 +114,28 @@ void AppRenderer::draw_game_objects(const Tetris &tetris) const {
   draw_tetromino(tetris.get_active_piece(), section_matrix, Style::Filled);
   draw_matrix(tetris.get_matrix(), section_matrix);
 
-  const auto held_pos = resolve(section_right, {.x = 1, .y = 3});
+  const auto held_pos = resolve(section_right, {1, 3});
   if (const auto held_piece = tetris.get_held_piece()) {
     draw_tetromino({held_piece.value()}, held_pos, Style::Filled);
   }
 
-  auto next_pos = resolve(section_left, {.x = 1, .y = 3});
+  auto next_pos = resolve(section_left, {1, 3});
   for (const auto next_type : tetris.get_seven_bag()) {
     draw_tetromino({next_type}, next_pos, Style::Filled);
     next_pos.y += 3 * PIXEL_SCALE;
   }
 }
 
-void AppRenderer::draw_screen_text(const Tetris &tetris) {
+void AppRenderer::draw_game_text(const Tetris &tetris) {
   text_renderer.draw_text("NEXT", section_left);
   text_renderer.draw_text("HOLD", section_right);
-  text_renderer.draw_text("SCORE", resolve(section_right, {.y = 8}));
-  text_renderer.draw_num(tetris.get_score(), resolve(section_right, {.y = 10}));
+  text_renderer.draw_text("SCORE", resolve(section_right, {0, 8}));
+  text_renderer.draw_num(tetris.get_score(), resolve(section_right, {0, 10}));
 }
 
-void AppRenderer::draw_pause_label() {
-  const char *str = "PAUSED";
-  const auto [win_w, win_h] = win_size;
-  const auto [tex_w, tex_h] = text_renderer.get_text_size(str);
-  const Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
-                  .y = (static_cast<float>(win_h - tex_h)) / 2};
-  text_renderer.draw_text(str, pos);
-}
-
-void AppRenderer::draw_game_over_label() {
-  const char *str = "GAMEOVER!\n\nCONTINUE?\n\n[Y/N]";
-  const auto [win_w, win_h] = win_size;
-  const auto [tex_w, tex_h] = text_renderer.get_text_size(str);
-  const Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
-                  .y = (static_cast<float>(win_h - tex_h)) / 2};
+void AppRenderer::draw_centered_text(std::string_view str) {
+  const auto text_size = text_renderer.get_text_size(str);
+  const Point pos{.x = (win_size.w - text_size.w) / 2,
+                  .y = (win_size.h - text_size.h) / 2};
   text_renderer.draw_text(str, pos);
 }

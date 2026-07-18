@@ -1,6 +1,7 @@
 #pragma once
 #include "PlatformSDL_TTF.hpp"
 #include "Point.hpp"
+#include "Size.hpp"
 #include <array>
 #include <filesystem>
 #include <string_view>
@@ -15,7 +16,7 @@ public:
   void draw_text(std::string_view str, Point<float> pos);
   void draw_num(unsigned num, Point<float> pos) const;
 
-  [[nodiscard]] auto get_text_size(std::string_view str) -> std::pair<int, int>;
+  [[nodiscard]] auto get_text_size(std::string_view str) -> Size<float>;
 
 private:
   struct TextEntry {

@@ -1,10 +1,12 @@
 #pragma once
 #include "PlatformSDL.hpp"
 #include "Point.hpp"
+#include "Size.hpp"
 #include "Tetromino.hpp"
 #include "TextRenderer.hpp"
 #include <cstdint>
 #include <filesystem>
+#include <string_view>
 
 class Tetris;
 class Matrix;
@@ -27,12 +29,10 @@ private:
   void draw_matrix(const Matrix &matrix, Point<float> screen_offset) const;
 
   void draw_game_objects(const Tetris &tetris) const;
-  void draw_screen_text(const Tetris &tetris);
+  void draw_game_text(const Tetris &tetris);
+  void draw_centered_text(std::string_view str);
 
-  void draw_pause_label();
-  void draw_game_over_label();
-
-  std::pair<int, int> win_size{};
+  Size<float> win_size{};
   Point<float> section_matrix{};
   Point<float> section_left{};
   Point<float> section_right{};

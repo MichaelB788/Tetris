@@ -1,7 +1,7 @@
 #include "TextRenderer.hpp"
 #include "Constants.hpp"
+#include "Size.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
-#include <utility>
 
 TextRenderer::TextRenderer(SDL_Renderer &renderer,
                            const std::filesystem::path &font_path)
@@ -40,10 +40,10 @@ void TextRenderer::draw_num(unsigned num, Point<float> pos) const {
   }
 }
 
-auto TextRenderer::get_text_size(std::string_view str) -> std::pair<int, int> {
-  std::pair<int, int> dim;
-  TTF_GetTextSize(&find_text(str), &dim.first, &dim.second);
-  return dim;
+auto TextRenderer::get_text_size(std::string_view str) -> Size<float> {
+  int w, h;
+  TTF_GetTextSize(&find_text(str), &w, &h);
+  return Size{.w = static_cast<float>(w), .h = static_cast<float>(h)};
 }
 
 auto TextRenderer::find_text(std::string_view str) -> TTF_Text & {

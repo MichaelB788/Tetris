@@ -5,7 +5,7 @@ class Timer {
 public:
   constexpr Timer() = default;
 
-  constexpr Timer(std::chrono::nanoseconds duration) : duration(duration) {}
+  constexpr Timer(std::chrono::nanoseconds dur) : duration(dur) {}
 
   void operator+=(std::chrono::nanoseconds delta) { accumulator += delta; }
 
@@ -26,7 +26,7 @@ public:
     }
   }
 
-  void set_duration(std::chrono::nanoseconds duration) { duration = duration; }
+  void set_duration(std::chrono::nanoseconds dur) { duration = dur; }
 
   void reset() { accumulator = {}; }
 

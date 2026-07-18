@@ -62,7 +62,7 @@ constexpr Point<int> I_PIECE_OFFSETS[4][5]{
     {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
 } // namespace
 
-void Tetromino::set_pos(Point<int> pos) { pos = pos; }
+void Tetromino::set_pos(Point<int> p) { pos = p; }
 
 void Tetromino::set_rotation(Rotation r) { rotation = r; }
 
@@ -99,14 +99,14 @@ auto Tetromino::srs_rotation(Rotation next_rotation, const Matrix &matrix)
   return true;
 }
 
-auto Tetromino::get_shape_at(Point<int> pos) const -> Shape {
+auto Tetromino::get_shape_at(Point<int> offset) const -> Shape {
   const auto t = static_cast<size_t>(type);
   const auto r = static_cast<size_t>(rotation);
-  auto ret = SHAPES[t][r];
-  for (auto &p : ret) {
-    p += pos;
+  auto shape = SHAPES[t][r];
+  for (auto &block : shape) {
+    block += offset;
   }
-  return ret;
+  return shape;
 }
 
 auto Tetromino::get_shifted_shape(Point<int> delta) const -> Shape {

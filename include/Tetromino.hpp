@@ -14,7 +14,7 @@ public:
   Tetromino(Type t, Point<int> p = {0, 0}, Rotation r = Rotation::R0)
       : type(t), pos(p), rotation(r) {}
 
-  void set_pos(Point<int> pos);
+  void set_pos(Point<int> p);
   void set_rotation(Rotation r);
 
   void shift(Point<int> delta);
@@ -23,7 +23,7 @@ public:
 
   auto srs_rotation(Rotation next_rotation, const Matrix &matrix) -> bool;
 
-  [[nodiscard]] auto get_shape_at(Point<int> pos) const -> Shape;
+  [[nodiscard]] auto get_shape_at(Point<int> offset) const -> Shape;
   [[nodiscard]] auto get_shifted_shape(Point<int> delta) const -> Shape;
   [[nodiscard]] auto get_shape() const -> Shape;
 

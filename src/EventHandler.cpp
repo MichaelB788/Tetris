@@ -8,26 +8,26 @@
 void EventHandler::listen_to_keyboard_input() {
   // Handle current keyboard inputs
   const auto curr_keyboard = SDL_GetKeyboardState(nullptr);
-  for (const auto &command : controls_) {
+  for (const auto &command : controls) {
     const auto scancode = command.scancode;
     const auto event = command.event;
-    if (!prev_keyboard_[scancode] && curr_keyboard[scancode]) {
-      pending_new_events_ |= event;
-    } else if (prev_keyboard_[scancode] && curr_keyboard[scancode]) {
-      pending_held_events_ |= event;
-    } else if (prev_keyboard_[scancode] && !curr_keyboard[scancode]) {
-      pending_held_events_ &= ~event;
+    if (!prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_new_events |= event;
+    } else if (prev_keyboard[scancode] && curr_keyboard[scancode]) {
+      pending_held_events |= event;
+    } else if (prev_keyboard[scancode] && !curr_keyboard[scancode]) {
+      pending_held_events &= ~event;
     }
   }
 
   // Take a snapshot of current keyboard state
   for (size_t i = 0; i < SDL_SCANCODE_COUNT; ++i) {
-    prev_keyboard_[i] = curr_keyboard[i];
+    prev_keyboard[i] = curr_keyboard[i];
   }
 }
 
 auto EventHandler::find_command(Event event) -> Command & {
-  for (auto &command : controls_) {
+  for (auto &command : controls) {
     if (command.event == event) {
       return command;
     }
@@ -36,9 +36,9 @@ auto EventHandler::find_command(Event event) -> Command & {
 }
 
 void EventHandler::handle_new_events(Tetris &tetris) {
-  for (size_t bit_idx = 0; bit_idx < controls_.size(); ++bit_idx) {
+  for (size_t bit_idx = 0; bit_idx < controls.size(); ++bit_idx) {
     const auto event = static_cast<Event>(1 << bit_idx);
-    if (pending_new_events_ & event) {
+    if (pending_new_events & event) {
       handle_event(event, tetris);
 
       if (auto &command = find_command(event); command.timer.has_value()) {
@@ -47,14 +47,14 @@ void EventHandler::handle_new_events(Tetris &tetris) {
       }
     }
   }
-  pending_new_events_ = 0;
+  pending_new_events = 0;
 }
 
 void EventHandler::handle_repeated_events(Tetris &tetris,
                                           std::chrono::nanoseconds delta) {
-  for (size_t bit_idx = 0; bit_idx < controls_.size(); ++bit_idx) {
+  for (size_t bit_idx = 0; bit_idx < controls.size(); ++bit_idx) {
     const auto event = static_cast<Event>(1 << bit_idx);
-    if (pending_held_events_ & event) {
+    if (pending_held_events & event) {
       if (auto &command = find_command(event); command.timer.has_value()) {
         command.timer->init_delay.invoke_when_elapsed(delta, [&] {
           command.timer->repeat_interval.invoke_periodically(
@@ -66,12 +66,12 @@ void EventHandler::handle_repeated_events(Tetris &tetris,
 }
 
 void EventHandler::handle_pause_event(Tetris &tetris) {
-  if (pending_new_events_ & TOGGLE_PAUSE_CMD) {
+  if (pending_new_events & TOGGLE_PAUSE_CMD) {
     tetris.unpause();
-    pending_new_events_ = 0;
-    pending_held_events_ = 0;
+    pending_new_events = 0;
+    pending_held_events = 0;
 
-    for (auto &command : controls_) {
+    for (auto &command : controls) {
       if (command.timer.has_value()) {
         command.timer->init_delay.reset();
         command.timer->repeat_interval.reset();

@@ -6,27 +6,19 @@
 
 class SevenBag {
 public:
+  using Preview = std::array<Tetromino::Type, 4>;
+
   explicit SevenBag(std::mt19937 &rng);
 
-  void shuffle(std::mt19937 &rng);
-
-  auto pop(std::mt19937 &rng) -> Tetromino::Type;
-
-  using Preview = std::array<Tetromino::Type, 4>;
-  auto preview() const -> Preview;
-
-  auto peek() const -> Tetromino;
+  void shuffle();
+  [[nodiscard]] auto pop() -> Tetromino::Type;
+  [[nodiscard]] auto peek() const -> Tetromino::Type;
+  [[nodiscard]] auto get_preview() const -> Preview;
 
 private:
-  size_t read_ = 0;
+  std::mt19937 &rng;
 
-  std::array<Tetromino::Type, 7> curr_bag_{
-      Tetromino::Type::I, Tetromino::Type::O, Tetromino::Type::T,
-      Tetromino::Type::S, Tetromino::Type::Z, Tetromino::Type::J,
-      Tetromino::Type::L};
-
-  std::array<Tetromino::Type, 7> next_bag_{
-      Tetromino::Type::I, Tetromino::Type::O, Tetromino::Type::T,
-      Tetromino::Type::S, Tetromino::Type::Z, Tetromino::Type::J,
-      Tetromino::Type::L};
+  size_t read = 0;
+  std::array<Tetromino::Type, 7> curr_bag{};
+  std::array<Tetromino::Type, 7> next_bag{};
 };

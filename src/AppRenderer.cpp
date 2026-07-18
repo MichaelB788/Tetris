@@ -16,15 +16,15 @@ auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
 
 AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
                          const std::filesystem::path &font_path)
-    : window_(SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE)),
-      renderer_(SDL_CreateRenderer(window_.get(), nullptr)),
-      texture_atlas_(IMG_LoadTexture(renderer_.get(), atlas_path.c_str())),
-      text_renderer_(*renderer_, font_path) {
-  if (!window_) {
+    : window(SDL_CreateWindow("Tetris", 800, 800, SDL_WINDOW_RESIZABLE)),
+      renderer(SDL_CreateRenderer(window.get(), nullptr)),
+      texture_atlas(IMG_LoadTexture(renderer.get(), atlas_path.c_str())),
+      text_renderer(*renderer, font_path) {
+  if (!window) {
     throw std::runtime_error("Couldn't create window");
-  } else if (!renderer_) {
+  } else if (!renderer) {
     throw std::runtime_error("Couldn't create renderer");
-  } else if (!texture_atlas_) {
+  } else if (!texture_atlas) {
     throw std::runtime_error("Couldn't create renderer");
   }
 
@@ -33,18 +33,18 @@ AppRenderer::AppRenderer(const std::filesystem::path &atlas_path,
 }
 
 void AppRenderer::center_frame_within_window() {
-  auto &[w, h] = win_size_;
-  SDL_GetWindowSize(window_.get(), &w, &h);
+  auto &[w, h] = win_size;
+  SDL_GetWindowSize(window.get(), &w, &h);
 
-  section_matrix_.x = (w - MATRIX_WIDTH) / 2;
-  section_matrix_.y = (h - MATRIX_HEIGHT) / 2;
-  section_left_ = resolve(section_matrix_, {.x = -6});
-  section_right_ = resolve(section_matrix_, {.x = MATRIX_COLS + 2});
+  section_matrix.x = (w - MATRIX_WIDTH) / 2;
+  section_matrix.y = (h - MATRIX_HEIGHT) / 2;
+  section_left = resolve(section_matrix, {.x = -6});
+  section_right = resolve(section_matrix, {.x = MATRIX_COLS + 2});
 }
 
 void AppRenderer::render_frame(Tetris &tetris) {
-  SDL_SetRenderDrawColor(renderer_.get(), 0x17, 0x18, 0x28, 0xFF);
-  SDL_RenderClear(renderer_.get());
+  SDL_SetRenderDrawColor(renderer.get(), 0x17, 0x18, 0x28, 0xFF);
+  SDL_RenderClear(renderer.get());
 
   switch (tetris.get_state()) {
     using enum Tetris::State;
@@ -53,17 +53,17 @@ void AppRenderer::render_frame(Tetris &tetris) {
     draw_screen_text(tetris);
     break;
   case Paused: {
-    auto [win_w, win_h] = win_size_;
-    auto [tex_w, tex_h] = text_renderer_.get_text_size("PAUSED");
+    auto [win_w, win_h] = win_size;
+    auto [tex_w, tex_h] = text_renderer.get_text_size("PAUSED");
     Point pos{.x = (static_cast<float>(win_w - tex_w)) / 2,
               .y = (static_cast<float>(win_h - tex_h)) / 2};
-    text_renderer_.draw_text("PAUSED", pos);
+    text_renderer.draw_text("PAUSED", pos);
   } break;
   case GameOver:
     break;
   }
 
-  SDL_RenderPresent(renderer_.get());
+  SDL_RenderPresent(renderer.get());
 }
 
 void AppRenderer::draw_tile(Tetromino::Type type, Point<int> matrix_pos,
@@ -80,7 +80,7 @@ void AppRenderer::draw_tile(Tetromino::Type type, Point<int> matrix_pos,
       .w = PIXEL_SCALE,
       .h = PIXEL_SCALE};
 
-  SDL_RenderTexture(renderer_.get(), texture_atlas_.get(), &texture_rect,
+  SDL_RenderTexture(renderer.get(), texture_atlas.get(), &texture_rect,
                     &texture_screen_pos);
 }
 
@@ -102,21 +102,21 @@ void AppRenderer::draw_matrix(const Matrix &matrix,
                                   .y = screen_offset.y,
                                   .w = MATRIX_COLS * PIXEL_SCALE,
                                   .h = MATRIX_ROWS * PIXEL_SCALE};
-  SDL_SetRenderDrawColor(renderer_.get(), 0x54, 0x58, 0xCC, 0xFF);
-  SDL_RenderRect(renderer_.get(), &outline_rect);
+  SDL_SetRenderDrawColor(renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
+  SDL_RenderRect(renderer.get(), &outline_rect);
 }
 
 void AppRenderer::draw_game_objects(const Tetris &tetris) const {
-  draw_tetromino(tetris.get_ghost_piece(), section_matrix_, Style::Transparent);
-  draw_tetromino(tetris.get_active_piece(), section_matrix_, Style::Filled);
-  draw_matrix(tetris.get_matrix(), section_matrix_);
+  draw_tetromino(tetris.get_ghost_piece(), section_matrix, Style::Transparent);
+  draw_tetromino(tetris.get_active_piece(), section_matrix, Style::Filled);
+  draw_matrix(tetris.get_matrix(), section_matrix);
 
-  const auto held_pos = resolve(section_right_, {.x = 1, .y = 3});
+  const auto held_pos = resolve(section_right, {.x = 1, .y = 3});
   if (const auto held_piece = tetris.get_held_piece()) {
     draw_tetromino({held_piece.value()}, held_pos, Style::Filled);
   }
 
-  auto next_pos = resolve(section_left_, {.x = 1, .y = 3});
+  auto next_pos = resolve(section_left, {.x = 1, .y = 3});
   for (const auto next_type : tetris.get_seven_bag()) {
     draw_tetromino({next_type}, next_pos, Style::Filled);
     next_pos.y += 3 * PIXEL_SCALE;
@@ -124,9 +124,8 @@ void AppRenderer::draw_game_objects(const Tetris &tetris) const {
 }
 
 void AppRenderer::draw_screen_text(const Tetris &tetris) {
-  text_renderer_.draw_text("NEXT", section_left_);
-  text_renderer_.draw_text("HOLD", section_right_);
-  text_renderer_.draw_text("SCORE", resolve(section_right_, {.y = 8}));
-  text_renderer_.draw_num(tetris.get_score(),
-                          resolve(section_right_, {.y = 10}));
+  text_renderer.draw_text("NEXT", section_left);
+  text_renderer.draw_text("HOLD", section_right);
+  text_renderer.draw_text("SCORE", resolve(section_right, {.y = 8}));
+  text_renderer.draw_num(tetris.get_score(), resolve(section_right, {.y = 10}));
 }

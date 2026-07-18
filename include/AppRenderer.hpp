@@ -29,14 +29,14 @@ private:
   void draw_game_objects(const Tetris &tetris) const;
   void draw_screen_text(const Tetris &tetris);
 
-  std::pair<int, int> win_size_{};
-  Point<float> section_matrix_{};
-  Point<float> section_left_{};
-  Point<float> section_right_{};
+  std::pair<int, int> win_size{};
+  Point<float> section_matrix{};
+  Point<float> section_left{};
+  Point<float> section_right{};
 
-  SDL::Window window_ = nullptr;
-  SDL::Renderer renderer_ = nullptr;
-  SDL::Texture texture_atlas_ = nullptr;
+  SDL::Window window = nullptr;
+  SDL::Renderer renderer = nullptr;
+  SDL::Texture texture_atlas = nullptr;
 
-  TextRenderer text_renderer_;
+  TextRenderer text_renderer;
 };

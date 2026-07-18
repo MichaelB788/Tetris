@@ -12,7 +12,7 @@ public:
   enum class Rotation : uint8_t { R0 = 0, R90 = 1, R180 = 2, R270 = 3 };
 
   Tetromino(Type t, Point<int> p = {0, 0}, Rotation r = Rotation::R0)
-      : type_(t), pos_(p), rotation_(r) {}
+      : type(t), pos(p), rotation(r) {}
 
   void set_pos(Point<int> pos);
   void set_rotation(Rotation r);
@@ -23,20 +23,21 @@ public:
 
   auto srs_rotation(Rotation next_rotation, const Matrix &matrix) -> bool;
 
-  auto get_shape_at(Point<int> pos) const -> Shape;
-  auto get_shifted_shape(Point<int> delta) const -> Shape;
-  auto get_shape() const -> Shape;
+  [[nodiscard]] auto get_shape_at(Point<int> pos) const -> Shape;
+  [[nodiscard]] auto get_shifted_shape(Point<int> delta) const -> Shape;
+  [[nodiscard]] auto get_shape() const -> Shape;
 
-  auto get_pos_after_hard_drop(const Matrix &matrix) const -> Point<int>;
+  [[nodiscard]] auto get_pos_after_hard_drop(const Matrix &matrix) const
+      -> Point<int>;
 
-  auto get_type() const -> Type;
-  auto get_pos() const -> Point<int>;
-  auto get_rotation() const -> Rotation;
+  [[nodiscard]] auto get_type() const -> Type;
+  [[nodiscard]] auto get_pos() const -> Point<int>;
+  [[nodiscard]] auto get_rotation() const -> Rotation;
 
 private:
-  Type type_ = Type::I;
-  Point<int> pos_{};
-  Rotation rotation_ = Rotation::R0;
+  Type type = Type::I;
+  Point<int> pos{};
+  Rotation rotation = Rotation::R0;
 };
 
 namespace tetromino {

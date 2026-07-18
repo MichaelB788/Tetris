@@ -5,17 +5,17 @@
 
 TextRenderer::TextRenderer(SDL_Renderer &renderer,
                            const std::filesystem::path &font_path)
-    : engine_(TTF_CreateRendererTextEngine(&renderer)),
-      font_(TTF_OpenFont(font_path.c_str(), FONT_SCALE)) {
-  if (!engine_) {
+    : engine(TTF_CreateRendererTextEngine(&renderer)),
+      font(TTF_OpenFont(font_path.c_str(), FONT_SCALE)) {
+  if (!engine) {
     throw std::runtime_error("Couldn't create text engine");
-  } else if (!font_) {
+  } else if (!font) {
     throw std::runtime_error("Couldn't create text engine");
   }
 
   const std::array nums_str{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-  for (size_t i = 0; i < nums_.size(); ++i) {
-    nums_[i].reset(TTF_CreateText(engine_.get(), font_.get(), nums_str[i], 1));
+  for (size_t i = 0; i < nums.size(); ++i) {
+    nums[i].reset(TTF_CreateText(engine.get(), font.get(), nums_str[i], 1));
   }
 }
 
@@ -25,7 +25,7 @@ void TextRenderer::draw_text(std::string_view str, Point<float> pos) {
 
 void TextRenderer::draw_num(unsigned num, Point<float> pos) const {
   if (num < 10) {
-    TTF_DrawRendererText(nums_[num].get(), pos.x, pos.y);
+    TTF_DrawRendererText(nums[num].get(), pos.x, pos.y);
     return;
   }
   std::vector<unsigned> digits{};
@@ -34,7 +34,7 @@ void TextRenderer::draw_num(unsigned num, Point<float> pos) const {
     num /= 10;
   }
   while (!digits.empty()) {
-    TTF_DrawRendererText(nums_[digits.back()].get(), pos.x, pos.y);
+    TTF_DrawRendererText(nums[digits.back()].get(), pos.x, pos.y);
     digits.pop_back();
     pos.x += FONT_SCALE;
   }
@@ -48,16 +48,16 @@ auto TextRenderer::get_text_size(std::string_view str) -> std::pair<int, int> {
 
 auto TextRenderer::find_text(std::string_view str) -> TTF_Text & {
   size_t i = 0;
-  for (; i < text_.size(); ++i) {
-    if (text_[i].str == str)
+  for (; i < text.size(); ++i) {
+    if (text[i].str == str)
       break;
   }
 
-  if (i == text_.size()) {
-    text_.push_back({.str = str,
-                     .texture{TTF_CreateText(engine_.get(), font_.get(),
-                                             str.data(), str.size())}});
+  if (i == text.size()) {
+    text.push_back({.str = str,
+                    .texture{TTF_CreateText(engine.get(), font.get(),
+                                            str.data(), str.size())}});
   }
 
-  return *text_[i].texture;
+  return *text[i].texture;
 }

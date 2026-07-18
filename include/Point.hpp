@@ -6,13 +6,21 @@ template <typename T>
 struct Point {
   T x, y;
 
-  Point operator+(Point other) const { return {x + other.x, y + other.y}; }
-  Point operator-(Point other) const { return {x - other.x, y - other.y}; }
-  Point operator*(Point other) const { return {x * other.x, y * other.y}; }
-  Point operator/(Point other) const { return {x / other.x, y / other.y}; }
+  [[nodiscard]] Point operator+(Point other) const {
+    return {x + other.x, y + other.y};
+  }
+  [[nodiscard]] Point operator-(Point other) const {
+    return {x - other.x, y - other.y};
+  }
+  [[nodiscard]] Point operator*(Point other) const {
+    return {x * other.x, y * other.y};
+  }
+  [[nodiscard]] Point operator/(Point other) const {
+    return {x / other.x, y / other.y};
+  }
 
-  Point operator*(T val) const { return {x * val, y * val}; }
-  Point operator/(T val) const { return {x / val, y / val}; }
+  [[nodiscard]] Point operator*(T val) const { return {x * val, y * val}; }
+  [[nodiscard]] Point operator/(T val) const { return {x / val, y / val}; }
 
   Point operator-() { return {x * -1, y * -1}; }
 

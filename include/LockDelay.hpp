@@ -6,12 +6,12 @@ class Tetris;
 
 class LockDelay {
 public:
-  LockDelay(std::chrono::nanoseconds delay) : timer_(delay) {};
+  LockDelay(std::chrono::nanoseconds delay) : timer(delay) {};
 
   template <typename Fn>
   void tick(std::chrono::nanoseconds delta, Fn &&lock_func) {
-    if (lock_pending_) {
-      timer_.invoke_when_elapsed(delta, lock_func);
+    if (lock_pending) {
+      timer.invoke_when_elapsed(delta, lock_func);
     }
   }
 
@@ -21,8 +21,8 @@ public:
   void reset();
 
 private:
-  bool lock_pending_ = false;
-  unsigned lock_resets_ = 0;
-  unsigned lock_reset_limit_ = 20;
-  Timer timer_{std::chrono::seconds(1)};
+  bool lock_pending = false;
+  unsigned lock_resets = 0;
+  unsigned lock_reset_limit = 20;
+  Timer timer{std::chrono::seconds(1)};
 };

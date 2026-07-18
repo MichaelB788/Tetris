@@ -5,13 +5,13 @@ class Timer {
 public:
   constexpr Timer() = default;
 
-  constexpr Timer(std::chrono::nanoseconds duration) : duration_(duration) {}
+  constexpr Timer(std::chrono::nanoseconds duration) : duration(duration) {}
 
-  void operator+=(std::chrono::nanoseconds delta) { accumulator_ += delta; }
+  void operator+=(std::chrono::nanoseconds delta) { accumulator += delta; }
 
   template <typename Fn>
   void invoke_when_elapsed(std::chrono::nanoseconds delta, Fn &&function) {
-    accumulator_ += delta;
+    accumulator += delta;
     if (has_elapsed()) {
       function();
     }
@@ -19,29 +19,29 @@ public:
 
   template <typename Fn>
   void invoke_periodically(std::chrono::nanoseconds delta, Fn &&function) {
-    accumulator_ += delta;
+    accumulator += delta;
     while (has_elapsed()) {
-      accumulator_ -= duration_;
+      accumulator -= duration;
       function();
     }
   }
 
-  void set_duration(std::chrono::nanoseconds duration) { duration_ = duration; }
+  void set_duration(std::chrono::nanoseconds duration) { duration = duration; }
 
-  void reset() { accumulator_ = {}; }
+  void reset() { accumulator = {}; }
 
   [[nodiscard]] auto has_elapsed() const -> bool {
-    return accumulator_ >= duration_;
+    return accumulator >= duration;
   }
 
-  [[nodiscard]] auto duration() const -> std::chrono::nanoseconds {
-    return duration_;
+  [[nodiscard]] auto get_duration() const -> std::chrono::nanoseconds {
+    return duration;
   }
 
-  [[nodiscard]] auto accumulator() const -> std::chrono::nanoseconds {
-    return accumulator_;
+  [[nodiscard]] auto get_accumulator() const -> std::chrono::nanoseconds {
+    return accumulator;
   }
 
 private:
-  std::chrono::nanoseconds duration_{}, accumulator_{};
+  std::chrono::nanoseconds duration{}, accumulator{};
 };

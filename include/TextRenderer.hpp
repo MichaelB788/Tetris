@@ -15,7 +15,7 @@ public:
   void draw_text(std::string_view str, Point<float> pos);
   void draw_num(unsigned num, Point<float> pos) const;
 
-  auto get_text_size(std::string_view str) -> std::pair<int, int>;
+  [[nodiscard]] auto get_text_size(std::string_view str) -> std::pair<int, int>;
 
 private:
   struct TextEntry {
@@ -23,11 +23,11 @@ private:
     SDL::TTF::Text texture;
   };
 
-  auto find_text(std::string_view str) -> TTF_Text &;
+  [[nodiscard]] auto find_text(std::string_view str) -> TTF_Text &;
 
-  SDL::TTF::RendererTextEngine engine_ = nullptr;
-  SDL::TTF::Font font_ = nullptr;
+  SDL::TTF::RendererTextEngine engine = nullptr;
+  SDL::TTF::Font font = nullptr;
 
-  std::vector<TextEntry> text_{};
-  std::array<SDL::TTF::Text, 10> nums_{};
+  std::vector<TextEntry> text{};
+  std::array<SDL::TTF::Text, 10> nums{};
 };

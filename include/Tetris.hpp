@@ -16,8 +16,7 @@ public:
   enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng)
-      : rng_(rng), seven_bag_(rng),
-        active_piece_(seven_bag_.pop(rng), SPAWN_POINT) {}
+      : rng(rng), seven_bag(rng), active_piece(seven_bag.pop(), SPAWN_POINT) {}
 
   void tick(std::chrono::nanoseconds delta_time);
 
@@ -37,34 +36,34 @@ public:
 
   void reset();
 
-  auto get_score() const -> unsigned;
-  auto get_state() const -> State;
-  auto get_matrix() const -> const Matrix &;
-  auto get_active_piece() const -> Tetromino;
-  auto get_seven_bag() const -> SevenBag::Preview;
-  auto get_held_piece() const -> std::optional<Tetromino::Type>;
-  auto get_ghost_piece() const -> Tetromino;
+  [[nodiscard]] auto get_score() const -> unsigned;
+  [[nodiscard]] auto get_state() const -> State;
+  [[nodiscard]] auto get_matrix() const -> const Matrix &;
+  [[nodiscard]] auto get_active_piece() const -> Tetromino;
+  [[nodiscard]] auto get_seven_bag() const -> SevenBag::Preview;
+  [[nodiscard]] auto get_held_piece() const -> std::optional<Tetromino::Type>;
+  [[nodiscard]] auto get_ghost_piece() const -> Tetromino;
 
 private:
   auto move_active(Point<int> delta) -> bool;
   auto rotate_active(Tetromino::Rotation next) -> bool;
 
-  auto try_spawn_next(Tetromino::Type next) -> bool;
+  [[nodiscard]] auto try_spawn_next(Tetromino::Type next) -> bool;
   void update_level();
 
   void finalize_move();
 
-  std::mt19937 &rng_;
+  std::mt19937 &rng;
 
-  State state_ = State::Running;
-  unsigned score_ = 0;
-  bool hold_command_triggered_ = false;
+  State state = State::Running;
+  unsigned score = 0;
+  bool hold_command_triggered = false;
 
-  Timer gravity_delay_{std::chrono::seconds(1)};
-  LockDelay lock_delay_{std::chrono::seconds(1)};
+  Timer gravity_delay{std::chrono::seconds(1)};
+  LockDelay lock_delay{std::chrono::seconds(1)};
 
-  std::optional<Tetromino::Type> held_piece_ = std::nullopt;
-  Matrix matrix_{};
-  SevenBag seven_bag_;
-  Tetromino active_piece_;
+  std::optional<Tetromino::Type> held_piece = std::nullopt;
+  Matrix matrix{};
+  SevenBag seven_bag;
+  Tetromino active_piece;
 };

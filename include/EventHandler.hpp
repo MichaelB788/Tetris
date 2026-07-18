@@ -33,8 +33,8 @@ private:
   void handle_event(Event event, Tetris &tetris);
 
   struct InputTimer {
-    Timer<std::chrono::nanoseconds> init_delay{};
-    Timer<std::chrono::nanoseconds> repeat_interval{};
+    Timer init_delay{};
+    Timer repeat_interval{};
   };
 
   struct Command {

@@ -59,7 +59,7 @@ private:
   unsigned score_ = 0;
   bool hold_command_triggered_ = false;
 
-  Timer<std::chrono::nanoseconds> gravity_delay_{std::chrono::seconds(1)};
+  Timer gravity_delay_{std::chrono::seconds(1)};
   LockDelay lock_delay_{std::chrono::seconds(1)};
 
   std::optional<Tetromino::Type> held_piece_ = std::nullopt;

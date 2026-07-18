@@ -24,5 +24,5 @@ private:
   bool lock_pending_ = false;
   unsigned lock_resets_ = 0;
   unsigned lock_reset_limit_ = 20;
-  Timer<std::chrono::nanoseconds> timer_{std::chrono::seconds(1)};
+  Timer timer_{std::chrono::seconds(1)};
 };

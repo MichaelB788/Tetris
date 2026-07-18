@@ -42,10 +42,14 @@ void Tetris::hold_active() {
   }
 }
 
-void Tetris::toggle_pause() {
+void Tetris::pause() {
   if (state_ == State::Running) {
     state_ = State::Paused;
-  } else if (state_ == State::Paused) {
+  }
+}
+
+void Tetris::unpause() {
+  if (state_ == State::Paused) {
     state_ = State::Running;
   }
 }

@@ -65,19 +65,25 @@ void EventHandler::handle_repeated_events(Tetris &tetris,
   }
 }
 
-void EventHandler::handle_event(Event command, Tetris &tetris) {
-  if (command == TOGGLE_PAUSE_CMD) {
-    tetris.toggle_pause();
+void EventHandler::handle_pause_event(Tetris &tetris) {
+  if (pending_new_events_ & TOGGLE_PAUSE_CMD) {
+    tetris.unpause();
     pending_new_events_ = 0;
     pending_held_events_ = 0;
-    return;
-  }
 
-  if (tetris.get_state() == Tetris::State::Paused) {
-    return;
+    for (auto &command : controls_) {
+      if (command.timer.has_value()) {
+        command.timer->init_delay.reset();
+        command.timer->repeat_interval.reset();
+      }
+    }
   }
+}
 
+void EventHandler::handle_event(Event command, Tetris &tetris) {
   switch (command) {
+  case NULL_CMD:
+    break;
   case MOVE_LEFT_CMD:
     tetris.move_left();
     break;
@@ -102,7 +108,7 @@ void EventHandler::handle_event(Event command, Tetris &tetris) {
   case HOLD_ACTIVE_CMD:
     tetris.hold_active();
     break;
-  default:
-    break;
+  case TOGGLE_PAUSE_CMD:
+    tetris.pause();
   }
 }

@@ -32,7 +32,8 @@ public:
 
   void hold_active();
 
-  void toggle_pause();
+  void pause();
+  void unpause();
 
   void reset();
 

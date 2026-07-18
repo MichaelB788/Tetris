@@ -28,8 +28,10 @@ void AppState::handle_tetris_state() {
   switch (tetris_.get_state()) {
     using enum Tetris::State;
   case Running:
-  case Paused:
     handler_.handle_new_events(tetris_);
+    break;
+  case Paused:
+    handler_.handle_pause_event(tetris_);
     break;
   case GameOver: // TODO: Add option to continue/quit
     tetris_.reset();

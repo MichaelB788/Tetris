@@ -12,6 +12,7 @@ public:
 
   void handle_new_events(Tetris &tetris);
   void handle_repeated_events(Tetris &tetris, std::chrono::nanoseconds delta);
+  void handle_pause_event(Tetris &tetris);
 
 private:
   enum Event : uint16_t {

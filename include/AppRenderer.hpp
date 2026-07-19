@@ -18,7 +18,7 @@ public:
 
   void center_frame_within_window();
 
-  void render_frame(Tetris &tetris);
+  void render_frame(const Tetris &tetris);
 
 private:
   enum class Style : uint8_t { Filled, Transparent };

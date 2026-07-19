@@ -47,7 +47,7 @@ void AppRenderer::center_frame_within_window() {
   section_right = resolve(section_matrix, {(MATRIX_COLS + 2), 0});
 }
 
-void AppRenderer::render_frame(Tetris &tetris) {
+void AppRenderer::render_frame(const Tetris &tetris) {
   SDL_SetRenderDrawColor(renderer.get(), 0x17, 0x18, 0x28, 0xFF);
   SDL_RenderClear(renderer.get());
 

@@ -22,11 +22,11 @@ public:
 
 private:
   enum class Style : uint8_t { Filled, Transparent };
-  void draw_tile(Tetromino::Type type, Point<int> matrix_pos,
-                 Point<float> screen_offset, Style style) const;
-  void draw_tetromino(Tetromino tet, Point<float> screen_offset,
+  void draw_tile(Tetromino::Type type, Point<float> matrix_base,
+                 Point<int> matrix_offset, Style style) const;
+  void draw_tetromino(Tetromino tet, Point<float> matrix_base,
                       Style style) const;
-  void draw_matrix(const Matrix &matrix, Point<float> screen_offset) const;
+  void draw_matrix(const Matrix &matrix, Point<float> matrix_base) const;
 
   void draw_game_objects(const Tetris &tetris) const;
   void draw_game_text(const Tetris &tetris);

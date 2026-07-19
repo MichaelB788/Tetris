@@ -68,12 +68,12 @@ void AppRenderer::render_frame(const Tetris &tetris) {
   SDL_RenderPresent(renderer.get());
 }
 
-void AppRenderer::draw_tile(Tetromino::Type type, Point<int> matrix_pos,
-                            Point<float> screen_offset, Style style) const {
+void AppRenderer::draw_tile(Tetromino::Type type, Point<float> matrix_base,
+                            Point<int> matrix_offset, Style style) const {
   const auto texture_rect_y = style == Style::Transparent ? PIXEL_SCALE : 0;
   const auto adjusted_pos =
-      resolve(screen_offset, {.x = static_cast<float>(matrix_pos.x),
-                              .y = static_cast<float>(matrix_pos.y)});
+      resolve(matrix_base, {.x = static_cast<float>(matrix_offset.x),
+                            .y = static_cast<float>(matrix_offset.y)});
 
   const SDL_FRect texture_rect{.x = PIXEL_SCALE * static_cast<float>(type),
                                .y = texture_rect_y,
@@ -87,24 +87,24 @@ void AppRenderer::draw_tile(Tetromino::Type type, Point<int> matrix_pos,
                     &texture_screen_pos);
 }
 
-void AppRenderer::draw_tetromino(Tetromino tet, Point<float> screen_offset,
+void AppRenderer::draw_tetromino(Tetromino tet, Point<float> matrix_base,
                                  Style style) const {
-  for (const auto pos : tet.get_shape()) {
-    draw_tile(tet.get_type(), pos, screen_offset, style);
+  for (const auto offset : tet.get_shape()) {
+    draw_tile(tet.get_type(), matrix_base, offset, style);
   }
 }
 
 void AppRenderer::draw_matrix(const Matrix &matrix,
-                              Point<float> screen_offset) const {
+                              Point<float> matrix_base) const {
   for (int y = 0; y < MATRIX_ROWS; ++y)
     for (int x = 0; x < MATRIX_COLS; ++x)
       if (auto tile = matrix.at(x, y))
-        draw_tile(tile.value(), {x, y}, screen_offset, Style::Filled);
+        draw_tile(tile.value(), matrix_base, {x, y}, Style::Filled);
 
-  const SDL_FRect outline_rect{.x = screen_offset.x,
-                               .y = screen_offset.y,
-                               .w = MATRIX_COLS * PIXEL_SCALE,
-                               .h = MATRIX_ROWS * PIXEL_SCALE};
+  const SDL_FRect outline_rect{.x = matrix_base.x,
+                               .y = matrix_base.y,
+                               .w = MATRIX_WIDTH,
+                               .h = MATRIX_HEIGHT};
   SDL_SetRenderDrawColor(renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
   SDL_RenderRect(renderer.get(), &outline_rect);
 }

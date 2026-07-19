@@ -30,7 +30,7 @@ private:
 
   void draw_game_objects(const Tetris &tetris) const;
   void draw_game_text(const Tetris &tetris);
-  void draw_centered_text(std::string_view str);
+  void draw_centered_text(Msg msg);
 
   Size<float> win_size{};
   Point<float> section_matrix{};

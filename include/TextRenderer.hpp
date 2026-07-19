@@ -4,31 +4,34 @@
 #include "Size.hpp"
 #include <array>
 #include <filesystem>
-#include <string_view>
-#include <vector>
 
 struct SDL_Renderer;
+
+enum class Msg {
+  Next = 0,
+  Hold = 1,
+  Score = 2,
+  Paused = 3,
+  GameOver = 4,
+};
 
 class TextRenderer {
 public:
   TextRenderer(SDL_Renderer &renderer, const std::filesystem::path &font_path);
 
-  void draw_text(std::string_view str, Point<float> pos);
+  void draw_text(Msg msg, Point<float> pos);
   void draw_num(unsigned num, Point<float> pos) const;
 
-  [[nodiscard]] auto get_text_size(std::string_view str) -> Size<float>;
+  [[nodiscard]] auto get_text_size(Msg msg) -> Size<float>;
 
 private:
   struct TextEntry {
-    std::string_view key;
     SDL::TTF::Text texture;
   };
-
-  [[nodiscard]] auto find_text(std::string_view str) -> TTF_Text &;
 
   SDL::TTF::RendererTextEngine engine = nullptr;
   SDL::TTF::Font font = nullptr;
 
-  std::vector<TextEntry> text_map{};
+  std::array<SDL::TTF::Text, 5> text_map{};
   std::array<SDL::TTF::Text, 10> nums_map{};
 };

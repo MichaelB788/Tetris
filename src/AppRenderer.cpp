@@ -58,10 +58,10 @@ void AppRenderer::render_frame(const Tetris &tetris) {
     draw_game_text(tetris);
     break;
   case Paused:
-    draw_centered_text("PAUSED");
+    draw_centered_text(Msg::Paused);
     break;
   case GameOver:
-    draw_centered_text("GAMEOVER!\n\nCONTINUE?\n\n[Y/N]");
+    draw_centered_text(Msg::GameOver);
     break;
   }
 
@@ -127,15 +127,15 @@ void AppRenderer::draw_game_objects(const Tetris &tetris) const {
 }
 
 void AppRenderer::draw_game_text(const Tetris &tetris) {
-  text_renderer.draw_text("NEXT", section_left);
-  text_renderer.draw_text("HOLD", section_right);
-  text_renderer.draw_text("SCORE", resolve(section_right, {0, 8}));
+  text_renderer.draw_text(Msg::Next, section_left);
+  text_renderer.draw_text(Msg::Hold, section_right);
+  text_renderer.draw_text(Msg::Score, resolve(section_right, {0, 8}));
   text_renderer.draw_num(tetris.get_score(), resolve(section_right, {0, 10}));
 }
 
-void AppRenderer::draw_centered_text(std::string_view str) {
-  const auto text_size = text_renderer.get_text_size(str);
+void AppRenderer::draw_centered_text(Msg msg) {
+  const auto text_size = text_renderer.get_text_size(msg);
   const Point pos{.x = (win_size.w - text_size.w) / 2,
                   .y = (win_size.h - text_size.h) / 2};
-  text_renderer.draw_text(str, pos);
+  text_renderer.draw_text(msg, pos);
 }

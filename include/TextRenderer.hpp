@@ -20,7 +20,7 @@ public:
 
 private:
   struct TextEntry {
-    std::string_view str;
+    std::string_view key;
     SDL::TTF::Text texture;
   };
 
@@ -29,6 +29,6 @@ private:
   SDL::TTF::RendererTextEngine engine = nullptr;
   SDL::TTF::Font font = nullptr;
 
-  std::vector<TextEntry> text{};
-  std::array<SDL::TTF::Text, 10> nums{};
+  std::vector<TextEntry> text_map{};
+  std::array<SDL::TTF::Text, 10> nums_map{};
 };

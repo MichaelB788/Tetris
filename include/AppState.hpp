@@ -12,22 +12,24 @@ class AppState {
 public:
   AppState(const std::filesystem::path &atlas_path,
            const std::filesystem::path &font_path)
-      : renderer(atlas_path, font_path), handler(tetris) {}
+      : renderer(atlas_path, font_path), handler() {}
 
   [[nodiscard]] auto update_frame() -> SDL_AppResult;
+
   void handle_window_resize_event();
 
 private:
+  [[nodiscard]] auto handle_keyboard_input() -> SDL_AppResult;
+
   void tick(std::chrono::nanoseconds delta);
-  void handle_tetris_state();
 
   std::mt19937 rng{std::random_device{}()};
   std::chrono::time_point<std::chrono::steady_clock>
-      prev_time = std::chrono::steady_clock::now(),
-      curr_time = std::chrono::steady_clock::now();
+      prev_frame_start = std::chrono::steady_clock::now(),
+      frame_start = std::chrono::steady_clock::now();
 
   FPS fps{60};
   Tetris tetris{rng};
-  EventHandler handler;
+  EventHandler handler{};
   AppRenderer renderer;
 };

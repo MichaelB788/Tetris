@@ -9,44 +9,40 @@ class Tetris;
 
 class EventHandler {
 public:
-  EventHandler(Tetris &tetris) : tetris(tetris) {}
+  void handle_game_events(Tetris &tetris, const bool *curr_keyboard);
+  void handle_paused_events(Tetris &tetris, const bool *curr_keyboard);
+  [[nodiscard]] auto handle_game_over_events(Tetris &tetris,
+                                             const bool *curr_keyboard)
+      -> SDL_AppResult;
 
-  [[nodiscard]] auto listen_to_keyboard_input() -> SDL_AppResult;
-
-  void handle_new_events();
-  void handle_repeated_events(std::chrono::nanoseconds delta);
-  void handle_pause_event();
+  void tick(Tetris &tetris, std::chrono::nanoseconds delta);
 
 private:
   enum Event : uint16_t {
-    // clang-format off
-    NULL_CMD          = 0x0,
-    MOVE_LEFT_CMD     = 0x1,
-    MOVE_RIGHT_CMD    = 0x2,
-    SOFT_DROP_CMD     = 0x4,
-    HARD_DROP_CMD     = 0x8,
-    ROTATE_CW_CMD     = 0x10,
-    ROTATE_CCW_CMD    = 0x20,
-    ROTATE_HALF_CMD   = 0x40,
-    HOLD_ACTIVE_CMD   = 0x80,
-    TOGGLE_PAUSE_CMD  = 0x100
-    // clang-format on
+    NULL_CMD = 0x0,
+    MOVE_LEFT_CMD = 0x1,
+    MOVE_RIGHT_CMD = 0x2,
+    SOFT_DROP_CMD = 0x4,
+    HARD_DROP_CMD = 0x8,
+    ROTATE_CW_CMD = 0x10,
+    ROTATE_CCW_CMD = 0x20,
+    ROTATE_HALF_CMD = 0x40,
+    HOLD_ACTIVE_CMD = 0x80,
+    TOGGLE_PAUSE_CMD = 0x100
   };
+
   struct InputTimer {
     Timer init_delay{};
     Timer repeat_interval{};
   };
+
   struct Command {
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
     Event event = NULL_CMD;
     std::optional<InputTimer> timer = std::nullopt;
   };
 
-  [[nodiscard]] auto find_command_from_event(Event event) -> Command &;
-  void update_pending_events(const bool *curr_keyboard);
-  [[nodiscard]] auto handle_game_over_event(const bool *curr_keyboard)
-      -> SDL_AppResult;
-  void handle_event(Event event);
+  void execute_command(Tetris &tetris, Command &command);
 
   static constexpr InputTimer MOVEMENT_TIMER{
       .init_delay{std::chrono::milliseconds(150)},
@@ -55,9 +51,6 @@ private:
       .init_delay{std::chrono::milliseconds(300)},
       .repeat_interval{std::chrono::milliseconds(100)}};
 
-  Tetris &tetris;
-
-  uint16_t pending_new_events = 0;
   uint16_t pending_held_events = 0;
 
   std::array<Command, 9> controls{

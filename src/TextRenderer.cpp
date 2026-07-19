@@ -43,7 +43,7 @@ void TextRenderer::draw_num(unsigned num, Point<float> pos) const {
 auto TextRenderer::get_text_size(std::string_view str) -> Size<float> {
   int w, h;
   TTF_GetTextSize(&find_text(str), &w, &h);
-  return Size{.w = static_cast<float>(w), .h = static_cast<float>(h)};
+  return {.w = static_cast<float>(w), .h = static_cast<float>(h)};
 }
 
 auto TextRenderer::find_text(std::string_view str) -> TTF_Text & {

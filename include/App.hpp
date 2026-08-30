@@ -1,7 +1,6 @@
 #pragma once
 #include "AppRenderer.hpp"
 #include "EventHandler.hpp"
-#include "FPS.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_init.h>
 #include <chrono>
@@ -23,7 +22,6 @@ private:
       previous_frame_start = std::chrono::steady_clock::now(),
       current_frame_start = std::chrono::steady_clock::now();
 
-  FPS fps{60};
   Tetris tetris{rng};
   EventHandler handler{};
   AppRenderer renderer;

@@ -1,6 +1,7 @@
 #include "App.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_init.h>
+#include <chrono>
 #include <thread>
 
 void App::loop() {
@@ -44,9 +45,11 @@ void App::loop() {
     renderer.render_frame(tetris);
 
     // If the frame finished early, sleep
+    static constexpr auto expected =
+        std::chrono::nanoseconds(1'000'000'000 / 60);
     const auto elapsed = std::chrono::steady_clock::now() - current_frame_start;
-    if (elapsed < fps.get_frame_duration()) {
-      std::this_thread::sleep_for(fps.get_frame_duration() - elapsed);
+    if (elapsed < expected) {
+      std::this_thread::sleep_for(expected - elapsed);
     }
   }
 }

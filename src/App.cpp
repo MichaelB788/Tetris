@@ -5,14 +5,15 @@
 #include <thread>
 
 void App::loop() {
-  // TODO: Consider if this belongs here or in EventHandler
-  SDL_Event event;
   while (true) {
     // Record the frame time
     previous_frame_start = current_frame_start;
     current_frame_start = std::chrono::steady_clock::now();
     const auto delta_time = current_frame_start - previous_frame_start;
 
+    // Poll events
+    // NOTE: It is imperitive that this happens before keyboard input is
+    // processed
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT)
         return;
@@ -20,26 +21,17 @@ void App::loop() {
         renderer.center_frame_within_window();
     }
 
-    // HACK: Shouldn't this be in EventHandler?
-    const auto keyboard = SDL_GetKeyboardState(nullptr);
+    // Handle keyboard input
+    switch (keyboard_listener.process_input(delta_time)) {
+    case KeyboardListener::AppResult::Continue:
+      break;
+    case KeyboardListener::AppResult::Quit:
+      return;
+    }
 
     // Update game state
-    switch (tetris.get_state()) {
-      using enum Tetris::State;
-    case Running:
-      handler.handle_game_events(tetris, keyboard);
+    if (tetris.get_state() == Tetris::State::Running)
       tetris.tick(delta_time);
-      handler.tick(tetris, delta_time);
-      break;
-    case Paused:
-      handler.handle_paused_events(tetris, keyboard);
-      break;
-    case GameOver:
-      // TODO: Probably want to check against a different type
-      if (handler.handle_game_over_events(tetris, keyboard) == SDL_APP_SUCCESS)
-        return;
-      break;
-    }
 
     // Render the frame
     renderer.render_frame(tetris);

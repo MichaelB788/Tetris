@@ -1,6 +1,6 @@
 #pragma once
 #include "AppRenderer.hpp"
-#include "EventHandler.hpp"
+#include "KeyboardListener.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_init.h>
 #include <chrono>
@@ -22,7 +22,8 @@ private:
       previous_frame_start = std::chrono::steady_clock::now(),
       current_frame_start = std::chrono::steady_clock::now();
 
+  SDL_Event event;
   Tetris tetris{rng};
-  EventHandler handler{};
+  KeyboardListener keyboard_listener{tetris};
   AppRenderer renderer;
 };

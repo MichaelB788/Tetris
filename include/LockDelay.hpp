@@ -24,5 +24,5 @@ private:
   bool lock_pending = false;
   unsigned lock_resets = 0;
   unsigned lock_reset_limit = 20;
-  Timer timer{std::chrono::seconds(1)};
+  PeriodicFunction timer{std::chrono::seconds(1)};
 };

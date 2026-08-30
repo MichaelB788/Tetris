@@ -11,11 +11,11 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
 add_library(TetrisSource
   App.cpp
   AppRenderer.cpp
-  EventHandler.cpp
-  LockDelay.cpp
+  KeyboardListener.cpp
   Matrix.cpp
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp
+  PeriodicFunction.cpp
   SevenBag.cpp
   Tetris.cpp
   Tetromino.cpp

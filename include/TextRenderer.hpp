@@ -25,10 +25,6 @@ public:
   [[nodiscard]] auto get_text_size(Msg msg) -> Size<float>;
 
 private:
-  struct TextEntry {
-    SDL::TTF::Text texture;
-  };
-
   SDL::TTF::RendererTextEngine engine = nullptr;
   SDL::TTF::Font font = nullptr;
 

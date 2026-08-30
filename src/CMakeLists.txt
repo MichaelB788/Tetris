@@ -1,12 +1,15 @@
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
 add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
   PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
+
 add_library(TetrisSource
-  AppState.cpp
+  App.cpp
   AppRenderer.cpp
   EventHandler.cpp
   FPS.cpp

@@ -7,6 +7,7 @@
 
 class Tetris;
 
+// TODO: This probably needs a refactor
 class EventHandler {
 public:
   void handle_game_events(Tetris &tetris, const bool *curr_keyboard);

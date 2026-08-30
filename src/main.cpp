@@ -1,61 +1,37 @@
-#include "AppState.hpp"
+#include "App.hpp"
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_init.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
-#include <stdexcept>
+#include <print>
 
-#define SDL_MAIN_USE_CALLBACKS
-#include <SDL3/SDL_main.h>
-
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
+int main() {
   const std::filesystem::path project_root = PROJECT_ROOT;
+  if (project_root.empty()) {
+    std::println(std::cerr, "main: Project root not properly set!");
+    return EXIT_FAILURE;
+  }
 
-  // SDL subsystems init
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) || !TTF_Init()) {
-    return SDL_APP_FAILURE;
+    std::println(std::cerr, "main: {}", SDL_GetError());
+    return EXIT_FAILURE;
   }
 
+  // Not a fan of the exception handling here, might change
   try {
-    *appstate =
-        new AppState(project_root / "assets" / "sprites" / "TetrominoAtlas.png",
-                     project_root / "assets" / "font" / "PressStart2P" /
-                         "PressStart2P-vaV7.ttf");
-  } catch (std::runtime_error &err) {
-    std::cout << err.what() << std::endl;
-    return SDL_APP_FAILURE;
+    App app(project_root / "assets" / "sprites" / "TetrominoAtlas.png",
+            project_root / "assets" / "font" / "PressStart2P" /
+                "PressStart2P-vaV7.ttf");
+    app.loop();
+  } catch (std::exception &e) {
+    std::println(std::cerr, "main: {}", e.what());
+    return EXIT_FAILURE;
   }
-
-  return SDL_APP_CONTINUE;
-}
-
-SDL_AppResult SDL_AppIterate(void *appstate) {
-  return static_cast<AppState *>(appstate)->update_frame();
-}
-
-SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-  switch (event->type) {
-  case SDL_EVENT_QUIT:
-    return SDL_APP_SUCCESS;
-  case SDL_EVENT_WINDOW_RESIZED:
-    static_cast<AppState *>(appstate)->handle_window_resize_event();
-    return SDL_APP_CONTINUE;
-  default:
-    return SDL_APP_CONTINUE;
-  }
-}
-
-void SDL_AppQuit(void *appstate, SDL_AppResult result) {
-  delete static_cast<AppState *>(appstate);
 
   TTF_Quit();
   SDL_Quit();
-
-  if (result == SDL_APP_SUCCESS) {
-    std::cout << "App closed successfully\n";
-  } else if (result == SDL_APP_FAILURE) {
-    std::cerr << "An error occurred: " << SDL_GetError() << "\n";
-  }
+  return EXIT_SUCCESS;
 }

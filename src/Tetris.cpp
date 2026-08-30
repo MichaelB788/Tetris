@@ -4,11 +4,22 @@
 #include <chrono>
 #include <optional>
 
+Tetris::Tetris(std::mt19937 &rng)
+    : rng(rng), seven_bag(rng), active_piece(seven_bag.pop(), SPAWN_POINT),
+      gravity(std::chrono::seconds(1),
+              [this] { active_piece.try_shift({.y = 1}, matrix); }),
+      lock(std::chrono::seconds(1), [this] {
+        if (!matrix.is_move_valid(active_piece.get_shifted_shape({.y = 1}))) {
+          finalize_move();
+          lock_resets = 0;
+        }
+      }) {}
+
 void Tetris::move_left() { move_active({.x = -1}); }
 
 void Tetris::move_right() { move_active({.x = 1}); }
 
-void Tetris::soft_drop() { lock_delay.begin_timer_if(!move_active({.y = 1})); }
+void Tetris::soft_drop() { move_active({.y = 1}); }
 
 void Tetris::hard_drop() {
   active_piece.hard_drop(matrix);
@@ -53,17 +64,12 @@ void Tetris::unpause() {
     state = State::Running;
   }
 }
-
 void Tetris::tick(std::chrono::nanoseconds delta_time) {
-  gravity_delay.invoke_periodically(delta_time, [this] {
-    lock_delay.begin_timer_if(!active_piece.try_shift({.y = 1}, matrix));
-  });
+  gravity.tick(delta_time);
 
-  lock_delay.tick(delta_time, [this] {
-    if (!matrix.is_move_valid(active_piece.get_shifted_shape({.y = 1}))) {
-      finalize_move();
-    }
-  });
+  if (lock_resets >= 10) {
+    lock.tick(delta_time);
+  }
 }
 
 void Tetris::reset() {
@@ -71,8 +77,8 @@ void Tetris::reset() {
   score = 0;
   hold_command_triggered = false;
 
-  gravity_delay.reset();
-  lock_delay.reset();
+  gravity.reset();
+  lock.reset();
 
   held_piece = std::nullopt;
   matrix.clear();
@@ -102,15 +108,19 @@ auto Tetris::get_ghost_piece() const -> Tetromino {
 }
 
 auto Tetris::move_active(Point<int> delta) -> bool {
-  const auto has_shifted = active_piece.try_shift(delta, matrix);
-  lock_delay.perform_lock_reset_if(has_shifted);
-  return has_shifted;
+  if (active_piece.try_shift(delta, matrix)) {
+    ++lock_resets;
+    return true;
+  }
+  return false;
 }
 
 auto Tetris::rotate_active(Tetromino::Rotation next) -> bool {
-  const auto has_rotated = active_piece.srs_rotation(next, matrix);
-  lock_delay.perform_lock_reset_if(has_rotated);
-  return has_rotated;
+  if (active_piece.srs_rotation(next, matrix)) {
+    ++lock_resets;
+    return true;
+  }
+  return false;
 }
 
 auto Tetris::try_spawn_next(Tetromino::Type next) -> bool {
@@ -123,8 +133,8 @@ auto Tetris::try_spawn_next(Tetromino::Type next) -> bool {
   }
 
   if (was_successful_turn) {
-    lock_delay.reset();
-    gravity_delay.reset();
+    lock.reset();
+    gravity.reset();
   }
 
   return was_successful_turn;
@@ -135,7 +145,7 @@ void Tetris::update_level() {
   static constexpr std::array LEVELS{1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
                                      450ms,  400ms, 300ms, 200ms, 100ms};
 
-  gravity_delay.set_duration(score < 100 ? LEVELS[score / 10] : LEVELS.back());
+  gravity.set_duration(score < 100 ? LEVELS[score / 10] : LEVELS.back());
 }
 
 void Tetris::finalize_move() {

@@ -1,11 +1,9 @@
 #pragma once
-#include "LockDelay.hpp"
 #include "Matrix.hpp"
+#include "PeriodicFunction.hpp"
 #include "Point.hpp"
 #include "SevenBag.hpp"
 #include "Tetromino.hpp"
-#include "Timer.hpp"
-#include <chrono>
 #include <cstdint>
 #include <optional>
 #include <random>
@@ -15,8 +13,7 @@ public:
   static constexpr Point SPAWN_POINT = {.x = 4, .y = 4};
   enum class State : uint8_t { Running, GameOver, Paused };
 
-  explicit Tetris(std::mt19937 &rng)
-      : rng(rng), seven_bag(rng), active_piece(seven_bag.pop(), SPAWN_POINT) {}
+  explicit Tetris(std::mt19937 &rng);
 
   void tick(std::chrono::nanoseconds delta_time);
 
@@ -56,14 +53,16 @@ private:
   std::mt19937 &rng;
 
   State state = State::Running;
-  unsigned score = 0;
-  bool hold_command_triggered = false;
 
-  Timer gravity_delay{std::chrono::seconds(1)};
-  LockDelay lock_delay{std::chrono::seconds(1)};
+  unsigned score = 0;
+  unsigned lock_resets = 0;
+  bool hold_command_triggered = false;
 
   std::optional<Tetromino::Type> held_piece = std::nullopt;
   Matrix matrix{};
   SevenBag seven_bag;
   Tetromino active_piece;
+
+  PeriodicFunction gravity;
+  PeriodicFunction lock;
 };

@@ -2,7 +2,7 @@
 #include <chrono>
 #include <functional>
 
-// A function which can automatically be called over a period of time.
+// A function which can automatically invoke itself over a given interval
 class PeriodicFunction {
 public:
   PeriodicFunction(const PeriodicFunction &) = delete;
@@ -14,8 +14,10 @@ public:
   constexpr PeriodicFunction(std::chrono::nanoseconds dur, Fn &&fn)
       : duration(dur), function(fn) {}
 
-  void invoke_immediately();
+  // Invoking early will reset the period
+  void invoke_early();
 
+  // Invokes the function once the period has elapsed
   void tick(std::chrono::nanoseconds delta);
 
   void set_duration(std::chrono::nanoseconds dur);

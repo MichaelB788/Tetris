@@ -31,14 +31,12 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
 
     // Handle inputs which can be repeated
     for (auto &act : actions) {
-      if (!prev_keyboard[act.scancode] && curr_keyboard[act.scancode]) {
-        act.func.invoke_immediately();
-        act.func.reset();
-      } else if (prev_keyboard[act.scancode] && curr_keyboard[act.scancode]) {
+      if (!prev_keyboard[act.scancode] && curr_keyboard[act.scancode])
+        act.func.invoke_early();
+      else if (prev_keyboard[act.scancode] && curr_keyboard[act.scancode])
         act.func.tick(delta);
-      } else if (prev_keyboard[act.scancode] && !curr_keyboard[act.scancode]) {
+      else if (prev_keyboard[act.scancode] && !curr_keyboard[act.scancode])
         act.func.reset();
-      }
     }
 
     // Handle inputs with no repeat

@@ -2,7 +2,10 @@
 #include <chrono>
 #include <functional>
 
-void PeriodicFunction::invoke_immediately() { std::invoke(function); }
+void PeriodicFunction::invoke_early() {
+  std::invoke(function);
+  accumulator = std::chrono::nanoseconds::zero();
+}
 
 void PeriodicFunction::tick(std::chrono::nanoseconds delta) {
   accumulator += delta;

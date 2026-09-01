@@ -10,7 +10,7 @@
 
 class Tetris {
 public:
-  static constexpr Point SPAWN_POINT = {.x = 4, .y = 4};
+  static constexpr Point<float> SPAWN_POINT = {.x = 4, .y = 4};
   enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng);
@@ -42,7 +42,7 @@ public:
   [[nodiscard]] auto get_ghost_piece() const -> Tetromino;
 
 private:
-  auto move_active(Point<int> delta) -> bool;
+  auto move_active(Point<float> delta) -> bool;
   auto rotate_active(Tetromino::Rotation next) -> bool;
 
   [[nodiscard]] auto try_spawn_next(Tetromino::Type next) -> bool;

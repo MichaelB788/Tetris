@@ -1,6 +1,6 @@
 #pragma once
-#include "AppRenderer.hpp"
 #include "KeyboardListener.hpp"
+#include "RenderingModule.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_init.h>
 #include <chrono>
@@ -25,5 +25,5 @@ private:
   SDL_Event event;
   Tetris tetris{rng};
   KeyboardListener keyboard_listener{tetris};
-  AppRenderer renderer;
+  RenderingModule renderer;
 };

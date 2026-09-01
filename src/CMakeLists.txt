@@ -10,16 +10,16 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
 
 add_library(TetrisSource
   App.cpp
-  AppRenderer.cpp
+  GameTextRenderer.cpp
   KeyboardListener.cpp
   Matrix.cpp
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp
   PeriodicFunction.cpp
+  RenderingModule.cpp
   SevenBag.cpp
   Tetris.cpp
   Tetromino.cpp
-  TextRenderer.cpp
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE

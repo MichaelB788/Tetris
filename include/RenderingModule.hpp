@@ -14,7 +14,7 @@ public:
   RenderingModule(const std::filesystem::path &atlas_path,
                   const std::filesystem::path &font_path);
 
-  void update_window_size();
+  void fit_context_within_window();
 
   void render_frame(const Tetris &tetris);
 

@@ -18,7 +18,7 @@ void App::loop() {
       if (event.type == SDL_EVENT_QUIT)
         return;
       else if (event.type == SDL_EVENT_WINDOW_RESIZED)
-        renderer.update_window_size();
+        renderer.fit_context_within_window();
     }
 
     // Handle keyboard input

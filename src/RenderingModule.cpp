@@ -29,10 +29,10 @@ RenderingModule::RenderingModule(const std::filesystem::path &atlas_path,
   }
 
   // Center content before starting
-  update_window_size();
+  fit_context_within_window();
 }
 
-void RenderingModule::update_window_size() {
+void RenderingModule::fit_context_within_window() {
   // Update window size
   int w, h;
   SDL_GetWindowSize(window.get(), &w, &h);

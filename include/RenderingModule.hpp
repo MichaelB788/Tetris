@@ -23,7 +23,7 @@ private:
 
   void render_game_state(const Tetris &tetris);
 
-  Size<float> win_size{};
+  FSize win_size{};
   FPoint section_matrix{};
   FPoint section_left{};
   FPoint section_right{};

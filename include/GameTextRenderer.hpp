@@ -17,7 +17,7 @@ public:
 
   void draw_game_text(GameText txt, FPoint pos);
 
-  void draw_centered_game_text(GameText txt, Size<float> window);
+  void draw_centered_game_text(GameText txt, FSize window);
 
   void draw_unsigned_integer(unsigned n, FPoint pos) const;
 

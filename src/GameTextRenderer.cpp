@@ -54,12 +54,10 @@ void GameTextRenderer::draw_unsigned_integer(unsigned n, FPoint pos) const {
   }
 }
 
-void GameTextRenderer::draw_centered_game_text(GameText txt,
-                                               Size<float> window) {
-  Size<int> text_size = {};
-  TTF_GetTextSize(text_map[std::to_underlying(txt)].get(), &text_size.w,
-                  &text_size.h);
+void GameTextRenderer::draw_centered_game_text(GameText txt, FSize window) {
+  int w, h;
+  TTF_GetTextSize(text_map[std::to_underlying(txt)].get(), &w, &h);
   TTF_DrawRendererText(text_map[std::to_underlying(txt)].get(),
-                       (window.w - static_cast<float>(text_size.w)) / 2,
-                       (window.h - static_cast<float>(text_size.h)) / 2);
+                       (window.w - static_cast<float>(w)) / 2,
+                       (window.h - static_cast<float>(h)) / 2);
 }

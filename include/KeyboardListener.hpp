@@ -1,6 +1,7 @@
 #pragma once
 #include "PeriodicFunction.hpp"
 #include "Tetris.hpp"
+#include "Timer.hpp"
 #include <SDL3/SDL_init.h>
 #include <SDL3/SDL_scancode.h>
 #include <array>
@@ -19,24 +20,32 @@ private:
 
   struct Action {
     SDL_Scancode scancode;
+    Timer input_delay;
     PeriodicFunction func;
   };
 
   std::array<Action, 7> actions = {{
       {.scancode = SDL_SCANCODE_W,
-       .func{std::chrono::milliseconds(120), [this] { tetris.hard_drop(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(60), [this] { tetris.hard_drop(); }}},
       {.scancode = SDL_SCANCODE_A,
-       .func{std::chrono::milliseconds(120), [this] { tetris.move_left(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(60), [this] { tetris.move_left(); }}},
       {.scancode = SDL_SCANCODE_S,
-       .func{std::chrono::milliseconds(120), [this] { tetris.soft_drop(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(60), [this] { tetris.soft_drop(); }}},
       {.scancode = SDL_SCANCODE_D,
-       .func{std::chrono::milliseconds(120), [this] { tetris.move_right(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(60), [this] { tetris.move_right(); }}},
       {.scancode = SDL_SCANCODE_LEFT,
-       .func{std::chrono::milliseconds(120), [this] { tetris.rotate_ccw(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_ccw(); }}},
       {.scancode = SDL_SCANCODE_RIGHT,
-       .func{std::chrono::milliseconds(120), [this] { tetris.rotate_cw(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_cw(); }}},
       {.scancode = SDL_SCANCODE_DOWN,
-       .func{std::chrono::milliseconds(120), [this] { tetris.rotate_half(); }}},
+       .input_delay{std::chrono::milliseconds(100)},
+       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_half(); }}},
   }};
 
   bool prev_keyboard[SDL_SCANCODE_COUNT]{};

@@ -1,4 +1,5 @@
 #pragma once
+#include "Timer.hpp"
 #include <chrono>
 #include <functional>
 
@@ -12,7 +13,7 @@ public:
 
   template <typename Fn>
   constexpr PeriodicFunction(std::chrono::nanoseconds dur, Fn &&fn)
-      : duration(dur), function(fn) {}
+      : period(dur), function(fn) {}
 
   // Invoking early will reset the period
   void invoke_early();
@@ -25,8 +26,7 @@ public:
   void reset();
 
 private:
-  std::chrono::nanoseconds duration{};
-  std::chrono::nanoseconds accumulator{};
+  Timer period;
 
   std::function<void()> function;
 };

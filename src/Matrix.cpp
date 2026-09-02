@@ -9,7 +9,7 @@ auto Matrix::at(size_t x, size_t y) const -> Cell {
   return data[y][x];
 }
 
-auto Matrix::at(Point<int> pos) const -> Cell {
+auto Matrix::at(FPoint pos) const -> Cell {
   assert(0 <= pos.x && pos.x < MATRIX_COLS && 0 <= pos.x &&
          pos.y < MATRIX_ROWS);
   return data[pos.y][pos.x];

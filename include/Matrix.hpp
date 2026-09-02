@@ -1,5 +1,6 @@
 #pragma once
 #include "Constants.hpp"
+#include "Point.hpp"
 #include "Tetromino.hpp"
 #include <array>
 #include <optional>
@@ -9,7 +10,7 @@ public:
   using Cell = std::optional<Tetromino::Type>;
 
   [[nodiscard]] auto at(size_t x, size_t y) const -> Cell;
-  [[nodiscard]] auto at(Point<int> pos) const -> Cell;
+  [[nodiscard]] auto at(FPoint pos) const -> Cell;
 
   void lock_down(Tetromino piece);
   auto clear_lines() -> unsigned;

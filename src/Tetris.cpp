@@ -107,7 +107,7 @@ auto Tetris::get_ghost_piece() const -> Tetromino {
           active_piece.get_rotation()};
 }
 
-auto Tetris::move_active(Point<float> delta) -> bool {
+auto Tetris::move_active(FPoint delta) -> bool {
   if (active_piece.try_shift(delta, matrix)) {
     ++lock_resets;
     return true;

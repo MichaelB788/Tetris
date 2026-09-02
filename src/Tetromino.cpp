@@ -49,28 +49,28 @@ constexpr Tetromino::Shape SHAPES[7][4]{
      {{{0, -1}, {0, 0}, {0, 1}, {-1, -1}}}}}; // R270
 
 // SRS offset data
-constexpr Point<float> STANDARD_PIECE_OFFSETS[4][5]{
+constexpr FPoint STANDARD_PIECE_OFFSETS[4][5]{
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
     {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}},     // R90
     {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R180
     {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}}; // R270
 
-constexpr Point<float> I_PIECE_OFFSETS[4][5]{
+constexpr FPoint I_PIECE_OFFSETS[4][5]{
     {{0, 0}, {-1, 0}, {2, 0}, {-1, 0}, {2, 0}},     // R0
     {{-1, 0}, {0, 0}, {0, 0}, {0, -1}, {0, 2}},     // R90
     {{-1, -1}, {1, -1}, {-2, -1}, {1, 0}, {-2, 0}}, // R180
     {{0, -1}, {0, -1}, {0, -1}, {0, 1}, {0, -2}}};  // R270
 } // namespace
 
-void Tetromino::set_pos(Point<float> p) { pos = p; }
+void Tetromino::set_pos(FPoint p) { pos = p; }
 
 void Tetromino::set_rotation(Rotation r) { rotation = r; }
 
-void Tetromino::shift(Point<float> delta) { pos += delta; }
+void Tetromino::shift(FPoint delta) { pos = fpoint::add(pos, delta); }
 
-auto Tetromino::try_shift(Point<float> delta, const Matrix &matrix) -> bool {
+auto Tetromino::try_shift(FPoint delta, const Matrix &matrix) -> bool {
   if (matrix.is_move_valid(get_shifted_shape(delta))) {
-    pos += delta;
+    pos = fpoint::add(pos, delta);
     return true;
   }
   return false;
@@ -89,35 +89,33 @@ auto Tetromino::srs_rotation(Rotation next_rotation, const Matrix &matrix)
   const auto from = static_cast<size_t>(rotation);
   const auto to = static_cast<size_t>(next_rotation);
   for (size_t i = 0; i < 5; ++i) {
-    const auto wall_kick = offsets[from][i] - offsets[to][i];
+    const auto wall_kick = fpoint::subtract(offsets[from][i], offsets[to][i]);
     if (matrix.is_move_valid(rotated.get_shifted_shape(wall_kick))) {
       rotation = next_rotation;
-      pos += wall_kick;
+      pos = fpoint::add(pos, wall_kick);
       return true;
     }
   }
   return true;
 }
 
-auto Tetromino::get_shape_at(Point<float> offset) const -> Shape {
+auto Tetromino::get_shape_at(FPoint offset) const -> Shape {
   const auto t = static_cast<size_t>(type);
   const auto r = static_cast<size_t>(rotation);
   auto shape = SHAPES[t][r];
-  for (auto &block : shape) {
-    block += offset;
-  }
+  for (auto &pos : shape)
+    pos = fpoint::add(pos, offset);
   return shape;
 }
 
-auto Tetromino::get_shifted_shape(Point<float> delta) const -> Shape {
-  return get_shape_at(pos + delta);
+auto Tetromino::get_shifted_shape(FPoint delta) const -> Shape {
+  return get_shape_at(fpoint::add(pos, delta));
 }
 
 auto Tetromino::get_shape() const -> Shape { return get_shape_at(pos); }
 
-auto Tetromino::get_pos_after_hard_drop(const Matrix &matrix) const
-    -> Point<float> {
-  Point<float> drop_pos = pos, test_pos = pos;
+auto Tetromino::get_pos_after_hard_drop(const Matrix &matrix) const -> FPoint {
+  FPoint drop_pos = pos, test_pos = pos;
   test_pos.y += 1;
 
   while (matrix.is_move_valid(get_shape_at(test_pos))) {
@@ -129,7 +127,7 @@ auto Tetromino::get_pos_after_hard_drop(const Matrix &matrix) const
 
 auto Tetromino::get_type() const -> Type { return type; }
 
-auto Tetromino::get_pos() const -> Point<float> { return pos; }
+auto Tetromino::get_pos() const -> FPoint { return pos; }
 
 auto Tetromino::get_rotation() const -> Rotation { return rotation; }
 

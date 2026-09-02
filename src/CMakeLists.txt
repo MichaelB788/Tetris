@@ -16,6 +16,7 @@ add_library(TetrisSource
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp
   PeriodicFunction.cpp
+  Point.cpp
   RenderingModule.cpp
   SevenBag.cpp
   Tetris.cpp

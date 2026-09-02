@@ -27,12 +27,11 @@ GameTextRenderer::GameTextRenderer(SDL_Renderer &renderer,
     nums_map[i].reset(TTF_CreateText(engine.get(), font.get(), nums_str[i], 1));
 }
 
-void GameTextRenderer::draw_game_text(GameText msg, Point<float> pos) {
+void GameTextRenderer::draw_game_text(GameText msg, FPoint pos) {
   TTF_DrawRendererText(text_map[std::to_underlying(msg)].get(), pos.x, pos.y);
 }
 
-void GameTextRenderer::draw_unsigned_integer(unsigned n,
-                                             Point<float> pos) const {
+void GameTextRenderer::draw_unsigned_integer(unsigned n, FPoint pos) const {
   // Draw a single digit
   if (n < 10) {
     TTF_DrawRendererText(nums_map[n].get(), pos.x, pos.y);

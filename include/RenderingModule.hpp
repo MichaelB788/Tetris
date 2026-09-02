@@ -24,9 +24,9 @@ private:
   void render_game_state(const Tetris &tetris);
 
   Size<float> win_size{};
-  Point<float> section_matrix{};
-  Point<float> section_left{};
-  Point<float> section_right{};
+  FPoint section_matrix{};
+  FPoint section_left{};
+  FPoint section_right{};
 
   SDL::Window window = nullptr;
   SDL::Renderer renderer = nullptr;

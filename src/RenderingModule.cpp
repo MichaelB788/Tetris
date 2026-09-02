@@ -9,8 +9,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 namespace {
-auto resolve(Point<float> base, Point<float> offset) -> Point<float> {
-  return base + (offset * PIXEL_SCALE);
+auto resolve(FPoint base, FPoint offset) -> FPoint {
+  return fpoint::add(base, fpoint::multiply_scalar(offset, PIXEL_SCALE));
 };
 } // namespace
 
@@ -67,7 +67,7 @@ void RenderingModule::render_frame(const Tetris &tetris) {
 
 void RenderingModule::render_game_state(const Tetris &tetris) {
   // Lambda to draw a tile to the screen
-  auto draw_tile = [this](Tetromino::Type type, Point<float> screen_position,
+  auto draw_tile = [this](Tetromino::Type type, FPoint screen_position,
                           BlockStyle style) {
     const auto texture_rect_y = style == BlockStyle::Ghost ? PIXEL_SCALE : 0;
 
@@ -84,7 +84,7 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
   };
 
   // Lambda to draw a Tetromino to the screen
-  auto draw_tetromino = [&](const Tetromino &tet, Point<float> screen_position,
+  auto draw_tetromino = [&](const Tetromino &tet, FPoint screen_position,
                             BlockStyle style) {
     for (const auto tetr_pos : tet.get_shape())
       draw_tile(tet.get_type(), resolve(screen_position, tetr_pos), style);

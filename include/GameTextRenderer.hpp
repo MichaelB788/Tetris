@@ -15,11 +15,11 @@ public:
   GameTextRenderer(SDL_Renderer &renderer,
                    const std::filesystem::path &font_path);
 
-  void draw_game_text(GameText txt, Point<float> pos);
+  void draw_game_text(GameText txt, FPoint pos);
 
   void draw_centered_game_text(GameText txt, Size<float> window);
 
-  void draw_unsigned_integer(unsigned n, Point<float> pos) const;
+  void draw_unsigned_integer(unsigned n, FPoint pos) const;
 
 private:
   SDL::TTF::RendererTextEngine engine = nullptr;

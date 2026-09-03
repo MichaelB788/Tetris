@@ -12,6 +12,8 @@ enum class GameText : size_t { Next, Hold, Score, Paused, GameOver };
 
 class GameTextRenderer {
 public:
+  GameTextRenderer() = default;
+
   GameTextRenderer(SDL_Renderer &renderer,
                    const std::filesystem::path &font_path);
 

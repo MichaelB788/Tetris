@@ -7,13 +7,17 @@
 #include <vector>
 
 GameTextRenderer::GameTextRenderer(SDL_Renderer &renderer,
-                                   const std::filesystem::path &font_path)
-    : engine(TTF_CreateRendererTextEngine(&renderer)),
-      font(TTF_OpenFont(font_path.c_str(), FONT_SCALE)), text_map() {
+                                   const std::filesystem::path &font_path) {
+  engine.reset(TTF_CreateRendererTextEngine(&renderer));
   if (!engine) {
-    throw std::runtime_error("Couldn't create text engine");
-  } else if (!font) {
-    throw std::runtime_error("Couldn't create font");
+    throw std::runtime_error(
+        std::format("GameTextRenderer::engine: {}", SDL_GetError()));
+  }
+
+  font.reset(TTF_OpenFont(font_path.c_str(), FONT_SCALE));
+  if (!font) {
+    throw std::runtime_error(
+        std::format("GameTextRenderer::font: {}", SDL_GetError()));
   }
 
   const std::array text_str{"NEXT", "HOLD", "SCORE", "PAUSED",

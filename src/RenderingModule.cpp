@@ -4,10 +4,12 @@
 #include "Piece.hpp"
 #include "Point.hpp"
 #include "Tetris.hpp"
+#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <format>
 
 namespace {
 auto resolve(FPoint base, FPoint offset) -> FPoint {
@@ -16,18 +18,26 @@ auto resolve(FPoint base, FPoint offset) -> FPoint {
 } // namespace
 
 RenderingModule::RenderingModule(const std::filesystem::path &atlas_path,
-                                 const std::filesystem::path &font_path)
-    : window(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE)),
-      renderer(SDL_CreateRenderer(window.get(), nullptr)),
-      texture_atlas(IMG_LoadTexture(renderer.get(), atlas_path.c_str())),
-      text_renderer(*renderer, font_path) {
+                                 const std::filesystem::path &font_path) {
+  window.reset(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE));
   if (!window) {
-    throw std::runtime_error("Couldn't create window");
-  } else if (!renderer) {
-    throw std::runtime_error("Couldn't create renderer");
-  } else if (!texture_atlas) {
-    throw std::runtime_error("Couldn't create renderer");
+    throw std::runtime_error(
+        std::format("RenderingModule::window: {}", SDL_GetError()));
   }
+
+  renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
+  if (!renderer) {
+    throw std::runtime_error(
+        std::format("RenderingModule::renderer: {}", SDL_GetError()));
+  }
+
+  texture_atlas.reset(IMG_LoadTexture(renderer.get(), atlas_path.c_str()));
+  if (!texture_atlas) {
+    throw std::runtime_error(
+        std::format("RenderingModule::texture_atlas: {}", SDL_GetError()));
+  }
+
+  text_renderer = GameTextRenderer(*renderer, font_path);
 
   // Center content before starting
   fit_context_within_window();

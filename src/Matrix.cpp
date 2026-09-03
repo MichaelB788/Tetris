@@ -4,14 +4,19 @@
 #include <algorithm>
 #include <cassert>
 
-auto Matrix::at(size_t x, size_t y) const -> Cell {
+namespace {
+[[nodiscard]] auto is_pos_within_bounds(FPoint pos) -> bool {
+  return pos.x >= 0 && pos.y >= 0 && pos.x < MATRIX_COLS && pos.y < MATRIX_ROWS;
+}
+} // namespace
+
+auto Matrix::at(size_t x, size_t y) const -> std::optional<Tetromino::Type> {
   assert(x < MATRIX_COLS && y < MATRIX_ROWS);
   return data[y][x];
 }
 
-auto Matrix::at(FPoint pos) const -> Cell {
-  assert(0 <= pos.x && pos.x < MATRIX_COLS && 0 <= pos.x &&
-         pos.y < MATRIX_ROWS);
+auto Matrix::at(FPoint pos) const -> std::optional<Tetromino::Type> {
+  assert(is_pos_within_bounds(pos));
   return data[pos.y][pos.x];
 }
 
@@ -20,15 +25,11 @@ void Matrix::clear() {
     row.fill(std::nullopt);
 }
 
-auto Matrix::is_shape_hitting_ground(const Tetromino::Shape &shape) const
+[[nodiscard]] auto Matrix::is_out_of_bounds(const Tetromino::Shape &shape)
     -> bool {
-  for (const auto [x, y] : shape) {
-    if (x < 0 || y < 0 || x >= MATRIX_COLS || y >= MATRIX_ROWS) {
-      continue;
-    }
-    if (data[y][x].has_value()) {
+  for (const auto pos : shape) {
+    if (!is_pos_within_bounds(pos))
       return true;
-    }
   }
   return false;
 }

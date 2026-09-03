@@ -7,19 +7,20 @@
 
 class Matrix {
 public:
-  using Cell = std::optional<Tetromino::Type>;
-
-  [[nodiscard]] auto at(size_t x, size_t y) const -> Cell;
-  [[nodiscard]] auto at(FPoint pos) const -> Cell;
+  [[nodiscard]] auto at(size_t x, size_t y) const
+      -> std::optional<Tetromino::Type>;
+  [[nodiscard]] auto at(FPoint pos) const -> std::optional<Tetromino::Type>;
 
   void lock_down(Tetromino piece);
   auto clear_lines() -> unsigned;
   void clear();
 
-  [[nodiscard]] auto
-  is_shape_hitting_ground(const Tetromino::Shape &shape) const -> bool;
+  [[nodiscard]] static auto is_out_of_bounds(const Tetromino::Shape &shape)
+      -> bool;
   [[nodiscard]] auto is_move_valid(const Tetromino::Shape &shape) const -> bool;
 
 private:
-  std::array<std::array<Cell, MATRIX_COLS>, MATRIX_ROWS> data{};
+  std::array<std::array<std::optional<Tetromino::Type>, MATRIX_COLS>,
+             MATRIX_ROWS>
+      data{};
 };

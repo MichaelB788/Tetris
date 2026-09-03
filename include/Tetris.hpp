@@ -42,26 +42,35 @@ public:
   [[nodiscard]] auto get_ghost_piece() const -> Tetromino;
 
 private:
-  auto move_active(FPoint delta) -> bool;
-  auto rotate_active(Tetromino::Rotation next) -> bool;
+  void move_active(FPoint delta);
+  void rotate_active(Tetromino::Rotation next);
 
-  [[nodiscard]] auto try_spawn_next(Tetromino::Type next) -> bool;
-  void update_level();
+  /**
+   * @brief Starts the next round by switching `active` to `next`. This will
+   * also try to adjust the initial position of the new `active` piece if the
+   * initial position overlaps with existing grounded tiles.
+   *
+   * @return `State::GameOver` if `active` was adjusted to a position out of
+   * bounds, `State::Running` otherwise
+   */
+  [[nodiscard]] auto start_next_round(Tetromino::Type next) -> State;
 
-  void finalize_move();
+  void lock_piece();
 
   std::mt19937 &rng;
 
   State state = State::Running;
 
   unsigned score = 0;
-  unsigned lock_resets = 0;
-  bool hold_command_triggered = false;
+  unsigned lock_reset_count = 0;
 
-  std::optional<Tetromino::Type> held_piece = std::nullopt;
+  bool hold_used = false;
+  bool should_lock = false;
+
   Matrix matrix{};
   SevenBag seven_bag;
   Tetromino active_piece;
+  std::optional<Tetromino::Type> held_piece = std::nullopt;
 
   PeriodicFunction gravity;
   PeriodicFunction lock;

@@ -6,12 +6,11 @@
 
 Tetris::Tetris(std::mt19937 &rng)
     : rng(rng), seven_bag(rng), active_piece(seven_bag.pop(), SPAWN_POINT),
-      gravity(std::chrono::seconds(1),
-              [this] { active_piece.try_shift({.y = 1}, matrix); }),
+      gravity(std::chrono::seconds(1), [this] { soft_drop(); }),
       lock(std::chrono::seconds(1), [this] {
         if (!matrix.is_move_valid(active_piece.get_shifted_shape({.y = 1}))) {
-          finalize_move();
-          lock_resets = 0;
+          lock_piece();
+          state = start_next_round(seven_bag.pop());
         }
       }) {}
 
@@ -19,11 +18,14 @@ void Tetris::move_left() { move_active({.x = -1}); }
 
 void Tetris::move_right() { move_active({.x = 1}); }
 
-void Tetris::soft_drop() { move_active({.y = 1}); }
+void Tetris::soft_drop() {
+  should_lock = !active_piece.try_shift({.y = 1}, matrix);
+}
 
 void Tetris::hard_drop() {
   active_piece.hard_drop(matrix);
-  finalize_move();
+  lock_piece();
+  state = start_next_round(seven_bag.pop());
 }
 
 void Tetris::rotate_cw() {
@@ -39,43 +41,39 @@ void Tetris::rotate_half() {
 }
 
 void Tetris::hold_active() {
-  if (hold_command_triggered) {
+  if (hold_used)
     return;
-  }
 
-  const auto to_hold = active_piece.get_type();
-  if (try_spawn_next(held_piece.has_value() ? held_piece.value()
-                                            : seven_bag.pop())) {
-    hold_command_triggered = true;
-    held_piece = to_hold;
-  } else {
-    state = State::GameOver;
-  }
+  hold_used = true;
+
+  // Perform a swap
+  const auto temp = active_piece.get_type();
+  state = start_next_round(held_piece.has_value() ? held_piece.value()
+                                                  : seven_bag.pop());
+  held_piece = temp;
 }
 
 void Tetris::pause() {
-  if (state == State::Running) {
+  if (state == State::Running)
     state = State::Paused;
-  }
 }
 
 void Tetris::unpause() {
-  if (state == State::Paused) {
+  if (state == State::Paused)
     state = State::Running;
-  }
 }
+
 void Tetris::tick(std::chrono::nanoseconds delta_time) {
   gravity.tick(delta_time);
 
-  if (lock_resets >= 10) {
+  if (should_lock)
     lock.tick(delta_time);
-  }
 }
 
 void Tetris::reset() {
   state = State::Running;
   score = 0;
-  hold_command_triggered = false;
+  hold_used = false;
 
   gravity.reset();
   lock.reset();
@@ -107,56 +105,50 @@ auto Tetris::get_ghost_piece() const -> Tetromino {
           active_piece.get_rotation()};
 }
 
-auto Tetris::move_active(FPoint delta) -> bool {
-  if (active_piece.try_shift(delta, matrix)) {
-    ++lock_resets;
-    return true;
+void Tetris::move_active(FPoint delta) {
+  if (active_piece.try_shift(delta, matrix) && should_lock) {
+    if (lock_reset_count++ < 10)
+      lock.reset();
   }
-  return false;
 }
 
-auto Tetris::rotate_active(Tetromino::Rotation next) -> bool {
-  if (active_piece.srs_rotation(next, matrix)) {
-    ++lock_resets;
-    return true;
+void Tetris::rotate_active(Tetromino::Rotation next) {
+  if (active_piece.srs_rotation(next, matrix) && should_lock) {
+    if (lock_reset_count++ < 10)
+      lock.reset();
   }
-  return false;
 }
 
-auto Tetris::try_spawn_next(Tetromino::Type next) -> bool {
+auto Tetris::start_next_round(Tetromino::Type next) -> State {
   active_piece = {next, SPAWN_POINT};
 
-  auto was_successful_turn = true;
-  while (matrix.is_shape_hitting_ground(active_piece.get_shape())) {
+  // Try to adjust the initial position of the next piece
+  while (!matrix.is_move_valid(active_piece.get_shape())) {
     active_piece.shift({.y = -1});
-    was_successful_turn = matrix.is_move_valid(active_piece.get_shape());
+    if (Matrix::is_out_of_bounds(active_piece.get_shape()))
+      return State::GameOver;
   }
 
-  if (was_successful_turn) {
-    lock.reset();
-    gravity.reset();
-  }
+  // Adjustment successful, reset round specific variables for next round
+  lock.reset();
+  gravity.reset();
+  lock_reset_count = 0;
+  should_lock = false;
 
-  return was_successful_turn;
+  return State::Running;
 }
 
-void Tetris::update_level() {
-  using namespace std::chrono_literals;
-  static constexpr std::array LEVELS{1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
-                                     450ms,  400ms, 300ms, 200ms, 100ms};
-
-  gravity.set_duration(score < 100 ? LEVELS[score / 10] : LEVELS.back());
-}
-
-void Tetris::finalize_move() {
+void Tetris::lock_piece() {
+  // Lock down the active piece and update the score
   matrix.lock_down(active_piece);
   score += matrix.clear_lines();
 
-  update_level();
+  // Update the gravity duration based on the score
+  using namespace std::chrono_literals;
+  static constexpr std::array LEVELS{1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
+                                     450ms,  400ms, 300ms, 200ms, 100ms};
+  gravity.set_duration(score < 100 ? LEVELS[score / 10] : LEVELS.back());
 
-  if (try_spawn_next(seven_bag.pop())) {
-    hold_command_triggered = false;
-  } else {
-    state = State::GameOver;
-  }
+  // Hold command should only be active again when the piece has locked down
+  hold_used = false;
 }

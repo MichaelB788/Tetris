@@ -36,8 +36,7 @@ void Matrix::clear() {
 
 auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
   return std::ranges::all_of(shape, [this](auto pos) {
-    return pos.x >= 0 && pos.y >= 0 && pos.x < MATRIX_COLS &&
-           pos.y < MATRIX_ROWS && !data[pos.y][pos.x].has_value();
+    return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
   });
 }
 
@@ -54,14 +53,13 @@ auto Matrix::clear_lines() -> unsigned {
   int write = MATRIX_ROWS - 1;
 
   for (int read = MATRIX_ROWS - 1; read >= 0; --read) {
-    if (std::ranges::all_of(data[read], [](auto matrix_cell) {
-          return matrix_cell.has_value();
-        })) {
+    if (std::ranges::all_of(data[read],
+                            [](auto tile) { return tile.has_value(); })) {
       ++cleared;
     } else {
-      if (write != read) {
+      if (write != read)
         data[write] = data[read];
-      }
+
       --write;
     }
   }

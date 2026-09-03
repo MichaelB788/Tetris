@@ -1,6 +1,6 @@
 #include "Matrix.hpp"
 #include "Constants.hpp"
-#include "Tetromino.hpp"
+#include "Piece.hpp"
 #include <algorithm>
 #include <cassert>
 
@@ -10,12 +10,12 @@ namespace {
 }
 } // namespace
 
-auto Matrix::at(size_t x, size_t y) const -> std::optional<Tetromino::Type> {
+auto Matrix::at(size_t x, size_t y) const -> std::optional<Piece::Type> {
   assert(x < MATRIX_COLS && y < MATRIX_ROWS);
   return data[y][x];
 }
 
-auto Matrix::at(FPoint pos) const -> std::optional<Tetromino::Type> {
+auto Matrix::at(FPoint pos) const -> std::optional<Piece::Type> {
   assert(is_pos_within_bounds(pos));
   return data[pos.y][pos.x];
 }
@@ -25,8 +25,7 @@ void Matrix::clear() {
     row.fill(std::nullopt);
 }
 
-[[nodiscard]] auto Matrix::is_out_of_bounds(const Tetromino::Shape &shape)
-    -> bool {
+[[nodiscard]] auto Matrix::is_out_of_bounds(const Piece::Shape &shape) -> bool {
   for (const auto pos : shape) {
     if (!is_pos_within_bounds(pos))
       return true;
@@ -34,16 +33,16 @@ void Matrix::clear() {
   return false;
 }
 
-auto Matrix::is_move_valid(const Tetromino::Shape &shape) const -> bool {
+auto Matrix::can_place(const Piece::Shape &shape) const -> bool {
   return std::ranges::all_of(shape, [this](auto pos) {
     return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
   });
 }
 
-void Matrix::lock_down(Tetromino piece) {
-  if (const auto shape = piece.get_shape(); is_move_valid(shape)) {
+void Matrix::lock_down(Piece piece) {
+  if (const auto shape = piece::create_shape(piece); can_place(shape)) {
     for (const auto [x, y] : shape) {
-      data[y][x] = piece.get_type();
+      data[y][x] = piece.type;
     }
   }
 }

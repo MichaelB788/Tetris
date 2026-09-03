@@ -1,6 +1,7 @@
 #include "RenderingModule.hpp"
 #include "Constants.hpp"
 #include "GameTextRenderer.hpp"
+#include "Piece.hpp"
 #include "Point.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_render.h>
@@ -66,8 +67,7 @@ void RenderingModule::render_frame(const Tetris &tetris) {
 }
 
 void RenderingModule::render_game_state(const Tetris &tetris) {
-  // Lambda to draw a tile to the screen
-  auto draw_tile = [this](Tetromino::Type type, FPoint screen_position,
+  auto draw_tile = [this](Piece::Type type, FPoint screen_position,
                           BlockStyle style) {
     const auto texture_rect_y = style == BlockStyle::Ghost ? PIXEL_SCALE : 0;
 
@@ -83,29 +83,28 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
                       &texture_screen_pos);
   };
 
-  // Lambda to draw a Tetromino to the screen
-  auto draw_tetromino = [&](const Tetromino &tet, FPoint screen_position,
-                            BlockStyle style) {
-    for (const auto tetr_pos : tet.get_shape())
-      draw_tile(tet.get_type(), resolve(screen_position, tetr_pos), style);
+  auto draw_piece = [&](const Piece &pc, FPoint screen_position,
+                        BlockStyle style) {
+    for (const auto tetr_pos : piece::create_shape(pc))
+      draw_tile(pc.type, resolve(screen_position, tetr_pos), style);
   };
 
   // Draw the ghost piece
   // NOTE: This should always be called before drawing active
-  draw_tetromino(tetris.get_ghost_piece(), section_matrix, BlockStyle::Ghost);
+  draw_piece(tetris.get_ghost_piece(), section_matrix, BlockStyle::Ghost);
 
   // Draw the active Tetromino
-  draw_tetromino(tetris.get_active_piece(), section_matrix, BlockStyle::Solid);
+  draw_piece(tetris.get_active_piece(), section_matrix, BlockStyle::Solid);
 
   // Draw the held piece
-  if (const auto held_piece = tetris.get_held_piece())
-    draw_tetromino({held_piece.value()}, resolve(section_right, {1, 3}),
-                   BlockStyle::Solid);
+  if (const auto held_type = tetris.get_held_piece())
+    draw_piece({held_type.value()}, resolve(section_right, {1, 3}),
+               BlockStyle::Solid);
 
   // Draw the seven bag queue
   auto next_pos = resolve(section_left, {1, 3});
   for (const auto next_type : tetris.get_seven_bag()) {
-    draw_tetromino({next_type}, next_pos, BlockStyle::Solid);
+    draw_piece({next_type}, next_pos, BlockStyle::Solid);
     next_pos.y += 3 * PIXEL_SCALE;
   }
 

@@ -1,9 +1,9 @@
 #include "SevenBag.hpp"
-#include "Tetromino.hpp"
+#include "Piece.hpp"
 #include <algorithm>
 
 SevenBag::SevenBag(std::mt19937 &rng) : rng(rng), curr_bag() {
-  using enum Tetromino::Type;
+  using enum Piece::Type;
   curr_bag = next_bag = {I, O, T, S, Z, J, L};
   std::ranges::shuffle(next_bag, rng);
   shuffle();
@@ -22,7 +22,7 @@ void SevenBag::shuffle() {
   }
 }
 
-auto SevenBag::pop() -> Tetromino::Type {
+auto SevenBag::pop() -> Piece::Type {
   const auto next_type_ = curr_bag[read++];
   if (read == curr_bag.size()) {
     shuffle();
@@ -30,7 +30,7 @@ auto SevenBag::pop() -> Tetromino::Type {
   return next_type_;
 }
 
-auto SevenBag::peek() const -> Tetromino::Type { return curr_bag[read]; }
+auto SevenBag::peek() const -> Piece::Type { return curr_bag[read]; }
 
 auto SevenBag::get_preview() const -> Preview {
   Preview preview{};

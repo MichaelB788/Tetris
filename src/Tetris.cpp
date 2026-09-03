@@ -1,44 +1,38 @@
 #include "Tetris.hpp"
+#include "Piece.hpp"
 #include "Point.hpp"
-#include "Tetromino.hpp"
 #include <chrono>
 #include <optional>
 
 Tetris::Tetris(std::mt19937 &rng)
-    : rng(rng), seven_bag(rng), active_piece(seven_bag.pop(), SPAWN_POINT),
+    : rng(rng), seven_bag(rng), player(seven_bag.pop(), SPAWN_POINT),
       gravity(std::chrono::seconds(1), [this] { soft_drop(); }),
       lock(std::chrono::seconds(1), [this] {
-        if (!matrix.is_move_valid(active_piece.get_shifted_shape({.y = 1}))) {
+        if (!matrix.can_place(
+                piece::create_shape(piece::shift(player, {.y = 1})))) {
           lock_piece();
           state = start_next_round(seven_bag.pop());
         }
       }) {}
 
-void Tetris::move_left() { move_active({.x = -1}); }
+void Tetris::move_left() { shift_active({.x = -1}); }
 
-void Tetris::move_right() { move_active({.x = 1}); }
+void Tetris::move_right() { shift_active({.x = 1}); }
 
 void Tetris::soft_drop() {
-  should_lock = !active_piece.try_shift({.y = 1}, matrix);
+  should_lock = piece::shift_within(player, {.y = 1}, matrix) ==
+                Piece::MoveResult::Unapplied;
 }
 
 void Tetris::hard_drop() {
-  active_piece.hard_drop(matrix);
+  piece::hard_drop(player, matrix);
   lock_piece();
   state = start_next_round(seven_bag.pop());
 }
 
-void Tetris::rotate_cw() {
-  rotate_active(tetromino::rotated_cw(active_piece.get_rotation(), 1));
-}
-
-void Tetris::rotate_ccw() {
-  rotate_active(tetromino::rotated_cw(active_piece.get_rotation(), 3));
-}
-
-void Tetris::rotate_half() {
-  rotate_active(tetromino::rotated_cw(active_piece.get_rotation(), 2));
-}
+void Tetris::rotate_cw() { rotate_active(Piece::Rotation::CW); }
+void Tetris::rotate_ccw() { rotate_active(Piece::Rotation::CCW); }
+void Tetris::rotate_half() { rotate_active(Piece::Rotation::Half); }
 
 void Tetris::hold_active() {
   if (hold_used)
@@ -47,10 +41,10 @@ void Tetris::hold_active() {
   hold_used = true;
 
   // Perform a swap
-  const auto temp = active_piece.get_type();
-  state = start_next_round(held_piece.has_value() ? held_piece.value()
-                                                  : seven_bag.pop());
-  held_piece = temp;
+  const auto temp = player.type;
+  state = start_next_round(held_type.has_value() ? held_type.value()
+                                                 : seven_bag.pop());
+  held_type = temp;
 }
 
 void Tetris::pause() {
@@ -78,10 +72,10 @@ void Tetris::reset() {
   gravity.reset();
   lock.reset();
 
-  held_piece = std::nullopt;
+  held_type = std::nullopt;
   matrix.clear();
   seven_bag.shuffle();
-  active_piece = {seven_bag.pop(), SPAWN_POINT};
+  player = {seven_bag.pop(), SPAWN_POINT};
 }
 
 auto Tetris::get_state() const -> State { return state; }
@@ -90,42 +84,57 @@ auto Tetris::get_score() const -> unsigned { return score; }
 
 auto Tetris::get_matrix() const -> const Matrix & { return matrix; }
 
-auto Tetris::get_active_piece() const -> Tetromino { return active_piece; }
+auto Tetris::get_active_piece() const -> Piece { return player; }
 
 auto Tetris::get_seven_bag() const -> SevenBag::Preview {
   return seven_bag.get_preview();
 }
 
-auto Tetris::get_held_piece() const -> std::optional<Tetromino::Type> {
-  return held_piece;
+auto Tetris::get_held_piece() const -> std::optional<Piece::Type> {
+  return held_type;
 }
 
-auto Tetris::get_ghost_piece() const -> Tetromino {
-  return {active_piece.get_type(), active_piece.get_pos_after_hard_drop(matrix),
-          active_piece.get_rotation()};
+auto Tetris::get_ghost_piece() const -> Piece {
+  auto ghost = player;
+  piece::hard_drop(ghost, matrix);
+  return ghost;
 }
 
-void Tetris::move_active(FPoint delta) {
-  if (active_piece.try_shift(delta, matrix) && should_lock) {
-    if (lock_reset_count++ < 10)
+void Tetris::shift_active(FPoint delta) {
+  switch (piece::shift_within(player, delta, matrix)) {
+    using enum Piece::MoveResult;
+  case Applied:
+    if (should_lock && lock_reset_count < 10) {
+      ++lock_reset_count;
       lock.reset();
+    }
+    break;
+  case Unapplied:
+    break;
   }
 }
 
-void Tetris::rotate_active(Tetromino::Rotation next) {
-  if (active_piece.srs_rotation(next, matrix) && should_lock) {
-    if (lock_reset_count++ < 10)
+void Tetris::rotate_active(Piece::Rotation next) {
+  switch (piece::rotate_srs(player, next, matrix)) {
+    using enum Piece::MoveResult;
+  case Applied:
+    if (should_lock && lock_reset_count < 10) {
+      ++lock_reset_count;
       lock.reset();
+    }
+    break;
+  case Unapplied:
+    break;
   }
 }
 
-auto Tetris::start_next_round(Tetromino::Type next) -> State {
-  active_piece = {next, SPAWN_POINT};
+auto Tetris::start_next_round(Piece::Type next) -> State {
+  player = {next, SPAWN_POINT};
 
   // Try to adjust the initial position of the next piece
-  while (!matrix.is_move_valid(active_piece.get_shape())) {
-    active_piece.shift({.y = -1});
-    if (Matrix::is_out_of_bounds(active_piece.get_shape()))
+  while (!matrix.can_place(piece::create_shape(player))) {
+    --player.pos.y;
+    if (Matrix::is_out_of_bounds(piece::create_shape(player)))
       return State::GameOver;
   }
 
@@ -140,7 +149,7 @@ auto Tetris::start_next_round(Tetromino::Type next) -> State {
 
 void Tetris::lock_piece() {
   // Lock down the active piece and update the score
-  matrix.lock_down(active_piece);
+  matrix.lock_down(player);
   score += matrix.clear_lines();
 
   // Update the gravity duration based on the score

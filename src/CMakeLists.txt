@@ -16,11 +16,11 @@ add_library(TetrisSource
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp
   PeriodicFunction.cpp
+  Piece.cpp
   Point.cpp
   RenderingModule.cpp
   SevenBag.cpp
   Tetris.cpp
-  Tetromino.cpp
   Timer.cpp
 )
 

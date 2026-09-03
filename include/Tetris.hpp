@@ -1,9 +1,9 @@
 #pragma once
 #include "Matrix.hpp"
 #include "PeriodicFunction.hpp"
+#include "Piece.hpp"
 #include "Point.hpp"
 #include "SevenBag.hpp"
-#include "Tetromino.hpp"
 #include <cstdint>
 #include <optional>
 #include <random>
@@ -36,14 +36,14 @@ public:
   [[nodiscard]] auto get_score() const -> unsigned;
   [[nodiscard]] auto get_state() const -> State;
   [[nodiscard]] auto get_matrix() const -> const Matrix &;
-  [[nodiscard]] auto get_active_piece() const -> Tetromino;
+  [[nodiscard]] auto get_active_piece() const -> Piece;
   [[nodiscard]] auto get_seven_bag() const -> SevenBag::Preview;
-  [[nodiscard]] auto get_held_piece() const -> std::optional<Tetromino::Type>;
-  [[nodiscard]] auto get_ghost_piece() const -> Tetromino;
+  [[nodiscard]] auto get_held_piece() const -> std::optional<Piece::Type>;
+  [[nodiscard]] auto get_ghost_piece() const -> Piece;
 
 private:
-  void move_active(FPoint delta);
-  void rotate_active(Tetromino::Rotation next);
+  void shift_active(FPoint delta);
+  void rotate_active(Piece::Rotation next);
 
   /**
    * @brief Starts the next round by switching `active` to `next`. This will
@@ -53,7 +53,7 @@ private:
    * @return `State::GameOver` if `active` was adjusted to a position out of
    * bounds, `State::Running` otherwise
    */
-  [[nodiscard]] auto start_next_round(Tetromino::Type next) -> State;
+  [[nodiscard]] auto start_next_round(Piece::Type next) -> State;
 
   void lock_piece();
 
@@ -69,8 +69,8 @@ private:
 
   Matrix matrix{};
   SevenBag seven_bag;
-  Tetromino active_piece;
-  std::optional<Tetromino::Type> held_piece = std::nullopt;
+  Piece player;
+  std::optional<Piece::Type> held_type = std::nullopt;
 
   PeriodicFunction gravity;
   PeriodicFunction lock;

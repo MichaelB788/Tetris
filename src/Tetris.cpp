@@ -134,7 +134,7 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
   // Try to adjust the initial position of the next piece
   while (!matrix.can_place(piece::create_shape(player))) {
     --player.pos.y;
-    if (Matrix::is_out_of_bounds(piece::create_shape(player)))
+    if (!matrix::is_piece_within_bounds(piece::create_shape(player)))
       return State::GameOver;
   }
 

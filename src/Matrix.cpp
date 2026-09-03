@@ -25,14 +25,6 @@ void Matrix::clear() {
     row.fill(std::nullopt);
 }
 
-[[nodiscard]] auto Matrix::is_out_of_bounds(const Piece::Shape &shape) -> bool {
-  for (const auto pos : shape) {
-    if (!is_pos_within_bounds(pos))
-      return true;
-  }
-  return false;
-}
-
 auto Matrix::can_place(const Piece::Shape &shape) const -> bool {
   return std::ranges::all_of(shape, [this](auto pos) {
     return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
@@ -41,9 +33,8 @@ auto Matrix::can_place(const Piece::Shape &shape) const -> bool {
 
 void Matrix::lock_down(Piece piece) {
   if (const auto shape = piece::create_shape(piece); can_place(shape)) {
-    for (const auto [x, y] : shape) {
+    for (const auto [x, y] : shape)
       data[y][x] = piece.type;
-    }
   }
 }
 
@@ -67,4 +58,9 @@ auto Matrix::clear_lines() -> unsigned {
     data[i].fill(std::nullopt);
 
   return cleared;
+}
+
+auto matrix::is_piece_within_bounds(const Piece::Shape &shape) -> bool {
+  return std::ranges::all_of(
+      shape, [](auto pos) { return is_pos_within_bounds(pos); });
 }

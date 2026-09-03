@@ -14,10 +14,13 @@ public:
   auto clear_lines() -> unsigned;
   void clear();
 
-  [[nodiscard]] static auto is_out_of_bounds(const Piece::Shape &shape) -> bool;
   [[nodiscard]] auto can_place(const Piece::Shape &shape) const -> bool;
 
 private:
   std::array<std::array<std::optional<Piece::Type>, MATRIX_COLS>, MATRIX_ROWS>
       data{};
 };
+
+namespace matrix {
+[[nodiscard]] auto is_piece_within_bounds(const Piece::Shape &piece) -> bool;
+}

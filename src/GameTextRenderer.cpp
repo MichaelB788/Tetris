@@ -22,17 +22,26 @@ GameTextRenderer::GameTextRenderer(SDL_Renderer &renderer,
 
   const std::array text_str{"NEXT", "HOLD", "SCORE", "PAUSED",
                             "GAMEOVER!\n\nCONTINUE?\n\n[Y/N]"};
-  for (size_t i = 0; i < text_map.size(); ++i) {
+  for (size_t i = 0; i < text_map.size(); ++i)
     text_map[i].reset(TTF_CreateText(engine.get(), font.get(), text_str[i], 0));
-  }
 
-  const std::array nums_str{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-  for (size_t i = 0; i < nums_map.size(); ++i)
-    nums_map[i].reset(TTF_CreateText(engine.get(), font.get(), nums_str[i], 1));
+  const std::array nums_str{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+  for (size_t i = 0; i < nums_map.size(); ++i) {
+    nums_map[i].reset(
+        TTF_CreateText(engine.get(), font.get(), &nums_str[i], 1));
+  }
 }
 
-void GameTextRenderer::draw_game_text(GameText msg, FPoint pos) {
-  TTF_DrawRendererText(text_map[std::to_underlying(msg)].get(), pos.x, pos.y);
+void GameTextRenderer::draw_game_text(TextIdx i, FPoint pos) {
+  TTF_DrawRendererText(text_map[std::to_underlying(i)].get(), pos.x, pos.y);
+}
+
+void GameTextRenderer::draw_centered_game_text(TextIdx i, FSize window) {
+  int w, h;
+  TTF_GetTextSize(text_map[std::to_underlying(i)].get(), &w, &h);
+  TTF_DrawRendererText(text_map[std::to_underlying(i)].get(),
+                       (window.w - static_cast<float>(w)) / 2,
+                       (window.h - static_cast<float>(h)) / 2);
 }
 
 void GameTextRenderer::draw_unsigned_integer(unsigned n, FPoint pos) const {
@@ -56,12 +65,4 @@ void GameTextRenderer::draw_unsigned_integer(unsigned n, FPoint pos) const {
     digits.pop_back();
     pos.x += FONT_SCALE;
   }
-}
-
-void GameTextRenderer::draw_centered_game_text(GameText txt, FSize window) {
-  int w, h;
-  TTF_GetTextSize(text_map[std::to_underlying(txt)].get(), &w, &h);
-  TTF_DrawRendererText(text_map[std::to_underlying(txt)].get(),
-                       (window.w - static_cast<float>(w)) / 2,
-                       (window.h - static_cast<float>(h)) / 2);
 }

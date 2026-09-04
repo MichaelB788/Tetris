@@ -66,10 +66,10 @@ void RenderingModule::render_frame(const Tetris &tetris) {
     render_game_state(tetris);
     break;
   case Paused:
-    text_renderer.draw_centered_game_text(GameText::Paused, win_size);
+    text_renderer.draw_centered_game_text(TextIdx::Paused, win_size);
     break;
   case GameOver:
-    text_renderer.draw_centered_game_text(GameText::GameOver, win_size);
+    text_renderer.draw_centered_game_text(TextIdx::GameOver, win_size);
     break;
   }
 
@@ -107,9 +107,10 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
   draw_piece(tetris.get_active_piece(), section_matrix, BlockStyle::Solid);
 
   // Draw the held piece
-  if (const auto held_type = tetris.get_held_piece())
+  if (const auto held_type = tetris.get_held_piece()) {
     draw_piece({held_type.value()}, resolve(section_right, {1, 3}),
                BlockStyle::Solid);
+  }
 
   // Draw the seven bag queue
   auto next_pos = resolve(section_left, {1, 3});
@@ -137,9 +138,9 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
   SDL_RenderRect(renderer.get(), &outline_rect);
 
   // Draw game text
-  text_renderer.draw_game_text(GameText::Next, section_left);
-  text_renderer.draw_game_text(GameText::Hold, section_right);
-  text_renderer.draw_game_text(GameText::Score, resolve(section_right, {0, 8}));
+  text_renderer.draw_game_text(TextIdx::Next, section_left);
+  text_renderer.draw_game_text(TextIdx::Hold, section_right);
+  text_renderer.draw_game_text(TextIdx::Score, resolve(section_right, {0, 8}));
   text_renderer.draw_unsigned_integer(tetris.get_score(),
                                       resolve(section_right, {0, 10}));
 }

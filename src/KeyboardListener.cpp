@@ -32,34 +32,47 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
 
   case Tetris::State::Paused:
     if (is_key_pressed(SDL_SCANCODE_SPACE))
-      tetris.unpause();
+      tetris.unpause_game();
     break;
 
   case Tetris::State::Running:
     // Check for pause, highest priority
     if (is_key_pressed(SDL_SCANCODE_SPACE)) {
-      tetris.pause();
-      break;
+      tetris.pause_game();
+      for (auto &act : repeatable_actions) {
+        act.input_delay.reset();
+        act.periodic_func.reset();
+      }
+      break; // Don't process any other events after pausing
     }
 
-    // Handle inputs which can be repeated
-    for (auto &act : actions) {
-      if (is_key_pressed(act.scancode)) {
-        act.input_delay.reset();
-        act.func.invoke_early();
-      } else if (is_key_held(act.scancode)) {
-        act.input_delay.tick(delta);
-        if (act.input_delay.has_set_off())
-          act.func.tick(delta);
-      } else if (is_key_released(act.scancode)) {
-        act.input_delay.reset();
-        act.func.reset();
+    // Handle repeatable actions
+    for (auto &[scancode, input_delay, periodic_func] : repeatable_actions) {
+      if (is_key_pressed(scancode)) {
+        input_delay.reset();
+        periodic_func.invoke_early();
+      } else if (is_key_held(scancode)) {
+        if (input_delay.has_set_off())
+          periodic_func.tick(delta);
+        else
+          input_delay.tick(delta);
+      } else if (is_key_released(scancode)) {
+        input_delay.reset();
+        periodic_func.reset();
       }
     }
 
-    // Handle inputs with no repeat
-    if (is_key_pressed(SDL_SCANCODE_UP))
-      tetris.hold_active();
+    // Handle one-shot moves
+    if (is_key_pressed(SDL_SCANCODE_W))
+      tetris.player_hard_drop();
+    else if (is_key_pressed(SDL_SCANCODE_UP))
+      tetris.hold_current_piece();
+    else if (is_key_pressed(SDL_SCANCODE_DOWN))
+      tetris.player_rotate_half();
+    else if (is_key_pressed(SDL_SCANCODE_LEFT))
+      tetris.player_rotate_ccw();
+    else if (is_key_pressed(SDL_SCANCODE_RIGHT))
+      tetris.player_rotate_cw();
     break;
   }
 

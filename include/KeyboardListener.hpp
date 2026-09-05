@@ -18,34 +18,27 @@ public:
 private:
   Tetris &tetris;
 
-  struct Action {
+  struct RepeatableAction {
     SDL_Scancode scancode;
     Timer input_delay;
-    PeriodicFunction func;
+    PeriodicFunction periodic_func;
   };
 
-  std::array<Action, 7> actions = {{
-      {.scancode = SDL_SCANCODE_W,
-       .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(60), [this] { tetris.hard_drop(); }}},
+  std::array<RepeatableAction, 3> repeatable_actions = {{
       {.scancode = SDL_SCANCODE_A,
        .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(60), [this] { tetris.move_left(); }}},
+       .periodic_func{std::chrono::milliseconds(60),
+                      [this] { tetris.player_step_left(); }}},
+
       {.scancode = SDL_SCANCODE_S,
        .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(60), [this] { tetris.soft_drop(); }}},
+       .periodic_func{std::chrono::milliseconds(60),
+                      [this] { tetris.player_soft_drop(); }}},
+
       {.scancode = SDL_SCANCODE_D,
        .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(60), [this] { tetris.move_right(); }}},
-      {.scancode = SDL_SCANCODE_LEFT,
-       .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_ccw(); }}},
-      {.scancode = SDL_SCANCODE_RIGHT,
-       .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_cw(); }}},
-      {.scancode = SDL_SCANCODE_DOWN,
-       .input_delay{std::chrono::milliseconds(100)},
-       .func{std::chrono::milliseconds(100), [this] { tetris.rotate_half(); }}},
+       .periodic_func{std::chrono::milliseconds(60),
+                      [this] { tetris.player_step_right(); }}},
   }};
 
   bool prev_keyboard[SDL_SCANCODE_COUNT]{};

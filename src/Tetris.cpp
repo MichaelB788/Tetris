@@ -6,7 +6,7 @@
 
 Tetris::Tetris(std::mt19937 &rng)
     : rng(rng), seven_bag(rng), player(seven_bag.pop(), SPAWN_POINT),
-      gravity(std::chrono::seconds(1), [this] { soft_drop(); }),
+      gravity(std::chrono::seconds(1), [this] { player_soft_drop(); }),
       lock(std::chrono::seconds(1), [this] {
         if (!matrix.can_place(
                 piece::create_shape(piece::shift(player, {.y = 1})))) {
@@ -15,26 +15,26 @@ Tetris::Tetris(std::mt19937 &rng)
         }
       }) {}
 
-void Tetris::move_left() { shift_active({.x = -1}); }
+void Tetris::player_step_left() { player_horizontal_shift(-1); }
 
-void Tetris::move_right() { shift_active({.x = 1}); }
+void Tetris::player_step_right() { player_horizontal_shift(1); }
 
-void Tetris::soft_drop() {
+void Tetris::player_soft_drop() {
   should_lock = piece::shift_within(player, {.y = 1}, matrix) ==
                 Piece::MoveResult::Unapplied;
 }
 
-void Tetris::hard_drop() {
+void Tetris::player_hard_drop() {
   piece::hard_drop(player, matrix);
   lock_piece();
   state = start_next_round(seven_bag.pop());
 }
 
-void Tetris::rotate_cw() { rotate_active(Piece::Rotation::CW); }
-void Tetris::rotate_ccw() { rotate_active(Piece::Rotation::CCW); }
-void Tetris::rotate_half() { rotate_active(Piece::Rotation::Half); }
+void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::CW); }
+void Tetris::player_rotate_ccw() { player_rotate(Piece::Rotation::CCW); }
+void Tetris::player_rotate_half() { player_rotate(Piece::Rotation::Half); }
 
-void Tetris::hold_active() {
+void Tetris::hold_current_piece() {
   if (hold_used)
     return;
 
@@ -47,12 +47,12 @@ void Tetris::hold_active() {
   held_type = temp;
 }
 
-void Tetris::pause() {
+void Tetris::pause_game() {
   if (state == State::Running)
     state = State::Paused;
 }
 
-void Tetris::unpause() {
+void Tetris::unpause_game() {
   if (state == State::Paused)
     state = State::Running;
 }
@@ -100,8 +100,8 @@ auto Tetris::get_ghost_piece() const -> Piece {
   return ghost;
 }
 
-void Tetris::shift_active(FPoint delta) {
-  switch (piece::shift_within(player, delta, matrix)) {
+void Tetris::player_horizontal_shift(float x) {
+  switch (piece::shift_within(player, {.x = x}, matrix)) {
     using enum Piece::MoveResult;
   case Applied:
     if (should_lock && lock_reset_count < 10) {
@@ -114,7 +114,7 @@ void Tetris::shift_active(FPoint delta) {
   }
 }
 
-void Tetris::rotate_active(Piece::Rotation next) {
+void Tetris::player_rotate(Piece::Rotation next) {
   switch (piece::rotate_srs(player, next, matrix)) {
     using enum Piece::MoveResult;
   case Applied:

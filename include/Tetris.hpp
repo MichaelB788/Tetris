@@ -17,19 +17,20 @@ public:
 
   void tick(std::chrono::nanoseconds delta_time);
 
-  void move_left();
-  void move_right();
-  void soft_drop();
-  void hard_drop();
+  void player_step_left();
+  void player_step_right();
 
-  void rotate_cw();
-  void rotate_ccw();
-  void rotate_half();
+  void player_soft_drop();
+  void player_hard_drop();
 
-  void hold_active();
+  void player_rotate_cw();
+  void player_rotate_ccw();
+  void player_rotate_half();
 
-  void pause();
-  void unpause();
+  void hold_current_piece();
+
+  void pause_game();
+  void unpause_game();
 
   void reset();
 
@@ -42,8 +43,8 @@ public:
   [[nodiscard]] auto get_ghost_piece() const -> Piece;
 
 private:
-  void shift_active(FPoint delta);
-  void rotate_active(Piece::Rotation next);
+  void player_horizontal_shift(float x);
+  void player_rotate(Piece::Rotation next);
 
   /**
    * @brief Starts the next round by switching `active` to `next`. This will
@@ -57,21 +58,22 @@ private:
 
   void lock_piece();
 
-  std::mt19937 &rng;
-
   State state = State::Running;
-
-  unsigned score = 0;
-  unsigned lock_reset_count = 0;
 
   bool hold_used = false;
   bool should_lock = false;
 
+  std::optional<Piece::Type> held_type = std::nullopt;
+
+  unsigned score = 0;
+  unsigned lock_reset_count = 0;
+
   Matrix matrix{};
   SevenBag seven_bag;
   Piece player;
-  std::optional<Piece::Type> held_type = std::nullopt;
 
   PeriodicFunction gravity;
   PeriodicFunction lock;
+
+  std::mt19937 &rng;
 };

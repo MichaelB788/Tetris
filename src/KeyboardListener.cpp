@@ -36,14 +36,28 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
     break;
 
   case Tetris::State::Running:
-    // Check for pause, highest priority
+    // Handle one-shot moves
+    // NOTE: The ordering of conditionals matter, as certain moves have an
+    // immediate effect wherein no movement actions should be handled afterwards
     if (is_key_pressed(SDL_SCANCODE_SPACE)) {
       tetris.pause_game();
       for (auto &act : repeatable_actions) {
         act.input_delay.reset();
         act.periodic_func.reset();
       }
-      break; // Don't process any other events after pausing
+      break; // Immediate effect; highest priority
+    } else if (is_key_pressed(SDL_SCANCODE_W)) {
+      tetris.player_hard_drop();
+      break; // Immediate effect
+    } else if (is_key_pressed(SDL_SCANCODE_UP)) {
+      tetris.hold_current_piece();
+      break; // Immediate effect
+    } else if (is_key_pressed(SDL_SCANCODE_DOWN)) {
+      tetris.player_rotate_half();
+    } else if (is_key_pressed(SDL_SCANCODE_LEFT)) {
+      tetris.player_rotate_ccw();
+    } else if (is_key_pressed(SDL_SCANCODE_RIGHT)) {
+      tetris.player_rotate_cw();
     }
 
     // Handle repeatable actions
@@ -61,18 +75,6 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
         periodic_func.reset();
       }
     }
-
-    // Handle one-shot moves
-    if (is_key_pressed(SDL_SCANCODE_W))
-      tetris.player_hard_drop();
-    else if (is_key_pressed(SDL_SCANCODE_UP))
-      tetris.hold_current_piece();
-    else if (is_key_pressed(SDL_SCANCODE_DOWN))
-      tetris.player_rotate_half();
-    else if (is_key_pressed(SDL_SCANCODE_LEFT))
-      tetris.player_rotate_ccw();
-    else if (is_key_pressed(SDL_SCANCODE_RIGHT))
-      tetris.player_rotate_cw();
     break;
   }
 

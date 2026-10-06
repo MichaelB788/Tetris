@@ -61,7 +61,7 @@ private:
   State state = State::Running;
 
   bool hold_used = false;
-  bool should_lock = false;
+  bool lock_countdown_enabled = false;
 
   std::optional<Piece::Type> held_type = std::nullopt;
 

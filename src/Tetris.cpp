@@ -20,18 +20,24 @@ void Tetris::player_step_left() { player_horizontal_shift(-1); }
 void Tetris::player_step_right() { player_horizontal_shift(1); }
 
 void Tetris::player_soft_drop() {
-  should_lock = piece::shift_within(player, {.y = 1}, matrix) ==
-                Piece::MoveResult::Unapplied;
+  if (const auto shifted = piece::shift_within(player, {.y = 1}, matrix))
+    player = shifted.value();
+  else
+    lock_countdown_enabled = true;
 }
 
 void Tetris::player_hard_drop() {
-  piece::hard_drop(player, matrix);
+  player = piece::hard_drop(player, matrix);
   lock_piece();
   state = start_next_round(seven_bag.pop());
 }
 
-void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::CW); }
-void Tetris::player_rotate_ccw() { player_rotate(Piece::Rotation::CCW); }
+void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::Clockwise); }
+
+void Tetris::player_rotate_ccw() {
+  player_rotate(Piece::Rotation::Counterclockwise);
+}
+
 void Tetris::player_rotate_half() { player_rotate(Piece::Rotation::Half); }
 
 void Tetris::hold_current_piece() {
@@ -60,7 +66,7 @@ void Tetris::unpause_game() {
 void Tetris::tick(std::chrono::nanoseconds delta_time) {
   gravity.tick(delta_time);
 
-  if (should_lock)
+  if (lock_countdown_enabled)
     lock.tick(delta_time);
 }
 
@@ -95,36 +101,26 @@ auto Tetris::get_held_piece() const -> std::optional<Piece::Type> {
 }
 
 auto Tetris::get_ghost_piece() const -> Piece {
-  auto ghost = player;
-  piece::hard_drop(ghost, matrix);
-  return ghost;
+  return piece::hard_drop(player, matrix);
 }
 
 void Tetris::player_horizontal_shift(float x) {
-  switch (piece::shift_within(player, {.x = x}, matrix)) {
-    using enum Piece::MoveResult;
-  case Applied:
-    if (should_lock && lock_reset_count < 10) {
+  if (const auto shifted = piece::shift_within(player, {.x = x}, matrix)) {
+    if (lock_countdown_enabled && lock_reset_count < 10) {
       ++lock_reset_count;
       lock.reset();
     }
-    break;
-  case Unapplied:
-    break;
+    player = shifted.value();
   }
 }
 
 void Tetris::player_rotate(Piece::Rotation next) {
-  switch (piece::rotate_srs(player, next, matrix)) {
-    using enum Piece::MoveResult;
-  case Applied:
-    if (should_lock && lock_reset_count < 10) {
+  if (const auto rotated = piece::rotate_srs(player, next, matrix)) {
+    if (lock_countdown_enabled && lock_reset_count < 10) {
       ++lock_reset_count;
       lock.reset();
     }
-    break;
-  case Unapplied:
-    break;
+    player = rotated.value();
   }
 }
 
@@ -142,7 +138,7 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
   lock.reset();
   gravity.reset();
   lock_reset_count = 0;
-  should_lock = false;
+  lock_countdown_enabled = false;
 
   return State::Running;
 }

@@ -2,6 +2,7 @@
 #include "Matrix.hpp"
 #include "Point.hpp"
 #include <cstddef>
+#include <optional>
 #include <utility>
 
 auto piece::create_shape(Piece pc) -> Piece::Shape {
@@ -51,10 +52,8 @@ auto piece::create_shape(Piece pc) -> Piece::Shape {
 
   auto shape =
       SHAPES[std::to_underlying(pc.type)][std::to_underlying(pc.rotation)];
-
   for (auto &pos : shape)
     pos = fpoint::add(pos, pc.pos);
-
   return shape;
 }
 
@@ -69,28 +68,25 @@ auto piece::rotate(Piece pc, Piece::Rotation dir) -> Piece {
   return pc;
 }
 
-void piece::hard_drop(Piece &pc, const Matrix &matrix) {
+auto piece::hard_drop(Piece pc, const Matrix &matrix) -> Piece {
   auto test = pc;
   ++test.pos.y;
-
   while (matrix.can_place(piece::create_shape(test))) {
     ++test.pos.y;
     ++pc.pos.y;
   }
+  return pc;
 }
 
-auto piece::shift_within(Piece &pc, FPoint delta, const Matrix &matrix)
-    -> Piece::MoveResult {
-  if (const auto shifted = piece::shift(pc, delta);
-      matrix.can_place(piece::create_shape(shifted))) {
-    pc = shifted;
-    return Piece::MoveResult::Applied;
-  }
-  return Piece::MoveResult::Unapplied;
+auto piece::shift_within(Piece pc, FPoint delta, const Matrix &matrix)
+    -> std::optional<Piece> {
+  pc.pos = fpoint::add(pc.pos, delta);
+  return matrix.can_place(piece::create_shape(pc)) ? std::make_optional(pc)
+                                                   : std::nullopt;
 }
 
-auto piece::rotate_srs(Piece &pc, Piece::Rotation next, const Matrix &matrix)
-    -> Piece::MoveResult {
+auto piece::rotate_srs(Piece pc, Piece::Rotation next, const Matrix &matrix)
+    -> std::optional<Piece> {
   // SRS offset data
   static constexpr FPoint STANDARD_PIECE_OFFSETS[4][5]{
       {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
@@ -107,18 +103,14 @@ auto piece::rotate_srs(Piece &pc, Piece::Rotation next, const Matrix &matrix)
   const auto &offsets =
       pc.type == Piece::Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
 
-  // Create a copy to test which positions would be valid under the rotation
   const auto rotated_pc = piece::rotate(pc, next);
-
   const auto from = std::to_underlying(pc.rotation);
   const auto to = std::to_underlying(rotated_pc.rotation);
   for (size_t i = 0; i < 5; ++i) {
     const auto test = piece::shift(
         rotated_pc, fpoint::subtract(offsets[from][i], offsets[to][i]));
-    if (matrix.can_place(piece::create_shape(test))) {
-      pc = test;
-      return Piece::MoveResult::Applied;
-    }
+    if (matrix.can_place(piece::create_shape(test)))
+      return test;
   }
-  return Piece::MoveResult::Unapplied;
+  return std::nullopt;
 }

@@ -18,11 +18,12 @@ public:
 private:
   std::mt19937 rng{std::random_device{}()};
 
-  std::chrono::time_point<std::chrono::steady_clock>
-      previous_frame_start = std::chrono::steady_clock::now(),
-      current_frame_start = std::chrono::steady_clock::now();
+  std::chrono::time_point<std::chrono::steady_clock> prev_time{
+      std::chrono::steady_clock::now()};
+  std::chrono::time_point<std::chrono::steady_clock> curr_time{
+      std::chrono::steady_clock::now()};
 
-  SDL_Event event;
+  SDL_Event event{};
   Tetris tetris{rng};
   KeyboardListener keyboard_listener{tetris};
   RenderingModule renderer;

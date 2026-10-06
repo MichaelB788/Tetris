@@ -5,7 +5,7 @@
 #include <optional>
 
 Tetris::Tetris(std::mt19937 &rng)
-    : rng(rng), seven_bag(rng), player(seven_bag.pop(), SPAWN_POINT),
+    : rng(rng), seven_bag(rng), player{seven_bag.pop(), SPAWN_POINT},
       gravity(std::chrono::seconds(1), [this] { player_soft_drop(); }),
       lock(std::chrono::seconds(1), [this] {
         if (!matrix.can_place(

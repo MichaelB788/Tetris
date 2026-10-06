@@ -3,16 +3,17 @@
 #include <algorithm>
 
 SevenBag::SevenBag(std::mt19937 &rng) : rng(rng), curr_bag() {
-  using enum Piece::Type;
-  curr_bag = next_bag = {I, O, T, S, Z, J, L};
-  std::ranges::shuffle(next_bag, rng);
+  curr_bag = next_bag = {Piece::Type::I, Piece::Type::O, Piece::Type::T,
+                         Piece::Type::S, Piece::Type::Z, Piece::Type::J,
+                         Piece::Type::L};
+  std::shuffle(next_bag.begin(), next_bag.end(), rng);
   shuffle();
 }
 
 void SevenBag::shuffle() {
   read = 0;
   curr_bag = next_bag;
-  std::ranges::shuffle(next_bag, rng);
+  std::shuffle(next_bag.begin(), next_bag.end(), rng);
 
   if (curr_bag.back() == next_bag[0]) {
     // Swap with any other element, since all elements are unique

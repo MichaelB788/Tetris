@@ -7,7 +7,7 @@ creation, rendering, input handling.
 
 The following are the minimum requirements to run the project:
 
-- A C/C++ compiler (such as GCC or MSVC) that supports C++23
+- A C/C++ compiler (such as GCC or MSVC) that supports C++17
 - CMake (with at least version 3.20)
 - A C/C++ generator, such as Ninja or Makefile.
 - SDL3, SDL3_TTF, and SDL3_IMG development files

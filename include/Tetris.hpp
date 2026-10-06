@@ -10,7 +10,7 @@
 
 class Tetris {
 public:
-  static constexpr FPoint SPAWN_POINT = {.x = 4, .y = 4};
+  static constexpr FPoint SPAWN_POINT = {4, 4};
   enum class State : uint8_t { Running, GameOver, Paused };
 
   explicit Tetris(std::mt19937 &rng);

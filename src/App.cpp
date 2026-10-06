@@ -1,15 +1,17 @@
 #include "App.hpp"
+#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_init.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <chrono>
 #include <thread>
 
 void App::loop() {
   while (true) {
     // Record the frame time
-    previous_frame_start = current_frame_start;
-    current_frame_start = std::chrono::steady_clock::now();
-    const auto delta_time = current_frame_start - previous_frame_start;
+    prev_time = curr_time;
+    curr_time = std::chrono::steady_clock::now();
+    const auto delta_time = curr_time - prev_time;
 
     // Poll events
     // NOTE: It is imperitive that this happens before keyboard input is
@@ -39,7 +41,7 @@ void App::loop() {
     // If the frame finished early, sleep
     static constexpr auto expected =
         std::chrono::nanoseconds(1'000'000'000 / 60);
-    const auto elapsed = std::chrono::steady_clock::now() - current_frame_start;
+    const auto elapsed = std::chrono::steady_clock::now() - curr_time;
     if (elapsed < expected) {
       std::this_thread::sleep_for(expected - elapsed);
     }

@@ -29,5 +29,5 @@ private:
   SDL::Renderer renderer = nullptr;
   SDL::Texture texture_atlas = nullptr;
 
-  GameTextRenderer text_renderer;
+  GameTextRenderer text_renderer{};
 };

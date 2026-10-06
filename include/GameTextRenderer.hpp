@@ -5,7 +5,6 @@
 #include <array>
 #include <cstddef>
 #include <filesystem>
-#include <utility>
 
 struct SDL_Renderer;
 
@@ -36,7 +35,7 @@ private:
   SDL::TTF::Font font = nullptr;
 
   // Holds text objects representing predefined strings, indexable via TextIdx
-  std::array<SDL::TTF::Text, std::to_underlying(TextIdx::Count)> text_map{};
+  std::array<SDL::TTF::Text, static_cast<size_t>(TextIdx::Count)> text_map{};
 
   // Holds text objects representing single digits [0-9]
   std::array<SDL::TTF::Text, 10> nums_map{};

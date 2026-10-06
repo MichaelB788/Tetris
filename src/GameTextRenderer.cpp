@@ -1,23 +1,23 @@
 #include "GameTextRenderer.hpp"
 #include "Constants.hpp"
 #include "Size.hpp"
+#include <SDL3/SDL_error.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <cstddef>
-#include <utility>
+#include <string>
 #include <vector>
 
 GameTextRenderer::GameTextRenderer(SDL_Renderer &renderer,
                                    const std::filesystem::path &font_path) {
   engine.reset(TTF_CreateRendererTextEngine(&renderer));
   if (!engine) {
-    throw std::runtime_error(
-        std::format("GameTextRenderer::engine: {}", SDL_GetError()));
+    throw std::runtime_error(std::string("TTF_CreateRendererTextEngine: ") +
+                             SDL_GetError());
   }
 
   font.reset(TTF_OpenFont(font_path.c_str(), FONT_SCALE));
   if (!font) {
-    throw std::runtime_error(
-        std::format("GameTextRenderer::font: {}", SDL_GetError()));
+    throw std::runtime_error(std::string("TTF_OpenFont: ") + SDL_GetError());
   }
 
   const std::array text_str{"NEXT", "HOLD", "SCORE", "PAUSED",
@@ -33,13 +33,13 @@ GameTextRenderer::GameTextRenderer(SDL_Renderer &renderer,
 }
 
 void GameTextRenderer::draw_game_text(TextIdx i, FPoint pos) {
-  TTF_DrawRendererText(text_map[std::to_underlying(i)].get(), pos.x, pos.y);
+  TTF_DrawRendererText(text_map[static_cast<size_t>(i)].get(), pos.x, pos.y);
 }
 
 void GameTextRenderer::draw_centered_game_text(TextIdx i, FSize window) {
   int w, h;
-  TTF_GetTextSize(text_map[std::to_underlying(i)].get(), &w, &h);
-  TTF_DrawRendererText(text_map[std::to_underlying(i)].get(),
+  TTF_GetTextSize(text_map[static_cast<size_t>(i)].get(), &w, &h);
+  TTF_DrawRendererText(text_map[static_cast<size_t>(i)].get(),
                        (window.w - static_cast<float>(w)) / 2,
                        (window.h - static_cast<float>(h)) / 2);
 }

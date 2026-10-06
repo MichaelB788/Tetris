@@ -9,8 +9,7 @@
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <format>
-#include <iostream>
+#include <string>
 
 namespace {
 auto resolve(FPoint base, FPoint offset) -> FPoint {
@@ -22,20 +21,20 @@ RenderingModule::RenderingModule(const std::filesystem::path &atlas_path,
                                  const std::filesystem::path &font_path) {
   window.reset(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE));
   if (!window) {
-    throw std::runtime_error(
-        std::format("RenderingModule::window: {}", SDL_GetError()));
+    throw std::runtime_error(std::string("RenderingModule::window: {}") +
+                             SDL_GetError());
   }
 
   renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
   if (!renderer) {
-    throw std::runtime_error(
-        std::format("RenderingModule::renderer: {}", SDL_GetError()));
+    throw std::runtime_error(std::string("RenderingModule::renderer: {}") +
+                             SDL_GetError());
   }
 
   texture_atlas.reset(IMG_LoadTexture(renderer.get(), atlas_path.c_str()));
   if (!texture_atlas) {
-    throw std::runtime_error(
-        std::format("RenderingModule::texture_atlas: {}", SDL_GetError()));
+    throw std::runtime_error(std::string("RenderingModule::texture_atlas: {}") +
+                             SDL_GetError());
   }
 
   text_renderer = GameTextRenderer(*renderer, font_path);
@@ -62,14 +61,13 @@ void RenderingModule::render_frame(const Tetris &tetris) {
   SDL_RenderClear(renderer.get());
 
   switch (tetris.get_state()) {
-    using enum Tetris::State;
-  case Running:
+  case Tetris::State::Running:
     render_game_state(tetris);
     break;
-  case Paused:
+  case Tetris::State::Paused:
     text_renderer.draw_centered_game_text(TextIdx::Paused, win_size);
     break;
-  case GameOver:
+  case Tetris::State::GameOver:
     text_renderer.draw_centered_game_text(TextIdx::GameOver, win_size);
     break;
   }

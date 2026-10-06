@@ -26,7 +26,7 @@ void Matrix::clear() {
 }
 
 auto Matrix::can_place(const Piece::Shape &shape) const -> bool {
-  return std::ranges::all_of(shape, [this](auto pos) {
+  return std::all_of(shape.begin(), shape.end(), [this](auto pos) {
     return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
   });
 }
@@ -43,8 +43,8 @@ auto Matrix::clear_lines() -> unsigned {
   int write = MATRIX_ROWS - 1;
 
   for (int read = MATRIX_ROWS - 1; read >= 0; --read) {
-    if (std::ranges::all_of(data[read],
-                            [](auto tile) { return tile.has_value(); })) {
+    if (std::all_of(data[read].begin(), data[read].end(),
+                    [](auto tile) { return tile.has_value(); })) {
       ++cleared;
     } else {
       if (write != read)
@@ -61,5 +61,5 @@ auto Matrix::clear_lines() -> unsigned {
 }
 
 auto matrix::is_piece_within_bounds(const Piece::Shape &shape) -> bool {
-  return std::ranges::all_of(shape, is_pos_within_bounds);
+  return std::all_of(shape.begin(), shape.end(), is_pos_within_bounds);
 }

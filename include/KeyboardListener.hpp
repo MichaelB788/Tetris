@@ -25,20 +25,17 @@ private:
   };
 
   std::array<RepeatableAction, 3> repeatable_actions = {{
-      {.scancode = SDL_SCANCODE_A,
-       .input_delay{std::chrono::milliseconds(100)},
-       .periodic_func{std::chrono::milliseconds(60),
-                      [this] { tetris.player_step_left(); }}},
+      {SDL_SCANCODE_A,
+       {std::chrono::milliseconds(100)},
+       {std::chrono::milliseconds(60), [this] { tetris.player_step_left(); }}},
 
-      {.scancode = SDL_SCANCODE_S,
-       .input_delay{std::chrono::milliseconds(100)},
-       .periodic_func{std::chrono::milliseconds(60),
-                      [this] { tetris.player_soft_drop(); }}},
+      {SDL_SCANCODE_S,
+       {std::chrono::milliseconds(100)},
+       {std::chrono::milliseconds(60), [this] { tetris.player_soft_drop(); }}},
 
-      {.scancode = SDL_SCANCODE_D,
-       .input_delay{std::chrono::milliseconds(100)},
-       .periodic_func{std::chrono::milliseconds(60),
-                      [this] { tetris.player_step_right(); }}},
+      {SDL_SCANCODE_D,
+       {std::chrono::milliseconds(100)},
+       {std::chrono::milliseconds(60), [this] { tetris.player_step_right(); }}},
   }};
 
   bool prev_keyboard[SDL_SCANCODE_COUNT]{};

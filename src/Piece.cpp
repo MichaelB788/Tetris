@@ -3,7 +3,6 @@
 #include "Point.hpp"
 #include <cstddef>
 #include <optional>
-#include <utility>
 
 auto piece::create_shape(Piece pc) -> Piece::Shape {
   // Piece shape/rotation data
@@ -51,7 +50,7 @@ auto piece::create_shape(Piece pc) -> Piece::Shape {
        {{{0, -1}, {0, 0}, {0, 1}, {-1, -1}}}}}; // R270
 
   auto shape =
-      SHAPES[std::to_underlying(pc.type)][std::to_underlying(pc.rotation)];
+      SHAPES[static_cast<size_t>(pc.type)][static_cast<size_t>(pc.rotation)];
   for (auto &pos : shape)
     pos = fpoint::add(pos, pc.pos);
   return shape;
@@ -64,7 +63,7 @@ auto piece::shift(Piece pc, FPoint delta) -> Piece {
 
 auto piece::rotate(Piece pc, Piece::Rotation dir) -> Piece {
   pc.rotation = static_cast<Piece::Rotation>(
-      (std::to_underlying(pc.rotation) + std::to_underlying(dir)) % 4);
+      (static_cast<size_t>(pc.rotation) + static_cast<size_t>(dir)) % 4);
   return pc;
 }
 
@@ -104,8 +103,8 @@ auto piece::rotate_srs(Piece pc, Piece::Rotation next, const Matrix &matrix)
       pc.type == Piece::Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
 
   const auto rotated_pc = piece::rotate(pc, next);
-  const auto from = std::to_underlying(pc.rotation);
-  const auto to = std::to_underlying(rotated_pc.rotation);
+  const auto from = static_cast<size_t>(pc.rotation);
+  const auto to = static_cast<size_t>(rotated_pc.rotation);
   for (size_t i = 0; i < 5; ++i) {
     const auto test = piece::shift(
         rotated_pc, fpoint::subtract(offsets[from][i], offsets[to][i]));

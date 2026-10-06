@@ -10,6 +10,7 @@
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <format>
+#include <iostream>
 
 namespace {
 auto resolve(FPoint base, FPoint offset) -> FPoint {
@@ -77,6 +78,7 @@ void RenderingModule::render_frame(const Tetris &tetris) {
 }
 
 void RenderingModule::render_game_state(const Tetris &tetris) {
+  enum class BlockStyle : uint8_t { Solid, Ghost };
   auto draw_tile = [this](Piece::Type type, FPoint screen_position,
                           BlockStyle style) {
     const auto texture_rect_y = style == BlockStyle::Ghost ? PIXEL_SCALE : 0;

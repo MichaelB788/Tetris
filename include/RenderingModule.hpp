@@ -3,7 +3,6 @@
 #include "PlatformSDL.hpp"
 #include "Point.hpp"
 #include "Size.hpp"
-#include <cstdint>
 #include <filesystem>
 
 class Tetris;
@@ -19,8 +18,6 @@ public:
   void render_frame(const Tetris &tetris);
 
 private:
-  enum class BlockStyle : uint8_t { Solid, Ghost };
-
   void render_game_state(const Tetris &tetris);
 
   FSize win_size{};

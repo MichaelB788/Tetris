@@ -21,20 +21,19 @@ RenderingModule::RenderingModule(const std::filesystem::path &atlas_path,
                                  const std::filesystem::path &font_path) {
   window.reset(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE));
   if (!window) {
-    throw std::runtime_error(std::string("RenderingModule::window: {}") +
+    throw std::runtime_error(std::string("SDL_CreateWindow: ") +
                              SDL_GetError());
   }
 
   renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
   if (!renderer) {
-    throw std::runtime_error(std::string("RenderingModule::renderer: {}") +
+    throw std::runtime_error(std::string("SDL_CreateRenderer: ") +
                              SDL_GetError());
   }
 
   texture_atlas.reset(IMG_LoadTexture(renderer.get(), atlas_path.c_str()));
   if (!texture_atlas) {
-    throw std::runtime_error(std::string("RenderingModule::texture_atlas: {}") +
-                             SDL_GetError());
+    throw std::runtime_error(std::string("IMG_LoadTexture: ") + SDL_GetError());
   }
 
   text_renderer = GameTextRenderer(*renderer, font_path);

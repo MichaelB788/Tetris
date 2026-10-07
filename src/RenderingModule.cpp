@@ -2,6 +2,7 @@
 #include "Constants.hpp"
 #include "GameTextRenderer.hpp"
 #include "Piece.hpp"
+#include "PlatformSDL.hpp"
 #include "Point.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_error.h>
@@ -9,7 +10,6 @@
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <string>
 
 namespace {
 auto resolve(FPoint base, FPoint offset) -> FPoint {
@@ -19,22 +19,17 @@ auto resolve(FPoint base, FPoint offset) -> FPoint {
 
 RenderingModule::RenderingModule(const std::filesystem::path &atlas_path,
                                  const std::filesystem::path &font_path) {
-  window.reset(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE));
-  if (!window) {
-    throw std::runtime_error(std::string("SDL_CreateWindow: ") +
-                             SDL_GetError());
-  }
+  if (window.reset(SDL_CreateWindow("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE));
+      window == nullptr)
+    throw SDL::Exception("SDL_CreateWindow");
 
-  renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
-  if (!renderer) {
-    throw std::runtime_error(std::string("SDL_CreateRenderer: ") +
-                             SDL_GetError());
-  }
+  if (renderer.reset(SDL_CreateRenderer(window.get(), nullptr));
+      renderer == nullptr)
+    throw SDL::Exception("SDL_CreateRenderer");
 
-  texture_atlas.reset(IMG_LoadTexture(renderer.get(), atlas_path.c_str()));
-  if (!texture_atlas) {
-    throw std::runtime_error(std::string("IMG_LoadTexture: ") + SDL_GetError());
-  }
+  if (texture_atlas.reset(IMG_LoadTexture(renderer.get(), atlas_path.c_str()));
+      texture_atlas == nullptr)
+    throw SDL::Exception("IMG_LoadTexture");
 
   text_renderer = GameTextRenderer(*renderer, font_path);
 
@@ -64,10 +59,10 @@ void RenderingModule::render_frame(const Tetris &tetris) {
     render_game_state(tetris);
     break;
   case Tetris::State::Paused:
-    text_renderer.draw_centered_game_text(TextIdx::Paused, win_size);
+    text_renderer.draw_game_text_centered(TextIdx::Paused, win_size);
     break;
   case Tetris::State::GameOver:
-    text_renderer.draw_centered_game_text(TextIdx::GameOver, win_size);
+    text_renderer.draw_game_text_centered(TextIdx::GameOver, win_size);
     break;
   }
 
@@ -88,8 +83,9 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
                                        .y = screen_position.y,
                                        .w = PIXEL_SCALE,
                                        .h = PIXEL_SCALE};
-    SDL_RenderTexture(renderer.get(), texture_atlas.get(), &texture_rect,
-                      &texture_screen_pos);
+    if (!SDL_RenderTexture(renderer.get(), texture_atlas.get(), &texture_rect,
+                           &texture_screen_pos))
+      throw SDL::Exception("SDL_RenderTexture");
   };
 
   auto draw_piece = [&](const Piece &pc, FPoint screen_position,
@@ -140,6 +136,5 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
   text_renderer.draw_game_text(TextIdx::Next, section_left);
   text_renderer.draw_game_text(TextIdx::Hold, section_right);
   text_renderer.draw_game_text(TextIdx::Score, resolve(section_right, {0, 8}));
-  text_renderer.draw_unsigned_integer(tetris.get_score(),
-                                      resolve(section_right, {0, 10}));
+  text_renderer.draw_uint(tetris.get_score(), resolve(section_right, {0, 10}));
 }

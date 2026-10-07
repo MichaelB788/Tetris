@@ -1,5 +1,7 @@
 #include "PlatformSDL.hpp"
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_error.h>
+#include <string>
 
 void SDL::WindowDeleter::operator()(SDL_Window *window) const {
   SDL_DestroyWindow(window);
@@ -15,4 +17,14 @@ void SDL::SurfaceDeleter::operator()(SDL_Surface *surface) const {
 
 void SDL::TextureDeleter::operator()(SDL_Texture *texture) const {
   SDL_DestroyTexture(texture);
+}
+
+SDL::Exception::Exception(std::string &msg)
+    : msg{msg + ": " + SDL_GetError()} {}
+
+SDL::Exception::Exception(const char *msg)
+    : msg{std::string{msg} + ": " + SDL_GetError()} {}
+
+auto SDL::Exception::what() const noexcept -> const char * {
+  return msg.data();
 }

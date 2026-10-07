@@ -26,9 +26,9 @@ public:
 
   void draw_game_text(TextIdx i, FPoint pos);
 
-  void draw_centered_game_text(TextIdx i, FSize window);
+  void draw_game_text_centered(TextIdx i, FSize window);
 
-  void draw_unsigned_integer(unsigned n, FPoint pos) const;
+  void draw_uint(unsigned n, FPoint pos) const;
 
 private:
   SDL::TTF::RendererTextEngine engine = nullptr;

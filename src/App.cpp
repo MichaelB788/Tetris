@@ -20,7 +20,7 @@ void App::loop() {
       if (event.type == SDL_EVENT_QUIT)
         return;
       else if (event.type == SDL_EVENT_WINDOW_RESIZED)
-        renderer.fit_context_within_window();
+        graphics.fit_context_within_window();
     }
 
     // Handle keyboard input
@@ -36,7 +36,7 @@ void App::loop() {
       tetris.tick(delta_time);
 
     // Render the frame
-    renderer.render_frame(tetris);
+    graphics.render_frame(tetris);
 
     // If the frame finished early, sleep
     static constexpr auto expected =

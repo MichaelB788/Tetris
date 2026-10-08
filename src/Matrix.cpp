@@ -1,17 +1,17 @@
 #include "Matrix.hpp"
-#include "Constants.hpp"
 #include "Piece.hpp"
 #include <algorithm>
 #include <cassert>
 
 namespace {
 [[nodiscard]] auto is_pos_within_bounds(FPoint pos) -> bool {
-  return pos.x >= 0 && pos.y >= 0 && pos.x < MATRIX_COLS && pos.y < MATRIX_ROWS;
+  return pos.x >= 0 && pos.y >= 0 && pos.x < Matrix::COLS &&
+         pos.y < Matrix::ROWS;
 }
 } // namespace
 
 auto Matrix::at(size_t x, size_t y) const -> std::optional<Piece::Type> {
-  assert(x < MATRIX_COLS && y < MATRIX_ROWS);
+  assert(x < COLS && y < ROWS);
   return data[y][x];
 }
 
@@ -40,9 +40,9 @@ void Matrix::lock_down(Piece piece) {
 
 auto Matrix::clear_lines() -> unsigned {
   unsigned cleared = 0;
-  int write = MATRIX_ROWS - 1;
+  int write = ROWS - 1;
 
-  for (int read = MATRIX_ROWS - 1; read >= 0; --read) {
+  for (int read = ROWS - 1; read >= 0; --read) {
     if (std::all_of(data[read].begin(), data[read].end(),
                     [](auto tile) { return tile.has_value(); })) {
       ++cleared;

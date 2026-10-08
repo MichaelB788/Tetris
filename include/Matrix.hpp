@@ -1,12 +1,15 @@
 #pragma once
-#include "Constants.hpp"
 #include "Piece.hpp"
 #include "Point.hpp"
 #include <array>
+#include <cstddef>
 #include <optional>
 
 class Matrix {
 public:
+  static constexpr size_t ROWS = 24;
+  static constexpr size_t COLS = 10;
+
   [[nodiscard]] auto at(size_t x, size_t y) const -> std::optional<Piece::Type>;
   [[nodiscard]] auto at(FPoint pos) const -> std::optional<Piece::Type>;
 
@@ -17,8 +20,7 @@ public:
   [[nodiscard]] auto can_place(const Piece::Shape &shape) const -> bool;
 
 private:
-  std::array<std::array<std::optional<Piece::Type>, MATRIX_COLS>, MATRIX_ROWS>
-      data{};
+  std::array<std::array<std::optional<Piece::Type>, COLS>, ROWS> data{};
 };
 
 namespace matrix {

@@ -106,14 +106,14 @@ void RenderingModule::render_game_state(const Tetris &tetris) {
   draw_piece(tetris.get_active_piece(), section_matrix, BlockStyle::Solid);
 
   // Draw the held piece
-  if (const auto held_type = tetris.get_held_piece()) {
+  if (const auto held_type = tetris.get_held_piece_type()) {
     draw_piece({held_type.value()}, resolve(section_right, {1, 3}),
                BlockStyle::Solid);
   }
 
   // Draw the seven bag queue
   auto next_pos = resolve(section_left, {1, 3});
-  for (const auto next_type : tetris.get_seven_bag()) {
+  for (const auto next_type : tetris.get_seven_bag_preview()) {
     draw_piece({next_type}, next_pos, BlockStyle::Solid);
     next_pos.y += 3 * PIXEL_SCALE;
   }

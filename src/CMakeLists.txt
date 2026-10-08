@@ -19,7 +19,6 @@ add_library(TetrisSource
   Piece.cpp
   Point.cpp
   RenderingModule.cpp
-  SevenBag.cpp
   Tetris.cpp
   Timer.cpp
 )

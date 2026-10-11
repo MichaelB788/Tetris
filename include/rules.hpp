@@ -9,6 +9,6 @@ namespace piece_action {
 [[nodiscard]] auto shift(Piece pc, FPoint delta, const Matrix &matrix)
     -> std::optional<Piece>;
 
-[[nodiscard]] auto srs_rotation(Piece pc, Piece::Rotation next,
+[[nodiscard]] auto srs_rotation(Piece pc, Piece::Rotation dir,
                                 const Matrix &matrix) -> std::optional<Piece>;
 } // namespace piece_action

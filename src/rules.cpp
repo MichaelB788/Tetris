@@ -1,6 +1,7 @@
 #include "rules.hpp"
 #include "FPoint.hpp"
 #include "Piece.hpp"
+#include <cstddef>
 
 auto piece_action::hard_drop(Piece pc, const Matrix &matrix) -> Piece {
   auto test = pc;
@@ -19,7 +20,7 @@ auto piece_action::shift(Piece pc, FPoint delta, const Matrix &matrix)
                                                : std::nullopt;
 }
 
-auto piece_action::srs_rotation(Piece piece, Piece::Rotation next,
+auto piece_action::srs_rotation(Piece piece, Piece::Rotation dir,
                                 const Matrix &matrix) -> std::optional<Piece> {
   // SRS offset data
   static constexpr FPoint STANDARD_PIECE_OFFSETS[4][5]{
@@ -37,18 +38,19 @@ auto piece_action::srs_rotation(Piece piece, Piece::Rotation next,
   const auto &offsets =
       piece.type == Piece::Type::I ? I_PIECE_OFFSETS : STANDARD_PIECE_OFFSETS;
 
-  const auto from = static_cast<int>(piece.rotation);
-  const auto to = static_cast<int>(next);
-  auto rotated_piece = piece;
-  rotated_piece.rotation = static_cast<Piece::Rotation>(from + to % 4);
+  const auto rotated_piece =
+      Piece{.type = piece.type,
+            .rotation = static_cast<Piece::Rotation>(
+                (static_cast<int>(piece.rotation) + static_cast<int>(dir)) % 4),
+            .pos = piece.pos};
+  const auto from = static_cast<size_t>(piece.rotation);
+  const auto to = static_cast<size_t>(rotated_piece.rotation);
 
   for (size_t i = 0; i < 5; ++i) {
-    const auto wallkick = fpoint::subtract(offsets[from][i], offsets[to][i]);
-    rotated_piece.pos = fpoint::add(rotated_piece.pos, wallkick);
-    if (matrix.is_shape_valid(rotated_piece.get_shape()))
-      return rotated_piece;
-    else
-      rotated_piece.pos = piece.pos;
+    const auto offset = fpoint::subtract(offsets[from][i], offsets[to][i]);
+    if (auto new_piece = piece_action::shift(rotated_piece, offset, matrix))
+      return new_piece;
   }
+
   return std::nullopt;
 }

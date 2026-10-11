@@ -132,7 +132,7 @@ void Tetris::lock_piece() {
 }
 
 auto tetris::create_next_piece(Piece::Type type) -> Piece {
-  return {type, {4, 4}};
+  return {.type = type, .pos = {4, 4}};
 }
 
 void tetris::lock_reset::attempt_reset(Tetris::LockReset &lock_reset) {

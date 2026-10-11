@@ -12,6 +12,6 @@ struct Piece {
   [[nodiscard]] auto get_shape() const -> Piece::Shape;
 
   Type type{};
-  FPoint pos{};
   Rotation rotation{};
+  FPoint pos{};
 };

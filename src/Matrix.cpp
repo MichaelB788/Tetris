@@ -25,14 +25,14 @@ void Matrix::clear() {
     row.fill(std::nullopt);
 }
 
-auto Matrix::can_place(const Piece::Shape &shape) const -> bool {
+auto Matrix::is_shape_valid(const Piece::Shape &shape) const -> bool {
   return std::all_of(shape.begin(), shape.end(), [this](auto pos) {
     return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
   });
 }
 
 void Matrix::lock_down(Piece piece) {
-  if (const auto shape = piece::create_shape(piece); can_place(shape)) {
+  if (const auto shape = piece.get_shape(); is_shape_valid(shape)) {
     for (const auto [x, y] : shape)
       data[y][x] = piece.type;
   }

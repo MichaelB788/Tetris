@@ -8,6 +8,7 @@
 #include <filesystem>
 
 class Tetris;
+class Matrix;
 
 enum class GameText : size_t {
   Next = 0,

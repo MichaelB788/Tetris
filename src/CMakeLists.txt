@@ -17,6 +17,7 @@ add_library(TetrisSource
   PeriodicFunction.cpp
   Piece.cpp
   FPoint.cpp
+  rules.cpp
   Graphics.cpp
   Tetris.cpp
   Timer.cpp

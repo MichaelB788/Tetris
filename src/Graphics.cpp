@@ -117,7 +117,7 @@ void graphics::sdl::ctx_init(Graphics::SDL_Ctx &sdl,
 
 void graphics::sdl::draw_piece(Graphics::SDL_Ctx &sdl, Piece piece, FPoint base,
                                BlockStyle style) {
-  for (const auto pos : piece::create_shape(piece))
+  for (const auto pos : piece.get_shape())
     draw_block(sdl, piece.type, resolve(base, pos), style);
 }
 

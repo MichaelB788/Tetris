@@ -17,7 +17,7 @@ public:
   auto clear_lines() -> unsigned;
   void clear();
 
-  [[nodiscard]] auto can_place(const Piece::Shape &shape) const -> bool;
+  [[nodiscard]] auto is_shape_valid(const Piece::Shape &shape) const -> bool;
 
 private:
   std::array<std::array<std::optional<Piece::Type>, COLS>, ROWS> data{};

@@ -1,6 +1,7 @@
 #include "Tetris.hpp"
 #include "FPoint.hpp"
 #include "Piece.hpp"
+#include "rules.hpp"
 #include <algorithm>
 #include <chrono>
 #include <optional>
@@ -10,8 +11,7 @@ Tetris::Tetris(std::mt19937 &rng_)
     : rng(rng_),
       gravity_func(std::chrono::seconds(1), [this] { player_soft_drop(); }),
       lock_reset{.func{std::chrono::seconds(1), [this] {
-                         if (!matrix.can_place(piece::create_shape(
-                                 piece::shift(player, {.y = 1})))) {
+                         if (!piece_action::shift(player, {.y = 1}, matrix)) {
                            lock_piece();
                            state = start_next_round(
                                tetris::seven_bag::pop(bag, rng));
@@ -26,14 +26,14 @@ void Tetris::player_step_left() { player_horizontal_shift(-1); }
 void Tetris::player_step_right() { player_horizontal_shift(1); }
 
 void Tetris::player_soft_drop() {
-  if (const auto shifted = piece::shift_within(player, {.y = 1}, matrix))
+  if (const auto shifted = piece_action::shift(player, {.y = 1}, matrix))
     player = shifted.value();
   else
     lock_reset.countdown_enabled = true;
 }
 
 void Tetris::player_hard_drop() {
-  player = piece::hard_drop(player, matrix);
+  player = piece_action::hard_drop(player, matrix);
   lock_piece();
   state = start_next_round(tetris::seven_bag::pop(bag, rng));
 }
@@ -87,14 +87,14 @@ void Tetris::reset() {
 }
 
 void Tetris::player_horizontal_shift(float x) {
-  if (const auto shifted = piece::shift_within(player, {.x = x}, matrix)) {
+  if (const auto shifted = piece_action::shift(player, {.x = x}, matrix)) {
     player = shifted.value();
     tetris::lock_reset::attempt_reset(lock_reset);
   }
 }
 
 void Tetris::player_rotate(Piece::Rotation next) {
-  if (const auto rotated = piece::rotate_srs(player, next, matrix)) {
+  if (const auto rotated = piece_action::srs_rotation(player, next, matrix)) {
     player = rotated.value();
     tetris::lock_reset::attempt_reset(lock_reset);
   }
@@ -104,9 +104,9 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
   player = tetris::create_next_piece(next);
 
   // Try to adjust the initial position of the next piece
-  while (!matrix.can_place(piece::create_shape(player))) {
+  while (!matrix.is_shape_valid(player.get_shape())) {
     --player.pos.y;
-    if (!matrix::is_piece_within_bounds(piece::create_shape(player)))
+    if (!matrix::is_piece_within_bounds(player.get_shape()))
       return State::GameOver;
   }
 
@@ -180,5 +180,5 @@ auto Tetris::get_held_piece_type() const -> std::optional<Piece::Type> {
   return held_piece.type;
 }
 auto Tetris::get_ghost_piece() const -> Piece {
-  return piece::hard_drop(player, matrix);
+  return piece_action::hard_drop(player, matrix);
 }

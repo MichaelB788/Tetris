@@ -1,4 +1,4 @@
-#include "Point.hpp"
+#include "FPoint.hpp"
 
 auto fpoint::add(FPoint a, FPoint b) -> FPoint {
   return {a.x + b.x, a.y + b.y};

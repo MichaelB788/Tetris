@@ -1,6 +1,6 @@
 #pragma once
+#include "FPoint.hpp"
 #include "Piece.hpp"
-#include "Point.hpp"
 #include <array>
 #include <cstddef>
 #include <optional>

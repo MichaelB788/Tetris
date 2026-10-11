@@ -1,5 +1,5 @@
 #pragma once
-#include "Point.hpp"
+#include "FPoint.hpp"
 #include <array>
 #include <cstdint>
 #include <optional>
@@ -10,12 +10,7 @@ struct Piece {
   using Shape = std::array<FPoint, 4>;
 
   enum class Type : uint8_t { I = 0, O = 1, T = 2, S = 3, Z = 4, J = 5, L = 6 };
-  enum class Rotation : uint8_t {
-    Default = 0,
-    Clockwise = 1,
-    Half = 2,
-    Counterclockwise = 3
-  };
+  enum class Rotation : uint8_t { r0 = 0, r90 = 1, r180 = 2, r270 = 3 };
 
   Type type{};
   FPoint pos{};

@@ -1,7 +1,7 @@
 #include "Graphics.hpp"
+#include "FPoint.hpp"
 #include "Piece.hpp"
 #include "PlatformSDL.hpp"
-#include "Point.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_render.h>

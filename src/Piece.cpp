@@ -1,6 +1,6 @@
 #include "Piece.hpp"
+#include "FPoint.hpp"
 #include "Matrix.hpp"
-#include "Point.hpp"
 #include <cstddef>
 #include <optional>
 

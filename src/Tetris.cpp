@@ -1,6 +1,6 @@
 #include "Tetris.hpp"
+#include "FPoint.hpp"
 #include "Piece.hpp"
-#include "Point.hpp"
 #include <algorithm>
 #include <chrono>
 #include <optional>
@@ -38,13 +38,11 @@ void Tetris::player_hard_drop() {
   state = start_next_round(tetris::seven_bag::pop(bag, rng));
 }
 
-void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::Clockwise); }
+void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::r90); }
 
-void Tetris::player_rotate_ccw() {
-  player_rotate(Piece::Rotation::Counterclockwise);
-}
+void Tetris::player_rotate_ccw() { player_rotate(Piece::Rotation::r270); }
 
-void Tetris::player_rotate_half() { player_rotate(Piece::Rotation::Half); }
+void Tetris::player_rotate_half() { player_rotate(Piece::Rotation::r180); }
 
 void Tetris::hold_current_piece() {
   if (!held_piece.action_used) {

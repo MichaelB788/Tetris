@@ -1,9 +1,9 @@
 #pragma once
+#include "FPoint.hpp"
+#include "FSize.hpp"
 #include "Piece.hpp"
 #include "PlatformSDL.hpp"
 #include "PlatformSDL_TTF.hpp"
-#include "Point.hpp"
-#include "Size.hpp"
 #include <array>
 #include <filesystem>
 

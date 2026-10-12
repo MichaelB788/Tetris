@@ -20,8 +20,6 @@ public:
 private:
   enum class BlockStyle { Solid, Ghost };
 
-  auto resolve(FPoint base, FPoint offset) const -> FPoint;
-
   void draw_block(Piece::Type type, FPoint pos,
                   BlockStyle style = BlockStyle::Solid) const;
   void draw_piece(Piece piece, FPoint base_pos,

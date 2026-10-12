@@ -2,7 +2,6 @@
 #include "FPoint.hpp"
 #include "Piece.hpp"
 #include <array>
-#include <cstddef>
 #include <optional>
 
 class Matrix {

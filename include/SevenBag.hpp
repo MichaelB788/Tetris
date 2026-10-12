@@ -1,7 +1,6 @@
 #pragma once
 #include "Piece.hpp"
 #include <array>
-#include <cstddef>
 #include <random>
 
 class SevenBag {

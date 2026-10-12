@@ -31,8 +31,7 @@ void Matrix::clear_all() {
 }
 
 auto Matrix::is_fpos_within_bounds(FPoint pos) -> bool {
-  return pos.x >= 0 && pos.y >= 0 && pos.x < Matrix::COLS &&
-         pos.y < Matrix::ROWS;
+  return pos.x >= 0 && pos.y >= 0 && pos.x < COLS && pos.y < ROWS;
 }
 
 auto Matrix::is_fpos_valid_at(FPoint pos) const -> bool {
@@ -41,10 +40,10 @@ auto Matrix::is_fpos_valid_at(FPoint pos) const -> bool {
 
 auto Matrix::at(FPoint pos) -> std::optional<Piece::Type> & {
   assert(is_fpos_within_bounds(pos));
-  return data[pos.y][pos.x];
+  return data[static_cast<size_t>(pos.y)][static_cast<size_t>(pos.x)];
 }
 
 auto Matrix::at(FPoint pos) const -> std::optional<Piece::Type> {
   assert(is_fpos_within_bounds(pos));
-  return data[pos.y][pos.x];
+  return data[static_cast<size_t>(pos.y)][static_cast<size_t>(pos.x)];
 }

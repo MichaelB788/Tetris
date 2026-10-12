@@ -9,12 +9,12 @@ SevenBag::SevenBag(std::mt19937 &rng) : rng(rng) {
 }
 
 auto SevenBag::pop_next_type() -> Piece::Type {
-  const auto next = current[read_idx++];
+  const auto next_type = current[read_idx++];
   if (read_idx == 7) {
     shuffle();
     read_idx = 0;
   }
-  return next;
+  return next_type;
 }
 
 auto SevenBag::get_preview() const -> Preview {

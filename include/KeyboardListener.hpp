@@ -2,7 +2,6 @@
 #include "PeriodicFunction.hpp"
 #include "Tetris.hpp"
 #include "Timer.hpp"
-#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_scancode.h>
 #include <array>
 #include <chrono>

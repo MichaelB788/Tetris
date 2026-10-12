@@ -13,6 +13,10 @@
 namespace {
 constexpr float MATRIX_PIXL_WIDTH = Matrix::COLS * PIXL_SZ;
 constexpr float MATRIX_PIXL_HEIGHT = Matrix::ROWS * PIXL_SZ;
+
+auto resolve(FPoint base, FPoint offset) -> FPoint {
+  return fpoint::add(base, fpoint::multiply_scalar(offset, PIXL_SZ));
+}
 } // namespace
 
 TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
@@ -78,10 +82,6 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
   SDL_RenderPresent(ctx.renderer.get());
 }
 
-auto TetrisRenderer::resolve(FPoint base, FPoint offset) const -> FPoint {
-  return fpoint::add(base, fpoint::multiply_scalar(offset, PIXL_SZ));
-}
-
 void TetrisRenderer::draw_block(Piece::Type type, FPoint pos,
                                 BlockStyle style) const {
   const auto src_y_offset = style == BlockStyle::Ghost ? PIXL_SZ : 0;
@@ -99,10 +99,11 @@ void TetrisRenderer::draw_piece(Piece piece, FPoint base,
 }
 
 void TetrisRenderer::draw_matrix(const Matrix &matrix, FPoint base) const {
-  for (float y = 0; y < Matrix::ROWS; ++y) {
-    for (float x = 0; x < Matrix::COLS; ++x) {
-      if (auto tile = matrix.at({x, y}))
-        draw_block(tile.value(), resolve(base, {x, y}), BlockStyle::Solid);
+  for (size_t y = 0; y < Matrix::ROWS; ++y) {
+    for (size_t x = 0; x < Matrix::COLS; ++x) {
+      const auto fpos = FPoint{static_cast<float>(x), static_cast<float>(y)};
+      if (auto tile = matrix.at(fpos))
+        draw_block(tile.value(), resolve(base, fpos), BlockStyle::Solid);
     }
   }
 

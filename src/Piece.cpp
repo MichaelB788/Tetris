@@ -2,7 +2,7 @@
 #include "FPoint.hpp"
 #include <cstddef>
 
-auto Piece::get_shape() const -> Piece::Shape {
+auto Piece::get_shape() const -> Shape {
   // Piece shape/rotation data
   static constexpr Piece::Shape SHAPES[7][4]{
       // I

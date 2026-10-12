@@ -1,8 +1,5 @@
 #include "App.hpp"
-#include <SDL3/SDL_error.h>
 #include <SDL3/SDL_events.h>
-#include <SDL3/SDL_init.h>
-#include <SDL3_ttf/SDL_ttf.h>
 #include <chrono>
 #include <thread>
 
@@ -12,8 +9,6 @@ void App::loop() {
     curr_time = std::chrono::steady_clock::now();
     const auto delta_time = curr_time - prev_time;
 
-    // NOTE: It is imperitive that this happens before keyboard input is
-    // processed
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT)
         return;

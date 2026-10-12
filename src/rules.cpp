@@ -4,7 +4,6 @@
 #include "Piece.hpp"
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 
 auto piece_query::is_valid_shape(const Piece::Shape &shape,
                                  const Matrix &matrix) -> bool {
@@ -63,7 +62,7 @@ auto piece_action::srs_rotation(Piece piece, Piece::Rotation dir,
 
   for (size_t i = 0; i < 5; ++i) {
     const auto offset = fpoint::subtract(offsets[from][i], offsets[to][i]);
-    if (auto new_piece = piece_action::shift(rotated_piece, offset, matrix))
+    if (auto new_piece = shift(rotated_piece, offset, matrix))
       return new_piece;
   }
 

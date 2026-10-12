@@ -1,12 +1,26 @@
 #include "rules.hpp"
 #include "FPoint.hpp"
+#include "Matrix.hpp"
 #include "Piece.hpp"
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
+
+auto piece_query::is_valid_shape(const Piece::Shape &shape,
+                                 const Matrix &matrix) -> bool {
+  return std::all_of(shape.cbegin(), shape.cend(),
+                     [&](auto pos) { return matrix.is_fpos_valid_at(pos); });
+}
+
+auto piece_query::is_shape_within_bounds(const Piece::Shape &shape) -> bool {
+  return std::all_of(shape.cbegin(), shape.cend(),
+                     Matrix::is_fpos_within_bounds);
+}
 
 auto piece_action::hard_drop(Piece pc, const Matrix &matrix) -> Piece {
   auto test = pc;
   ++test.pos.y;
-  while (matrix.is_shape_valid(test.get_shape())) {
+  while (piece_query::is_valid_shape(test.get_shape(), matrix)) {
     ++test.pos.y;
     ++pc.pos.y;
   }
@@ -16,8 +30,9 @@ auto piece_action::hard_drop(Piece pc, const Matrix &matrix) -> Piece {
 auto piece_action::shift(Piece pc, FPoint delta, const Matrix &matrix)
     -> std::optional<Piece> {
   pc.pos = fpoint::add(pc.pos, delta);
-  return matrix.is_shape_valid(pc.get_shape()) ? std::make_optional(pc)
-                                               : std::nullopt;
+  return piece_query::is_valid_shape(pc.get_shape(), matrix)
+             ? std::make_optional(pc)
+             : std::nullopt;
 }
 
 auto piece_action::srs_rotation(Piece piece, Piece::Rotation dir,
@@ -53,4 +68,11 @@ auto piece_action::srs_rotation(Piece piece, Piece::Rotation dir,
   }
 
   return std::nullopt;
+}
+
+void piece_action::lock_down(Piece pc, Matrix &matrix) {
+  const auto shape = pc.get_shape();
+  assert(piece_query::is_valid_shape(shape, matrix));
+  for (const auto pos : shape)
+    matrix.at(pos) = pc.type;
 }

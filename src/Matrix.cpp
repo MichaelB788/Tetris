@@ -1,55 +1,20 @@
 #include "Matrix.hpp"
+#include "FPoint.hpp"
 #include "Piece.hpp"
 #include <algorithm>
 #include <cassert>
 
-namespace {
-[[nodiscard]] auto is_pos_within_bounds(FPoint pos) -> bool {
-  return pos.x >= 0 && pos.y >= 0 && pos.x < Matrix::COLS &&
-         pos.y < Matrix::ROWS;
-}
-} // namespace
-
-auto Matrix::at(size_t x, size_t y) const -> std::optional<Piece::Type> {
-  assert(x < COLS && y < ROWS);
-  return data[y][x];
-}
-
-auto Matrix::at(FPoint pos) const -> std::optional<Piece::Type> {
-  assert(is_pos_within_bounds(pos));
-  return data[pos.y][pos.x];
-}
-
-void Matrix::clear() {
-  for (auto &row : data)
-    row.fill(std::nullopt);
-}
-
-auto Matrix::is_shape_valid(const Piece::Shape &shape) const -> bool {
-  return std::all_of(shape.begin(), shape.end(), [this](auto pos) {
-    return is_pos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
-  });
-}
-
-void Matrix::lock_down(Piece piece) {
-  if (const auto shape = piece.get_shape(); is_shape_valid(shape)) {
-    for (const auto [x, y] : shape)
-      data[y][x] = piece.type;
-  }
-}
-
 auto Matrix::clear_lines() -> unsigned {
-  unsigned cleared = 0;
+  auto cleared = 0u;
   int write = ROWS - 1;
 
   for (int read = ROWS - 1; read >= 0; --read) {
-    if (std::all_of(data[read].begin(), data[read].end(),
+    if (std::all_of(data[read].cbegin(), data[read].cend(),
                     [](auto tile) { return tile.has_value(); })) {
       ++cleared;
     } else {
       if (write != read)
         data[write] = data[read];
-
       --write;
     }
   }
@@ -60,6 +25,26 @@ auto Matrix::clear_lines() -> unsigned {
   return cleared;
 }
 
-auto matrix::is_piece_within_bounds(const Piece::Shape &shape) -> bool {
-  return std::all_of(shape.begin(), shape.end(), is_pos_within_bounds);
+void Matrix::clear_all() {
+  for (auto &row : data)
+    row.fill(std::nullopt);
+}
+
+auto Matrix::is_fpos_within_bounds(FPoint pos) -> bool {
+  return pos.x >= 0 && pos.y >= 0 && pos.x < Matrix::COLS &&
+         pos.y < Matrix::ROWS;
+}
+
+auto Matrix::is_fpos_valid_at(FPoint pos) const -> bool {
+  return is_fpos_within_bounds(pos) && !data[pos.y][pos.x].has_value();
+}
+
+auto Matrix::at(FPoint pos) -> std::optional<Piece::Type> & {
+  assert(is_fpos_within_bounds(pos));
+  return data[pos.y][pos.x];
+}
+
+auto Matrix::at(FPoint pos) const -> std::optional<Piece::Type> {
+  assert(is_fpos_within_bounds(pos));
+  return data[pos.y][pos.x];
 }

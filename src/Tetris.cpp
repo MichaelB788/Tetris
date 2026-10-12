@@ -81,7 +81,7 @@ void Tetris::reset() {
   lock_reset.func.reset();
 
   held_piece.type = std::nullopt;
-  matrix.clear();
+  matrix.clear_all();
   tetris::seven_bag::shuffle(bag, rng);
   player = tetris::create_next_piece(tetris::seven_bag::pop(bag, rng));
 }
@@ -104,9 +104,9 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
   player = tetris::create_next_piece(next);
 
   // Try to adjust the initial position of the next piece
-  while (!matrix.is_shape_valid(player.get_shape())) {
+  while (!piece_query::is_valid_shape(player.get_shape(), matrix)) {
     --player.pos.y;
-    if (!matrix::is_piece_within_bounds(player.get_shape()))
+    if (!piece_query::is_shape_within_bounds(player.get_shape()))
       return State::GameOver;
   }
 
@@ -121,7 +121,7 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
 
 void Tetris::lock_piece() {
   held_piece.action_used = false;
-  matrix.lock_down(player);
+  piece_action::lock_down(player, matrix);
   score += matrix.clear_lines();
 
   using namespace std::chrono_literals;

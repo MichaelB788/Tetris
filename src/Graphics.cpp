@@ -125,9 +125,8 @@ void graphics::sdl::draw_matrix(Graphics::SDL_Ctx &sdl, const Matrix &matrix,
                                 FPoint base) {
   for (float y = 0; y < Matrix::ROWS; ++y) {
     for (float x = 0; x < Matrix::COLS; ++x) {
-      if (auto tile = matrix.at(x, y)) {
+      if (auto tile = matrix.at({x, y}))
         draw_block(sdl, tile.value(), resolve(base, {x, y}), BlockStyle::Solid);
-      }
     }
   }
 

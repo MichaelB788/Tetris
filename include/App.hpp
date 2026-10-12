@@ -1,7 +1,7 @@
 #pragma once
-#include "Graphics.hpp"
 #include "KeyboardListener.hpp"
 #include "Tetris.hpp"
+#include "TetrisRenderer.hpp"
 #include <SDL3/SDL_init.h>
 #include <chrono>
 #include <filesystem>
@@ -11,7 +11,7 @@ class App {
 public:
   App(const std::filesystem::path &atlas_path,
       const std::filesystem::path &font_path)
-      : graphics(atlas_path, font_path) {}
+      : tetris_renderer(atlas_path, font_path) {}
 
   void loop();
 
@@ -26,5 +26,5 @@ private:
   SDL_Event event{};
   Tetris tetris{rng};
   KeyboardListener keyboard_listener{tetris};
-  Graphics graphics;
+  TetrisRenderer tetris_renderer;
 };

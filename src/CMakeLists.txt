@@ -19,6 +19,7 @@ add_library(TetrisSource
   FPoint.cpp
   rules.cpp
   Graphics.cpp
+  SevenBag.cpp
   Tetris.cpp
   Timer.cpp
 )

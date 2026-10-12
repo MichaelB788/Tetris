@@ -2,8 +2,7 @@
 #include "Matrix.hpp"
 #include "PeriodicFunction.hpp"
 #include "Piece.hpp"
-#include <array>
-#include <cstddef>
+#include "SevenBag.hpp"
 #include <cstdint>
 #include <optional>
 #include <random>
@@ -15,15 +14,6 @@ public:
   struct HeldPiece {
     bool action_used{};
     std::optional<Piece::Type> type{};
-  };
-
-  struct SevenBag {
-    using Preview = std::array<Piece::Type, 4>;
-    size_t read_idx = 0;
-    std::array<Piece::Type, 7> current{};
-    std::array<Piece::Type, 7> next{
-        Piece::Type::I, Piece::Type::O, Piece::Type::T, Piece::Type::S,
-        Piece::Type::Z, Piece::Type::J, Piece::Type::L};
   };
 
   struct LockReset {
@@ -76,24 +66,9 @@ private:
 
   HeldPiece held_piece{};
   Matrix matrix{};
-  Piece player{};
-  SevenBag bag;
+  SevenBag seven_bag;
+  Piece player;
 
   PeriodicFunction gravity_func;
   LockReset lock_reset;
 };
-
-namespace tetris {
-[[nodiscard]] auto create_next_piece(Piece::Type type) -> Piece;
-
-namespace lock_reset {
-void attempt_reset(Tetris::LockReset &lock_reset);
-}
-
-namespace seven_bag {
-void shuffle(Tetris::SevenBag &bag, std::mt19937 &rng);
-[[nodiscard]] auto pop(Tetris::SevenBag &bag, std::mt19937 &rng) -> Piece::Type;
-[[nodiscard]] auto create_preview(const Tetris::SevenBag &bag)
-    -> Tetris::SevenBag::Preview;
-} // namespace seven_bag
-} // namespace tetris

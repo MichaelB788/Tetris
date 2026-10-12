@@ -11,17 +11,6 @@ class Tetris {
 public:
   enum class State : uint8_t { Running, GameOver, Paused };
 
-  struct HeldPiece {
-    bool action_used{};
-    std::optional<Piece::Type> type{};
-  };
-
-  struct LockReset {
-    uint8_t count{};
-    bool countdown_enabled{};
-    PeriodicFunction func;
-  };
-
   explicit Tetris(std::mt19937 &rng);
 
   void tick(std::chrono::nanoseconds delta_time);
@@ -57,6 +46,7 @@ private:
 
   [[nodiscard]] auto start_next_round(Piece::Type next) -> State;
 
+  void attempt_lock_reset();
   void lock_piece();
 
   std::mt19937 &rng;
@@ -64,11 +54,18 @@ private:
   State state{};
   unsigned score{};
 
-  HeldPiece held_piece{};
+  struct {
+    bool action_used{};
+    std::optional<Piece::Type> type{};
+  } held_piece{};
   Matrix matrix{};
   SevenBag seven_bag;
   Piece player;
 
   PeriodicFunction gravity_func;
-  LockReset lock_reset;
+  struct LockReset {
+    PeriodicFunction func;
+    uint8_t count{};
+    bool countdown_enabled{};
+  } lock_reset;
 };

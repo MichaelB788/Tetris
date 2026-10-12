@@ -10,25 +10,18 @@ namespace {
 [[nodiscard]] auto create_next_piece(Piece::Type type) -> Piece {
   return {.type = type, .pos = {4, 4}};
 }
-
-void attempt_lock_reset(Tetris::LockReset &lock_reset) {
-  if (lock_reset.countdown_enabled && lock_reset.count < 10) {
-    ++lock_reset.count;
-    lock_reset.func.reset();
-  }
-}
 } // namespace
 
 Tetris::Tetris(std::mt19937 &rng_)
     : rng(rng_), seven_bag(rng_),
       player(create_next_piece(seven_bag.pop_next_type())),
       gravity_func(std::chrono::seconds(1), [this] { player_soft_drop(); }),
-      lock_reset{.func{std::chrono::seconds(1), [this] {
-                         if (!piece_action::shift(player, {.y = 1}, matrix)) {
-                           lock_piece();
-                           state = start_next_round(seven_bag.pop_next_type());
-                         }
-                       }}} {}
+      lock_reset{{std::chrono::seconds(1), [this] {
+                    if (!piece_action::shift(player, {.y = 1}, matrix)) {
+                      lock_piece();
+                      state = start_next_round(seven_bag.pop_next_type());
+                    }
+                  }}} {}
 
 void Tetris::player_step_left() { player_horizontal_shift(-1); }
 
@@ -97,14 +90,14 @@ void Tetris::reset() {
 void Tetris::player_horizontal_shift(float x) {
   if (const auto shifted = piece_action::shift(player, {.x = x}, matrix)) {
     player = shifted.value();
-    attempt_lock_reset(lock_reset);
+    attempt_lock_reset();
   }
 }
 
 void Tetris::player_rotate(Piece::Rotation next) {
   if (const auto rotated = piece_action::srs_rotation(player, next, matrix)) {
     player = rotated.value();
-    attempt_lock_reset(lock_reset);
+    attempt_lock_reset();
   }
 }
 
@@ -125,6 +118,13 @@ auto Tetris::start_next_round(Piece::Type next) -> State {
   lock_reset.countdown_enabled = false;
 
   return State::Running;
+}
+
+void Tetris::attempt_lock_reset() {
+  if (lock_reset.countdown_enabled && lock_reset.count < 10) {
+    ++lock_reset.count;
+    lock_reset.func.reset();
+  }
 }
 
 void Tetris::lock_piece() {

@@ -1,5 +1,5 @@
 #include "TetrisRenderer.hpp"
-#include "FPoint.hpp"
+#include "Geometry.hpp"
 #include "GraphicsContext.hpp"
 #include "Piece.hpp"
 #include "Tetris.hpp"
@@ -11,11 +11,11 @@
 #include <vector>
 
 namespace {
-constexpr float MATRIX_PIXL_WIDTH = Matrix::COLS * PIXL_SZ;
-constexpr float MATRIX_PIXL_HEIGHT = Matrix::ROWS * PIXL_SZ;
+constexpr float PLAYFIELD_PIXL_WIDTH = Playfield::COLS * PIXL_SZ;
+constexpr float PLAYFIELD_PIXL_HEIGHT = Playfield::ROWS * PIXL_SZ;
 
-auto resolve(FPoint base, FPoint offset) -> FPoint {
-  return fpoint::add(base, fpoint::multiply_scalar(offset, PIXL_SZ));
+auto resolve(Point base, Vector offset) -> Point {
+  return base + (offset * PIXL_SZ);
 }
 } // namespace
 
@@ -32,11 +32,11 @@ void TetrisRenderer::update_resized_window_layout() {
   window.size.w = static_cast<float>(w);
   window.size.h = static_cast<float>(h);
 
-  window.base_pos.matrix.x = (window.size.w - MATRIX_PIXL_WIDTH) / 2;
-  window.base_pos.matrix.y = (window.size.h - MATRIX_PIXL_HEIGHT) / 2;
-  window.base_pos.left = resolve(window.base_pos.matrix, {-6, 0});
+  window.base_pos.playfield.x = (window.size.w - PLAYFIELD_PIXL_WIDTH) / 2;
+  window.base_pos.playfield.y = (window.size.h - PLAYFIELD_PIXL_HEIGHT) / 2;
+  window.base_pos.left = resolve(window.base_pos.playfield, {-6, 0});
   window.base_pos.right =
-      resolve(window.base_pos.matrix, {Matrix::COLS + 2, 0});
+      resolve(window.base_pos.playfield, {Playfield::COLS + 2, 0});
 }
 
 void TetrisRenderer::render_frame(const Tetris &tetris) const {
@@ -46,8 +46,8 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
   switch (tetris.get_state()) {
   case Tetris::State::Running:
     // draw pieces
-    draw_piece(tetris.get_active_piece(), window.base_pos.matrix);
-    draw_piece(tetris.get_ghost_piece(), window.base_pos.matrix,
+    draw_piece(tetris.get_active_piece(), window.base_pos.playfield);
+    draw_piece(tetris.get_ghost_piece(), window.base_pos.playfield,
                BlockStyle::Ghost);
 
     if (const auto held_type = tetris.get_held_piece_type())
@@ -62,8 +62,8 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
       }
     }
 
-    // draw matrix
-    draw_matrix(tetris.get_matrix(), window.base_pos.matrix);
+    // draw playfield
+    draw_playfield(tetris.get_playfield(), window.base_pos.playfield);
 
     // draw text
     draw_text(GameText::Next, window.base_pos.left);
@@ -82,7 +82,7 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
   SDL_RenderPresent(ctx.renderer.get());
 }
 
-void TetrisRenderer::draw_block(Piece::Type type, FPoint pos,
+void TetrisRenderer::draw_block(Piece::Type type, Point pos,
                                 BlockStyle style) const {
   const auto src_y_offset = style == BlockStyle::Ghost ? PIXL_SZ : 0;
   const auto src_rect = SDL_FRect{PIXL_SZ * static_cast<float>(type),
@@ -92,28 +92,32 @@ void TetrisRenderer::draw_block(Piece::Type type, FPoint pos,
                     &dst_rect);
 }
 
-void TetrisRenderer::draw_piece(Piece piece, FPoint base,
+void TetrisRenderer::draw_piece(Piece piece, Point base,
                                 BlockStyle style) const {
-  for (const auto pos : piece.get_shape())
-    draw_block(piece.type, resolve(base, pos), style);
+  for (const auto pos : piece.get_shape()) {
+    draw_block(piece.get_type(), resolve(base, {pos.x, pos.y}), style);
+  }
 }
 
-void TetrisRenderer::draw_matrix(const Matrix &matrix, FPoint base) const {
-  for (size_t y = 0; y < Matrix::ROWS; ++y) {
-    for (size_t x = 0; x < Matrix::COLS; ++x) {
-      const auto fpos = FPoint{static_cast<float>(x), static_cast<float>(y)};
-      if (auto tile = matrix.at(fpos))
-        draw_block(tile.value(), resolve(base, fpos), BlockStyle::Solid);
+void TetrisRenderer::draw_playfield(const Playfield &playfield,
+                                    Point base) const {
+  for (size_t y = 0; y < Playfield::ROWS; ++y) {
+    for (size_t x = 0; x < Playfield::COLS; ++x) {
+      if (const auto cell = playfield(x, y))
+        draw_block(
+            cell.value(),
+            resolve(base, {static_cast<float>(x), static_cast<float>(y)}),
+            BlockStyle::Solid);
     }
   }
 
-  const auto matrix_outline_rect =
-      SDL_FRect{base.x, base.y, MATRIX_PIXL_WIDTH, MATRIX_PIXL_HEIGHT};
+  const auto playfield_outline_rect =
+      SDL_FRect{base.x, base.y, PLAYFIELD_PIXL_WIDTH, PLAYFIELD_PIXL_HEIGHT};
   SDL_SetRenderDrawColor(ctx.renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
-  SDL_RenderRect(ctx.renderer.get(), &matrix_outline_rect);
+  SDL_RenderRect(ctx.renderer.get(), &playfield_outline_rect);
 }
 
-void TetrisRenderer::draw_uint(unsigned n, FPoint pos) const {
+void TetrisRenderer::draw_uint(unsigned n, Point pos) const {
   if (n < 10) {
     TTF_DrawRendererText(ctx.uint_text_map[n].get(), pos.x, pos.y);
     return;
@@ -132,7 +136,7 @@ void TetrisRenderer::draw_uint(unsigned n, FPoint pos) const {
   }
 }
 
-void TetrisRenderer::draw_text(GameText game_text, FPoint pos) const {
+void TetrisRenderer::draw_text(GameText game_text, Point pos) const {
   TTF_DrawRendererText(ctx.game_text_map[static_cast<size_t>(game_text)].get(),
                        pos.x, pos.y);
 }

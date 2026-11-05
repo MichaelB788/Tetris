@@ -1,23 +1,19 @@
 #include "Tetris.hpp"
-#include "FPoint.hpp"
+#include "Geometry.hpp"
 #include "Piece.hpp"
-#include "rules.hpp"
 #include <chrono>
 #include <optional>
 #include <random>
 
-namespace {
-[[nodiscard]] auto create_next_piece(Piece::Type type) -> Piece {
-  return {.type = type, .pos = {4, 4}};
-}
-} // namespace
+static constexpr Point SPAWN_POS = {4, 4};
 
 Tetris::Tetris(std::mt19937 &rng_)
-    : rng(rng_), seven_bag(rng_),
-      player(create_next_piece(seven_bag.pop_next_type())),
+    : rng(rng_), seven_bag(rng_), player(seven_bag.pop_next_type(), SPAWN_POS),
       gravity_func(std::chrono::seconds(1), [this] { player_soft_drop(); }),
       lock_reset{{std::chrono::seconds(1), [this] {
-                    if (!piece_action::shift(player, {.y = 1}, matrix)) {
+                    auto test = player;
+                    test.shift_unbounded({0, 1});
+                    if (!playfield.can_place(test.get_shape())) {
                       lock_piece();
                       state = start_next_round(seven_bag.pop_next_type());
                     }
@@ -28,27 +24,27 @@ void Tetris::player_step_left() { player_horizontal_shift(-1); }
 void Tetris::player_step_right() { player_horizontal_shift(1); }
 
 void Tetris::player_soft_drop() {
-  if (const auto shifted = piece_action::shift(player, {.y = 1}, matrix))
-    player = shifted.value();
-  else
+  if (!player.shift({0, 1}, playfield))
     lock_reset.countdown_enabled = true;
 }
 
 void Tetris::player_hard_drop() {
-  player = piece_action::hard_drop(player, matrix);
+  player.hard_drop(playfield);
   lock_piece();
   state = start_next_round(seven_bag.pop_next_type());
 }
 
-void Tetris::player_rotate_cw() { player_rotate(Piece::Rotation::r90); }
+void Tetris::player_rotate_clockwise() {
+  player_rotate(Piece::RotationDir::Clockwise);
+}
 
-void Tetris::player_rotate_ccw() { player_rotate(Piece::Rotation::r270); }
-
-void Tetris::player_rotate_half() { player_rotate(Piece::Rotation::r180); }
+void Tetris::player_rotate_counterclockwise() {
+  player_rotate(Piece::RotationDir::Counterclockwise);
+}
 
 void Tetris::hold_current_piece() {
   if (!held_piece.action_used) {
-    const auto temp = player.type;
+    const auto temp = player.get_type();
     state = start_next_round(held_piece.type ? held_piece.type.value()
                                              : seven_bag.pop_next_type());
     held_piece.type = temp;
@@ -82,32 +78,28 @@ void Tetris::reset() {
   lock_reset.func.reset();
 
   held_piece.type = std::nullopt;
-  matrix.clear_all();
+  playfield.clear_all_rows();
   seven_bag.shuffle();
-  player = create_next_piece(seven_bag.pop_next_type());
+  player = {seven_bag.pop_next_type(), SPAWN_POS};
 }
 
 void Tetris::player_horizontal_shift(float x) {
-  if (const auto shifted = piece_action::shift(player, {.x = x}, matrix)) {
-    player = shifted.value();
+  if (player.shift({x, 0}, playfield))
     attempt_lock_reset();
-  }
 }
 
-void Tetris::player_rotate(Piece::Rotation next) {
-  if (const auto rotated = piece_action::srs_rotation(player, next, matrix)) {
-    player = rotated.value();
+void Tetris::player_rotate(Piece::RotationDir dir) {
+  if (player.rotate(dir, playfield))
     attempt_lock_reset();
-  }
 }
 
-auto Tetris::start_next_round(Piece::Type next) -> State {
-  player = create_next_piece(next);
+auto Tetris::start_next_round(Piece::Type next_type) -> State {
+  player = {next_type, SPAWN_POS};
 
   // Try to adjust the initial position of the next piece
-  while (!piece_query::is_valid_shape(player.get_shape(), matrix)) {
-    --player.pos.y;
-    if (!piece_query::is_shape_within_bounds(player.get_shape()))
+  while (!playfield.can_place(player.get_shape())) {
+    player.shift_unbounded({0, -1});
+    if (!playfield.is_within_bounds(player.get_shape()))
       return State::GameOver;
   }
 
@@ -129,8 +121,8 @@ void Tetris::attempt_lock_reset() {
 
 void Tetris::lock_piece() {
   held_piece.action_used = false;
-  piece_action::lock_down(player, matrix);
-  score += matrix.clear_lines();
+  playfield.lock_down(player);
+  score += playfield.clear_full_rows();
 
   using namespace std::chrono_literals;
   static constexpr std::array LEVELS{1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
@@ -143,7 +135,7 @@ auto Tetris::get_state() const -> State { return state; }
 
 auto Tetris::get_score() const -> unsigned { return score; }
 
-auto Tetris::get_matrix() const -> const Matrix & { return matrix; }
+auto Tetris::get_playfield() const -> const Playfield & { return playfield; }
 
 auto Tetris::get_active_piece() const -> Piece { return player; }
 
@@ -156,5 +148,7 @@ auto Tetris::get_held_piece_type() const -> std::optional<Piece::Type> {
 }
 
 auto Tetris::get_ghost_piece() const -> Piece {
-  return piece_action::hard_drop(player, matrix);
+  auto ghost = player;
+  ghost.hard_drop(playfield);
+  return ghost;
 }

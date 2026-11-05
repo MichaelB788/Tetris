@@ -1,7 +1,7 @@
 #pragma once
-#include "Matrix.hpp"
 #include "PeriodicFunction.hpp"
 #include "Piece.hpp"
+#include "Playfield.hpp"
 #include "SevenBag.hpp"
 #include <cstdint>
 #include <optional>
@@ -21,9 +21,8 @@ public:
   void player_soft_drop();
   void player_hard_drop();
 
-  void player_rotate_cw();
-  void player_rotate_ccw();
-  void player_rotate_half();
+  void player_rotate_clockwise();
+  void player_rotate_counterclockwise();
 
   void hold_current_piece();
 
@@ -34,7 +33,7 @@ public:
 
   [[nodiscard]] auto get_score() const -> unsigned;
   [[nodiscard]] auto get_state() const -> State;
-  [[nodiscard]] auto get_matrix() const -> const Matrix &;
+  [[nodiscard]] auto get_playfield() const -> const Playfield &;
   [[nodiscard]] auto get_active_piece() const -> Piece;
   [[nodiscard]] auto get_seven_bag_preview() const -> SevenBag::Preview;
   [[nodiscard]] auto get_held_piece_type() const -> std::optional<Piece::Type>;
@@ -42,9 +41,9 @@ public:
 
 private:
   void player_horizontal_shift(float x);
-  void player_rotate(Piece::Rotation next);
+  void player_rotate(Piece::RotationDir dir);
 
-  [[nodiscard]] auto start_next_round(Piece::Type next) -> State;
+  [[nodiscard]] auto start_next_round(Piece::Type next_type) -> State;
 
   void attempt_lock_reset();
   void lock_piece();
@@ -58,11 +57,13 @@ private:
     bool action_used{};
     std::optional<Piece::Type> type{};
   } held_piece{};
-  Matrix matrix{};
+
+  Playfield playfield{};
   SevenBag seven_bag;
   Piece player;
 
   PeriodicFunction gravity_func;
+
   struct LockReset {
     PeriodicFunction func;
     uint8_t count{};

@@ -1,12 +1,11 @@
 #pragma once
-#include "FPoint.hpp"
-#include "FSize.hpp"
+#include "Geometry.hpp"
 #include "GraphicsContext.hpp"
 #include "Piece.hpp"
 #include <filesystem>
 
 class Tetris;
-class Matrix;
+class Playfield;
 
 class TetrisRenderer {
 public:
@@ -20,23 +19,23 @@ public:
 private:
   enum class BlockStyle { Solid, Ghost };
 
-  void draw_block(Piece::Type type, FPoint pos,
+  void draw_block(Piece::Type type, Point pos,
                   BlockStyle style = BlockStyle::Solid) const;
-  void draw_piece(Piece piece, FPoint base_pos,
+  void draw_piece(Piece piece, Point base_pos,
                   BlockStyle style = BlockStyle::Solid) const;
-  void draw_matrix(const Matrix &matrix, FPoint base_pos) const;
+  void draw_playfield(const Playfield &playfield, Point base_pos) const;
 
-  void draw_uint(unsigned uint, FPoint pos) const;
-  void draw_text(GameText game_text, FPoint pos) const;
+  void draw_uint(unsigned uint, Point pos) const;
+  void draw_text(GameText game_text, Point pos) const;
   void draw_centered_text(GameText game_text) const;
 
   struct {
-    FSize size{};
+    Size size{};
 
     struct {
-      FPoint matrix{};
-      FPoint left{};
-      FPoint right{};
+      Point playfield{};
+      Point left{};
+      Point right{};
     } base_pos;
   } window{};
 

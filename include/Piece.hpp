@@ -3,6 +3,8 @@
 #include <array>
 #include <cstdint>
 
+class Playfield;
+
 class Piece {
 public:
   using Shape = std::array<Point, 4>;
@@ -11,15 +13,17 @@ public:
   enum class Rotation : uint8_t { r0, r90, r180, r270 };
   enum class RotationDir { Clockwise = 1, Counterclockwise = 3 };
 
-  Piece(Type type, Point pos, Rotation rotation);
+  Piece(Type type = Type::I, Point pos = {0, 0},
+        Rotation rotation = Rotation::r0);
 
-  auto shift(Vector delta, Rectangle bounds) -> bool;
-  auto rotate(RotationDir dir, Rectangle bounds) -> bool;
-
-  void hard_drop(Rectangle bounds);
+  auto shift(Vector delta, const Playfield &playfield) -> bool;
+  auto rotate(RotationDir dir, const Playfield &playfield) -> bool;
+  void hard_drop(const Playfield &playfield);
 
   void shift_unbounded(Vector delta);
   void rotate_unbounded(RotationDir dir);
+
+  void set_pos(Point position);
 
   [[nodiscard]] auto get_type() const -> Type;
   [[nodiscard]] auto get_rotation() const -> Rotation;

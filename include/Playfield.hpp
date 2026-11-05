@@ -11,7 +11,6 @@ public:
 
   static constexpr size_t ROWS = 24;
   static constexpr size_t COLS = 10;
-  static constexpr Rectangle BOUNDS = {0, 0, COLS - 1, ROWS - 1};
 
   void clear_all_rows();
   // returns the number of rows cleared

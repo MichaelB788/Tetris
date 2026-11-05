@@ -1,6 +1,6 @@
 #include "Piece.hpp"
 #include "Geometry.hpp"
-#include <algorithm>
+#include "Playfield.hpp"
 #include <cstddef>
 
 Piece::Piece(Type type, Point pos, Rotation rotation)
@@ -19,18 +19,20 @@ Piece::Piece(Type type, Point pos, Rotation rotation)
     shape[i] = pos + SHAPE_OFFSETS[static_cast<size_t>(type)][i];
 }
 
-auto Piece::shift(Vector delta, Rectangle bounds) -> bool {
+auto Piece::shift(Vector delta, const Playfield &playfield) -> bool {
   auto test = *this;
   test.shift_unbounded(delta);
-  if (std::all_of(test.shape.cbegin(), test.shape.cend(),
-                  [bounds](Point p) { return p.is_within(bounds); })) {
+  if (playfield.can_place(test.shape)) {
     *this = test;
     return true;
   }
   return false;
 }
 
-auto Piece::rotate(RotationDir dir, Rectangle bounds) -> bool {
+auto Piece::rotate(RotationDir dir, const Playfield &playfield) -> bool {
+  if (type == Type::O)
+    return false;
+
   // SRS offset data
   static constexpr Vector STANDARD_PIECE_OFFSETS[4][5]{
       {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},       // R0
@@ -54,18 +56,20 @@ auto Piece::rotate(RotationDir dir, Rectangle bounds) -> bool {
 
   for (size_t i = 0; i < 5; ++i) {
     const auto offset = offsets[from][i] - offsets[to][i];
-    if (test.shift(offset, bounds)) {
+    if (test.shift(offset, playfield)) {
       *this = test;
       return true;
+    } else {
+      test.set_pos(pos);
     }
   }
   return false;
 }
 
-void Piece::hard_drop(Rectangle bounds) {
+void Piece::hard_drop(const Playfield &playfield) {
   auto test = *this;
   auto delta = Vector{};
-  while (test.shift({0, 1}, bounds))
+  while (test.shift({0, 1}, playfield))
     ++delta.y;
   shift_unbounded(delta);
 }
@@ -77,24 +81,34 @@ void Piece::shift_unbounded(Vector delta) {
 }
 
 void Piece::rotate_unbounded(RotationDir dir) {
-  rotation = static_cast<Rotation>(static_cast<unsigned>(rotation) +
-                                   static_cast<unsigned>(dir) % 4);
+  if (type == Type::O)
+    return;
+
+  rotation = static_cast<Rotation>(
+      (static_cast<int>(rotation) + static_cast<int>(dir)) % 4);
   switch (dir) {
   case RotationDir::Clockwise:
-    for (auto &p : shape) {
-      const auto delta = p - pos;
-      p.x = pos.x + delta.y;
-      p.y = pos.y - delta.x;
-    }
-    break;
-  case RotationDir::Counterclockwise:
     for (auto &p : shape) {
       const auto delta = p - pos;
       p.x = pos.x - delta.y;
       p.y = pos.y + delta.x;
     }
     break;
+  case RotationDir::Counterclockwise:
+    for (auto &p : shape) {
+      const auto delta = p - pos;
+      p.x = pos.x + delta.y;
+      p.y = pos.y - delta.x;
+    }
+    break;
   }
+}
+
+void Piece::set_pos(Point position) {
+  const auto delta = position - pos;
+  pos = position;
+  for (auto &p : shape)
+    p += delta;
 }
 
 auto Piece::get_type() const -> Type { return type; }

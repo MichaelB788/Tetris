@@ -50,12 +50,10 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
     } else if (is_key_pressed(SDL_SCANCODE_UP)) {
       tetris.hold_current_piece();
       break; // Immediate effect
-    } else if (is_key_pressed(SDL_SCANCODE_DOWN)) {
-      tetris.player_rotate_half();
     } else if (is_key_pressed(SDL_SCANCODE_LEFT)) {
-      tetris.player_rotate_ccw();
+      tetris.player_rotate_counterclockwise();
     } else if (is_key_pressed(SDL_SCANCODE_RIGHT)) {
-      tetris.player_rotate_cw();
+      tetris.player_rotate_clockwise();
     }
 
     // Handle repeatable actions

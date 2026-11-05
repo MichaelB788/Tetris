@@ -44,7 +44,7 @@ auto Playfield::is_within_bounds(const Piece::Shape &shape) -> bool {
                      [](Point p) { return p.is_within(BOUNDS); });
 }
 
-auto Playfield::can_place(const Piece::Shape &shape) -> bool {
+auto Playfield::can_place(const Piece::Shape &shape) const -> bool {
   return std::all_of(shape.cbegin(), shape.cend(), [this](Point p) {
     return p.is_within(BOUNDS) &&
            !cells[static_cast<size_t>(p.y)][static_cast<size_t>(p.x)]

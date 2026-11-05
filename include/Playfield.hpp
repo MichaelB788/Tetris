@@ -20,7 +20,7 @@ public:
   void lock_down(const Piece &piece);
 
   [[nodiscard]] static auto is_within_bounds(const Piece::Shape &shape) -> bool;
-  [[nodiscard]] auto can_place(const Piece::Shape &shape) -> bool;
+  [[nodiscard]] auto can_place(const Piece::Shape &shape) const -> bool;
 
   [[nodiscard]] auto at(Point pos) const -> Cell;
   [[nodiscard]] auto operator()(size_t x, size_t y) const -> Cell;

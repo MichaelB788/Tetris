@@ -1,17 +1,34 @@
 #pragma once
-#include "FPoint.hpp"
+#include "Geometry.hpp"
 #include <array>
 #include <cstdint>
 
-struct Piece {
-  using Shape = std::array<FPoint, 4>;
+class Piece {
+public:
+  using Shape = std::array<Point, 4>;
 
-  enum class Type : uint8_t { I = 0, O = 1, T = 2, S = 3, Z = 4, J = 5, L = 6 };
-  enum class Rotation : uint8_t { r0 = 0, r90 = 1, r180 = 2, r270 = 3 };
+  enum class Type : uint8_t { I, O, T, S, Z, J, L };
+  enum class Rotation : uint8_t { r0, r90, r180, r270 };
+  enum class RotationDir { Clockwise = 1, Counterclockwise = 3 };
 
-  [[nodiscard]] auto get_shape() const -> Shape;
+  Piece(Type type, Point pos, Rotation rotation);
 
+  auto shift(Vector delta, Rectangle bounds) -> bool;
+  auto rotate(RotationDir dir, Rectangle bounds) -> bool;
+
+  void hard_drop(Rectangle bounds);
+
+  void shift_unbounded(Vector delta);
+  void rotate_unbounded(RotationDir dir);
+
+  [[nodiscard]] auto get_type() const -> Type;
+  [[nodiscard]] auto get_rotation() const -> Rotation;
+  [[nodiscard]] auto get_pos() const -> Point;
+  [[nodiscard]] auto get_shape() const -> const Shape &;
+
+private:
   Type type{};
   Rotation rotation{};
-  FPoint pos{};
+  Point pos{};
+  Shape shape{};
 };

@@ -13,15 +13,14 @@ public:
   enum class Rotation : uint8_t { r0, r90, r180, r270 };
   enum class RotationDir { Clockwise = 1, Counterclockwise = 3 };
 
-  Piece(Type type = Type::I, Point pos = {0, 0},
-        Rotation rotation = Rotation::r0);
+  Piece(Type type = Type::I, Point pos = {0, 0});
 
   auto shift(Vector delta, const Playfield &playfield) -> bool;
   auto rotate(RotationDir dir, const Playfield &playfield) -> bool;
   void hard_drop(const Playfield &playfield);
 
-  void shift_unbounded(Vector delta);
-  void rotate_unbounded(RotationDir dir);
+  void shift_unchecked(Vector delta);
+  void rotate_unchecked(RotationDir dir);
 
   void set_pos(Point position);
 

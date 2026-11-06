@@ -101,13 +101,6 @@ void Piece::rotate_unchecked(RotationDir dir) {
   }
 }
 
-void Piece::set_pos(Point position) {
-  const auto delta = position - pos;
-  pos = position;
-  for (auto &p : shape)
-    p += delta;
-}
-
 auto Piece::get_type() const -> Type { return type; }
 
 auto Piece::get_rotation() const -> Rotation { return rotation; }

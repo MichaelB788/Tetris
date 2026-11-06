@@ -22,8 +22,6 @@ public:
   void shift_unchecked(Vector delta);
   void rotate_unchecked(RotationDir dir);
 
-  void set_pos(Point position);
-
   [[nodiscard]] auto get_type() const -> Type;
   [[nodiscard]] auto get_rotation() const -> Rotation;
   [[nodiscard]] auto get_pos() const -> Point;

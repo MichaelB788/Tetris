@@ -12,8 +12,7 @@ Tetris::Tetris(std::mt19937 &rng_)
       gravity_func(std::chrono::seconds(1), [this] { player_soft_drop(); }),
       lock_reset{{std::chrono::seconds(1), [this] {
                     auto test = player;
-                    test.shift_unchecked({0, 1});
-                    if (!playfield.can_place(test.get_shape())) {
+                    if (!test.shift({0, 1}, playfield)) {
                       lock_piece();
                       state = start_next_round(seven_bag.pop_next_type());
                     }

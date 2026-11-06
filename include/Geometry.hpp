@@ -1,5 +1,13 @@
 #pragma once
 
+struct Size {
+  int w, h;
+};
+
+struct Rectangle {
+  float x, y, w, h;
+};
+
 struct Vector {
   float x, y;
 
@@ -10,14 +18,6 @@ struct Vector {
   [[nodiscard]] auto operator+(Vector other) const -> Vector;
   [[nodiscard]] auto operator-(Vector other) const -> Vector;
   [[nodiscard]] auto operator*(float scalar) const -> Vector;
-};
-
-struct Size {
-  float w, h;
-};
-
-struct Rectangle {
-  float x, y, w, h;
 };
 
 struct Point {

@@ -1,45 +1,51 @@
 # Tetris
 
-Tetris, written in C++. Much of the project uses the SDL3 framework for window
-creation, rendering, input handling.
+Tetris clone written in C++, using the SDL3 rendering library.
+
+![image](assets/readme_img/tetris_preview.png)
+
+# Controls
+
+- Step Left: A
+- Step Right: D
+- Soft Drop: S
+- Hard Drop: W
+- Clockwise Rotation: Right Arrow
+- Counterclockwise Rotation: Left Arrow
+- Hold Piece: Up Arrow
 
 # Requirements
 
-The following are the minimum requirements to run the project:
+## Linux
 
-- A C/C++ compiler (such as GCC or MSVC) that supports C++17
-- CMake (with at least version 3.20)
-- A C/C++ generator, such as Ninja or Makefile.
-- SDL3, SDL3_TTF, and SDL3_IMG development files
+- GCC
+- CMake
+- Ninja
+- Development files for SDL3, SDL3 image, and SDL3 ttf
 
 # Build Instructions
 
 ## Linux
 
-If you just want to try the program, build the project in `Release` mode:
+Build the project in `Release` mode to try it out:
 
 ```bash
-cmake -B build -S .\
-    -DCMAKE_BUILD_TYPE=Release\
-    -G Ninja # This line may be omitted if using Make
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -G Ninja
 ```
 
-Otherwise, build the project in `Debug` mode:
+Build the project in `Debug` mode for testing/development:
 
 ```bash
-cmake -B build -S .\
-    -DCMAKE_EXPORT_COMPILE_COMMANDS=YES\
-    -DCMAKE_BUILD_TYPE=Debug\
-    -G Ninja # This line may be omitted if using Make
+cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=YES -DCMAKE_BUILD_TYPE=Debug -G Ninja
 ```
 
-You can then build or rebuild the project using:
+You can then (re)build the project using:
 
 ```bash
 cmake --build build
 ```
 
-The resulting binary can be found under `build/Release/` or `build/Debug/`,
+The program binary will be generated under `build/Release/` or `build/Debug/`,
 depending on the build type.
 
 # License

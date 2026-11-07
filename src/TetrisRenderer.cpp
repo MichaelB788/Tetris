@@ -32,7 +32,7 @@ void TetrisRenderer::update_on_resize() {
   layout.playfield.y =
       (static_cast<float>(ctx.window_size.h) - PLAYFIELD_PIXEL_H) / 2;
 
-  layout.queue = resolve(layout.playfield, {-6, 0});
+  layout.preview = resolve(layout.playfield, {-6, 0});
   layout.held = resolve(layout.playfield, {Playfield::COLS + 2, 0});
 }
 
@@ -52,13 +52,13 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
       const auto preview = tetris.get_seven_bag_preview();
       for (size_t i = 0; i < preview.size(); ++i) {
         draw_piece({preview[i]},
-                   resolve(layout.queue, {1, 3 * static_cast<float>(i + 1)}));
+                   resolve(layout.preview, {1, 3 * static_cast<float>(i + 1)}));
       }
     }
 
     draw_playfield(tetris.get_playfield(), layout.playfield);
 
-    draw_text(*ctx.game_text.next, layout.queue);
+    draw_text(*ctx.game_text.next, layout.preview);
     draw_text(*ctx.game_text.held, layout.held);
     draw_text(*ctx.game_text.score, resolve(layout.held, {0, 8}));
     draw_number(tetris.get_score(), resolve(layout.held, {0, 10}));

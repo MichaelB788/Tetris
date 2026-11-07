@@ -20,9 +20,7 @@ private:
   enum class BlockStyle { Solid, Ghost };
 
   struct Layout {
-    Point playfield{};
-    Point queue{};
-    Point held{};
+    Point playfield{}, preview{}, held{};
   };
 
   void draw_block(Piece::Type type, Point pos,

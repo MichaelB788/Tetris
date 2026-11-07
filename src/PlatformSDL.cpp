@@ -14,10 +14,6 @@ void SDL::RendererDeleter::operator()(SDL_Renderer *renderer) const {
   SDL_DestroyRenderer(renderer);
 }
 
-void SDL::SurfaceDeleter::operator()(SDL_Surface *surface) const {
-  SDL_DestroySurface(surface);
-}
-
 void SDL::TextureDeleter::operator()(SDL_Texture *texture) const {
   SDL_DestroyTexture(texture);
 }

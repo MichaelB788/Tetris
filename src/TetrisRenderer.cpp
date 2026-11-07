@@ -42,14 +42,12 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
 
   switch (tetris.get_state()) {
   case Tetris::State::Running:
-    // draw pieces
     draw_piece(tetris.get_active_piece(), layout.playfield);
     draw_piece(tetris.get_ghost_piece(), layout.playfield, BlockStyle::Ghost);
 
     if (const auto held_type = tetris.get_held_piece_type())
       draw_piece({held_type.value()}, resolve(layout.held, {1, 3}));
 
-    // draw next queue
     {
       const auto preview = tetris.get_seven_bag_preview();
       for (size_t i = 0; i < preview.size(); ++i) {
@@ -58,20 +56,18 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
       }
     }
 
-    // draw playfield
     draw_playfield(tetris.get_playfield(), layout.playfield);
 
-    // draw text
-    draw_text(GameText::Next, layout.queue);
-    draw_text(GameText::Hold, layout.held);
-    draw_text(GameText::Score, resolve(layout.held, {0, 8}));
+    draw_text(*ctx.game_text.next, layout.queue);
+    draw_text(*ctx.game_text.held, layout.held);
+    draw_text(*ctx.game_text.score, resolve(layout.held, {0, 8}));
     draw_number(tetris.get_score(), resolve(layout.held, {0, 10}));
     break;
   case Tetris::State::Paused:
-    draw_text_centered(GameText::Paused);
+    draw_text_centered(*ctx.game_text.paused);
     break;
   case Tetris::State::GameOver:
-    draw_text_centered(GameText::GameOver);
+    draw_text_centered(*ctx.game_text.game_over);
     break;
   }
 
@@ -132,14 +128,14 @@ void TetrisRenderer::draw_number(unsigned n, Point pos) const {
   }
 }
 
-void TetrisRenderer::draw_text(GameText game_text, Point pos) const {
-  TTF_DrawRendererText(ctx.game_text[game_text].get(), pos.x, pos.y);
+void TetrisRenderer::draw_text(TTF_Text &text, Point pos) const {
+  TTF_DrawRendererText(&text, pos.x, pos.y);
 }
 
-void TetrisRenderer::draw_text_centered(GameText game_text) const {
-  Size text{};
-  TTF_GetTextSize(ctx.game_text[game_text].get(), &text.w, &text.h);
-  TTF_DrawRendererText(ctx.game_text[game_text].get(),
-                       (ctx.window_size.w - static_cast<float>(text.w)) / 2,
-                       (ctx.window_size.h - static_cast<float>(text.h)) / 2);
+void TetrisRenderer::draw_text_centered(TTF_Text &text) const {
+  Size text_size{};
+  TTF_GetTextSize(&text, &text_size.w, &text_size.h);
+  TTF_DrawRendererText(
+      &text, (ctx.window_size.w - static_cast<float>(text_size.w)) / 2,
+      (ctx.window_size.h - static_cast<float>(text_size.h)) / 2);
 }

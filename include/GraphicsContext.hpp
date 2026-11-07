@@ -1,5 +1,4 @@
 #pragma once
-#include "EnumArray.hpp"
 #include "Geometry.hpp"
 #include "PlatformSDL.hpp"
 #include "PlatformSDL_TTF.hpp"
@@ -8,9 +7,11 @@
 
 static constexpr float PIXEL_SCALE = 32.0f;
 
-enum class GameText : size_t { Next, Hold, Score, Paused, GameOver, Count };
-
 struct GraphicsContext {
+  struct GameText {
+    SDL::TTF::Text next{}, held{}, score{}, paused{}, game_over{};
+  };
+
   // Throws an SDL::Exception upon failure
   explicit GraphicsContext(const std::filesystem::path &atlas_texture_path,
                            const std::filesystem::path &font_path);
@@ -24,7 +25,6 @@ struct GraphicsContext {
 
   SDL::TTF::RendererTextEngine engine{};
   SDL::TTF::Font font{};
-  EnumArray<SDL::TTF::Text, static_cast<size_t>(GameText::Count), GameText>
-      game_text{};
+  GameText game_text{};
   std::array<SDL::TTF::Text, 10> digit_text{};
 };

@@ -18,11 +18,11 @@ GraphicsContext::GraphicsContext(
     return SDL::TTF::create_text(*engine, *font, text);
   };
 
-  game_text[GameText::Next] = make_text("NEXT");
-  game_text[GameText::Hold] = make_text("HOLD");
-  game_text[GameText::Score] = make_text("SCORE");
-  game_text[GameText::Paused] = make_text("PAUSED");
-  game_text[GameText::GameOver] = make_text("GAME OVER!\n\nCONTINUE?\n\n[Y/N]");
+  game_text.next = make_text("NEXT");
+  game_text.held = make_text("HELD");
+  game_text.score = make_text("SCORE");
+  game_text.paused = make_text("PAUSED");
+  game_text.game_over = make_text("GAME OVER!\n\nCONTINUE?\n\n[Y/N]");
 
   static constexpr std::array nums_str{"0", "1", "2", "3", "4",
                                        "5", "6", "7", "8", "9"};

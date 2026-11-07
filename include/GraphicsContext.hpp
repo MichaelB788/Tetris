@@ -1,5 +1,4 @@
 #pragma once
-#include "Geometry.hpp"
 #include "PlatformSDL.hpp"
 #include "PlatformSDL_TTF.hpp"
 #include <array>
@@ -16,11 +15,7 @@ struct GraphicsContext {
   explicit GraphicsContext(const std::filesystem::path &atlas_texture_path,
                            const std::filesystem::path &font_path);
 
-  void update_window_size();
-
-  Size window_size{};
-  SDL::Window window{};
-  SDL::Renderer renderer{};
+  SDL::Display display{};
   SDL::Texture piece_atlas{};
 
   SDL::TTF::RendererTextEngine engine{};

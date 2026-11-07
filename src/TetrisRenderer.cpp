@@ -25,20 +25,20 @@ TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
 }
 
 void TetrisRenderer::update_on_resize() {
-  ctx.update_window_size();
+  ctx.display.window_resized();
 
   layout.playfield.x =
-      (static_cast<float>(ctx.window_size.w) - PLAYFIELD_PIXEL_W) / 2;
+      (static_cast<float>(ctx.display.w) - PLAYFIELD_PIXEL_W) / 2;
   layout.playfield.y =
-      (static_cast<float>(ctx.window_size.h) - PLAYFIELD_PIXEL_H) / 2;
+      (static_cast<float>(ctx.display.h) - PLAYFIELD_PIXEL_H) / 2;
 
   layout.preview = resolve(layout.playfield, {-6, 0});
   layout.held = resolve(layout.playfield, {Playfield::COLS + 2, 0});
 }
 
 void TetrisRenderer::render_frame(const Tetris &tetris) const {
-  SDL_SetRenderDrawColor(ctx.renderer.get(), 0x17, 0x18, 0x28, 0xFF);
-  SDL_RenderClear(ctx.renderer.get());
+  SDL_SetRenderDrawColor(ctx.display.renderer.get(), 0x17, 0x18, 0x28, 0xFF);
+  SDL_RenderClear(ctx.display.renderer.get());
 
   switch (tetris.get_state()) {
   case Tetris::State::Running:
@@ -71,7 +71,7 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
     break;
   }
 
-  SDL_RenderPresent(ctx.renderer.get());
+  SDL_RenderPresent(ctx.display.renderer.get());
 }
 
 void TetrisRenderer::draw_block(Piece::Type type, Point pos,
@@ -80,8 +80,8 @@ void TetrisRenderer::draw_block(Piece::Type type, Point pos,
   const auto src_rect = SDL_FRect{PIXEL_SCALE * static_cast<float>(type),
                                   src_y_offset, PIXEL_SCALE, PIXEL_SCALE};
   const auto dst_rect = SDL_FRect{pos.x, pos.y, PIXEL_SCALE, PIXEL_SCALE};
-  SDL_RenderTexture(ctx.renderer.get(), ctx.piece_atlas.get(), &src_rect,
-                    &dst_rect);
+  SDL_RenderTexture(ctx.display.renderer.get(), ctx.piece_atlas.get(),
+                    &src_rect, &dst_rect);
 }
 
 void TetrisRenderer::draw_piece(Piece piece, Point origin,
@@ -105,8 +105,8 @@ void TetrisRenderer::draw_playfield(const Playfield &playfield,
 
   const SDL_FRect playfield_outline{origin.x, origin.y, PLAYFIELD_PIXEL_W,
                                     PLAYFIELD_PIXEL_H};
-  SDL_SetRenderDrawColor(ctx.renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
-  SDL_RenderRect(ctx.renderer.get(), &playfield_outline);
+  SDL_SetRenderDrawColor(ctx.display.renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
+  SDL_RenderRect(ctx.display.renderer.get(), &playfield_outline);
 }
 
 void TetrisRenderer::draw_number(unsigned n, Point pos) const {
@@ -135,7 +135,7 @@ void TetrisRenderer::draw_text(TTF_Text &text, Point pos) const {
 void TetrisRenderer::draw_text_centered(TTF_Text &text) const {
   Size text_size{};
   TTF_GetTextSize(&text, &text_size.w, &text_size.h);
-  TTF_DrawRendererText(
-      &text, (ctx.window_size.w - static_cast<float>(text_size.w)) / 2,
-      (ctx.window_size.h - static_cast<float>(text_size.h)) / 2);
+  TTF_DrawRendererText(&text,
+                       (ctx.display.w - static_cast<float>(text_size.w)) / 2,
+                       (ctx.display.h - static_cast<float>(text_size.h)) / 2);
 }

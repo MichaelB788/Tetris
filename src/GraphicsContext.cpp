@@ -7,12 +7,10 @@
 GraphicsContext::GraphicsContext(
     const std::filesystem::path &atlas_texture_path,
     const std::filesystem::path &font_path)
-    : window_size{900, 1000},
-      window(SDL::create_window("Tetris", window_size.w, window_size.h,
-                                SDL_WINDOW_RESIZABLE)),
-      renderer(SDL::create_renderer(*window, {})),
-      piece_atlas(SDL::load_texture_from_image(*renderer, atlas_texture_path)),
-      engine(SDL::TTF::create_renderer_text_engine(*renderer)),
+    : display("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE),
+      piece_atlas(
+          SDL::load_texture_from_image(*display.renderer, atlas_texture_path)),
+      engine(SDL::TTF::create_renderer_text_engine(*display.renderer)),
       font(SDL::TTF::open_font(font_path, PIXEL_SCALE)) {
   auto make_text = [this](std::string_view text) {
     return SDL::TTF::create_text(*engine, *font, text);
@@ -30,7 +28,3 @@ GraphicsContext::GraphicsContext(
     digit_text[i] = make_text(nums_str[i]);
   }
 };
-
-void GraphicsContext::update_window_size() {
-  SDL_GetWindowSize(window.get(), &window_size.w, &window_size.h);
-}

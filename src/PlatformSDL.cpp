@@ -32,6 +32,13 @@ auto SDL::Exception::what() const noexcept -> const char * {
   return msg.data();
 }
 
+SDL::Display::Display(std::string_view name, int w, int h,
+                      SDL_WindowFlags flags)
+    : w(w), h(h), window{create_window(name.data(), w, h, flags)},
+      renderer(create_renderer(*window, {})) {}
+
+void SDL::Display::window_resized() { SDL_GetWindowSize(window.get(), &w, &h); }
+
 auto SDL::create_window(std::string_view name, int w, int h,
                         SDL_WindowFlags flags) -> Window {
   if (auto *window_ptr = SDL_CreateWindow(name.data(), w, h, flags))

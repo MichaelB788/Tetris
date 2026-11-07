@@ -11,15 +11,15 @@ struct SDL_Surface;
 struct SDL_Texture;
 
 namespace SDL {
-struct WindowDeleter {
+struct WindowDestroyer {
   void operator()(SDL_Window *window) const;
 };
 
-struct RendererDeleter {
+struct RendererDestroyer {
   void operator()(SDL_Renderer *renderer) const;
 };
 
-struct TextureDeleter {
+struct TextureDestroyer {
   void operator()(SDL_Texture *texture) const;
 };
 
@@ -33,9 +33,9 @@ private:
   std::string msg;
 };
 
-using Window = std::unique_ptr<SDL_Window, WindowDeleter>;
-using Renderer = std::unique_ptr<SDL_Renderer, RendererDeleter>;
-using Texture = std::unique_ptr<SDL_Texture, TextureDeleter>;
+using Window = std::unique_ptr<SDL_Window, WindowDestroyer>;
+using Renderer = std::unique_ptr<SDL_Renderer, RendererDestroyer>;
+using Texture = std::unique_ptr<SDL_Texture, TextureDestroyer>;
 
 struct Display {
   Display() = default;

@@ -9,20 +9,20 @@ struct TTF_Text;
 struct TTF_Font;
 
 namespace SDL::TTF {
-struct RendererTextEngineDeleter {
+struct RendererTextEngineDestroyer {
   void operator()(TTF_TextEngine *engine) const;
 };
-struct FontDeleter {
+struct FontCloser {
   void operator()(TTF_Font *font) const;
 };
-struct TextDeleter {
+struct TextDestroyer {
   void operator()(TTF_Text *text) const;
 };
 
 using RendererTextEngine =
-    std::unique_ptr<TTF_TextEngine, RendererTextEngineDeleter>;
-using Font = std::unique_ptr<TTF_Font, FontDeleter>;
-using Text = std::unique_ptr<TTF_Text, TextDeleter>;
+    std::unique_ptr<TTF_TextEngine, RendererTextEngineDestroyer>;
+using Font = std::unique_ptr<TTF_Font, FontCloser>;
+using Text = std::unique_ptr<TTF_Text, TextDestroyer>;
 
 [[nodiscard]] auto create_renderer_text_engine(SDL_Renderer &renderer)
     -> RendererTextEngine;

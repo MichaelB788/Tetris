@@ -6,15 +6,15 @@
 #include <SDL3_image/SDL_image.h>
 #include <string>
 
-void SDL::WindowDeleter::operator()(SDL_Window *window) const {
+void SDL::WindowDestroyer::operator()(SDL_Window *window) const {
   SDL_DestroyWindow(window);
 }
 
-void SDL::RendererDeleter::operator()(SDL_Renderer *renderer) const {
+void SDL::RendererDestroyer::operator()(SDL_Renderer *renderer) const {
   SDL_DestroyRenderer(renderer);
 }
 
-void SDL::TextureDeleter::operator()(SDL_Texture *texture) const {
+void SDL::TextureDestroyer::operator()(SDL_Texture *texture) const {
   SDL_DestroyTexture(texture);
 }
 

@@ -11,7 +11,6 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
 add_library(TetrisSource
   App.cpp
   Geometry.cpp
-  GraphicsContext.cpp
   KeyboardListener.cpp
   PeriodicFunction.cpp
   Piece.cpp

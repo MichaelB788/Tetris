@@ -1,7 +1,9 @@
 #pragma once
 #include "Geometry.hpp"
-#include "GraphicsContext.hpp"
 #include "Piece.hpp"
+#include "PlatformSDL.hpp"
+#include "PlatformSDL_TTF.hpp"
+#include <array>
 #include <filesystem>
 
 class Tetris;
@@ -9,6 +11,7 @@ class Playfield;
 
 class TetrisRenderer {
 public:
+  // Throws an SDL::Exception upon failure
   TetrisRenderer(const std::filesystem::path &atlas_texture_path,
                  const std::filesystem::path &font_path);
 
@@ -23,6 +26,10 @@ private:
     Point playfield{}, preview{}, held{};
   };
 
+  struct GameText {
+    SDL::TTF::Text next{}, held{}, score{}, paused{}, game_over{};
+  };
+
   void draw_block(Piece::Type type, Point pos,
                   BlockStyle style = BlockStyle::Solid) const;
   void draw_piece(Piece piece, Point base_pos,
@@ -34,5 +41,12 @@ private:
   void draw_text_centered(TTF_Text &text) const;
 
   Layout layout{};
-  GraphicsContext ctx;
+
+  SDL::Display display{};
+  SDL::Texture piece_atlas{};
+
+  SDL::TTF::RendererTextEngine engine{};
+  SDL::TTF::Font font{};
+  GameText game_text{};
+  std::array<SDL::TTF::Text, 10> digit_text{};
 };

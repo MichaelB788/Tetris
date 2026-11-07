@@ -13,7 +13,7 @@ void App::loop() {
       if (event.type == SDL_EVENT_QUIT)
         return;
       else if (event.type == SDL_EVENT_WINDOW_RESIZED)
-        tetris_renderer.update_on_resize();
+        tetris_renderer.update_layout_on_resize();
     }
 
     switch (keyboard_listener.process_input(delta_time)) {

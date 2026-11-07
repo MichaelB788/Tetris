@@ -5,6 +5,7 @@
 #include "PlatformSDL_TTF.hpp"
 #include <array>
 #include <filesystem>
+#include <string_view>
 
 class Tetris;
 class Playfield;
@@ -15,7 +16,7 @@ public:
   TetrisRenderer(const std::filesystem::path &atlas_texture_path,
                  const std::filesystem::path &font_path);
 
-  void update_on_resize();
+  void update_layout_on_resize();
 
   void render_frame(const Tetris &tetris) const;
 
@@ -29,6 +30,8 @@ private:
   struct GameText {
     SDL::TTF::Text next{}, held{}, score{}, paused{}, game_over{};
   };
+
+  [[nodiscard]] auto make_text(std::string_view text) const -> SDL::TTF::Text;
 
   void draw_block(Piece::Type type, Point pos,
                   BlockStyle style = BlockStyle::Solid) const;

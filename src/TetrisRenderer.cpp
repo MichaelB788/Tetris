@@ -1,10 +1,12 @@
 #include "TetrisRenderer.hpp"
 #include "Geometry.hpp"
 #include "Piece.hpp"
+#include "PlatformSDL_TTF.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <array>
 #include <cstddef>
 #include <vector>
 
@@ -24,27 +26,25 @@ TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
       piece_atlas(
           SDL::load_texture_from_image(*display.renderer, atlas_texture_path)),
       engine(SDL::TTF::create_renderer_text_engine(*display.renderer)),
-      font(SDL::TTF::open_font(font_path, PIXEL_SCALE)) {
-  auto make_text = [this](std::string_view text) {
-    return SDL::TTF::create_text(*engine, *font, text);
-  };
-
-  game_text.next = make_text("NEXT");
-  game_text.held = make_text("HELD");
-  game_text.score = make_text("SCORE");
-  game_text.paused = make_text("PAUSED");
-  game_text.game_over = make_text("GAME OVER!\n\nCONTINUE?\n\n[Y/N]");
-
-  static constexpr std::array nums_str{"0", "1", "2", "3", "4",
-                                       "5", "6", "7", "8", "9"};
-  for (size_t i = 0; i < digit_text.size(); ++i) {
-    digit_text[i] = make_text(nums_str[i]);
-  }
-
-  update_on_resize();
+      font(SDL::TTF::open_font(font_path, PIXEL_SCALE)),
+      game_text{
+          make_text("NEXT"),
+          make_text("HELD"),
+          make_text("SCORE"),
+          make_text("PAUSED"),
+          make_text("GAME OVER!\n\nCONTINUE?\n\n[Y/N]"),
+      },
+      digit_text([this]() {
+        std::array<SDL::TTF::Text, 10> ret;
+        size_t i = 0;
+        for (auto n_str : {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
+          ret[i++] = make_text(n_str);
+        return ret;
+      }()) {
+  update_layout_on_resize();
 }
 
-void TetrisRenderer::update_on_resize() {
+void TetrisRenderer::update_layout_on_resize() {
   display.window_resized();
 
   layout.playfield.x = (static_cast<float>(display.w) - PLAYFIELD_PIXEL_W) / 2;
@@ -90,6 +90,10 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
   }
 
   SDL_RenderPresent(display.renderer.get());
+}
+
+auto TetrisRenderer::make_text(std::string_view text) const -> SDL::TTF::Text {
+  return SDL::TTF::create_text(*engine, *font, text);
 }
 
 void TetrisRenderer::draw_block(Piece::Type type, Point pos,

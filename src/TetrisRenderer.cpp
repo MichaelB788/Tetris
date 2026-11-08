@@ -64,13 +64,13 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
     draw_piece(tetris.get_ghost_piece(), layout.playfield, BlockStyle::Ghost);
 
     if (const auto held_type = tetris.get_held_piece_type())
-      draw_piece({held_type.value()}, resolve(layout.held, {1, 3}));
+      draw_piece(Piece{held_type.value()}, resolve(layout.held, {1, 3}));
 
     {
-      const auto preview = tetris.get_seven_bag_preview();
-      for (size_t i = 0; i < preview.size(); ++i) {
-        draw_piece({preview[i]},
-                   resolve(layout.preview, {1, 3 * static_cast<float>(i + 1)}));
+      float offset_y = 3;
+      for (const auto type : tetris.get_seven_bag_preview()) {
+        draw_piece(Piece{type}, resolve(layout.preview, {1, offset_y}));
+        offset_y += 3;
       }
     }
 
@@ -106,7 +106,7 @@ void TetrisRenderer::draw_block(Piece::Type type, Point pos,
                     &dst_rect);
 }
 
-void TetrisRenderer::draw_piece(Piece piece, Point origin,
+void TetrisRenderer::draw_piece(const Piece &piece, Point origin,
                                 BlockStyle style) const {
   for (const auto pos : piece.get_shape()) {
     draw_block(piece.get_type(), resolve(origin, {pos.x, pos.y}), style);

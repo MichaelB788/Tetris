@@ -35,7 +35,7 @@ private:
 
   void draw_block(Piece::Type type, Point pos,
                   BlockStyle style = BlockStyle::Solid) const;
-  void draw_piece(Piece piece, Point base_pos,
+  void draw_piece(const Piece &piece, Point base_pos,
                   BlockStyle style = BlockStyle::Solid) const;
   void draw_playfield(const Playfield &playfield, Point base_pos) const;
 

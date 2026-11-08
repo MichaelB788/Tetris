@@ -37,17 +37,6 @@ using Window = std::unique_ptr<SDL_Window, WindowDestroyer>;
 using Renderer = std::unique_ptr<SDL_Renderer, RendererDestroyer>;
 using Texture = std::unique_ptr<SDL_Texture, TextureDestroyer>;
 
-struct Display {
-  Display() = default;
-  Display(std::string_view name, int w, int h, SDL_WindowFlags flags);
-
-  void window_resized();
-
-  int w{}, h{};
-  Window window{};
-  Renderer renderer{};
-};
-
 [[nodiscard]] auto create_window(std::string_view name, int w, int h,
                                  SDL_WindowFlags flags) -> Window;
 [[nodiscard]] auto create_renderer(SDL_Window &window, std::string_view name)

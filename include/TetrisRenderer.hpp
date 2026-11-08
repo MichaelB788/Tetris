@@ -45,7 +45,8 @@ private:
 
   Layout layout{};
 
-  SDL::Display display{};
+  SDL::Window window{};
+  SDL::Renderer renderer{};
   SDL::Texture piece_atlas{};
 
   SDL::TTF::RendererTextEngine engine{};

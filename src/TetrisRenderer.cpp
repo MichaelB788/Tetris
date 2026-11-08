@@ -1,6 +1,7 @@
 #include "TetrisRenderer.hpp"
 #include "Geometry.hpp"
 #include "Piece.hpp"
+#include "PlatformSDL.hpp"
 #include "PlatformSDL_TTF.hpp"
 #include "Tetris.hpp"
 #include <SDL3/SDL_render.h>
@@ -22,10 +23,10 @@ auto resolve(Point origin, Vector offset) -> Point {
 
 TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
                                const std::filesystem::path &font_path)
-    : display("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE),
-      piece_atlas(
-          SDL::load_texture_from_image(*display.renderer, atlas_texture_path)),
-      engine(SDL::TTF::create_renderer_text_engine(*display.renderer)),
+    : window(SDL::create_window("Tetris", 900, 1000, SDL_WINDOW_RESIZABLE)),
+      renderer(SDL::create_renderer(*window, {})),
+      piece_atlas(SDL::load_texture_from_image(*renderer, atlas_texture_path)),
+      engine(SDL::TTF::create_renderer_text_engine(*renderer)),
       font(SDL::TTF::open_font(font_path, PIXEL_SCALE)),
       game_text{
           make_text("NEXT"),
@@ -45,18 +46,19 @@ TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
 }
 
 void TetrisRenderer::update_layout_on_resize() {
-  display.window_resized();
+  int w, h;
+  SDL_GetWindowSizeInPixels(window.get(), &w, &h);
 
-  layout.playfield.x = (static_cast<float>(display.w) - PLAYFIELD_PIXEL_W) / 2;
-  layout.playfield.y = (static_cast<float>(display.h) - PLAYFIELD_PIXEL_H) / 2;
+  layout.playfield.x = (static_cast<float>(w) - PLAYFIELD_PIXEL_W) / 2;
+  layout.playfield.y = (static_cast<float>(h) - PLAYFIELD_PIXEL_H) / 2;
 
   layout.preview = resolve(layout.playfield, {-6, 0});
   layout.held = resolve(layout.playfield, {Playfield::COLS + 2, 0});
 }
 
 void TetrisRenderer::render_frame(const Tetris &tetris) const {
-  SDL_SetRenderDrawColor(display.renderer.get(), 0x17, 0x18, 0x28, 0xFF);
-  SDL_RenderClear(display.renderer.get());
+  SDL_SetRenderDrawColor(renderer.get(), 0x17, 0x18, 0x28, 0xFF);
+  SDL_RenderClear(renderer.get());
 
   switch (tetris.get_state()) {
   case Tetris::State::Running:
@@ -89,7 +91,7 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
     break;
   }
 
-  SDL_RenderPresent(display.renderer.get());
+  SDL_RenderPresent(renderer.get());
 }
 
 auto TetrisRenderer::make_text(std::string_view text) const -> SDL::TTF::Text {
@@ -102,8 +104,7 @@ void TetrisRenderer::draw_block(Piece::Type type, Point pos,
   const auto src_rect = SDL_FRect{PIXEL_SCALE * static_cast<float>(type),
                                   src_y_offset, PIXEL_SCALE, PIXEL_SCALE};
   const auto dst_rect = SDL_FRect{pos.x, pos.y, PIXEL_SCALE, PIXEL_SCALE};
-  SDL_RenderTexture(display.renderer.get(), piece_atlas.get(), &src_rect,
-                    &dst_rect);
+  SDL_RenderTexture(renderer.get(), piece_atlas.get(), &src_rect, &dst_rect);
 }
 
 void TetrisRenderer::draw_piece(const Piece &piece, Point origin,
@@ -127,8 +128,8 @@ void TetrisRenderer::draw_playfield(const Playfield &playfield,
 
   const SDL_FRect playfield_outline{origin.x, origin.y, PLAYFIELD_PIXEL_W,
                                     PLAYFIELD_PIXEL_H};
-  SDL_SetRenderDrawColor(display.renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
-  SDL_RenderRect(display.renderer.get(), &playfield_outline);
+  SDL_SetRenderDrawColor(renderer.get(), 0x54, 0x58, 0xCC, 0xFF);
+  SDL_RenderRect(renderer.get(), &playfield_outline);
 }
 
 void TetrisRenderer::draw_number(unsigned number, Point pos) const {
@@ -154,8 +155,11 @@ void TetrisRenderer::draw_text(TTF_Text &text, Point pos) const {
 }
 
 void TetrisRenderer::draw_text_centered(TTF_Text &text) const {
-  int w, h;
-  TTF_GetTextSize(&text, &w, &h);
-  TTF_DrawRendererText(&text, (display.w - static_cast<float>(w)) / 2,
-                       (display.h - static_cast<float>(h)) / 2);
+  int tex_w, tex_h, win_w, win_h;
+  TTF_GetTextSize(&text, &tex_w, &tex_h);
+  SDL_GetWindowSizeInPixels(window.get(), &win_w, &win_h);
+  const auto [x, y] = Point{static_cast<float>((win_w - tex_w)) / 2,
+                            static_cast<float>((win_h - tex_h)) / 2};
+
+  TTF_DrawRendererText(&text, x, y);
 }

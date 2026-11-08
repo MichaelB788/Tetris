@@ -154,8 +154,8 @@ void TetrisRenderer::draw_text(TTF_Text &text, Point pos) const {
 }
 
 void TetrisRenderer::draw_text_centered(TTF_Text &text) const {
-  Size text_size{};
-  TTF_GetTextSize(&text, &text_size.w, &text_size.h);
-  TTF_DrawRendererText(&text, (display.w - static_cast<float>(text_size.w)) / 2,
-                       (display.h - static_cast<float>(text_size.h)) / 2);
+  int w, h;
+  TTF_GetTextSize(&text, &w, &h);
+  TTF_DrawRendererText(&text, (display.w - static_cast<float>(w)) / 2,
+                       (display.h - static_cast<float>(h)) / 2);
 }

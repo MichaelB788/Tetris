@@ -1,9 +1,5 @@
 #pragma once
 
-struct Size {
-  int w, h;
-};
-
 struct Rectangle {
   float x, y, w, h;
 };

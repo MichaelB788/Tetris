@@ -5,7 +5,6 @@
 #include "PlatformSDL_TTF.hpp"
 #include <array>
 #include <filesystem>
-#include <string_view>
 
 class Tetris;
 class Playfield;
@@ -31,8 +30,6 @@ private:
     SDL::TTF::Text next{}, held{}, score{}, paused{}, game_over{};
   };
 
-  [[nodiscard]] auto make_text(std::string_view text) const -> SDL::TTF::Text;
-
   void draw_block(Piece::Type type, Point pos,
                   BlockStyle style = BlockStyle::Solid) const;
   void draw_piece(const Piece &piece, Point base_pos,
@@ -40,7 +37,6 @@ private:
   void draw_playfield(const Playfield &playfield, Point base_pos) const;
 
   void draw_number(unsigned number, Point pos) const;
-  void draw_text(TTF_Text &text, Point pos) const;
   void draw_text_centered(TTF_Text &text) const;
 
   Layout layout{};

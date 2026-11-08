@@ -12,12 +12,16 @@
 #include <vector>
 
 namespace {
-constexpr float PIXEL_SCALE = 32.0f;
-constexpr float PLAYFIELD_PIXEL_W = Playfield::COLS * PIXEL_SCALE;
-constexpr float PLAYFIELD_PIXEL_H = Playfield::ROWS * PIXEL_SCALE;
+constexpr auto PIXEL_SCALE = 32.0f;
+constexpr auto PLAYFIELD_PIXEL_W = Playfield::COLS * PIXEL_SCALE;
+constexpr auto PLAYFIELD_PIXEL_H = Playfield::ROWS * PIXEL_SCALE;
 
 auto resolve(Point origin, Vector offset) -> Point {
   return origin + (offset * PIXEL_SCALE);
+}
+
+void draw_text(TTF_Text &text, Point pos) {
+  TTF_DrawRendererText(&text, pos.x, pos.y);
 }
 } // namespace
 
@@ -29,17 +33,18 @@ TetrisRenderer::TetrisRenderer(const std::filesystem::path &atlas_texture_path,
       engine(SDL::TTF::create_renderer_text_engine(*renderer)),
       font(SDL::TTF::open_font(font_path, PIXEL_SCALE)),
       game_text{
-          make_text("NEXT"),
-          make_text("HELD"),
-          make_text("SCORE"),
-          make_text("PAUSED"),
-          make_text("GAME OVER!\n\nCONTINUE?\n\n[Y/N]"),
+          SDL::TTF::create_text(*engine, *font, "NEXT"),
+          SDL::TTF::create_text(*engine, *font, "HELD"),
+          SDL::TTF::create_text(*engine, *font, "SCORE"),
+          SDL::TTF::create_text(*engine, *font, "PAUSED"),
+          SDL::TTF::create_text(*engine, *font,
+                                "GAME OVER!\n\nCONTINUE?\n\n[Y/N]"),
       },
       digit_text([this]() {
         std::array<SDL::TTF::Text, 10> ret;
         size_t i = 0;
         for (auto n_str : {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"})
-          ret[i++] = make_text(n_str);
+          ret[i++] = SDL::TTF::create_text(*engine, *font, n_str);
         return ret;
       }()) {
   update_layout_on_resize();
@@ -94,10 +99,6 @@ void TetrisRenderer::render_frame(const Tetris &tetris) const {
   SDL_RenderPresent(renderer.get());
 }
 
-auto TetrisRenderer::make_text(std::string_view text) const -> SDL::TTF::Text {
-  return SDL::TTF::create_text(*engine, *font, text);
-}
-
 void TetrisRenderer::draw_block(Piece::Type type, Point pos,
                                 BlockStyle style) const {
   const auto src_y_offset = style == BlockStyle::Ghost ? PIXEL_SCALE : 0;
@@ -109,9 +110,8 @@ void TetrisRenderer::draw_block(Piece::Type type, Point pos,
 
 void TetrisRenderer::draw_piece(const Piece &piece, Point origin,
                                 BlockStyle style) const {
-  for (const auto pos : piece.get_shape()) {
+  for (const auto pos : piece.get_shape())
     draw_block(piece.get_type(), resolve(origin, {pos.x, pos.y}), style);
-  }
 }
 
 void TetrisRenderer::draw_playfield(const Playfield &playfield,
@@ -150,16 +150,10 @@ void TetrisRenderer::draw_number(unsigned number, Point pos) const {
   }
 }
 
-void TetrisRenderer::draw_text(TTF_Text &text, Point pos) const {
-  TTF_DrawRendererText(&text, pos.x, pos.y);
-}
-
 void TetrisRenderer::draw_text_centered(TTF_Text &text) const {
   int tex_w, tex_h, win_w, win_h;
   TTF_GetTextSize(&text, &tex_w, &tex_h);
   SDL_GetWindowSizeInPixels(window.get(), &win_w, &win_h);
-  const auto [x, y] = Point{static_cast<float>((win_w - tex_w)) / 2,
-                            static_cast<float>((win_h - tex_h)) / 2};
-
-  TTF_DrawRendererText(&text, x, y);
+  TTF_DrawRendererText(&text, static_cast<float>((win_w - tex_w)) / 2,
+                       static_cast<float>((win_h - tex_h)) / 2);
 }

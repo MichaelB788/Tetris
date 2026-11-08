@@ -131,20 +131,19 @@ void TetrisRenderer::draw_playfield(const Playfield &playfield,
   SDL_RenderRect(display.renderer.get(), &playfield_outline);
 }
 
-void TetrisRenderer::draw_number(unsigned n, Point pos) const {
-  if (n < 10) {
-    TTF_DrawRendererText(digit_text[n].get(), pos.x, pos.y);
+void TetrisRenderer::draw_number(unsigned number, Point pos) const {
+  if (number < 10) {
+    draw_text(*digit_text[number], pos);
     return;
   }
 
   std::vector<unsigned> digits{};
-  while (n > 0) {
-    digits.push_back(n % 10);
-    n /= 10;
+  while (number > 0) {
+    digits.push_back(number % 10);
+    number /= 10;
   }
-
   while (!digits.empty()) {
-    TTF_DrawRendererText(digit_text[digits.back()].get(), pos.x, pos.y);
+    draw_text(*digit_text[digits.back()], pos);
     digits.pop_back();
     pos.x += PIXEL_SCALE;
   }

@@ -39,7 +39,7 @@ private:
                   BlockStyle style = BlockStyle::Solid) const;
   void draw_playfield(const Playfield &playfield, Point base_pos) const;
 
-  void draw_number(unsigned uint, Point pos) const;
+  void draw_number(unsigned number, Point pos) const;
   void draw_text(TTF_Text &text, Point pos) const;
   void draw_text_centered(TTF_Text &text) const;
 

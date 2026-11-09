@@ -12,7 +12,6 @@ add_library(TetrisSource
   App.cpp
   Geometry.cpp
   KeyboardListener.cpp
-  PeriodicFunction.cpp
   Piece.cpp
   PlatformSDL.cpp
   PlatformSDL_TTF.cpp

@@ -4,8 +4,10 @@
 #include <SDL3/SDL_scancode.h>
 #include <algorithm>
 #include <chrono>
+#include <functional>
 
-auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
+auto KeyboardListener::process_input(Tetris &tetris,
+                                     std::chrono::nanoseconds delta)
     -> AppResult {
   auto curr_keyboard = SDL_GetKeyboardState(0);
 
@@ -41,7 +43,7 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
       tetris.pause_game();
       for (auto &act : repeatable_actions) {
         act.input_delay.reset();
-        act.periodic_func.reset();
+        act.repeat_delay.reset();
       }
       break; // Immediate effect; highest priority
     } else if (is_key_pressed(SDL_SCANCODE_W)) {
@@ -57,18 +59,22 @@ auto KeyboardListener::process_input(std::chrono::nanoseconds delta)
     }
 
     // Handle repeatable actions
-    for (auto &[scancode, input_delay, periodic_func] : repeatable_actions) {
+    for (auto &[scancode, input_delay, repeat_delay, handler] :
+         repeatable_actions) {
       if (is_key_pressed(scancode)) {
-        input_delay.reset();
-        periodic_func.invoke_early();
+        std::invoke(handler, tetris);
       } else if (is_key_held(scancode)) {
-        if (input_delay.has_set_off())
-          periodic_func.tick(delta);
-        else
+        if (input_delay.has_set_off()) {
+          if (repeat_delay.tick(delta); repeat_delay.has_set_off()) {
+            std::invoke(handler, tetris);
+            repeat_delay.reset();
+          }
+        } else {
           input_delay.tick(delta);
+        }
       } else if (is_key_released(scancode)) {
         input_delay.reset();
-        periodic_func.reset();
+        repeat_delay.reset();
       }
     }
     break;

@@ -25,6 +25,6 @@ private:
 
   SDL_Event event{};
   Tetris tetris{rng};
-  KeyboardListener keyboard_listener{tetris};
+  KeyboardListener keyboard_listener{};
   TetrisRenderer tetris_renderer;
 };

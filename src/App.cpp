@@ -16,7 +16,7 @@ void App::loop() {
         tetris_renderer.update_layout_on_resize();
     }
 
-    switch (keyboard_listener.process_input(delta_time)) {
+    switch (keyboard_listener.process_input(tetris, delta_time)) {
     case KeyboardListener::AppResult::Continue:
       break;
     case KeyboardListener::AppResult::Quit:

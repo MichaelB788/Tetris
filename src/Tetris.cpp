@@ -8,15 +8,8 @@
 static constexpr Point SPAWN_POS = {4, 4};
 
 Tetris::Tetris(std::mt19937 &rng_)
-    : rng(rng_), seven_bag(rng_), player(seven_bag.pop_next_type(), SPAWN_POS),
-      gravity_func(std::chrono::seconds(1), [this] { player_soft_drop(); }),
-      lock_reset{{std::chrono::seconds(1), [this] {
-                    auto test = player;
-                    if (!test.shift({0, 1}, playfield)) {
-                      lock_piece();
-                      state = start_next_round(seven_bag.pop_next_type());
-                    }
-                  }}} {}
+    : rng(rng_), seven_bag(rng_), player(seven_bag.pop_next_type(), SPAWN_POS) {
+}
 
 void Tetris::player_step_left() { player_horizontal_shift(-1); }
 
@@ -24,7 +17,7 @@ void Tetris::player_step_right() { player_horizontal_shift(1); }
 
 void Tetris::player_soft_drop() {
   if (!player.shift({0, 1}, playfield))
-    lock_reset.countdown_enabled = true;
+    lock.is_enabled = true;
 }
 
 void Tetris::player_hard_drop() {
@@ -61,20 +54,31 @@ void Tetris::unpause_game() {
     state = State::Running;
 }
 
-void Tetris::tick(std::chrono::nanoseconds delta_time) {
-  gravity_func.tick(delta_time);
+void Tetris::tick(std::chrono::nanoseconds delta) {
+  if (gravity_delay.tick(delta); gravity_delay.has_set_off()) {
+    player_soft_drop();
+    gravity_delay.reset();
+  }
 
-  if (lock_reset.countdown_enabled)
-    lock_reset.func.tick(delta_time);
+  if (lock.is_enabled) {
+    if (lock.delay.tick(delta); lock.delay.has_set_off()) {
+      auto test = player;
+      if (!test.shift({0, 1}, playfield)) {
+        lock_piece();
+        state = start_next_round(seven_bag.pop_next_type());
+        lock.delay.reset();
+      }
+    }
+  }
 }
 
 void Tetris::reset() {
   state = State::Running;
-  score = lock_reset.count = 0;
-  held_piece.action_used = lock_reset.countdown_enabled = false;
+  score = lock.reset_count = 0;
+  held_piece.action_used = lock.is_enabled = false;
 
-  gravity_func.reset();
-  lock_reset.func.reset();
+  gravity_delay.reset();
+  lock.delay.reset();
 
   held_piece.type = std::nullopt;
   playfield.clear_all_rows();
@@ -103,18 +107,18 @@ auto Tetris::start_next_round(Piece::Type next_type) -> State {
   }
 
   // Adjustment successful, reset round specific variables for next round
-  lock_reset.func.reset();
-  gravity_func.reset();
-  lock_reset.count = 0;
-  lock_reset.countdown_enabled = false;
+  gravity_delay.reset();
+  lock.delay.reset();
+  lock.reset_count = 0;
+  lock.is_enabled = false;
 
   return State::Running;
 }
 
 void Tetris::attempt_lock_reset() {
-  if (lock_reset.countdown_enabled && lock_reset.count < 10) {
-    ++lock_reset.count;
-    lock_reset.func.reset();
+  if (lock.is_enabled && lock.reset_count < 10) {
+    ++lock.reset_count;
+    lock.delay.reset();
   }
 }
 
@@ -126,8 +130,8 @@ void Tetris::lock_piece() {
   using namespace std::chrono_literals;
   static constexpr std::array LEVELS{1000ms, 900ms, 800ms, 700ms, 600ms, 500ms,
                                      450ms,  400ms, 300ms, 200ms, 100ms};
-  gravity_func.set_duration(score < 100 ? LEVELS[score / 10]
-                                        : std::chrono::milliseconds(100));
+  gravity_delay.set_duration(score < 100 ? LEVELS[score / 10]
+                                         : std::chrono::milliseconds(100));
 }
 
 auto Tetris::get_state() const -> State { return state; }

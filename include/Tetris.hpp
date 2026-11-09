@@ -1,8 +1,9 @@
 #pragma once
-#include "PeriodicFunction.hpp"
 #include "Piece.hpp"
 #include "Playfield.hpp"
 #include "SevenBag.hpp"
+#include "Timer.hpp"
+#include <chrono>
 #include <cstdint>
 #include <optional>
 #include <random>
@@ -40,6 +41,17 @@ public:
   [[nodiscard]] auto get_ghost_piece() const -> Piece;
 
 private:
+  struct HeldPiece {
+    bool action_used{};
+    std::optional<Piece::Type> type{};
+  };
+
+  struct Lock {
+    bool is_enabled{};
+    uint8_t reset_count{};
+    Timer delay{std::chrono::seconds{1}};
+  };
+
   void player_horizontal_shift(float x);
   void player_rotate(Piece::RotationDir dir);
 
@@ -53,20 +65,12 @@ private:
   State state{};
   unsigned score{};
 
-  struct {
-    bool action_used{};
-    std::optional<Piece::Type> type{};
-  } held_piece{};
+  HeldPiece held_piece{};
 
   Playfield playfield{};
   SevenBag seven_bag;
   Piece player;
 
-  PeriodicFunction gravity_func;
-
-  struct LockReset {
-    PeriodicFunction func;
-    uint8_t count{};
-    bool countdown_enabled{};
-  } lock_reset;
+  Timer gravity_delay{std::chrono::seconds{1}};
+  Lock lock{};
 };

@@ -9,8 +9,9 @@ class KeyboardListener {
 public:
   enum class AppResult { Continue, Quit };
 
-  [[nodiscard]] auto process_input(Tetris &tetris,
-                                   std::chrono::nanoseconds delta) -> AppResult;
+  [[nodiscard]] auto process_keystrokes(Tetris &tetris,
+                                        std::chrono::nanoseconds delta)
+      -> AppResult;
 
 private:
   struct RepeatableAction {

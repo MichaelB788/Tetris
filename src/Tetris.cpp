@@ -61,13 +61,15 @@ void Tetris::tick(std::chrono::nanoseconds delta) {
   }
 
   if (lock.is_enabled) {
-    if (lock.delay.tick(delta); lock.delay.has_set_off()) {
+    if (lock.delay.has_set_off()) {
       auto test = player;
       if (!test.shift({0, 1}, playfield)) {
         lock_piece();
         state = start_next_round(seven_bag.pop_next_type());
         lock.delay.reset();
       }
+    } else {
+      lock.delay.tick(delta);
     }
   }
 }

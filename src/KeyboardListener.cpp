@@ -6,10 +6,10 @@
 #include <chrono>
 #include <functional>
 
-auto KeyboardListener::process_input(Tetris &tetris,
-                                     std::chrono::nanoseconds delta)
+auto KeyboardListener::process_keystrokes(Tetris &tetris,
+                                          std::chrono::nanoseconds delta)
     -> AppResult {
-  auto curr_keyboard = SDL_GetKeyboardState(0);
+  const auto curr_keyboard = SDL_GetKeyboardState(nullptr);
 
   auto is_key_pressed = [&](SDL_Scancode sc) -> bool {
     return !prev_keyboard[sc] && curr_keyboard[sc];
@@ -21,7 +21,6 @@ auto KeyboardListener::process_input(Tetris &tetris,
     return prev_keyboard[sc] && !curr_keyboard[sc];
   };
 
-  // Handle different input based on the current state of the game
   switch (tetris.get_state()) {
   case Tetris::State::GameOver:
     if (is_key_pressed(SDL_SCANCODE_Y))
@@ -36,27 +35,29 @@ auto KeyboardListener::process_input(Tetris &tetris,
     break;
 
   case Tetris::State::Running:
-    // Handle one-shot moves
-    // NOTE: The ordering of conditionals matter, as certain moves have an
-    // immediate effect wherein no movement actions should be handled afterwards
+    // Handle one-shot moves; block other input by breaking out early
     if (is_key_pressed(SDL_SCANCODE_SPACE)) {
       tetris.pause_game();
       for (auto &act : repeatable_actions) {
         act.input_delay.reset();
         act.repeat_delay.reset();
       }
-      break; // Immediate effect; highest priority
-    } else if (is_key_pressed(SDL_SCANCODE_W)) {
-      tetris.player_hard_drop();
-      break; // Immediate effect
-    } else if (is_key_pressed(SDL_SCANCODE_UP)) {
-      tetris.hold_current_piece();
-      break; // Immediate effect
-    } else if (is_key_pressed(SDL_SCANCODE_LEFT)) {
-      tetris.player_rotate_counterclockwise();
-    } else if (is_key_pressed(SDL_SCANCODE_RIGHT)) {
-      tetris.player_rotate_clockwise();
+      break;
     }
+    if (is_key_pressed(SDL_SCANCODE_W)) {
+      tetris.player_hard_drop();
+      break;
+    }
+    if (is_key_pressed(SDL_SCANCODE_UP)) {
+      tetris.hold_current_piece();
+      break;
+    }
+
+    // Handle one-shot moves
+    if (is_key_pressed(SDL_SCANCODE_LEFT))
+      tetris.player_rotate_counterclockwise();
+    else if (is_key_pressed(SDL_SCANCODE_RIGHT))
+      tetris.player_rotate_clockwise();
 
     // Handle repeatable actions
     for (auto &[scancode, input_delay, repeat_delay, handler] :
@@ -80,8 +81,6 @@ auto KeyboardListener::process_input(Tetris &tetris,
     break;
   }
 
-  // Keep a copy of the current keyboard for later
   std::copy_n(curr_keyboard, SDL_SCANCODE_COUNT, prev_keyboard);
-
   return AppResult::Continue;
 }

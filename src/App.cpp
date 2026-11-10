@@ -3,6 +3,10 @@
 #include <chrono>
 #include <thread>
 
+namespace {
+constexpr auto TARGET_FPS = std::chrono::nanoseconds(1'000'000'000 / 60);
+}
+
 void App::loop() {
   while (true) {
     prev_time = curr_time;
@@ -16,23 +20,25 @@ void App::loop() {
         tetris_renderer.update_layout_on_resize();
     }
 
-    switch (keyboard_listener.process_input(tetris, delta_time)) {
+    switch (keyboard_listener.process_keystrokes(tetris, delta_time)) {
     case KeyboardListener::AppResult::Continue:
       break;
     case KeyboardListener::AppResult::Quit:
       return;
     }
 
-    if (tetris.get_state() == Tetris::State::Running)
+    switch (tetris.get_state()) {
+    case Tetris::State::Running:
       tetris.tick(delta_time);
+      break;
+    default:
+      break;
+    }
 
     tetris_renderer.render_frame(tetris);
 
-    static constexpr auto expected =
-        std::chrono::nanoseconds(1'000'000'000 / 60);
-    const auto elapsed = std::chrono::steady_clock::now() - curr_time;
-    if (elapsed < expected) {
-      std::this_thread::sleep_for(expected - elapsed);
-    }
+    if (const auto elapsed = std::chrono::steady_clock::now() - curr_time;
+        elapsed < TARGET_FPS)
+      std::this_thread::sleep_for(TARGET_FPS - elapsed);
   }
 }

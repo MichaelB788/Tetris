@@ -1,11 +1,11 @@
 #pragma once
 
 struct Rectangle {
-  float x, y, w, h;
+  float x{}, y{}, w{}, h{};
 };
 
 struct Vector {
-  float x, y;
+  float x{}, y{};
 
   auto operator+=(Vector other) -> Vector &;
   auto operator-=(Vector other) -> Vector &;
@@ -17,7 +17,7 @@ struct Vector {
 };
 
 struct Point {
-  float x, y;
+  float x{}, y{};
 
   [[nodiscard]] auto is_within(Rectangle rect) const -> bool;
 

@@ -50,6 +50,8 @@ private:
     bool is_enabled{};
     uint8_t reset_count{};
     Timer delay{std::chrono::seconds{1}};
+
+    void attempt_reset();
   };
 
   void player_horizontal_shift(float x);
@@ -57,20 +59,16 @@ private:
 
   [[nodiscard]] auto start_next_round(Piece::Type next_type) -> State;
 
-  void attempt_lock_reset();
-  void lock_piece();
-
   std::mt19937 &rng;
 
   State state{};
   unsigned score{};
 
-  HeldPiece held_piece{};
+  Timer gravity_delay{std::chrono::seconds{1}};
+  Lock lock{};
 
+  HeldPiece held_piece{};
   Playfield playfield{};
   SevenBag seven_bag;
   Piece player;
-
-  Timer gravity_delay{std::chrono::seconds{1}};
-  Lock lock{};
 };

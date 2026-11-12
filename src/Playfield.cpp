@@ -5,8 +5,9 @@
 #include <cassert>
 #include <cstddef>
 
-static constexpr Rectangle BOUNDS = {0, 0, Playfield::COLS - 1,
-                                     Playfield::ROWS - 1};
+namespace {
+constexpr Rectangle BOUNDS = {0, 0, Playfield::COLS - 1, Playfield::ROWS - 1};
+}
 
 void Playfield::clear_all_rows() {
   for (auto &row : cells)

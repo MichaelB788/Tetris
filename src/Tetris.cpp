@@ -5,7 +5,9 @@
 #include <optional>
 #include <random>
 
-static constexpr Point SPAWN_POS = {4, 4};
+namespace {
+constexpr Point SPAWN_POS = {4, 4};
+}
 
 Tetris::Tetris(std::mt19937 &rng_)
     : rng(rng_), seven_bag(rng_), player(seven_bag.pop_next_type(), SPAWN_POS) {

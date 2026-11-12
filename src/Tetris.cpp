@@ -85,7 +85,7 @@ void Tetris::reset() {
   held_piece.type = std::nullopt;
   playfield.clear_all_rows();
   seven_bag.shuffle();
-  player = {seven_bag.pop_next_type(), SPAWN_POS};
+  player = Piece{seven_bag.pop_next_type(), SPAWN_POS};
 }
 
 void Tetris::player_horizontal_shift(float x) {
@@ -99,7 +99,7 @@ void Tetris::player_rotate(Piece::RotationDir dir) {
 }
 
 auto Tetris::start_next_round(Piece::Type next_type) -> State {
-  player = {next_type, SPAWN_POS};
+  player = Piece{next_type, SPAWN_POS};
 
   // Try to adjust the initial position of the next piece
   while (!playfield.can_place(player.get_shape())) {

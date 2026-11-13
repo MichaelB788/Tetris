@@ -14,13 +14,4 @@ project(
   LANGUAGES CXX
 )
 
-include_directories(BEFORE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include {CMAKE_CURRENT_SOURCE_DIR}/src
-  ${CMAKE_CURRENT_BINARY_DIR}/include
-)
-
-find_package(SDL3 CONFIG REQUIRED)
-find_package(SDL3_image CONFIG REQUIRED)
-find_package(SDL3_ttf CONFIG REQUIRED)
-
 add_subdirectory(src)

@@ -47,5 +47,5 @@ auto SDL::load_texture_from_image(SDL_Renderer &renderer,
     -> Texture {
   if (auto *img_ptr = IMG_LoadTexture(&renderer, file.c_str()))
     return Texture{img_ptr};
-  throw SDL::Exception("Failed to load image");
+  throw SDL::Exception(std::string{"Failed to load image at "} + file.string());
 }

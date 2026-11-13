@@ -1,6 +1,7 @@
 #include "PlatformSDL_TTF.hpp"
 #include "PlatformSDL.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
+#include <string>
 
 void SDL::TTF::RendererTextEngineDestroyer::operator()(
     TTF_TextEngine *engine) const {
@@ -26,7 +27,7 @@ auto SDL::TTF::open_font(const std::filesystem::path &file, float ptsize)
     -> Font {
   if (auto *font_ptr = TTF_OpenFont(file.c_str(), ptsize))
     return Font{font_ptr};
-  throw SDL::Exception("Failed to open font");
+  throw SDL::Exception(std::string{"Failed to open font at "} + file.string());
 }
 
 auto SDL::TTF::create_text(TTF_TextEngine &engine, TTF_Font &font,

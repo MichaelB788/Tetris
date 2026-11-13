@@ -16,27 +16,23 @@ Tetris clone written in C++, using the SDL3 rendering library.
 
 # Requirements
 
-## Linux
-
-- GCC
+- vcpkg (for installing SDL3 dependencies)
+- GCC (Linux), MSVC (Windows), or Clang (MacOS)
 - CMake
 - Ninja
-- Development files for SDL3, SDL3 image, and SDL3 ttf
 
 # Build Instructions
-
-## Linux
 
 Build the project in `Release` mode to try it out:
 
 ```bash
-cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -G Ninja
+cmake --preset Release
 ```
 
 Build the project in `Debug` mode for testing/development:
 
 ```bash
-cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=YES -DCMAKE_BUILD_TYPE=Debug -G Ninja
+cmake --preset Debug
 ```
 
 You can then (re)build the project using:
